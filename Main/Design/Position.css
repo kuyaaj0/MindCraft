@@ -93,3 +93,52 @@ footer {
   color: #ccc;
   font-size: 0.9em;
 }
+
+/* === Subject Selection Popup === */
+.subject-menu {
+  display: none;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 20px auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.subject-menu h3 {
+  margin-bottom: 15px;
+  color: #1DB954;
+}
+
+.subject-menu button {
+  width: 90%;
+  margin: 8px auto;
+  display: block;
+  background: #1DB954;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.subject-menu button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+.close-btn {
+  background: #ff5252 !important;
+}
+
+.close-btn:hover {
+  background: #ff6b6b !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
