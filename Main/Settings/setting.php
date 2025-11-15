@@ -1,60 +1,24 @@
-<?php
-session_start();
-
-// Redirect if not logged in
-if (!isset($_SESSION['Username'])) {
-    header("Location: Signin.php");
-    exit;
-}
-
-// Fetch current settings from session or defaults
-$theme = isset($_SESSION['theme']) ? $_SESSION['theme'] : 'dark';
-$sound = isset($_SESSION['sound']) ? $_SESSION['sound'] : 'on';
-$vibration = isset($_SESSION['vibration']) ? $_SESSION['vibration'] : 'on';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['theme'])) {
-        $_SESSION['theme'] = $_POST['theme'];
-        $theme = $_POST['theme'];
-    }
-    if (isset($_POST['sound'])) {
-        $_SESSION['sound'] = $_POST['sound'];
-        $sound = $_POST['sound'];
-    }
-    if (isset($_POST['vibration'])) {
-        $_SESSION['vibration'] = $_POST['vibration'];
-        $vibration = $_POST['vibration'];
-    }
-    if (isset($_POST['logout'])) {
-        session_destroy();
-        header("Location: Signin.php");
-        exit;
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings - MindCraft</title>
-<link rel="stylesheet" href="../Design/style.css">
+<link rel="stylesheet" href="../Design/Position.css">
 
 <style>
 body {
     font-family: 'Poppins', sans-serif;
     margin:0; padding:0;
-    background: <?= $theme === 'dark' ? '#203a43' : '#f5f5f5' ?>;
-    color: <?= $theme === 'dark' ? '#fff' : '#000' ?>;
     text-align: center;
 }
 .settings-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background: <?= $theme === 'dark' ? 'rgba(0,0,0,0.4)' : '#eee' ?>;
     border-radius: 12px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
 }
 button, select {
     margin: 10px;
@@ -70,39 +34,79 @@ button:hover { background:#1ed760; }
 <body>
 
 <div class="settings-container">
-    <h2>Settings</h2>
+    <h2>⚙️ Settings</h2>
 
-    <form method="POST">
-        <label>Theme:</label>
-        <select name="theme" onchange="this.form.submit()">
-            <option value="dark" <?= $theme==='dark'?'selected':'' ?>>Dark</option>
-            <option value="light" <?= $theme==='light'?'selected':'' ?>>Light</option>
-        </select>
-        <br>
+    <label>Theme:</label>
+    <select id="themeSelect">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+    </select>
+    <br>
 
-        <label>Sound:</label>
-        <select name="sound" onchange="this.form.submit()">
-            <option value="on" <?= $sound==='on'?'selected':'' ?>>On</option>
-            <option value="off" <?= $sound==='off'?'selected':'' ?>>Off</option>
-        </select>
-        <br>
+    <label>Sound:</label>
+    <select id="soundSelect">
+        <option value="on">On</option>
+        <option value="off">Off</option>
+    </select>
+    <br>
 
-        <label>Vibration:</label>
-        <select name="vibration" onchange="this.form.submit()">
-            <option value="on" <?= $vibration==='on'?'selected':'' ?>>On</option>
-            <option value="off" <?= $vibration==='off'?'selected':'' ?>>Off</option>
-        </select>
-        <br>
+    <label>Vibration:</label>
+    <select id="vibrationSelect">
+        <option value="on">On</option>
+        <option value="off">Off</option>
+    </select>
+    <br>
 
-        <button type="submit" name="logout">Logout</button>
-    </form>
+    <button id="logoutBtn">🚪 Logout</button>
 </div>
 
 <script>
-// Optional: Store preferences in localStorage for JS
-localStorage.setItem('theme', '<?= $theme ?>');
-localStorage.setItem('sound', '<?= $sound ?>');
-localStorage.setItem('vibration', '<?= $vibration ?>');
+// --- Load saved preferences ---
+const theme = localStorage.getItem('theme') || 'dark';
+const sound = localStorage.getItem('sound') || 'on';
+const vibration = localStorage.getItem('vibration') || 'on';
+
+// --- Set current selections ---
+document.getElementById('themeSelect').value = theme;
+document.getElementById('soundSelect').value = sound;
+document.getElementById('vibrationSelect').value = vibration;
+
+// --- Apply theme ---
+function applyTheme(theme) {
+    if(theme === 'dark') {
+        document.body.style.background = '#203a43';
+        document.body.style.color = '#fff';
+        document.querySelector('.settings-container').style.background = 'rgba(0,0,0,0.4)';
+    } else {
+        document.body.style.background = '#f5f5f5';
+        document.body.style.color = '#000';
+        document.querySelector('.settings-container').style.background = '#eee';
+    }
+}
+applyTheme(theme);
+
+// --- Update localStorage when changed ---
+document.getElementById('themeSelect').addEventListener('change', (e) => {
+    localStorage.setItem('theme', e.target.value);
+    applyTheme(e.target.value);
+});
+
+document.getElementById('soundSelect').addEventListener('change', (e) => {
+    localStorage.setItem('sound', e.target.value);
+});
+
+document.getElementById('vibrationSelect').addEventListener('change', (e) => {
+    localStorage.setItem('vibration', e.target.value);
+});
+
+// --- Logout ---
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    // Clear user-related data
+    localStorage.removeItem('username');
+    localStorage.removeItem('level');
+    localStorage.removeItem('xp');
+    window.location.href = 'signin.html'; // redirect to signin page
+});
 </script>
 
 </body>
