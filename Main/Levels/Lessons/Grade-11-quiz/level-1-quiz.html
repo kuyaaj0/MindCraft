@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 11 Quiz - Level 1 (Binary)</title>
+  <link rel="stylesheet" href="../../../Design/style.css">
 
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px;
+    }
+    h2 { margin-bottom: 20px; }
+    .choice {
+      display: block;
+      margin: 10px auto;
+      padding: 12px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      background: #1DB954;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .choice:hover { background: #1ed760; }
+    #result { margin-top: 20px; font-size: 1.2em; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Grade 11 Quiz - Level 1: Binary Programming</h2>
+    <div id="questionContainer"></div>
+    <div id="result"></div>
+    <button id="nextBtn" style="display:none;">Next Question</button>
+  </div>
+
+  <script src="../../../Exp/levels.js"></script>
+  <script>
+    // --- QUIZ DATA: Binary Programming ---
+    const quizQuestions = [
+      {
+        question: "What is the binary equivalent of decimal 5?",
+        choices: ["101", "110", "111", "100"],
+        answer: 0
+      },
+      {
+        question: "How many bits are there in a byte?",
+        choices: ["8", "4", "16", "2"],
+        answer: 0
+      },
+      {
+        question: "What is the binary equivalent of decimal 10?",
+        choices: ["1010", "1001", "1100", "1110"],
+        answer: 0
+      },
+      {
+        question: "Which digit is NOT used in binary?",
+        choices: ["2", "0", "1", "All are used"],
+        answer: 0
+      },
+      {
+        question: "What is the decimal value of binary 1101?",
+        choices: ["13", "12", "14", "15"],
+        answer: 0
+      },
+      {
+        question: "Binary is a base-__ number system.",
+        choices: ["2", "10", "8", "16"],
+        answer: 0
+      },
+      {
+        question: "The binary number 1111 equals decimal:",
+        choices: ["15", "14", "16", "13"],
+        answer: 0
+      },
+      {
+        question: "How do you represent decimal 0 in binary?",
+        choices: ["0", "1", "00", "10"],
+        answer: 0
+      },
+      {
+        question: "Binary numbers are used by computers because they:",
+        choices: ["Represent two states (on/off)", "Are easier to read", "Require more memory", "None of the above"],
+        answer: 0
+      },
+      {
+        question: "What is the result of binary addition: 101 + 011?",
+        choices: ["1000", "111", "110", "1011"],
+        answer: 0
+      },
+      // You can add more questions (10–40 total)
+    ];
+
+    let currentQuestion = 0;
+    const questionContainer = document.getElementById("questionContainer");
+    const nextBtn = document.getElementById("nextBtn");
+    const result = document.getElementById("result");
+
+    function loadQuestion() {
+      result.textContent = "";
+      nextBtn.style.display = "none";
+
+      const q = quizQuestions[currentQuestion];
+      questionContainer.innerHTML = `<h3>${q.question}</h3>`;
+      q.choices.forEach((choice, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.className = "choice";
+        btn.onclick = () => checkAnswer(index);
+        questionContainer.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedIndex) {
+      const correctIndex = quizQuestions[currentQuestion].answer;
+      const choices = document.querySelectorAll(".choice");
+      choices.forEach(btn => btn.disabled = true);
+
+      if (selectedIndex === correctIndex) {
+        result.textContent = "✅ Correct! You gained 5 XP!";
+        gainQuizXP(true);
+      } else {
+        result.textContent = "❌ Wrong! No XP gained.";
+        gainQuizXP(false);
+      }
+
+      nextBtn.style.display = "inline-block";
+    }
+
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      if (currentQuestion < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        questionContainer.innerHTML = "<h3>🎉 Quiz Finished!</h3>";
+        nextBtn.style.display = "none";
+        result.textContent = "Your XP has been updated!";
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
