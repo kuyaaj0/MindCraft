@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 11 Quiz - Level 1 (HTML)</title>
+  <link rel="stylesheet" href="../../../Design/levels.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: 50px auto;
+      padding: 20px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 12px;
+    }
+    h2 { margin-bottom: 10px; }
+    h4 { margin-top: 5px; }
+    .choice {
+      display: block;
+      margin: 10px auto;
+      padding: 12px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      background: #1DB954;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .choice:hover { background: #1ed760; }
+    #result { margin-top: 20px; font-size: 1.2em; }
+    #nextBtn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #1DB954;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      display: none;
+    }
+    #nextBtn:hover { background: #1ed760; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Grade 11 Quiz - Level 1: HTML Basics</h2>
+    <h4 id="progress">Question 1 of 10</h4>
+    <h4 id="timer">Time Left: 15:00</h4>
+
+    <div id="questionContainer"></div>
+    <div id="result"></div>
+    <button id="nextBtn">Next Question</button>
+  </div>
+
+  <!-- Sound Effects -->
+  <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
+  <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
+
+  <!-- XP System -->
+  <script src="../../../Exp/levels.js"></script>
+
+  <script>
+    // --- QUIZ DATA: HTML Basics ---
+    const quizQuestions = [
+      { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
+      { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
+      { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
+      { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
+      { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
+      { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
+      { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
+      { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
+      { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
+      { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
+    ];
+
+    let currentQuestion = 0;
+    const questionContainer = document.getElementById("questionContainer");
+    const nextBtn = document.getElementById("nextBtn");
+    const result = document.getElementById("result");
+    const progress = document.getElementById("progress");
+    const timerEl = document.getElementById("timer");
+
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    const soundEnabled = localStorage.getItem('sound') === 'on';
+    const vibrationEnabled = localStorage.getItem('vibration') === 'on';
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    // --- TIMER ---
+    let totalTime = 15 * 60; // 15 minutes default
+    const interval = setInterval(() => {
+      if (totalTime <= 0) {
+        clearInterval(interval);
+        questionContainer.innerHTML = "<h3>⏰ Time's up!</h3>";
+        nextBtn.style.display = "none";
+        result.textContent = "Your XP has been updated!";
+        return;
+      }
+      totalTime--;
+      const minutes = Math.floor(totalTime / 60);
+      const seconds = totalTime % 60;
+      timerEl.textContent = `Time Left: ${minutes}:${seconds.toString().padStart(2,'0')}`;
+    }, 1000);
+
+    // --- LOAD QUESTION ---
+    function loadQuestion() {
+      result.textContent = "";
+      nextBtn.style.display = "none";
+      const q = quizQuestions[currentQuestion];
+      progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+      questionContainer.innerHTML = `<h3>${q.question}</h3>`;
+      q.choices.forEach((choice, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.className = "choice";
+        btn.onclick = () => checkAnswer(index);
+        questionContainer.appendChild(btn);
+      });
+    }
+
+    // --- CHECK ANSWER ---
+    function checkAnswer(selectedIndex) {
+      const correctIndex = quizQuestions[currentQuestion].answer;
+      const choices = document.querySelectorAll(".choice");
+      choices.forEach(btn => btn.disabled = true);
+
+      if (selectedIndex === correctIndex) {
+        result.textContent = "✅ Correct! You gained 5 XP!";
+        gainQuizXP(true);
+        if (soundEnabled) correctSound.play();
+        if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
+      } else {
+        result.textContent = "❌ Wrong! No XP gained.";
+        gainQuizXP(false);
+        if (soundEnabled) wrongSound.play();
+        if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
+      }
+
+      nextBtn.style.display = "inline-block";
+    }
+
+    // --- NEXT QUESTION ---
+    nextBtn.onclick = () => {
+      currentQuestion++;
+      if (currentQuestion < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        clearInterval(interval);
+        questionContainer.innerHTML = "<h3>🎉 Quiz Finished!</h3>";
+        nextBtn.style.display = "none";
+        result.textContent = "Your XP has been updated!";
+      }
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
