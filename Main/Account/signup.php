@@ -49,6 +49,6 @@ button:hover { background:#1ed760; }
   <button type="submit">Create Account</button>
 </form>
 <p><?= $message ?></p>
-<p>Already have an account? <a href="Signin.php" style="color:#1DB954;">Sign in here</a>.</p>
+<p>Already have an account? <a href="signin.php" style="color:#1DB954;">Sign in here</a>.</p>
 </body>
 </html>
