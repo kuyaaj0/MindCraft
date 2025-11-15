@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindCraft | Learn and Level Up</title>
+  <link rel="stylesheet" href="Design/style.css">
 
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 30px 10px;
+      background: rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #ccc;
+      font-size: 1.1em;
+    }
+
+    .menu {
+      margin-top: 40px;
+    }
+
+    .menu button {
+      display: block;
+      width: 80%;
+      max-width: 300px;
+      margin: 15px auto;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #1DB954;
+      color: white;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .menu button:hover {
+      background: #1ed760;
+    }
+
+    .xp-section {
+      margin-top: 40px;
+    }
+
+    progress {
+      width: 80%;
+      height: 20px;
+      border-radius: 10px;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 0.9em;
+      background: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧠 MindCraft</h1>
+    <p>Learn lessons. Gain XP. Level up your mind.</p>
+  </header>
+
+  <main>
+    <section class="menu">
+      <button onclick="location.href='Levels/level-1-quiz.html'">📘 Levels</button>
+      <button onclick="location.href='Modular/'">📖 Modular Lessons</button>
+      <button onclick="location.href='Account/'">👤 Account</button>
+      <button onclick="location.href='Settings/'">⚙️ Settings</button>
+    </section>
+
+    <section class="xp-section">
+      <h3>Your XP: <span id="xpValue">0</span></h3>
+      <progress id="xpBar" value="0" max="100"></progress>
+      <br><br>
+      <button onclick="gainXP(10)">Gain 10 XP</button>
+      <button onclick="resetXP()">Reset XP</button>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 MindCraft | Created by Kuya AJ</p>
+  </footer>
+
+  <script>
+    // --- XP SYSTEM (Saves Progress in localStorage) ---
+    let xp = parseInt(localStorage.getItem('xp')) || 0;
+    const xpValue = document.getElementById('xpValue');
+    const xpBar = document.getElementById('xpBar');
+
+    // Display saved XP on load
+    xpValue.textContent = xp;
+    xpBar.value = xp;
+
+    function gainXP(amount) {
+      xp += amount;
+      if (xp > 100) xp = 100;
+      xpValue.textContent = xp;
+      xpBar.value = xp;
+      localStorage.setItem('xp', xp);
+      alert(`You gained ${amount} XP! Keep learning!`);
+    }
+
+    function resetXP() {
+      if (confirm('Reset all your XP progress?')) {
+        xp = 0;
+        localStorage.setItem('xp', xp);
+        xpValue.textContent = xp;
+        xpBar.value = xp;
+        alert('XP reset complete.');
+      }
+    }
+  </script>
+</body>
+</html>
