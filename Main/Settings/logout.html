@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logout - MindCraft</title>
+<script>
+  // Clear all user-related data from localStorage
+  localStorage.removeItem('username');
+  localStorage.removeItem('level');
+  localStorage.removeItem('xp');
+  // Optional: clear settings too if needed
+  // localStorage.removeItem('theme');
+  // localStorage.removeItem('sound');
+  // localStorage.removeItem('vibration');
+
+  // Redirect to signin page
+  window.location.href = '../Account/signin.html';
+</script>
+</head>
+<body>
+<p>Logging out...</p>
+</body>
+</html>
