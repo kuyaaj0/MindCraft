@@ -4,102 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MindCraft | Learn and Level Up</title>
-  <!-- External CSS -->
-  <link rel="stylesheet" href="Main/Design/style.css">
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      padding: 30px 10px;
-      background: rgba(0,0,0,0.3);
-    }
-
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #ccc;
-      font-size: 1.1em;
-    }
-
-    .menu {
-      margin-top: 40px;
-    }
-
-    .menu button {
-      display: block;
-      width: 80%;
-      max-width: 300px;
-      margin: 15px auto;
-      padding: 15px;
-      border: none;
-      border-radius: 12px;
-      background: #1DB954;
-      color: white;
-      font-size: 1em;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .menu button:hover {
-      background: #1ed760;
-    }
-
-    .xp-section {
-      margin-top: 40px;
-    }
-
-    progress {
-      width: 80%;
-      height: 20px;
-      border-radius: 10px;
-    }
-
-    footer {
-      margin-top: 50px;
-      padding: 20px;
-      font-size: 0.9em;
-      background: rgba(0, 0, 0, 0.3);
-    }
-  </style>
+  <!-- External CSS Files -->
+  <link rel="stylesheet" href="Main/Design/Position.css">
+  <link rel="stylesheet" href="Main/Design/levels.css">
 </head>
+
 <body>
+  <!-- HEADER (XP & LEVEL STATUS) -->
   <header>
-    <h1>🧠 MindCraft</h1>
-    <p>Learn lessons. Gain XP. Level up your mind.</p>
+    <div class="xp-status">
+      <span>XP:</span>
+      <progress id="xpBar" value="0" max="100"></progress>
+      <span id="xpValue">0</span>
+    </div>
+
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
   </header>
 
+  <!-- MAIN MENU SECTION -->
   <main>
-    <section class="menu">
-      <button onclick="location.href='Main/Levels/level-1-quiz.html'">📘 Levels</button>
-      <button onclick="location.href='Main/Modular/'">📖 Modular Lessons</button>
-      <button onclick="location.href='Main/Account/'">👤 Account</button>
-      <button onclick="location.href='Main/Settings/'">⚙️ Settings</button>
-    </section>
+    <h1>🧠 MindCraft</h1>
+    <p>Learn lessons. Gain XP. Level up your mind.</p>
 
-    <section class="xp-section">
-      <h3>Level: <span id="levelValue">1</span></h3>
-      <h3>XP: <span id="xpValue">0</span> / <span id="xpMax">100</span></h3>
-      <progress id="xpBar" value="0" max="100"></progress>
-    </section>
+    <nav class="menu">
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/level-1.html'">📘 Levels</button>
+      <button onclick="location.href='Main/Modular/'">📖 Modular Lessons</button>
+      <button onclick="location.href='Main/Account/account.php'">👤 Account</button>
+      <button onclick="location.href='Main/Settings/settings.php'">⚙️ Settings</button>
+    </nav>
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <p>© 2025 MindCraft | Created by Kuya AJ</p>
   </footer>
 
-  <!-- External JS for XP/Leveling -->
+  <!-- XP SYSTEM -->
   <script src="Main/Exp/levels.js"></script>
 </body>
 </html>
