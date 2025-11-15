@@ -1,15 +1,56 @@
 /* General Layout */
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
   margin: 0;
   padding: 0;
-  height: 100vh;
-  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
+
+.language-select h1 {
+  color: #ff69b4;
+  margin-top: 60px;
+  text-shadow: 0 0 10px #ff69b4, 0 0 20px #1DB954;
+  font-size: 1rem;
+}
+
+.language-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin: 50px auto;
+  width: 90%;
+  max-width: 900px;
+}
+
+.language-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #00ff90;
+  padding: 20px;
+  border-radius: 10px;
+  width: 120px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.language-card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.language-card p {
+  font-size: 0.5rem;
+  color: #fff;
+}
+
+.language-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px #00ff90, 0 0 30px #ff69b4;
+}
+
 
 /* Header (XP + Level display) */
 header {
