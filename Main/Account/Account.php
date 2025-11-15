@@ -3,7 +3,7 @@ session_start();
 
 // Redirect if not logged in
 if (!isset($_SESSION['Username'])) {
-    header("Location: signin.php");
+    header("Location: Signin.php");
     exit;
 }
 ?>
@@ -31,7 +31,7 @@ button:hover { background:#1ed760; }
   <p><b>XP:</b> <?= $_SESSION['XP'] ?? 0 ?></p>
 
   <a href="../Settings/settings.php"><button>⚙️ Settings</button></a>
-  <a href="../Settings/logout.php"><button>🚪 Logout</button></a>
+  <a href="../Settings/Logout.php"><button>🚪 Logout</button></a>
 </div>
 </body>
 </html>
