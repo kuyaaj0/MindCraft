@@ -3,7 +3,7 @@ session_start();
 
 // Redirect if not logged in
 if (!isset($_SESSION['Username'])) {
-    header("Location: signin.php");
+    header("Location: Signin.php");
     exit;
 }
 
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (isset($_POST['logout'])) {
         session_destroy();
-        header("Location: signin.php");
+        header("Location: Signin.php");
         exit;
     }
 }
