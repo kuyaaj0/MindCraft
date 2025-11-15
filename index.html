@@ -32,11 +32,27 @@
     <p>Learn lessons. Gain XP. Level up your mind.</p>
 
     <nav class="menu">
-      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/'">📘 Levels</button>
-      <button onclick="location.href='Main/Modular/Grade-11/Lessons'">📖 Modular Lessons</button>
-      <button onclick="location.href='Main/Account/Account.php'">👤 Account</button>
+      <button onclick="toggleMenu('levelsMenu')">📘 Levels</button>
+      <button onclick="toggleMenu('modularMenu')">📖 Modular Lessons</button>
+      <button onclick="location.href='Main/Account/account.php'">👤 Account</button>
       <button onclick="location.href='Main/Settings/settings.php'">⚙️ Settings</button>
     </nav>
+
+    <!-- LEVEL SUBJECT MENU -->
+    <div id="levelsMenu" class="subject-menu">
+      <h3>Select a Quiz Subject:</h3>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/Programming/level-1.html'">💻 Programming</button>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/General Mathematics/level-1.html'">📐 General Mathematics</button>
+      <button class="close-btn" onclick="toggleMenu('levelsMenu')">❌ Close</button>
+    </div>
+
+    <!-- MODULAR SUBJECT MENU -->
+    <div id="modularMenu" class="subject-menu">
+      <h3>Select a Lesson Subject:</h3>
+      <button onclick="location.href='Main/Modular/Grade-11/Programming/'">💻 Programming Lessons</button>
+      <button onclick="location.href='Main/Modular/Grade-11/General Mathematics/'">📐 General Mathematics Lessons</button>
+      <button class="close-btn" onclick="toggleMenu('modularMenu')">❌ Close</button>
+    </div>
   </main>
 
   <!-- FOOTER -->
@@ -46,5 +62,13 @@
 
   <!-- XP SYSTEM -->
   <script src="Main/Exp/levels.js"></script>
+
+  <!-- MENU TOGGLE SCRIPT -->
+  <script>
+    function toggleMenu(id) {
+      const menu = document.getElementById(id);
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+  </script>
 </body>
 </html>
