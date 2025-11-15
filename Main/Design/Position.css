@@ -1,4 +1,4 @@
-/* =============== Global Layout =============== */
+/* General Layout */
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -11,7 +11,7 @@ body {
   align-items: center;
 }
 
-/* Header XP Bar Layout */
+/* Header (XP + Level display) */
 header {
   width: 100%;
   display: flex;
@@ -24,16 +24,15 @@ header {
   box-sizing: border-box;
 }
 
-/* XP Section (Top Left) */
 .xp-status {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.xp-status span {
+.level-display {
   font-weight: bold;
-  font-size: 1em;
+  color: #1DB954;
 }
 
 progress {
@@ -44,24 +43,21 @@ progress {
   background-color: #333;
 }
 
-/* Level Display (Top Right) */
-.level-display {
-  font-weight: bold;
-  font-size: 1em;
-  color: #1DB954;
+/* Centered Menu */
+main {
+  text-align: center;
+  margin-top: 60px;
 }
 
-/* Navigation Menu */
-nav {
-  margin-top: 60px;
+.menu {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
+  margin-top: 30px;
 }
 
-/* Navigation Buttons */
-nav button {
+.menu button {
   width: 250px;
   padding: 15px;
   border: none;
@@ -71,20 +67,21 @@ nav button {
   font-size: 1em;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s ease;
 }
 
-nav button:hover {
+.menu button:hover {
   background: #1ed760;
+  transform: scale(1.05);
 }
 
 /* Footer */
 footer {
   margin-top: auto;
-  padding: 15px;
   width: 100%;
+  padding: 15px;
   text-align: center;
-  background: rgba(0,0,0,0.3);
-  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.3);
   color: #ccc;
+  font-size: 0.9em;
 }
