@@ -41,9 +41,27 @@
     <!-- LEVEL SUBJECT MENU -->
     <div id="levelsMenu" class="subject-menu">
       <h3>Select a Quiz Subject:</h3>
-      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/Programming/level-1-quiz.html'">💻 Programming</button>
-      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/General Mathematics/level-1-quiz.html'">📐 General Mathematics</button>
+      <button onclick="toggleMenu('programmingMenu')">💻 Programming</button>
+      <button onclick="toggleMenu('mathMenu')">📐 General Mathematics</button>
       <button class="close-btn" onclick="toggleMenu('levelsMenu')">❌ Close</button>
+    </div>
+
+    <!-- PROGRAMMING LEVELS -->
+    <div id="programmingMenu" class="subject-menu">
+      <h3>💻 Programming - Select Level:</h3>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/Programming/level-1.html'">Level 1</button>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/Programming/level-2.html'">Level 2</button>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/Programming/level-3.html'">Level 3</button>
+      <button class="close-btn" onclick="toggleMenu('programmingMenu')">⬅️ Back</button>
+    </div>
+
+    <!-- MATH LEVELS -->
+    <div id="mathMenu" class="subject-menu">
+      <h3>📐 General Mathematics - Select Level:</h3>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/General Mathematics/level-1.html'">Level 1</button>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/General Mathematics/level-2.html'">Level 2</button>
+      <button onclick="location.href='Main/Levels/Lessons/Grade-11-quiz/General Mathematics/level-3.html'">Level 3</button>
+      <button class="close-btn" onclick="toggleMenu('mathMenu')">⬅️ Back</button>
     </div>
 
     <!-- MODULAR SUBJECT MENU -->
@@ -66,6 +84,10 @@
   <!-- MENU TOGGLE SCRIPT -->
   <script>
     function toggleMenu(id) {
+      const menus = document.querySelectorAll('.subject-menu');
+      menus.forEach(m => {
+        if (m.id !== id) m.style.display = 'none';
+      });
       const menu = document.getElementById(id);
       menu.style.display = (menu.style.display === "block") ? "none" : "block";
     }
