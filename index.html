@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MindCraft | Learn and Level Up</title>
-  <link rel="stylesheet" href="Design/style.css">
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="Main/Design/style.css">
 
   <style>
     body {
@@ -81,10 +82,10 @@
 
   <main>
     <section class="menu">
-      <button onclick="location.href='Levels/level-1-quiz.html'">📘 Levels</button>
-      <button onclick="location.href='Modular/'">📖 Modular Lessons</button>
-      <button onclick="location.href='Account/'">👤 Account</button>
-      <button onclick="location.href='Settings/'">⚙️ Settings</button>
+      <button onclick="location.href='Main/Levels/level-1-quiz.html'">📘 Levels</button>
+      <button onclick="location.href='Main/Modular/'">📖 Modular Lessons</button>
+      <button onclick="location.href='Main/Account/'">👤 Account</button>
+      <button onclick="location.href='Main/Settings/'">⚙️ Settings</button>
     </section>
 
     <section class="xp-section">
@@ -100,34 +101,7 @@
     <p>© 2025 MindCraft | Created by Kuya AJ</p>
   </footer>
 
-  <script>
-    // --- XP SYSTEM (Saves Progress in localStorage) ---
-    let xp = parseInt(localStorage.getItem('xp')) || 0;
-    const xpValue = document.getElementById('xpValue');
-    const xpBar = document.getElementById('xpBar');
-
-    // Display saved XP on load
-    xpValue.textContent = xp;
-    xpBar.value = xp;
-
-    function gainXP(amount) {
-      xp += amount;
-      if (xp > 100) xp = 100;
-      xpValue.textContent = xp;
-      xpBar.value = xp;
-      localStorage.setItem('xp', xp);
-      alert(`You gained ${amount} XP! Keep learning!`);
-    }
-
-    function resetXP() {
-      if (confirm('Reset all your XP progress?')) {
-        xp = 0;
-        localStorage.setItem('xp', xp);
-        xpValue.textContent = xp;
-        xpBar.value = xp;
-        alert('XP reset complete.');
-      }
-    }
-  </script>
+  <!-- External JS for XP system -->
+  <script src="Main/Exp/levels.js"></script>
 </body>
 </html>
