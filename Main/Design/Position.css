@@ -57,6 +57,37 @@ body {
 }
 
 /* =========================
+   Lesson & Quiz Select Menus
+========================= */
+.language-card select {
+  display: block;
+  width: 100%;
+  margin: 8px auto 5px;
+  padding: 8px;
+  font-size: 0.6rem;
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border: 1px solid #1DB954;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.language-card select:hover {
+  border-color: #ff69b4;
+  box-shadow: 0 0 8px #ff69b4, 0 0 12px #1DB954;
+  background: rgba(30, 30, 30, 0.9);
+}
+
+.language-card option {
+  background: #000;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* =========================
    Header (XP + Level)
 ========================= */
 header {
