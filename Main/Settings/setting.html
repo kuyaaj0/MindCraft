@@ -80,17 +80,20 @@ button:hover {
 </div>
 
 <script>
-// --- Load saved preferences ---
+// =============================
+// Load saved preferences
+// =============================
 const theme = localStorage.getItem('theme') || 'dark';
 const sound = localStorage.getItem('sound') || 'on';
 const vibration = localStorage.getItem('vibration') || 'on';
 
-// --- Set current selections ---
 document.getElementById('themeSelect').value = theme;
 document.getElementById('soundSelect').value = sound;
 document.getElementById('vibrationSelect').value = vibration;
 
-// --- Apply theme ---
+// =============================
+// Apply theme styling
+// =============================
 function applyTheme(theme) {
     const container = document.querySelector('.settings-container');
     if (theme === 'dark') {
@@ -107,24 +110,30 @@ function applyTheme(theme) {
 }
 applyTheme(theme);
 
-// --- Save changes on selection ---
-document.getElementById('themeSelect').addEventListener('change', (e) => {
+// =============================
+// Save new settings
+// =============================
+document.getElementById('themeSelect').addEventListener('change', e => {
     localStorage.setItem('theme', e.target.value);
     applyTheme(e.target.value);
 });
-document.getElementById('soundSelect').addEventListener('change', (e) => {
+document.getElementById('soundSelect').addEventListener('change', e => {
     localStorage.setItem('sound', e.target.value);
 });
-document.getElementById('vibrationSelect').addEventListener('change', (e) => {
+document.getElementById('vibrationSelect').addEventListener('change', e => {
     localStorage.setItem('vibration', e.target.value);
 });
 
-// --- Back Button (Return to main index.html) ---
+// =============================
+// Back button (to root index.html)
+// =============================
 document.getElementById('backBtn').addEventListener('click', () => {
-    window.location.href = 'index.html';
+    window.location.href = '../../index.html';
 });
 
-// --- Logout ---
+// =============================
+// Logout button (to signin.html)
+// =============================
 document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('level');
