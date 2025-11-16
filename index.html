@@ -147,7 +147,7 @@
 const currentUser = localStorage.getItem('currentUser');
 if (!currentUser) {
     // Not logged in, redirect to signin page
-    window.location.href = 'Account/signin.html';
+    window.location.href = 'Main/Account/signin.html';
 } else {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const user = users.find(u => u.username === currentUser);
@@ -160,11 +160,11 @@ if (!currentUser) {
 
 // ===== Buttons =====
 document.getElementById('settingsBtn').addEventListener('click', () => {
-    window.location.href = 'Settings/settings.html';
+    window.location.href = 'Main/Settings/setting.html';
 });
 document.getElementById('logoutBtn').addEventListener('click', () => {
     localStorage.removeItem('currentUser');
-    window.location.href = 'Account/signin.html';
+    window.location.href = 'Main/Account/signin.html';
 });
 </script>
 
