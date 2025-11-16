@@ -29,12 +29,12 @@ button, select {
     font-size: 1em;
     border-radius: 10px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 button {
     background: #1DB954;
     color: #fff;
     border: none;
-    transition: all 0.3s ease;
 }
 button:hover {
     background: #1ed760;
@@ -74,7 +74,6 @@ button:hover {
     </select>
     <br>
 
-    <!-- Back Button Only -->
     <button class="back-btn" id="backBtn">⬅️ Back</button>
 </div>
 
@@ -91,20 +90,26 @@ document.getElementById('soundSelect').value = sound;
 document.getElementById('vibrationSelect').value = vibration;
 
 // =============================
-// Apply theme styling
+// Apply theme (color + text)
 // =============================
 function applyTheme(theme) {
     const container = document.querySelector('.settings-container');
+    const textElements = document.querySelectorAll('h2, label, option');
+
     if (theme === 'dark') {
         document.body.style.background = '#203a43';
         document.body.style.color = '#fff';
         container.style.background = 'rgba(0,0,0,0.4)';
+        container.style.color = '#fff';
         container.style.boxShadow = '0 0 15px #1DB954';
+        textElements.forEach(el => el.style.color = '#fff');
     } else {
         document.body.style.background = '#f5f5f5';
         document.body.style.color = '#000';
-        container.style.background = '#eee';
+        container.style.background = '#fff';
+        container.style.color = '#000';
         container.style.boxShadow = '0 0 15px #999';
+        textElements.forEach(el => el.style.color = '#000');
     }
 }
 applyTheme(theme);
@@ -113,8 +118,12 @@ applyTheme(theme);
 // Save new settings
 // =============================
 document.getElementById('themeSelect').addEventListener('change', e => {
-    localStorage.setItem('theme', e.target.value);
-    applyTheme(e.target.value);
+    const newTheme = e.target.value;
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+
+    // Broadcast change to all pages (so they update instantly)
+    window.dispatchEvent(new StorageEvent('storage', { key: 'theme', newValue: newTheme }));
 });
 document.getElementById('soundSelect').addEventListener('change', e => {
     localStorage.setItem('sound', e.target.value);
@@ -130,6 +139,9 @@ document.getElementById('backBtn').addEventListener('click', () => {
     window.location.href = '../../index.html';
 });
 </script>
+
+<!-- Load global theme (so all pages match) -->
+<script src="../Design/theme.js"></script>
 
 </body>
 </html>
