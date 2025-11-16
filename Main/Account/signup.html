@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - MindCraft</title>
+<link rel="stylesheet" href="../Design/style.css">
+<style>
+body { 
+    font-family: 'Poppins', sans-serif; 
+    text-align: center; 
+    background: #203a43; 
+    color: white; 
+}
+input { 
+    padding: 10px; 
+    width: 70%; 
+    margin: 10px; 
+    border-radius: 8px; 
+    border: none; 
+}
+button { 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 8px; 
+    background: #1DB954; 
+    color: white; 
+    cursor: pointer; 
+}
+button:hover { background: #1ed760; }
+.message { margin: 10px; color: #ff5252; }
+</style>
+</head>
+<body>
+
+<h2>🧠 MindCraft - Sign Up</h2>
+<form id="signupForm">
+  <input type="text" id="username" placeholder="Enter username" required><br>
+  <input type="password" id="password" placeholder="Enter password" required><br>
+  <button type="submit">Create Account</button>
+</form>
+<p class="message" id="message"></p>
+<p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+
+<script>
+// Initialize users in localStorage if not exist
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify([]));
+}
+
+const form = document.getElementById('signupForm');
+const messageEl = document.getElementById('message');
+
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    // Check if username exists
+    if (users.some(u => u.username === username)) {
+        messageEl.textContent = "❌ Username already exists!";
+        return;
+    }
+
+    // Add new user
+    users.push({ username, password, level: 1, xp: 0 });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    messageEl.style.color = "#1DB954";
+    messageEl.textContent = "✅ Account created! You can now sign in.";
+
+    // Optional: redirect after 1.5 seconds
+    setTimeout(() => {
+        window.location.href = 'signin.html';
+    }, 1500);
+});
+</script>
+
+</body>
+</html>
