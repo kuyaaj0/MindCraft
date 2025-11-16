@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In - MindCraft</title>
-<link rel="stylesheet" href="../Design/style.css">
+<link rel="stylesheet" href="../Design/Position.css">
 <style>
 body { 
     font-family: 'Poppins', sans-serif; 
@@ -43,8 +43,7 @@ button:hover { background: #1ed760; }
 <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 
 <script>
-// Simulate a "database" using localStorage
-// Example user for testing: username: "user1", password: "12345"
+// Initialize users in localStorage if not exist
 if (!localStorage.getItem('users')) {
     localStorage.setItem('users', JSON.stringify([
         { username: 'user1', password: '12345', level: 1, xp: 0 }
@@ -73,13 +72,13 @@ form.addEventListener('submit', function(e) {
         return;
     }
 
-    // Save login info to localStorage
-    localStorage.setItem('username', user.username);
+    // Save current user info in localStorage
+    localStorage.setItem('currentUser', user.username);
     localStorage.setItem('level', user.level);
     localStorage.setItem('xp', user.xp);
 
-    // Redirect to account page
-    window.location.href = 'account.html';
+    // Redirect to index.html (main dashboard)
+    window.location.href = '../index.html';
 });
 </script>
 
