@@ -1,129 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MindCraft | Choose a Coding Language</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCraft | Choose a Coding Language</title>
 
-  <!-- Fonts and Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Main/Design/Position.css">
-  <link rel="stylesheet" href="Main/Design/levels.css">
+<!-- Fonts and Styles -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Main/Design/Position.css">
+<link rel="stylesheet" href="Main/Design/levels.css">
+
+<style>
+.user-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+.user-actions button {
+    padding: 5px 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1DB954;
+    color: white;
+    cursor: pointer;
+}
+.user-actions button:hover { background: #1ed760; }
+</style>
 </head>
 <body>
-  <header>
+
+<header>
     <div class="xp-status">
-      <span>XP:</span>
-      <progress id="xpBar" value="0" max="100"></progress>
-      <span id="xpValue">0</span>
+        <span>XP:</span>
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
     </div>
     <div class="level-display">
-      Level <span id="levelValue">1</span>
+        Level <span id="levelValue">1</span>
     </div>
-
     <div class="user-actions">
-      <button onclick="location.href='Main/Settings/setting.php'">⚙️ Settings</button>
-      <button onclick="location.href='logout.php'">🚪 Logout</button>
+        <button id="settingsBtn">⚙️ Settings</button>
+        <button id="logoutBtn">🚪 Logout</button>
     </div>
-  </header>
+</header>
 
-  <main class="language-select">
+<main class="language-select">
     <h1>🧠 CHOOSE A CODING LANGUAGE</h1>
 
     <div class="language-grid">
 
-      <!-- HTML -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/html.png" alt="HTML">
-        <p>HTML</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
-        </select>
-      </div>
+        <!-- HTML -->
+        <div class="language-card">
+            <img src="Main/Assets/Icons/html.png" alt="HTML">
+            <p>HTML</p>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📖 Select Lesson</option>
+                <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
+                <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
+            </select>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📝 Select Quiz</option>
+                <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
+                <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
+                <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
+            </select>
+        </div>
 
-      <!-- CSS -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/css.png" alt="CSS">
-        <p>CSS</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
-        </select>
-      </div>
+        <!-- CSS -->
+        <div class="language-card">
+            <img src="Main/Assets/Icons/css.png" alt="CSS">
+            <p>CSS</p>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📖 Select Lesson</option>
+                <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
+                <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
+            </select>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📝 Select Quiz</option>
+                <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
+                <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
+                <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
+            </select>
+        </div>
 
-      <!-- JavaScript -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/js.png" alt="JavaScript">
-        <p>JAVASCRIPT</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
-        </select>
-      </div>
+        <!-- JavaScript -->
+        <div class="language-card">
+            <img src="Main/Assets/Icons/js.png" alt="JavaScript">
+            <p>JAVASCRIPT</p>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📖 Select Lesson</option>
+                <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
+                <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
+            </select>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📝 Select Quiz</option>
+                <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
+                <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
+                <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
+            </select>
+        </div>
 
-      <!-- PHP -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/php.png" alt="PHP">
-        <p>PHP</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/PHP/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/PHP/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/PHP/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/PHP/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/PHP/level-3.html">Level 3</option>
-        </select>
-      </div>
+        <!-- PHP -->
+        <div class="language-card">
+            <img src="Main/Assets/Icons/php.png" alt="PHP">
+            <p>PHP</p>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📖 Select Lesson</option>
+                <option value="Main/Modular/PHP/lesson-1.html">Lesson 1</option>
+                <option value="Main/Modular/PHP/lesson-2.html">Lesson 2</option>
+            </select>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📝 Select Quiz</option>
+                <option value="Main/Levels/Quiz/PHP/level-1.html">Level 1</option>
+                <option value="Main/Levels/Quiz/PHP/level-2.html">Level 2</option>
+                <option value="Main/Levels/Quiz/PHP/level-3.html">Level 3</option>
+            </select>
+        </div>
 
-      <!-- Python -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/python.png" alt="Python">
-        <p>PYTHON</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/PYTHON/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/PYTHON/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/PYTHON/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/PYTHON/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/PYTHON/level-3.html">Level 3</option>
-        </select>
-      </div>
+        <!-- Python -->
+        <div class="language-card">
+            <img src="Main/Assets/Icons/python.png" alt="Python">
+            <p>PYTHON</p>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📖 Select Lesson</option>
+                <option value="Main/Modular/PYTHON/lesson-1.html">Lesson 1</option>
+                <option value="Main/Modular/PYTHON/lesson-2.html">Lesson 2</option>
+            </select>
+            <select onchange="if(this.value) window.location.href=this.value">
+                <option value="">📝 Select Quiz</option>
+                <option value="Main/Levels/Quiz/PYTHON/level-1.html">Level 1</option>
+                <option value="Main/Levels/Quiz/PYTHON/level-2.html">Level 2</option>
+                <option value="Main/Levels/Quiz/PYTHON/level-3.html">Level 3</option>
+            </select>
+        </div>
 
     </div>
-  </main>
+</main>
 
-  <footer>
+<footer>
     <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
-  </footer>
+</footer>
 
-  <script src="Main/Exp/levels.js"></script>
+<script>
+// ===== User authentication check using localStorage =====
+const currentUser = localStorage.getItem('currentUser');
+if (!currentUser) {
+    // Not logged in, redirect to signin page
+    window.location.href = 'Account/signin.html';
+} else {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.username === currentUser);
+    if (user) {
+        document.getElementById('levelValue').textContent = user.level;
+        document.getElementById('xpValue').textContent = user.xp;
+        document.getElementById('xpBar').value = user.xp;
+    }
+}
+
+// ===== Buttons =====
+document.getElementById('settingsBtn').addEventListener('click', () => {
+    window.location.href = 'Settings/settings.html';
+});
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'Account/signin.html';
+});
+</script>
+
 </body>
 </html>
