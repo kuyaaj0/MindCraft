@@ -9,16 +9,19 @@
 <style>
 body {
     font-family: 'Poppins', sans-serif;
-    margin:0; padding:0;
+    margin: 0;
+    padding: 0;
     text-align: center;
+    transition: background 0.3s, color 0.3s;
 }
 .settings-container {
     max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
+    margin: 60px auto;
+    padding: 25px;
     border-radius: 12px;
     background: rgba(0,0,0,0.4);
     color: #fff;
+    box-shadow: 0 0 15px #1DB954;
 }
 button, select {
     margin: 10px;
@@ -27,8 +30,22 @@ button, select {
     border-radius: 10px;
     cursor: pointer;
 }
-button { background:#1DB954; color:#fff; border:none; }
-button:hover { background:#1ed760; }
+button {
+    background: #1DB954;
+    color: #fff;
+    border: none;
+    transition: all 0.3s ease;
+}
+button:hover {
+    background: #1ed760;
+    transform: scale(1.05);
+}
+.back-btn {
+    background: #ff69b4;
+}
+.back-btn:hover {
+    background: #ff85c1;
+}
 </style>
 </head>
 <body>
@@ -57,6 +74,8 @@ button:hover { background:#1ed760; }
     </select>
     <br>
 
+    <!-- Buttons Section -->
+    <button class="back-btn" id="backBtn">⬅️ Back</button>
     <button id="logoutBtn">🚪 Logout</button>
 </div>
 
@@ -73,39 +92,44 @@ document.getElementById('vibrationSelect').value = vibration;
 
 // --- Apply theme ---
 function applyTheme(theme) {
-    if(theme === 'dark') {
+    const container = document.querySelector('.settings-container');
+    if (theme === 'dark') {
         document.body.style.background = '#203a43';
         document.body.style.color = '#fff';
-        document.querySelector('.settings-container').style.background = 'rgba(0,0,0,0.4)';
+        container.style.background = 'rgba(0,0,0,0.4)';
+        container.style.boxShadow = '0 0 15px #1DB954';
     } else {
         document.body.style.background = '#f5f5f5';
         document.body.style.color = '#000';
-        document.querySelector('.settings-container').style.background = '#eee';
+        container.style.background = '#eee';
+        container.style.boxShadow = '0 0 15px #999';
     }
 }
 applyTheme(theme);
 
-// --- Update localStorage when changed ---
+// --- Save changes on selection ---
 document.getElementById('themeSelect').addEventListener('change', (e) => {
     localStorage.setItem('theme', e.target.value);
     applyTheme(e.target.value);
 });
-
 document.getElementById('soundSelect').addEventListener('change', (e) => {
     localStorage.setItem('sound', e.target.value);
 });
-
 document.getElementById('vibrationSelect').addEventListener('change', (e) => {
     localStorage.setItem('vibration', e.target.value);
 });
 
+// --- Back Button (Return to main index.html) ---
+document.getElementById('backBtn').addEventListener('click', () => {
+    window.location.href = '../../index.html';
+});
+
 // --- Logout ---
 document.getElementById('logoutBtn').addEventListener('click', () => {
-    // Clear user-related data
-    localStorage.removeItem('username');
+    localStorage.removeItem('currentUser');
     localStorage.removeItem('level');
     localStorage.removeItem('xp');
-    window.location.href = 'signin.html'; // redirect to signin page
+    window.location.href = '../Account/signin.html';
 });
 </script>
 
