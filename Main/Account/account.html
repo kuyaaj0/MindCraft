@@ -11,34 +11,25 @@ body {
   background: #203a43;
   color: white;
   margin: 0;
+  padding: 0;
   text-align: center;
 }
-header {
+nav {
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  gap: 15px;
 }
-.xp-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.level-display {
-  font-weight: bold;
-}
-.user-actions button {
-  margin-left: 10px;
-  padding: 5px 12px;
+nav button {
+  padding: 8px 16px;
   border: none;
   border-radius: 8px;
   background: #1DB954;
   color: white;
   cursor: pointer;
 }
-.user-actions button:hover { background: #1ed760; }
-
+nav button:hover { background: #1ed760; }
 .container {
   margin-top: 50px;
   background: rgba(0,0,0,0.4);
@@ -48,34 +39,17 @@ header {
   margin-left: auto;
   margin-right: auto;
 }
-button.account-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background: #1DB954;
-  color: white;
-  cursor: pointer;
-  margin: 5px;
-}
-button.account-btn:hover { background: #1ed760; }
+h2 { margin-bottom: 15px; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="xp-status">
-    <span>XP:</span>
-    <progress id="xpBar" value="0" max="100"></progress>
-    <span id="xpValue">0</span>
-  </div>
-  <div class="level-display">
-    Level <span id="levelValue">1</span>
-  </div>
-  <div class="user-actions">
-    <button id="settingsBtn">⚙️ Settings</button>
-    <button id="logoutBtn">🚪 Logout</button>
-  </div>
-</header>
+<!-- Navigation Menu -->
+<nav>
+  <button onclick="location.href='index.html'">🏠 Home</button>
+  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  <button onclick="logout()">🚪 Logout</button>
+</nav>
 
 <div class="container">
   <h2>👤 Account Information</h2>
@@ -85,36 +59,25 @@ button.account-btn:hover { background: #1ed760; }
 </div>
 
 <script>
-// ===== Check logged-in user =====
+// Check if user is logged in
 const currentUser = localStorage.getItem('currentUser');
 if (!currentUser) {
-    alert('You must sign in first!');
-    window.location.href = '../Account/signin.html';
+  alert('You must sign in first!');
+  window.location.href = '../Account/signin.html';
 }
 
-// ===== Display account info =====
-const users = JSON.parse(localStorage.getItem('users') || '[]');
-const user = users.find(u => u.username === currentUser);
+// Display account info
+document.getElementById('username').textContent = currentUser;
+document.getElementById('level').textContent = localStorage.getItem('level') || 1;
+document.getElementById('xp').textContent = localStorage.getItem('xp') || 0;
 
-if (user) {
-    document.getElementById('username').textContent = user.username;
-    document.getElementById('level').textContent = user.level;
-    document.getElementById('xp').textContent = user.xp;
-
-    document.getElementById('levelValue').textContent = user.level;
-    document.getElementById('xpValue').textContent = user.xp;
-    document.getElementById('xpBar').value = user.xp;
+// Logout function
+function logout() {
+  localStorage.removeItem('currentUser');
+  localStorage.removeItem('level');
+  localStorage.removeItem('xp');
+  window.location.href = '../Account/signin.html';
 }
-
-// ===== Buttons =====
-document.getElementById('settingsBtn').addEventListener('click', () => {
-    window.location.href = '../Settings/setting.html';
-});
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('currentUser');
-    window.location.href = '../Account/signin.html';
-});
 </script>
-
 </body>
 </html>
