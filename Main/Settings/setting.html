@@ -74,9 +74,8 @@ button:hover {
     </select>
     <br>
 
-    <!-- Buttons Section -->
+    <!-- Back Button Only -->
     <button class="back-btn" id="backBtn">⬅️ Back</button>
-    <button id="logoutBtn">🚪 Logout</button>
 </div>
 
 <script>
@@ -129,16 +128,6 @@ document.getElementById('vibrationSelect').addEventListener('change', e => {
 // =============================
 document.getElementById('backBtn').addEventListener('click', () => {
     window.location.href = '../../index.html';
-});
-
-// =============================
-// Logout button (to signin.html)
-// =============================
-document.getElementById('logoutBtn').addEventListener('click', () => {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('level');
-    localStorage.removeItem('xp');
-    window.location.href = '../Account/signin.html';
 });
 </script>
 
