@@ -18,6 +18,7 @@ body {
   padding: 0;
   transition: background 0.5s, color 0.5s;
 }
+
 .quiz-container {
   max-width: 700px;
   margin: 50px auto;
@@ -27,6 +28,7 @@ body {
   box-shadow: 0 0 15px #1DB954;
   transition: background 0.3s, box-shadow 0.3s;
 }
+
 h2 { color: #1DB954; margin-bottom: 10px; font-size: 0.9rem; }
 h4 { font-size: 0.6rem; }
 
@@ -109,6 +111,23 @@ h4 { font-size: 0.6rem; }
   cursor: pointer;
 }
 #backBtn:hover { background: #ff85c1; transform: scale(1.05); }
+
+/* === Celebrating Character === */
+.hero-sprite {
+  width: 128px;
+  height: 128px;
+  background: url('../../../Assets/Characters/hero_sheet.png') no-repeat;
+  background-size: 1024px 128px; /* 8 frames horizontally */
+  image-rendering: pixelated;
+  animation: celebrateAnim 1s steps(8) infinite;
+  margin-top: 20px;
+  filter: drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954);
+}
+
+@keyframes celebrateAnim {
+  from { background-position: 0 0; }
+  to { background-position: -1024px 0; }
+}
 </style>
 </head>
 
@@ -127,6 +146,7 @@ h4 { font-size: 0.6rem; }
 <!-- Popup Overlay -->
 <div id="popupOverlay">
   <h2>🎉 Level Complete!</h2>
+  <div class="hero-sprite"></div> <!-- Celebrating Character -->
   <p id="xpGain">+0 XP Gained</p>
   <div class="xp-bar-container">
     <div class="xp-bar-fill" id="xpBarFill"></div>
@@ -264,10 +284,14 @@ function showPopup() {
   // Animate XP bar filling
   setTimeout(() => { xpBar.style.width = "100%"; }, 300);
 
-  // Fade to lobby after 3 seconds
+  // Character celebration pulse
+  const hero = document.querySelector('.hero-sprite');
+  hero.style.animation = 'celebrateAnim 0.7s steps(8) infinite';
+
+  // Fade to lobby after 4s
   setTimeout(() => {
     window.location.href = "../../../index.html";
-  }, 3500);
+  }, 4000);
 }
 
 /* === Start === */
