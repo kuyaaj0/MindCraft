@@ -82,7 +82,7 @@ document.getElementById('xp').textContent = localStorage.getItem(`${currentUser}
 function logout() {
   localStorage.setItem('lastUser', currentUser); // optional tracking
   localStorage.removeItem('currentUser');
-  window.location.href = '../Account/signin.html';
+  window.location.href = '../Account/signin.html'; //this is important
 }
 </script>
 
