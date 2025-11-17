@@ -15,6 +15,7 @@
       text-align: center;
       margin: 0;
       padding: 0;
+      transition: background 0.3s, color 0.3s;
     }
     .quiz-container {
       max-width: 700px;
@@ -22,6 +23,8 @@
       padding: 20px;
       background: rgba(0,0,0,0.4);
       border-radius: 12px;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 15px #1DB954;
     }
     h2 { margin-bottom: 10px; }
     h4 { margin-top: 5px; }
@@ -36,6 +39,8 @@
       cursor: pointer;
       font-weight: bold;
       transition: 0.3s;
+      color: #fff;
+      border: none;
     }
     .choice:hover { background: #1ed760; }
     #result { margin-top: 20px; font-size: 1.2em; }
@@ -49,6 +54,7 @@
       font-weight: bold;
       cursor: pointer;
       display: none;
+      transition: all 0.3s;
     }
     #nextBtn:hover { background: #1ed760; }
   </style>
@@ -71,11 +77,34 @@
   <!-- XP System -->
   <script src="../../../Exp/levels.js"></script>
 
-  <!--this one is important for theme mode-->
-  <script src="Main/Design/theme.js"></script>
+  <!-- Corrected Theme Path -->
+  <script src="../../../Design/theme.js"></script>
 
   <script>
-    // --- QUIZ DATA: HTML Basics ---
+    // =============================
+    // Apply saved theme to quiz
+    // =============================
+    function applyThemeToQuiz(theme) {
+      const container = document.querySelector('.quiz-container');
+      if (theme === 'light') {
+        document.body.style.background = '#f5f5f5';
+        document.body.style.color = '#000';
+        container.style.background = '#eee';
+        container.style.boxShadow = '0 0 15px #999';
+      } else {
+        document.body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
+        document.body.style.color = '#fff';
+        container.style.background = 'rgba(0,0,0,0.4)';
+        container.style.boxShadow = '0 0 15px #1DB954';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyThemeToQuiz(savedTheme);
+
+    // =============================
+    // QUIZ DATA: HTML Basics
+    // =============================
     const quizQuestions = [
       { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
       { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
@@ -104,7 +133,7 @@
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     // --- TIMER ---
-    let totalTime = 15 * 60; // 15 minutes default
+    let totalTime = 15 * 60;
     const interval = setInterval(() => {
       if (totalTime <= 0) {
         clearInterval(interval);
