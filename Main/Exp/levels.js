@@ -1,80 +1,107 @@
-// --- LEVEL & XP SYSTEM ---
-let level = parseInt(localStorage.getItem('level')) || 1;
-let xp = parseInt(localStorage.getItem('xp')) || 0;
-let xpMax = parseInt(localStorage.getItem('xpMax')) || 100;
+// ===============================
+// 🎮 MindCraft Level & XP System
+// ===============================
 
+// --- Identify current user ---
+const currentUser = localStorage.getItem('currentUser');
+if (!currentUser) {
+  console.warn("No user logged in. XP system paused.");
+}
+
+// --- Load saved data for this user ---
+let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
+let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || 100;
+
+// --- UI elements ---
 const xpValue = document.getElementById('xpValue');
 const xpBar = document.getElementById('xpBar');
 const levelValue = document.getElementById('levelValue');
-const xpMaxDisplay = document.getElementById('xpMax');
 
-// For smooth animation
+// --- Smooth display ---
 let displayedXP = xp;
 let displayedLevel = level;
 
-// Initialize display
+// --- Initialize display ---
 updateDisplay();
+animateXP();
 
-// Animate XP bar and number smoothly
+// ===============================
+// 🔄 Animation for XP bar
+// ===============================
 function animateXP() {
   if (displayedXP < xp) displayedXP += Math.ceil((xp - displayedXP) * 0.1) || 1;
   if (displayedXP > xp) displayedXP = xp;
   if (displayedLevel !== level) displayedLevel = level;
 
-  xpValue.textContent = displayedXP;
-  xpBar.value = displayedXP;
-  xpBar.max = xpMax;
-  levelValue.textContent = displayedLevel;
-  xpMaxDisplay.textContent = xpMax;
+  if (xpValue) xpValue.textContent = displayedXP;
+  if (xpBar) {
+    xpBar.value = displayedXP;
+    xpBar.max = xpMax;
+  }
+  if (levelValue) levelValue.textContent = displayedLevel;
 
   requestAnimationFrame(animateXP);
 }
-animateXP();
 
-// Gain XP after finishing a modular lesson (50-60 mins)
+// ===============================
+// 💥 XP Gain Functions
+// ===============================
 function gainLessonXP() {
-  addXP(10);
+  addXP(10); // XP per lesson
 }
 
-// Gain XP after quiz (true = correct, false = wrong)
 function gainQuizXP(isCorrect) {
-  if (isCorrect) addXP(5);
+  if (isCorrect) addXP(5); // XP per correct quiz answer
 }
 
-// Generic function to add XP and handle leveling
+// ===============================
+// ➕ Add XP + Handle Level Up
+// ===============================
 function addXP(amount) {
+  if (!currentUser) return;
+
   xp += amount;
 
   // Handle leveling
   while (xp >= xpMax) {
-    xp -= xpMax; // carry over leftover XP
+    xp -= xpMax;
     level += 1;
-    xpMax = Math.floor(xpMax * 1.15); // increase XP needed per level
-    alert(`🎉 Congratulations! You've reached Level ${level}!`);
+    xpMax = Math.floor(xpMax * 1.15);
+    alert(`🎉 Congratulations ${currentUser}! You've reached Level ${level}!`);
   }
 
-  // Save progress
-  localStorage.setItem('xp', xp);
-  localStorage.setItem('level', level);
-  localStorage.setItem('xpMax', xpMax);
-}
+  // Save progress for this user
+  localStorage.setItem(`${currentUser}_xp`, xp);
+  localStorage.setItem(`${currentUser}_level`, level);
+  localStorage.setItem(`${currentUser}_xpMax`, xpMax);
 
-// Optional: reset progress (for testing, not in UI)
-function resetXP() {
-  xp = 0;
-  level = 1;
-  xpMax = 100;
-  localStorage.setItem('xp', xp);
-  localStorage.setItem('level', level);
-  localStorage.setItem('xpMax', xpMax);
   updateDisplay();
 }
 
-// Update display immediately
+// ===============================
+// ♻️ Reset XP (for testing)
+// ===============================
+function resetXP() {
+  if (!currentUser) return;
+
+  xp = 0;
+  level = 1;
+  xpMax = 100;
+  localStorage.setItem(`${currentUser}_xp`, xp);
+  localStorage.setItem(`${currentUser}_level`, level);
+  localStorage.setItem(`${currentUser}_xpMax`, xpMax);
+  updateDisplay();
+}
+
+// ===============================
+// 📊 Update Display
+// ===============================
 function updateDisplay() {
-  xpValue.textContent = xp;
-  xpBar.value = xp;
-  xpBar.max = xpMax;
-  levelValue.textContent = level;
-  xpMaxDisplay.textContent = xpMax;
+  if (xpValue) xpValue.textContent = xp;
+  if (xpBar) {
+    xpBar.value = xp;
+    xpBar.max = xpMax;
   }
+  if (levelValue) levelValue.textContent = level;
+}
