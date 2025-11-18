@@ -77,6 +77,20 @@ function addXP(amount) {
   localStorage.setItem(`${currentUser}_xpMax`, xpMax);
 
   updateDisplay();
+  highlightXPBar();
+}
+
+// ===============================
+// 💡 Highlight XP bar when updated
+// ===============================
+function highlightXPBar() {
+  if (xpBar) {
+    xpBar.style.transition = 'box-shadow 0.5s ease';
+    xpBar.style.boxShadow = '0 0 15px #1DB954';
+    setTimeout(() => {
+      xpBar.style.boxShadow = 'none';
+    }, 2000);
+  }
 }
 
 // ===============================
@@ -104,4 +118,25 @@ function updateDisplay() {
     xpBar.max = xpMax;
   }
   if (levelValue) levelValue.textContent = level;
+}
+
+// ===============================
+// 🔁 Sync XP display on other pages
+// (For example, on index.html after finishing a quiz)
+// ===============================
+function syncXPDisplay() {
+  const user = localStorage.getItem('currentUser');
+  if (!user) return;
+
+  const xpNow = parseInt(localStorage.getItem(`${user}_xp`)) || 0;
+  const levelNow = parseInt(localStorage.getItem(`${user}_level`)) || 1;
+  const xpCap = parseInt(localStorage.getItem(`${user}_xpMax`)) || 100;
+
+  // Update globals
+  xp = xpNow;
+  level = levelNow;
+  xpMax = xpCap;
+
+  updateDisplay();
+  highlightXPBar();
 }
