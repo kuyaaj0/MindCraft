@@ -306,6 +306,7 @@ if (!currentUser) {
 document.getElementById('xpValue').textContent = xp;
 document.getElementById('levelValue').textContent = level;
 document.getElementById('xpBar').value = xp;
+document.getElementById('xpBar').max = 100; // you can later make dynamic
 
 const theme = localStorage.getItem('theme') || 'light';
 applyEnvironment(theme);
