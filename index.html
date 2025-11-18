@@ -286,9 +286,18 @@ footer {
 <script src="Main/Design/theme.js"></script>
 <script>
 const currentUser = localStorage.getItem('currentUser');
-const xp = parseInt(localStorage.getItem('xp') || 0);
-const level = parseInt(localStorage.getItem('level') || 1);
+const user = localStorage.getItem('currentUser');
+let xp = 0;
+let level = 1;
 
+// Load per-user XP & Level
+if (user) {
+  xp = parseInt(localStorage.getItem(user + '_xp') || 0);
+  level = parseInt(localStorage.getItem(user + '_level') || 1);
+  // Update global fallback too (for backward compatibility)
+  localStorage.setItem('xp', xp);
+  localStorage.setItem('level', level);
+}
 if (!currentUser) {
   alert('You must sign in first!');
   window.location.href = 'Main/Account/signin.html';
