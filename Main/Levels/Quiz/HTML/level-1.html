@@ -7,6 +7,7 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Design/levels.css">
+<link rel="stylesheet" href="../../../Design/global_size-FIX.css">
 
 <style>
 body {
@@ -68,7 +69,7 @@ h4 { font-size: 0.6rem; }
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
   display: none;
   justify-content: center;
   align-items: center;
@@ -117,16 +118,24 @@ h4 { font-size: 0.6rem; }
   width: 128px;
   height: 128px;
   background: url('../../../Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 1024px 128px; /* 8 frames horizontally */
+  background-size: 1024px 128px;
   image-rendering: pixelated;
   animation: celebrateAnim 1s steps(8) infinite;
   margin-top: 20px;
-  filter: drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954);
+  filter: drop-shadow(0 0 10px #1DB954);
 }
-
 @keyframes celebrateAnim {
   from { background-position: 0 0; }
   to { background-position: -1024px 0; }
+}
+
+/* === Fade-Out Transition === */
+.fade-out {
+  animation: fadeOut 1s ease forwards;
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: scale(0.98); }
 }
 </style>
 </head>
@@ -146,7 +155,7 @@ h4 { font-size: 0.6rem; }
 <!-- Popup Overlay -->
 <div id="popupOverlay">
   <h2>🎉 Level Complete!</h2>
-  <div class="hero-sprite"></div> <!-- Celebrating Character -->
+  <div class="hero-sprite"></div>
   <p id="xpGain">+0 XP Gained</p>
   <div class="xp-bar-container">
     <div class="xp-bar-fill" id="xpBarFill"></div>
@@ -154,20 +163,27 @@ h4 { font-size: 0.6rem; }
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
 
+<!-- Sounds -->
 <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
 
+<!-- Scripts -->
 <script src="../../../Exp/levels.js"></script>
 <script src="../../../Design/theme.js"></script>
+<script src="../../../Design/navigation.js"></script>
 
 <script>
 /* === Apply Theme === */
 const theme = localStorage.getItem('theme') || 'dark';
+const hero = document.querySelector('.hero-sprite');
 if (theme === 'light') {
   document.body.style.background = '#f5f5f5';
   document.body.style.color = '#000';
   document.querySelector('.quiz-container').style.background = '#eee';
   document.querySelector('.quiz-container').style.boxShadow = '0 0 15px #999';
+  hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
+} else {
+  hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
 }
 
 /* === Quiz System === */
@@ -185,16 +201,16 @@ const quizQuestions = [
 ];
 
 let currentQuestion = 0;
+let xpEarned = 0;
 const questionContainer = document.getElementById("questionContainer");
 const nextBtn = document.getElementById("nextBtn");
 const finishBtn = document.getElementById("finishBtn");
 const result = document.getElementById("result");
 const progress = document.getElementById("progress");
 const timerEl = document.getElementById("timer");
+
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
-
-let xpEarned = 0;
 
 const soundEnabled = localStorage.getItem('sound') === 'on';
 const vibrationEnabled = localStorage.getItem('vibration') === 'on';
@@ -273,7 +289,6 @@ function showPopup() {
   popup.style.display = "flex";
   document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`;
 
-  // Update XP for current user
   const user = localStorage.getItem('currentUser');
   if (user) {
     let xp = parseInt(localStorage.getItem(user + "_xp")) || 0;
@@ -281,18 +296,15 @@ function showPopup() {
     localStorage.setItem(user + "_xp", xp);
   }
 
-  // Animate XP bar filling
   setTimeout(() => { xpBar.style.width = "100%"; }, 300);
-
-  // Character celebration pulse
-  const hero = document.querySelector('.hero-sprite');
-  hero.style.animation = 'celebrateAnim 0.7s steps(8) infinite';
-
-  // Fade to lobby after 4s
-  setTimeout(() => {
-    window.location.href = "../../../../../index.html";
-  }, 4000);
 }
+
+/* === Back to Lobby with transition === */
+document.getElementById('backBtn').onclick = () => {
+  const popup = document.getElementById('popupOverlay');
+  popup.classList.add('fade-out');
+  setTimeout(() => goToLobby(), 1000);
+};
 
 /* === Start === */
 loadQuestion();
