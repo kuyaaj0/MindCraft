@@ -72,15 +72,21 @@ body {
 /* ===== Background Characters ===== */
 .bg-character {
   position: absolute;
-  bottom: 20px;
-  width: 80px;
-  height: 80px;
+  bottom: calc(5vh + 20px); /* dynamic height fix */
+  width: min(80px, 15vw);
+  height: min(80px, 15vw);
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 640px 80px; /* 8 frames horizontally */
+  background-size: 800% 100%; /* 8 frames horizontally */
   image-rendering: pixelated;
-  animation: walkAnim 1s steps(8) infinite, moveAcross 20s linear infinite;
+  animation: walkAnim 1s steps(8) infinite, moveAcross 22s linear infinite;
   z-index: -1;
-  filter: drop-shadow(0 0 8px #1DB954);
+  filter: drop-shadow(0 0 10px #1DB954);
+}
+
+@media (max-height: 700px) {
+  .bg-character {
+    bottom: calc(2vh + 10px);
+  }
 }
 
 @keyframes walkAnim {
