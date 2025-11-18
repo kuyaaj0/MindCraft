@@ -1,5 +1,5 @@
 // =============================
-// 🌗 Global Theme Loader (Dark/Light)
+// 🌗 Global Theme Loader (Dark/Light) + Environment Sync
 // =============================
 (function() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -14,7 +14,7 @@
 
     if (theme === 'dark') {
       // Body
-      body.style.background = '#0f2027';
+      body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
       body.style.color = '#ffffff';
 
       // Containers and sections
@@ -59,13 +59,22 @@
         t.style.color = '#000000';
       });
     }
+
+    // 🔄 Save preference and sync with environment system
+    localStorage.setItem('theme', theme);
+    if (typeof applyEnvironment === 'function') {
+      applyEnvironment(theme); // update sky, sun, moon, and character reactions
+    }
   }
 
   // Apply saved theme immediately
   applyTheme(savedTheme);
 
-  // Reapply when theme changes anywhere
+  // Reapply when theme changes elsewhere (e.g. Settings page)
   window.addEventListener('storage', e => {
     if (e.key === 'theme') applyTheme(e.newValue);
   });
+
+  // Global access for Settings or any page
+  window.setTheme = applyTheme;
 })();
