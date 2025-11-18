@@ -1,0 +1,174 @@
+/* ===============================
+   🌍 MindCraft Responsive Layouts
+   Works across: Account, Settings, Quizzes, Lessons, Index
+   =============================== */
+
+/* --- General --- */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* --- Containers (Account, Settings, Lessons, Quizzes) --- */
+.container,
+.settings-container,
+.quiz-container,
+.lesson-content {
+  width: 90%;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.4);
+  box-shadow: 0 0 15px #1DB954;
+}
+
+/* --- Headers / Titles --- */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* --- Buttons and Selects --- */
+button, select {
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+button {
+  background: #1DB954;
+  color: #fff;
+}
+button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+select {
+  background: #333;
+  color: #fff;
+}
+
+/* --- Navigation Bars --- */
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.6);
+}
+nav button {
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  background: #1DB954;
+  border-radius: 8px;
+}
+nav button:hover {
+  background: #1ed760;
+}
+
+/* --- Quiz Buttons --- */
+.choice {
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  background: #1DB954;
+  cursor: pointer;
+  font-weight: bold;
+  color: #fff;
+  transition: 0.3s;
+  border: none;
+}
+.choice:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+
+/* --- XP Bar --- */
+progress {
+  width: 120px;
+  height: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #333;
+}
+
+/* --- Responsive Adjustments (Mobile) --- */
+@media (max-width: 600px) {
+  /* Body scaling */
+  body {
+    font-size: 0.9rem;
+  }
+
+  /* Containers */
+  .container,
+  .settings-container,
+  .quiz-container,
+  .lesson-content {
+    width: 92%;
+    padding: 18px;
+    margin: 20px auto;
+  }
+
+  /* Text scaling */
+  h1 { font-size: 1rem; }
+  h2 { font-size: 0.95rem; }
+  h3, h4, h5 { font-size: 0.8rem; }
+
+  /* Buttons and selects */
+  button, select {
+    width: 85%;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  /* Navigation */
+  nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+  nav button {
+    width: 80%;
+    font-size: 0.85rem;
+  }
+
+  /* Quiz choices */
+  .choice {
+    font-size: 0.75rem;
+    padding: 10px;
+    width: 90%;
+  }
+
+  /* Footer smaller */
+  footer {
+    font-size: 0.8rem;
+    padding: 10px 0;
+  }
+}
+
+/* --- Larger Screens (Desktop) --- */
+@media (min-width: 1024px) {
+  body {
+    font-size: 1rem;
+  }
+
+  .container,
+  .settings-container,
+  .quiz-container,
+  .lesson-content {
+    max-width: 800px;
+    padding: 30px;
+  }
+
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.1rem; }
+}
