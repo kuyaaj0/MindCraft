@@ -69,18 +69,25 @@ body {
   50% { opacity: 1; }
 }
 
-/* ===== Background Characters ===== */
+/* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: calc(5vh + 20px); /* dynamic height fix */
-  width: min(80px, 15vw);
-  height: min(80px, 15vw);
+  bottom: 8vh; /* better spacing from footer */
+  width: clamp(64px, 12vw, 96px);
+  height: clamp(64px, 12vw, 96px);
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%; /* 8 frames horizontally */
+  background-size: 800% 100%;
   image-rendering: pixelated;
-  animation: walkAnim 1s steps(8) infinite, moveAcross 22s linear infinite;
+  animation: walkAnim 1s steps(8) infinite;
   z-index: -1;
   filter: drop-shadow(0 0 10px #1DB954);
+  opacity: 0.9;
+}
+
+/* Walk cycle */
+@keyframes walkAnim {
+  from { background-position: 0; }
+  to { background-position: -800%; }
 }
 
 @media (max-height: 700px) {
@@ -89,10 +96,6 @@ body {
   }
 }
 
-@keyframes walkAnim {
-  from { background-position: 0; }
-  to { background-position: -640px; }
-}
 @keyframes moveAcross {
   0% { left: -100px; transform: scaleX(1); }
   45% { left: calc(100% - 100px); transform: scaleX(1); }
@@ -292,6 +295,28 @@ footer {
 <!-- Scripts -->
 <script src="Main/Design/theme.js"></script>
 <script>
+// === Smart Character Placement ===
+const chars = document.querySelectorAll('.bg-character');
+chars.forEach((char, i) => {
+  const delay = Math.random() * 15; // Random start delay
+  const offset = Math.random() * 10; // Small vertical variance
+  const direction = Math.random() > 0.5 ? 1 : -1; // left or right
+  const duration = 20 + Math.random() * 10; // variable walking speed
+
+  char.style.bottom = `${5 + offset}vh`;
+  char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
+  
+  const keyframes = `
+    @keyframes move${i} {
+      0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
+      50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
+      100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
+    }`;
+  const styleEl = document.createElement('style');
+  styleEl.textContent = keyframes;
+  document.head.appendChild(styleEl);
+});
+  
 const currentUser = localStorage.getItem('currentUser');
 const user = localStorage.getItem('currentUser');
 let xp = 0;
