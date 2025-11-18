@@ -1,281 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MindCraft | Grade 11 Coding Lessons</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCraft | Grade 11 Coding Lessons</title>
 
-  <!-- Fonts and Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="Main/Design/Position.css">
-  <link rel="stylesheet" href="Main/Design/levels.css">
+<!-- Fonts and Styles -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Main/Design/Position.css">
+<link rel="stylesheet" href="Main/Design/levels.css">
 
-  <style>
-  body {
-    font-family: 'Press Start 2P', cursive;
-    color: #fff;
-    margin: 0;
-    overflow-x: hidden;
-    position: relative;
-    transition: background 1s, color 1s;
-  }
+<style>
+body {
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  margin: 0;
+  overflow-x: hidden;
+  position: relative;
+  transition: background 1s, color 1s;
+}
 
-  /* ===== Sky Background (Theme Reactive) ===== */
-  #sky {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -3;
-    background: linear-gradient(to bottom, #87ceeb, #f5f5f5);
-    transition: background 2s;
-  }
+/* ===== Sky Background ===== */
+#sky {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -3;
+  background: linear-gradient(to bottom, #87ceeb, #f5f5f5);
+  transition: background 2s;
+}
 
+/* ===== Sun & Moon ===== */
+#sun, #moon {
+  position: fixed;
+  top: 8%;
+  right: 10%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: opacity 2s, transform 2s;
+  z-index: -2;
+}
+#sun {
+  background: radial-gradient(circle, #fff200, #ff8c00);
+  opacity: 1;
+}
+#moon {
+  background: radial-gradient(circle, #f0f0f0, #bdbdbd);
+  box-shadow: 0 0 15px #fff;
+  opacity: 0;
+}
+
+/* ===== Stars ===== */
+#stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('Main/Assets/Backgrounds/stars.png') repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 2s;
+  z-index: -1;
+  animation: twinkle 6s linear infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+/* ===== Background Characters ===== */
+.bg-character {
+  position: absolute;
+  bottom: 20px;
+  width: 80px;
+  height: 80px;
+  background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
+  background-size: 640px 80px; /* 8 frames horizontally */
+  image-rendering: pixelated;
+  animation: walkAnim 1s steps(8) infinite, moveAcross 20s linear infinite;
+  z-index: -1;
+  filter: drop-shadow(0 0 8px #1DB954);
+}
+
+@keyframes walkAnim {
+  from { background-position: 0; }
+  to { background-position: -640px; }
+}
+@keyframes moveAcross {
+  0% { left: -100px; transform: scaleX(1); }
+  45% { left: calc(100% - 100px); transform: scaleX(1); }
+  50% { transform: scaleX(-1); }
+  95% { left: 0; transform: scaleX(-1); }
+  100% { left: -100px; transform: scaleX(1); }
+}
+
+/* ===== Header & Layout ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #1DB954;
+}
+
+.xp-status, .level-display, .user-actions {
+  font-size: 0.6rem;
+  text-align: center;
+  margin: 5px;
+}
+
+button {
+  font-family: 'Press Start 2P', cursive;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.5rem;
+  transition: all 0.3s ease;
+}
+button:hover { background: #1ed760; transform: scale(1.05); }
+
+main {
+  text-align: center;
+  padding: 20px;
+}
+
+.language-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.language-card {
+  width: 220px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px #1DB954;
+  transition: transform 0.3s ease;
+}
+.language-card:hover { transform: scale(1.05); }
+
+.language-card img {
+  width: 60px;
+  height: 60px;
+}
+
+.language-card select {
+  margin-top: 10px;
+  font-size: 0.5rem;
+  font-family: 'Press Start 2P', cursive;
+  padding: 5px;
+  border-radius: 5px;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.6rem;
+  margin-top: 40px;
+  padding-bottom: 10px;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
   #sun, #moon {
-    position: fixed;
-    top: 10%;
-    left: 85%;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    transition: opacity 2s, transform 2s;
-    z-index: -2;
+    width: 60px;
+    height: 60px;
+    top: 5%;
+    right: 8%;
   }
-
-  #sun {
-    background: radial-gradient(circle, #fff200, #ff8c00);
-    opacity: 1;
-  }
-
-  #moon {
-    background: radial-gradient(circle, #f0f0f0, #bdbdbd);
-    box-shadow: 0 0 15px #fff;
-    opacity: 0;
-  }
-
-  #stars {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: url('Main/Assets/Backgrounds/stars.png') repeat;
-    background-size: cover;
-    opacity: 0;
-    transition: opacity 2s;
-    z-index: -1;
-    animation: twinkle 6s linear infinite;
-  }
-
-  @keyframes twinkle {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
-  }
-
-  /* ===== Background Characters ===== */
   .bg-character {
-    position: absolute;
-    bottom: 40px;
-    width: 96px;
-    height: 96px;
-    background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-    background-size: 768px 96px; /* 8 frames horizontally */
-    image-rendering: pixelated;
-    animation: walkAnim 1s steps(8) infinite, moveAcross 18s linear infinite;
-    z-index: -1;
-    filter: drop-shadow(0 0 10px #1DB954);
+    width: 64px;
+    height: 64px;
+    background-size: 512px 64px;
   }
-
-  @keyframes walkAnim {
-    from { background-position: 0; }
-    to { background-position: -768px; }
+  .language-card {
+    width: 90%;
   }
-
-  @keyframes moveAcross {
-    0% { left: -100px; transform: scaleX(1); }
-    45% { left: calc(100% - 100px); transform: scaleX(1); }
-    50% { transform: scaleX(-1); }
-    95% { left: 0; transform: scaleX(-1); }
-    100% { left: -100px; transform: scaleX(1); }
-  }
-
-  /* ===== Header and Layout ===== */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  .xp-status, .level-display, .user-actions {
-    font-size: 0.6rem;
-  }
-
   button {
-    font-family: 'Press Start 2P', cursive;
-    background: #1DB954;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 10px;
-    cursor: pointer;
+    font-size: 0.45rem;
   }
-
-  button:hover { background: #1ed760; }
-
-  main {
-    text-align: center;
-    padding: 30px;
-  }
-
-  footer {
-    text-align: center;
-    font-size: 0.6rem;
-    margin-top: 30px;
-    padding-bottom: 10px;
-  }
-  </style>
+}
+</style>
 </head>
 <body>
 
-  <!-- Sky and Environment -->
-  <div id="sky"></div>
-  <div id="sun"></div>
-  <div id="moon"></div>
-  <div id="stars"></div>
+<!-- Environment Elements -->
+<div id="sky"></div>
+<div id="sun"></div>
+<div id="moon"></div>
+<div id="stars"></div>
 
-  <!-- Walking Characters (Background NPCs) -->
-  <div class="bg-character" style="--delay: 2s;"></div>
-  <div class="bg-character" style="--delay: 5s;"></div>
-  <div class="bg-character" style="--delay: 8s;"></div>
+<!-- Walking Characters -->
+<div class="bg-character" style="animation-delay: 2s;"></div>
+<div class="bg-character" style="animation-delay: 5s;"></div>
+<div class="bg-character" style="animation-delay: 8s;"></div>
 
-  <!-- Header with XP and Navigation -->
-  <header>
-    <div class="xp-status">
-      <span>XP:</span>
-      <progress id="xpBar" value="0" max="100"></progress>
-      <span id="xpValue">0</span>
+<!-- Header -->
+<header>
+  <div class="xp-status">
+    <span>XP:</span>
+    <progress id="xpBar" value="0" max="100"></progress>
+    <span id="xpValue">0</span>
+  </div>
+  <div class="level-display">
+    Level <span id="levelValue">1</span>
+  </div>
+  <div class="user-actions">
+    <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
+    <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+  </div>
+</header>
+
+<!-- Main Menu -->
+<main class="language-select">
+  <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
+  <div class="language-grid">
+    <!-- HTML -->
+    <div class="language-card">
+      <img src="Main/Assets/Icons/html.png" alt="HTML">
+      <p>HTML</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
+      </select>
     </div>
-    <div class="level-display">
-      Level <span id="levelValue">1</span>
+
+    <!-- CSS -->
+    <div class="language-card">
+      <img src="Main/Assets/Icons/css.png" alt="CSS">
+      <p>CSS</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
+      </select>
     </div>
-    <div class="user-actions">
-      <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
-      <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+
+    <!-- JavaScript -->
+    <div class="language-card">
+      <img src="Main/Assets/Icons/js.png" alt="JavaScript">
+      <p>JavaScript</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
+      </select>
     </div>
-  </header>
+  </div>
+</main>
 
-  <main class="language-select">
-    <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
+<footer>
+  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
+</footer>
 
-    <div class="language-grid">
+<!-- Scripts -->
+<script src="Main/Design/theme.js"></script>
+<script>
+const currentUser = localStorage.getItem('currentUser');
+const xp = parseInt(localStorage.getItem('xp') || 0);
+const level = parseInt(localStorage.getItem('level') || 1);
 
-      <!-- HTML -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/html.png" alt="HTML">
-        <p>HTML</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
-        </select>
-      </div>
+if (!currentUser) {
+  alert('You must sign in first!');
+  window.location.href = 'Main/Account/signin.html';
+}
 
-      <!-- CSS -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/css.png" alt="CSS">
-        <p>CSS</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
-        </select>
-      </div>
+document.getElementById('xpValue').textContent = xp;
+document.getElementById('levelValue').textContent = level;
+document.getElementById('xpBar').value = xp;
 
-      <!-- JavaScript -->
-      <div class="language-card">
-        <img src="Main/Assets/Icons/js.png" alt="JavaScript">
-        <p>JavaScript</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
-          <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
-          <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
-          <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
-        </select>
-      </div>
-    </div>
-  </main>
+const theme = localStorage.getItem('theme') || 'light';
+applyEnvironment(theme);
 
-  <footer>
-    <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
-  </footer>
+function applyEnvironment(theme) {
+  const sky = document.getElementById('sky');
+  const sun = document.getElementById('sun');
+  const moon = document.getElementById('moon');
+  const stars = document.getElementById('stars');
+  const chars = document.querySelectorAll('.bg-character');
 
-  <!-- Theme -->
-  <script src="Main/Design/theme.js"></script>
+  if (theme === 'light') {
+    sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
+    sun.style.opacity = 1;
+    moon.style.opacity = 0;
+    stars.style.opacity = 0;
+    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
+  } else {
+    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
+    sun.style.opacity = 0;
+    moon.style.opacity = 1;
+    stars.style.opacity = 1;
 
-  <script>
-  // Load user data
-  const currentUser = localStorage.getItem('currentUser');
-  const xp = parseInt(localStorage.getItem('xp') || 0);
-  const level = parseInt(localStorage.getItem('level') || 1);
-
-  if (!currentUser) {
-    alert('You must sign in first!');
-    window.location.href = 'Main/Account/signin.html';
+    // Characters "react" to the dark
+    chars.forEach(c => {
+      c.style.animationPlayState = 'paused';
+      c.style.transform += ' translateY(-10px)';
+      setTimeout(() => {
+        c.style.animationPlayState = 'running';
+        c.style.transform = 'scaleX(1)';
+      }, 2000);
+    });
   }
-
-  document.getElementById('xpValue').textContent = xp;
-  document.getElementById('levelValue').textContent = level;
-  document.getElementById('xpBar').value = xp;
-
-  // Apply Theme Environment
-  const theme = localStorage.getItem('theme') || 'light';
-  applyEnvironment(theme);
-
-  function applyEnvironment(theme) {
-    const sky = document.getElementById('sky');
-    const sun = document.getElementById('sun');
-    const moon = document.getElementById('moon');
-    const stars = document.getElementById('stars');
-    const chars = document.querySelectorAll('.bg-character');
-
-    if (theme === 'light') {
-      sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
-      sun.style.opacity = 1;
-      moon.style.opacity = 0;
-      stars.style.opacity = 0;
-      chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #1DB954)');
-    } else {
-      sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
-      sun.style.opacity = 0;
-      moon.style.opacity = 1;
-      stars.style.opacity = 1;
-      // Make characters "notice" night
-      chars.forEach(c => {
-        c.style.animationPlayState = 'paused';
-        c.style.transform += ' translateY(-10px)'; // look up
-        setTimeout(() => {
-          c.style.animationPlayState = 'running';
-          c.style.transform = 'scaleX(1)';
-        }, 2000);
-      });
-    }
-  }
-  </script>
+}
+</script>
 </body>
 </html>
