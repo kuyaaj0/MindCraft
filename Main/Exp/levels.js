@@ -97,6 +97,12 @@ function initializeXPDisplay() {
     // 🔄 Animation Loop for XP bar (smooth transition)
     // ===============================
     function animateXP() {
+        // ⭐ FIX: Reset displayedXP to 0 when leveling up for visual "reset" effect
+        if (displayedLevel !== level) {
+            displayedXP = 0; // Visually reset bar to 0 before animating to new XP
+            displayedLevel = level;
+        }
+
         // Smoothly move displayed XP towards actual saved XP
         if (displayedXP < xp) {
             displayedXP += Math.ceil((xp - displayedXP) * 0.1) || 1;
@@ -104,8 +110,6 @@ function initializeXPDisplay() {
         } else if (displayedXP > xp) {
             displayedXP = xp;
         }
-
-        if (displayedLevel !== level) displayedLevel = level;
 
         xpValue.textContent = `${Math.floor(displayedXP)}/${xpMax}`;
         xpBar.value = displayedXP;
