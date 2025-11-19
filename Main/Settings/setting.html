@@ -87,58 +87,44 @@ const theme = localStorage.getItem('theme') || 'dark';
 const sound = localStorage.getItem('sound') || 'on';
 const vibration = localStorage.getItem('vibration') || 'on';
 
+// Set select boxes to the saved values
 document.getElementById('themeSelect').value = theme;
 document.getElementById('soundSelect').value = sound;
 document.getElementById('vibrationSelect').value = vibration;
 
-// =============================
-// Apply theme (color + text)
-// =============================
-function applyTheme(theme) {
-    const container = document.querySelector('.settings-container');
-    const textElements = document.querySelectorAll('h2, label, option');
+// IMPORTANT: The theme is applied when theme.js loads below.
+// The custom applyTheme function is now removed, relying entirely on theme.js.
 
-    if (theme === 'dark') {
-        document.body.style.background = '#203a43';
-        document.body.style.color = '#fff';
-        container.style.background = 'rgba(0,0,0,0.4)';
-        container.style.color = '#fff';
-        container.style.boxShadow = '0 0 15px #1DB954';
-        textElements.forEach(el => el.style.color = '#fff');
-    } else {
-        document.body.style.background = '#f5f5f5';
-        document.body.style.color = '#000';
-        container.style.background = '#fff';
-        container.style.color = '#000';
-        container.style.boxShadow = '0 0 15px #999';
-        textElements.forEach(el => el.style.color = '#000');
-    }
-}
-applyTheme(theme);
 
 // =============================
 // Save new settings
 // =============================
 document.getElementById('themeSelect').addEventListener('change', e => {
-    const newTheme = e.target.value;
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-
-    // Broadcast change to all pages (so they update instantly)
-    window.dispatchEvent(new StorageEvent('storage', { key: 'theme', newValue: newTheme }));
+    const newTheme = e.target.value;
+    localStorage.setItem('theme', newTheme);
+    
+    // FIX: Use the global function defined in theme.js to apply the theme
+    if (typeof window.setTheme === 'function') {
+        window.setTheme(newTheme);
+    } else {
+        // Fallback if theme.js failed to load
+        window.dispatchEvent(new StorageEvent('storage', { key: 'theme', newValue: newTheme }));
+    }
 });
+
 document.getElementById('soundSelect').addEventListener('change', e => {
-    localStorage.setItem('sound', e.target.value);
+    localStorage.setItem('sound', e.target.value);
 });
 document.getElementById('vibrationSelect').addEventListener('change', e => {
-    localStorage.setItem('vibration', e.target.value);
+    localStorage.setItem('vibration', e.target.value);
 });
 
 // =============================
 // Back button (to root index.html)
 // =============================
 document.getElementById('backBtn').addEventListener('click', () => {
-    window.location.href = '../../index.html';
+    // Since settings.html is in Main/Settings/, we go up two levels to index.html
+    window.location.href = '../../index.html';
 });
 </script>
 
