@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MindCraft | Grade 11 Coding Lessons</title>
 
-<!-- Fonts and Styles -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="Main/Design/Position.css">
 <link rel="stylesheet" href="Main/Design/levels.css">
@@ -13,405 +12,346 @@
 
 <style>
 body {
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  margin: 0;
-  overflow-x: hidden;
-  position: relative;
-  transition: background 1s, color 1s;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  margin: 0;
+  overflow-x: hidden;
+  position: relative;
+  transition: background 1s, color 1s;
 }
 
 /* ===== Sky Background ===== */
 #sky {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -3;
-  background: linear-gradient(to bottom, #87ceeb, #f5f5f5);
-  transition: background 2s;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -3;
+  background: linear-gradient(to bottom, #87ceeb, #f5f5f5);
+  transition: background 2s;
 }
 
 /* ===== Sun & Moon ===== */
 #sun, #moon {
-  position: fixed;
-  right: 10%;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  transition: all 2s ease-in-out;
-  z-index: -2;
+  position: fixed;
+  right: 10%;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: all 2s ease-in-out;
+  z-index: -2;
 }
 
 /* Sun (daytime) */
 #sun {
-  background: radial-gradient(circle, #fff200, #ff8c00);
-  opacity: 0;
-  transform: translateY(120px); /* hidden below horizon */
+  background: radial-gradient(circle, #fff200, #ff8c00);
+  opacity: 0;
+  transform: translateY(120px); /* hidden below horizon */
 }
 
 /* Moon (nighttime) */
 #moon {
-  background: radial-gradient(circle, #f0f0f0, #bdbdbd);
-  box-shadow: 0 0 15px #fff;
-  opacity: 0;
-  transform: translateY(120px);
+  background: radial-gradient(circle, #f0f0f0, #bdbdbd);
+  box-shadow: 0 0 15px #fff;
+  opacity: 0;
+  transform: translateY(120px);
 }
 
 /* ===== Stars ===== */
 #stars {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('Main/Assets/Backgrounds/stars.png') repeat;
-  background-size: cover;
-  opacity: 0;
-  transition: opacity 2s;
-  z-index: -1;
-  animation: twinkle 6s linear infinite;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('Main/Assets/Backgrounds/stars.png') repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 2s;
+  z-index: -1;
+  animation: twinkle 6s linear infinite;
 }
 @keyframes twinkle {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 /* === Background Characters === */
 .bg-character {
-  position: absolute;
-  bottom: 8vh;
-  width: 90px; /* exact per-frame width */
-  height: 330px; /* full sprite height */
-  background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%; /* 8 frames horizontally */
-  image-rendering: pixelated;
-  animation: walkAnim 1s steps(8) infinite;
-  z-index: -1;
-  filter: drop-shadow(0 0 10px #1DB954);
-  opacity: 0.9;
+  position: absolute;
+  bottom: 8vh;
+  width: 90px; /* exact per-frame width */
+  height: 330px; /* full sprite height */
+  background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
+  background-size: 800% 100%; /* 8 frames horizontally */
+  image-rendering: pixelated;
+  animation: walkAnim 1s steps(8) infinite;
+  z-index: -1;
+  filter: drop-shadow(0 0 10px #1DB954);
+  opacity: 0.9;
 }
 
 /* Walk cycle for 8 frames */
 @keyframes walkAnim {
-  from { background-position: 0; }
-  to { background-position: -800%; }
+  from { background-position: 0; }
+  to { background-position: -800%; }
 }
 
 @media (max-height: 700px) {
-  .bg-character {
-    bottom: calc(2vh + 10px);
-  }
-}
-
-@keyframes moveAcross {
-  0% { left: -120px; transform: scaleX(1); }
-  45% { left: calc(100% - 100px); transform: scaleX(1); }
-  50% { transform: scaleX(-1); }
-  95% { left: 0; transform: scaleX(-1); }
-  100% { left: -120px; transform: scaleX(1); }
+  .bg-character {
+    bottom: calc(2vh + 10px);
+  }
 }
 
 /* ===== Header & Layout ===== */
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 10px 15px;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid #1DB954;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #1DB954;
 }
 
 .xp-status, .level-display, .user-actions {
-  font-size: 0.6rem;
-  text-align: center;
-  margin: 5px;
+  font-size: 0.6rem;
+  text-align: center;
+  margin: 5px;
 }
 
 button {
-  font-family: 'Press Start 2P', cursive;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-size: 0.5rem;
-  transition: all 0.3s ease;
+  font-family: 'Press Start 2P', cursive;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.5rem;
+  transition: all 0.3s ease;
 }
 button:hover { background: #1ed760; transform: scale(1.05); }
 
 main {
-  text-align: center;
-  padding: 20px;
+  text-align: center;
+  padding: 20px;
 }
 
 .language-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
 }
 
 .language-card {
-  width: 220px;
-  padding: 15px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px #1DB954;
-  transition: transform 0.3s ease;
+  width: 220px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px #1DB954;
+  transition: transform 0.3s ease;
 }
 .language-card:hover { transform: scale(1.05); }
 
 .language-card img {
-  width: 60px;
-  height: 60px;
+  width: 60px;
+  height: 60px;
 }
 
 .language-card select {
-  margin-top: 10px;
-  font-size: 0.5rem;
-  font-family: 'Press Start 2P', cursive;
-  padding: 5px;
-  border-radius: 5px;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  width: 100%;
+  margin-top: 10px;
+  font-size: 0.5rem;
+  font-family: 'Press Start 2P', cursive;
+  padding: 5px;
+  border-radius: 5px;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  width: 100%;
 }
 
 footer {
-  text-align: center;
-  font-size: 0.6rem;
-  margin-top: 40px;
-  padding-bottom: 10px;
+  text-align: center;
+  font-size: 0.6rem;
+  margin-top: 40px;
+  padding-bottom: 10px;
 }
 
 /* ===== Responsive Design ===== */
 @media (max-width: 768px) {
-  #sun, #moon {
-    width: 60px;
-    height: 60px;
-    top: 5%;
-    right: 8%;
-  }
-  .bg-character {
-    width: 72px;
-    height: 264px;
-    background-size: 800% 100%;
-  }
-  .language-card {
-    width: 90%;
-  }
-  button {
-    font-size: 0.45rem;
-  }
+  #sun, #moon {
+    width: 60px;
+    height: 60px;
+    top: 5%;
+    right: 8%;
+  }
+  .bg-character {
+    width: 72px;
+    height: 264px;
+    background-size: 800% 100%;
+  }
+  .language-card {
+    width: 90%;
+  }
+  button {
+    font-size: 0.45rem;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- Environment Elements -->
 <div id="sky"></div>
 <div id="sun"></div>
 <div id="moon"></div>
 <div id="stars"></div>
 
-<!-- Walking Characters -->
 <div class="bg-character" style="animation-delay: 2s;"></div>
 <div class="bg-character" style="animation-delay: 5s;"></div>
 <div class="bg-character" style="animation-delay: 8s;"></div>
 
-<!-- Header -->
 <header>
-  <div class="xp-status">
-    <span>XP:</span>
-    <progress id="xpBar" value="0" max="100"></progress>
-    <span id="xpValue">0</span>
-  </div>
-  <div class="level-display">
-    Level <span id="levelValue">1</span>
-  </div>
-  <div class="user-actions">
-    <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
-    <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
-  </div>
+  <div class="xp-status">
+    <span>XP:</span>
+    <progress id="xpBar" value="0" max="100"></progress>
+    <span id="xpValue">0</span>
+  </div>
+  <div class="level-display">
+    Level <span id="levelValue">1</span>
+  </div>
+  <div class="user-actions">
+    <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
+    <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+  </div>
 </header>
 
-<!-- Main Menu -->
 <main class="language-select">
-  <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
-  <div class="language-grid">
-    <!-- HTML -->
-    <div class="language-card">
-      <img src="Main/Assets/Icons/html.png" alt="HTML">
-      <p>HTML</p>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
-      </select>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
-      </select>
-    </div>
+  <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
+  <div class="language-grid">
+        <div class="language-card">
+      <img src="Main/Assets/Icons/html.png" alt="HTML">
+      <p>HTML</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
+      </select>
+    </div>
 
-    <!-- CSS -->
-    <div class="language-card">
-      <img src="Main/Assets/Icons/css.png" alt="CSS">
-      <p>CSS</p>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
-      </select>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
-      </select>
-    </div>
+        <div class="language-card">
+      <img src="Main/Assets/Icons/css.png" alt="CSS">
+      <p>CSS</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
+      </select>
+    </div>
 
-    <!-- JavaScript -->
-    <div class="language-card">
-      <img src="Main/Assets/Icons/js.png" alt="JavaScript">
-      <p>JavaScript</p>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
-      </select>
-      <select onchange="if(this.value) window.location.href=this.value">
-        <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
-      </select>
-    </div>
-  </div>
+        <div class="language-card">
+      <img src="Main/Assets/Icons/js.png" alt="JavaScript">
+      <p>JavaScript</p>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📖 Select Lesson</option>
+        <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
+        <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
+      </select>
+      <select onchange="if(this.value) window.location.href=this.value">
+        <option value="">📝 Select Quiz</option>
+        <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
+        <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
+        <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
+      </select>
+    </div>
+  </div>
 </main>
 
 <footer>
-  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
+  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
 </footer>
 
-<!-- Scripts -->
 <script src="Main/Design/theme.js"></script>
 <script src="Main/Exp/levels.js"></script>
 
 <script>
-// === Smart Character Placement ===
+// === Smart Character Placement === (Unique to index.html)
 const chars = document.querySelectorAll('.bg-character');
 chars.forEach((char, i) => {
-  const delay = Math.random() * 15;
-  const offset = Math.random() * 10;
-  const direction = Math.random() > 0.5 ? 1 : -1;
-  const duration = 20 + Math.random() * 10;
+  const delay = Math.random() * 15;
+  const offset = Math.random() * 10;
+  const direction = Math.random() > 0.5 ? 1 : -1;
+  const duration = 20 + Math.random() * 10;
 
-  char.style.bottom = `${5 + offset}vh`;
-  char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
+  char.style.bottom = `${5 + offset}vh`;
+  char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
 
-  const keyframes = `
-    @keyframes move${i} {
-      0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-      50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
-      100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-    }`;
-  const styleEl = document.createElement('style');
-  styleEl.textContent = keyframes;
-  document.head.appendChild(styleEl);
+  const keyframes = `
+    @keyframes move${i} {
+      0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
+      50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
+      100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
+    }`;
+  const styleEl = document.createElement('style');
+  styleEl.textContent = keyframes;
+  document.head.appendChild(styleEl);
 });
 
-// === XP System ===
-const xpBar = document.getElementById('xpBar');
-const xpValue = document.getElementById('xpValue');
-const levelValue = document.getElementById('levelValue');
+// === Theme Environment Function === (Called by theme.js)
+window.applyEnvironment = function(theme, animate=false) {
+  const sky = document.getElementById('sky');
+  const sun = document.getElementById('sun');
+  const moon = document.getElementById('moon');
+  const stars = document.getElementById('stars');
+  if (!sky || !sun || !moon || !stars) return;
 
-function syncXPDisplay() {
-  let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
-  let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+  if (theme === 'light') {
+    sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
+    stars.style.opacity = 0;
+    sun.style.opacity = 1;
+    moon.style.opacity = 0;
 
-  // Handle XP overflow
-  while (xp >= 100) {
-    xp -= 100;
-    level += 1;
-  }
+    if (animate) sun.style.transform = 'translateY(0)';
+    if (animate) moon.style.transform = 'translateY(120px)';
+    
+    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
+  } else {
+    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
+    stars.style.opacity = 1;
+    sun.style.opacity = 0;
+    moon.style.opacity = 1;
 
-  xpBar.value = xp;
-  xpValue.textContent = xp;
-  levelValue.textContent = level;
-
-  localStorage.setItem(`${currentUser}_xp`, xp);
-  localStorage.setItem(`${currentUser}_level`, level);
+    if (animate) sun.style.transform = 'translateY(120px)';
+    if (animate) moon.style.transform = 'translateY(0)';
+    
+    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
+  }
 }
 
-// 🔹 Initial load
+
+// === Initial Load Theme ===
+const savedTheme = localStorage.getItem('theme') || 'dark';
+window.applyEnvironment(savedTheme, false);
+
+
+// === User Sign-in Check ===
 const currentUser = localStorage.getItem('currentUser');
 if (!currentUser) {
-  alert('You must sign in first!');
-  window.location.href = 'Main/Account/signin.html';
-} else {
-  syncXPDisplay();
+  alert('You must sign in first!');
+  window.location.href = 'Main/Account/signin.html';
 }
 
-// 🔹 Resync periodically
-setInterval(syncXPDisplay, 3000);
-
-// 🔹 Glow on XP change
-function glowXP() {
-  xpBar.style.transition = 'box-shadow 0.6s ease';
-  xpBar.style.boxShadow = '0 0 15px #1DB954';
-  setTimeout(() => xpBar.style.boxShadow = 'none', 1500);
-}
-
-// Listen for XP changes
-window.addEventListener('storage', (e) => {
-  if (e.key && e.key.includes('_xp')) {
-    syncXPDisplay();
-    glowXP();
-  }
-});
-
-// === Theme System ===
-function applyEnvironment(theme, animate=false) {
-  const sky = document.getElementById('sky');
-  const sun = document.getElementById('sun');
-  const moon = document.getElementById('moon');
-  const stars = document.getElementById('stars');
-
-  if (theme === 'light') {
-    sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
-    stars.style.opacity = 0;
-    sun.style.opacity = 1;
-    moon.style.opacity = 0;
-
-    if (animate) sun.style.transform = 'translateY(0)'; // only if toggled
-    if (animate) moon.style.transform = 'translateY(120px)';
-    
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
-  } else {
-    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
-    stars.style.opacity = 1;
-    sun.style.opacity = 0;
-    moon.style.opacity = 1;
-
-    if (animate) sun.style.transform = 'translateY(120px)'; // only if toggled
-    if (animate) moon.style.transform = 'translateY(0)';
-    
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
-  }
-}
-
-// Load saved theme on page load without animation
-const savedTheme = localStorage.getItem('theme') || 'dark';
-applyEnvironment(savedTheme, false);
-
-// Listen for theme changes
-window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') applyEnvironment(e.newValue, true);
-});
+// NOTE: All XP system and storage event listeners are now handled by levels.js
 </script>
 </body>
 </html>
