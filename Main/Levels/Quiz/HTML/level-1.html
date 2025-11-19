@@ -8,146 +8,146 @@
 <link rel="stylesheet" href="../../../Design/levels.css">
 <link rel="stylesheet" href="../../../Design/global_size-FIX.css">
 <style>
+/* --- CSS is unchanged, focusing on script fix --- */
 body {
-  font-family: 'Press Start 2P', cursive;
-  /* ⭐ REMOVED: manual background line, theme.js will handle this */
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  transition: background 0.5s, color 0.5s;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  transition: background 0.5s, color 0.5s;
 }
 .quiz-container {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 25px;
-  background: rgba(0,0,0,0.5);
-  border-radius: 12px;
-  box-shadow: 0 0 15px #1DB954;
-  transition: background 0.3s, box-shadow 0.3s;
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 25px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 15px #1DB954;
+  transition: background 0.3s, box-shadow 0.3s;
 }
-h2 { color: #1DB954; margin-bottom: 10px; font-size: 0.9rem; font-family: 'Press Start 2P', cursive; } /* ⭐ FIXED Font */
-h4 { font-size: 0.6rem; font-family: 'Press Start 2P', cursive; } /* ⭐ FIXED Font */
+h2 { color: #1DB954; margin-bottom: 10px; font-size: 0.9rem; font-family: 'Press Start 2P', cursive; }
+h4 { font-size: 0.6rem; font-family: 'Press Start 2P', cursive; }
 .choice {
-  display: block;
-  margin: 10px auto;
-  padding: 12px;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 10px;
-  background: #1DB954;
-  cursor: pointer;
-  color: #fff;
-  border: none;
-  transition: transform 0.2s, background 0.3s;
-  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED Font */
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  background: #1DB954;
+  cursor: pointer;
+  color: #fff;
+  border: none;
+  transition: transform 0.2s, background 0.3s;
+  font-family: 'Press Start 2P', cursive;
 }
 .choice:hover { background: #1ed760; transform: scale(1.05); }
 #result { margin-top: 20px; font-size: 0.7rem; }
 #nextBtn, #finishBtn {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #1DB954;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  display: none;
-  font-size: 0.6rem;
-  transition: transform 0.3s;
-  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED Font */
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #1DB954;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  display: none;
+  font-size: 0.6rem;
+  transition: transform 0.3s;
+  font-family: 'Press Start 2P', cursive;
 }
 #nextBtn:hover, #finishBtn:hover { background: #1ed760; transform: scale(1.1); }
 /* === Popup Overlay === */
 #popupOverlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  color: #fff;
-  z-index: 999;
-  animation: fadeIn 0.8s ease;
-  padding-bottom: 10vh;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #fff;
+  z-index: 999;
+  animation: fadeIn 0.8s ease;
+  padding-bottom: 10vh;
 }
 @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 #xpGain {
-  color: #1DB954;
-  font-size: 0.8rem;
-  margin: 10px 0;
+  color: #1DB954;
+  font-size: 0.8rem;
+  margin: 10px 0;
 }
 .xp-bar-container {
-  width: 60%;
-  background: #222;
-  border-radius: 8px;
-  height: 16px;
-  overflow: hidden;
-  margin: 15px auto;
+  width: 60%;
+  background: #222;
+  border-radius: 8px;
+  height: 16px;
+  overflow: hidden;
+  margin: 15px auto;
 }
 .xp-bar-fill {
-  background: linear-gradient(90deg, #00ff90, #1DB954);
-  width: 0%;
-  height: 100%;
-  transition: width 1.5s ease-in-out;
+  background: linear-gradient(90deg, #00ff90, #1DB954);
+  width: 0%;
+  height: 100%;
+  transition: width 1.5s ease-in-out;
 }
 #backBtn {
-  background: #ff69b4;
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  padding: 10px 18px;
-  font-family: 'Press Start 2P', cursive;
-  margin-top: 20px;
-  cursor: pointer;
+  background: #ff69b4;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 10px 18px;
+  font-family: 'Press Start 2P', cursive;
+  margin-top: 20px;
+  cursor: pointer;
 }
 #backBtn:hover { background: #ff85c1; transform: scale(1.05); }
 /* === Celebrating Character === */
 .hero-sprite {
-  width: clamp(64px, 20vw, 128px);
-  height: clamp(64px, 20vw, 128px);
-  background: url('../../../Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 1024px 128px;
-  image-rendering: pixelated;
-  animation: celebrateAnim 1s steps(8) infinite;
-  margin-top: 10px;
-  filter: drop-shadow(0 0 10px #1DB954);
+  width: clamp(64px, 20vw, 128px);
+  height: clamp(64px, 20vw, 128px);
+  background: url('../../../Assets/Characters/hero_sheet.png') no-repeat;
+  background-size: 1024px 128px;
+  image-rendering: pixelated;
+  animation: celebrateAnim 1s steps(8) infinite;
+  margin-top: 10px;
+  filter: drop-shadow(0 0 10px #1DB954);
 }
 @keyframes celebrateAnim {
-  from { background-position: 0 0; }
-  to { background-position: -1024px 0; }
+  from { background-position: 0 0; }
+  to { background-position: -1024px 0; }
 }
 /* === Fade-Out Transition === */
 .fade-out {
-  animation: fadeOut 1s ease forwards;
+  animation: fadeOut 1s ease forwards;
 }
 @keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; transform: scale(0.98); }
+  from { opacity: 1; }
+  to { opacity: 0; transform: scale(0.98); }
 }
 </style>
 </head>
 <body>
 <div class="quiz-container">
-  <h2>Grade 11 Quiz - Level 1: HTML Basics</h2>
-  <h4 id="progress">Question 1 of 10</h4>
-  <h4 id="timer">Time Left: 15:00</h4>
-  <div id="questionContainer"></div>
-  <div id="result"></div>
-  <button id="nextBtn">Next Question</button>
-  <button id="finishBtn">Finish Level</button>
+  <h2>Grade 11 Quiz - Level 1: HTML Basics</h2>
+  <h4 id="progress">Question 1 of 10</h4>
+  <h4 id="timer">Time Left: 15:00</h4>
+  <div id="questionContainer"></div>
+  <div id="result"></div>
+  <button id="nextBtn">Next Question</button>
+  <button id="finishBtn">Finish Level</button>
 </div>
 <div id="popupOverlay">
-  <h2>🎉 Level Complete!</h2>
-  <div class="hero-sprite"></div>
-  <p id="xpGain">+0 XP Gained</p>
-  <div class="xp-bar-container">
-    <div class="xp-bar-fill" id="xpBarFill"></div>
-  </div>
-  <button id="backBtn">⬅ Back to Lobby</button>
+  <h2>🎉 Level Complete!</h2>
+  <div class="hero-sprite"></div>
+  <p id="xpGain">+0 XP Gained</p>
+  <div class="xp-bar-container">
+    <div class="xp-bar-fill" id="xpBarFill"></div>
+  </div>
+  <button id="backBtn">⬅ Back to Lobby</button>
 </div>
 <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
@@ -156,33 +156,26 @@ h4 { font-size: 0.6rem; font-family: 'Press Start 2P', cursive; } /* ⭐ FIXED F
 <script src="../../../Design/theme.js"></script>
 <script src="../../../Design/navigate_return.js"></script>
 <script>
-// ⭐ FIX: Removed all manual theme setting. theme.js now handles the body background.
+// ⭐ ENVIRONMENT SETUP
 const hero = document.querySelector('.hero-sprite');
-// The sprite filter is kept here to allow the theme to change the character's glow.
 const theme = localStorage.getItem('theme') || 'dark';
 if (theme === 'light') {
-    hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
+    hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
 } else {
-    hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
+    hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
 }
 
-/* === Quiz System === */
-const quizQuestions = [
-  { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
-  { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
-  { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
-  { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
-  { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
-  { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
-  { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
-  { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
-  { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
-  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }];
-
+/* === QUIZ STATE VARIABLES === */
 let currentQuestion = 0;
-let xpEarned = 0; // Keep this to track display value
-const XP_PER_QUESTION = 5; // Define XP amount
+let xpEarned = 0; 
+const XP_PER_QUESTION = 5; 
 
+// ⭐ FIX 1: Fetch initial XP and Level details *before* the quiz starts
+let initialXP = parseInt(localStorage.getItem('currentXP') || 0);
+let initialLevel = parseInt(localStorage.getItem('currentLevel') || 1);
+
+
+/* === DOM ELEMENTS & CONFIG === */
 const questionContainer = document.getElementById("questionContainer");
 const nextBtn = document.getElementById("nextBtn");
 const finishBtn = document.getElementById("finishBtn");
@@ -195,6 +188,21 @@ const wrongSound = document.getElementById("wrongSound");
 const soundEnabled = localStorage.getItem('sound') === 'on';
 const vibrationEnabled = localStorage.getItem('vibration') === 'on';
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+/* === QUIZ DATA === */
+const quizQuestions = [
+  { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
+  { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
+  { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
+  { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
+  { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
+  { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
+  { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
+  { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
+  { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
+  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
+];
+
 
 /* === TIMER === */
 let totalTime = 15 * 60;
@@ -234,11 +242,11 @@ function checkAnswer(selectedIndex) {
   choices.forEach(b => b.disabled = true);
   if (selectedIndex === correctIndex) {
     result.textContent = `✅ Correct! +${XP_PER_QUESTION} XP`;
-    xpEarned += XP_PER_QUESTION; // Track for display
-    // ⭐ FIX: Award XP using the global function from levels.js
-    if (typeof window.awardXP === 'function') {
-        window.awardXP(XP_PER_QUESTION);
-    }
+    xpEarned += XP_PER_QUESTION; 
+    // Award XP using the global function from levels.js
+    if (typeof window.awardXP === 'function') {
+        window.awardXP(XP_PER_QUESTION);
+    }
     if (soundEnabled) correctSound.play();
     if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
   } else {
@@ -262,32 +270,23 @@ finishBtn.onclick = () => {
   showPopup();
 };
 
-/* === Show Popup and Animate XP === */
+/* === Show Popup and Animate XP (REVISED FIX) === */
 function showPopup() {
   document.querySelector(".quiz-container").classList.add('fade-out');
  
-  // Retrieve the current (post-quiz) XP data from storage
+  // Retrieve the final XP and Level after all awards have been processed by levels.js
   const finalXP = parseInt(localStorage.getItem('currentXP') || 0);
   const finalLevel = parseInt(localStorage.getItem('currentLevel') || 1);
-  const nextLevelXP = finalLevel * 100; // Assuming XP target = Level * 100
+  
+  // The maximum XP for the *final* level the user is on (assuming target = Level * 100)
+  const nextLevelXP = finalLevel * 100;
 
-  // Calculate XP gained towards the new level
-  // This logic is complex because the user might have leveled up.
-  // For simplicity, we calculate the percentage of the current level completed.
-  let percentComplete;
- 
-  // FIX: If the user just leveled up, the finalXP might be low again.
-  // We need to check if the user is now in a new level.
-  if (finalLevel > initialLevel) {
-    // If leveled up: calculate percentage within the NEW level.
-    // This calculation depends entirely on how your levels.js resets XP after a level up.
-    // Assuming currentXP holds the progress *within* the current level:
-    percentComplete = (finalXP / nextLevelXP) * 100; 
-  } else {
-    // If still in the same level: calculate percentage within the initial level target (100 in this case)
-    percentComplete = (finalXP / 100) * 100;
-  }
-
+  // Calculate the percentage of the current level completed
+  // This calculation assumes 'currentXP' in localStorage stores the progress *within* the current level.
+  let percentComplete = (finalXP / nextLevelXP) * 100;
+  
+  // Handle edge case where XP might temporarily exceed the bar limit right before a level up
+  percentComplete = Math.min(percentComplete, 100);
 
   setTimeout(() => {
     document.querySelector(".quiz-container").style.display = "none";
@@ -298,23 +297,22 @@ function showPopup() {
    
     // Display the total XP earned in this session
     document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`; 
-    
+    
     // Display the user's actual final level
     document.querySelector("#popupOverlay h2").textContent = `🎉 Level ${finalLevel} Complete!`;
-    
+    
     // Animate bar to the calculated percentage
-    setTimeout(() => { 
-        // Constraint the percentage so it doesn't go over 100% (for visual clarity)
-        xpBar.style.width = `${Math.min(percentComplete, 100)}%`; 
+    setTimeout(() => { 
+        xpBar.style.width = `${percentComplete}%`; 
     }, 300);
-  
+  
   }, 800);
 }
 
 /* === Back to Lobby with transition === */
 const goToLobby = () => {
-    // Navigate back to the root index.html
-    window.location.href = '../../../index.html';
+    // Navigate back to the root index.html
+    window.location.href = '../../../index.html';
 }
 
 document.getElementById('backBtn').onclick = () => {
