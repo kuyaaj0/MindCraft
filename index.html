@@ -13,7 +13,7 @@
 <style>
 /* === Global Resets === */
 body {
-  font-family: 'Press Start 2P', cursive; /* Applied globally */
+  font-family: 'Press Start 2P', cursive;
   color: #fff;
   margin: 0;
   overflow-x: hidden;
@@ -34,7 +34,7 @@ body {
 #sun, #moon {
   position: fixed;
   right: 10%;
-  width: clamp(60px, 10vw, 80px);
+  width: clamp(60px, 10vw, 80px); /* Responsive size */
   height: clamp(60px, 10vw, 80px);
   border-radius: 50%;
   transition: all 2s ease-in-out;
@@ -63,7 +63,7 @@ body {
 /* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: clamp(5vh, 8vh, 10vh);
+  bottom: clamp(5vh, 8vh, 10vh); /* Responsive bottom placement */
   width: 90px;
   height: 330px;
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
@@ -82,20 +82,44 @@ body {
 /* ===== Header & Layout (Responsive) ===== */
 header {
   display: flex;
+  flex-direction: column; /* ⭐ NEW: Stack vertically by default (mobile) */
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
-  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Ensure header uses gamified font */
+  font-family: 'Press Start 2P', cursive;
 }
 
-.xp-status, .level-display, .user-actions {
+/* Inner container for XP/Level/Buttons to allow horizontal layout on desktop */
+.header-top-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 5px; /* Spacing for when it stacks on mobile */
+}
+
+/* Group XP and Level together on mobile for better flow */
+.xp-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 5px; /* Spacing below XP group on mobile */
+}
+
+.xp-status, .level-display {
   font-size: 0.6rem;
   text-align: center;
-  margin: 5px;
-  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Ensure elements use gamified font */
+  font-family: 'Press Start 2P', cursive;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px; /* Spacing above buttons on mobile */
+    width: 100%;
+    justify-content: center;
 }
 
 button {
@@ -127,8 +151,8 @@ main {
 }
 
 .language-card {
-  width: 100%;
-  max-width: 280px;
+  width: 100%; /* Default to full width on mobile */
+  max-width: 280px; /* Max size for a single card */
   padding: 15px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.5);
@@ -161,16 +185,36 @@ footer {
   padding-bottom: 10px;
 }
 
-/* ===== MEDIA QUERIES for Desktop/Tablet Layouts ===== */
+/* ===== MEDIA QUERIES for Desktop/Tablet Layouts (768px+) ===== */
 @media (min-width: 768px) {
-    /* Header: Keep elements aligned */
-    header {
+    /* Header: Change to horizontal layout */
+    header {
+        flex-direction: row; /* ⭐ NEW: Horizontal layout on desktop */
         flex-wrap: nowrap;
         justify-content: space-around;
-    }
-    .xp-status, .level-display, .user-actions {
+    }
+    
+    /* Hide the inner top row div on desktop */
+    .header-top-row {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    /* XP Group: Keep horizontal and centered */
+    .xp-group {
+        margin-bottom: 0;
+    }
+
+    /* User Actions: Keep buttons grouped and smaller margin */
+    .user-actions {
+        width: auto;
+        margin-top: 0;
+    }
+
+    .xp-status, .level-display {
         font-size: 0.7rem;
     }
+    
     button {
         font-size: 0.6rem;
     }
@@ -181,12 +225,12 @@ footer {
         max-width: none;
     }
 }
+
 @media (min-width: 1024px) {
-    /* Larger Font Size for large screens */
     h1 {
         font-size: 1.5rem;
     }
-    .xp-status, .level-display, .user-actions {
+    .xp-status, .level-display {
         font-size: 0.8rem;
     }
     button {
@@ -207,18 +251,21 @@ footer {
 <div class="bg-character" style="animation-delay: 8s;"></div>
 
 <header>
-  <div class="xp-status">
-    <span>XP:</span>
-    <progress id="xpBar" value="0" max="100"></progress>
-    <span id="xpValue">0</span>
-  </div>
-  <div class="level-display">
-    Level <span id="levelValue">1</span>
-  </div>
-  <div class="user-actions">
-    <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
-    <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
-  </div>
+    <div class="xp-group">
+        <div class="xp-status">
+            <span>XP:</span>
+            <progress id="xpBar" value="0" max="100"></progress>
+            <span id="xpValue">0</span>
+        </div>
+        <div class="level-display">
+            Level <span id="levelValue">1</span>
+        </div>
+    </div>
+
+    <div class="user-actions">
+        <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
+        <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+    </div>
 </header>
 
 <main class="language-select">
@@ -336,10 +383,6 @@ window.applyEnvironment = function(theme, animate=false) {
   }
 }
 
-/* ⭐ REMOVED: Initial Load Theme logic. theme.js should handle initial load and updates.
-const savedTheme = localStorage.getItem('theme') || 'dark';
-window.applyEnvironment(savedTheme, false);
-*/
 
 // === User Sign-in Check ===
 const currentUser = localStorage.getItem('currentUser');
@@ -347,8 +390,6 @@ if (!currentUser) {
   alert('You must sign in first!');
   window.location.href = 'Main/Account/signin.html';
 }
-
-// NOTE: All XP system and storage event listeners are now handled by levels.js
 </script>
 </body>
 </html>
