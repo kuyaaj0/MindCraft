@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Level 1 - HTML Quiz | MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../Design/levels.css">
-<link rel="stylesheet" href="../../../Design/global_size-FIX.css">
+<!-- Updated paths for GitHub Pages (replace 'your-repo-name' with your actual repo name, e.g., 'mindcraft') -->
+<link rel="stylesheet" href="/your-repo-name/Main/Design/levels.css">
+<link rel="stylesheet" href="/your-repo-name/Main/Design/global_size-FIX.css">
 <style>
 /* --- CSS is unchanged, focusing on script fix --- */
 body {
@@ -111,7 +112,7 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 .hero-sprite {
   width: clamp(64px, 20vw, 128px);
   height: clamp(64px, 20vw, 128px);
-  background: url('../../../Assets/Characters/hero_sheet.png') no-repeat;
+  background: url('/your-repo-name/Main/Assets/Characters/hero_sheet.png') no-repeat;
   background-size: 1024px 128px;
   image-rendering: pixelated;
   animation: celebrateAnim 1s steps(8) infinite;
@@ -151,12 +152,14 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
   </div>
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
-<audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
-<audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
+<!-- Updated paths for GitHub Pages -->
+<audio id="correctSound" src="/your-repo-name/Main/Assets/Sounds/Correct.mp3"></audio>
+<audio id="wrongSound" src="/your-repo-name/Main/Assets/Sounds/Incorrect.mp3"></audio>
 
-<script src="../../../Exp/levels.js"></script>
-<script src="../../../Design/theme.js"></script>
-<script src="../../../Design/navigate_return.js"></script>
+<!-- Updated script paths -->
+<script src="/your-repo-name/Main/Exp/levels.js"></script>
+<script src="/your-repo-name/Main/Design/theme.js"></script>
+<script src="/your-repo-name/Main/Design/navigate_return.js"></script>
 <script>
 // ⭐ ENVIRONMENT SETUP
 const hero = document.querySelector('.hero-sprite');
@@ -220,15 +223,21 @@ const interval = setInterval(() => {
 
 /* === Load Question === */
 function loadQuestion() {
+  console.log("loadQuestion called for question:", currentQuestion); // DEBUG: Check if this runs
   result.textContent = "";
   nextBtn.style.display = "none";
   finishBtn.style.display = "none";
   questionContainer.innerHTML = ""; // Clear previous content
+  if (currentQuestion >= quizQuestions.length) {
+    console.error("No more questions!"); // DEBUG
+    return;
+  }
   const q = quizQuestions[currentQuestion];
   progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
   const questionEl = document.createElement("h3");
   questionEl.textContent = q.question;
   questionContainer.appendChild(questionEl);
+  console.log("Appending choices for question:", q.question); // DEBUG
   q.choices.forEach((choice, i) => {
     const btn = document.createElement("button");
     btn.textContent = choice;
@@ -237,10 +246,12 @@ function loadQuestion() {
     btn.onclick = () => checkAnswer(i);
     questionContainer.appendChild(btn);
   });
+  console.log("Question loaded successfully"); // DEBUG
 }
 
 /* === Check Answer === */
 function checkAnswer(selectedIndex) {
+  console.log("checkAnswer called with:", selectedIndex); // DEBUG
   const correctIndex = quizQuestions[currentQuestion].answer;
   const choices = document.querySelectorAll(".choice");
   choices.forEach(b => b.disabled = true);
@@ -250,6 +261,8 @@ function checkAnswer(selectedIndex) {
     // Award XP using the global function from levels.js
     if (typeof window.awardXP === 'function') {
         window.awardXP(XP_PER_QUESTION);
+    } else {
+      console.warn("awardXP function not found"); // DEBUG
     }
     if (soundEnabled) correctSound.play();
     if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
@@ -276,6 +289,7 @@ finishBtn.onclick = () => {
 
 /* === Show Popup and Animate XP (REVISED FIX) === */
 function showPopup() {
+  console.log("showPopup called"); // DEBUG
   document.querySelector(".quiz-container").classList.add('fade-out');
   
   // Retrieve the final XP and Level after all awards have been processed by levels.js
@@ -315,8 +329,8 @@ function showPopup() {
 
 /* === Back to Lobby with transition === */
 const goToLobby = () => {
-    // Navigate back to the root index.html
-    window.location.href = '../../../index.html';
+    // Navigate back to the root index.html (updated path)
+    window.location.href = '/your-repo-name/index.html';
 }
 
 document.getElementById('backBtn').onclick = () => {
@@ -326,6 +340,7 @@ document.getElementById('backBtn').onclick = () => {
 };
 
 /* === Start === */
+console.log("Starting quiz..."); // DEBUG
 loadQuestion();
 </script>
 </body>
