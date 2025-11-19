@@ -13,7 +13,7 @@
 <style>
 /* === Global Resets === */
 body {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Press Start 2P', cursive; /* Applied globally */
   color: #fff;
   margin: 0;
   overflow-x: hidden;
@@ -28,14 +28,13 @@ body {
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: -3;
-  /* Initial background is set by JS function call at the bottom */
   transition: background 2s;
 }
 
 #sun, #moon {
   position: fixed;
   right: 10%;
-  width: clamp(60px, 10vw, 80px); /* Responsive size */
+  width: clamp(60px, 10vw, 80px);
   height: clamp(60px, 10vw, 80px);
   border-radius: 50%;
   transition: all 2s ease-in-out;
@@ -64,7 +63,7 @@ body {
 /* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: clamp(5vh, 8vh, 10vh); /* Responsive bottom placement */
+  bottom: clamp(5vh, 8vh, 10vh);
   width: 90px;
   height: 330px;
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
@@ -85,16 +84,18 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+  flex-wrap: wrap;
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
+  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Ensure header uses gamified font */
 }
 
 .xp-status, .level-display, .user-actions {
   font-size: 0.6rem;
   text-align: center;
   margin: 5px;
+  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Ensure elements use gamified font */
 }
 
 button {
@@ -112,7 +113,7 @@ button:hover { background: #1ed760; transform: scale(1.05); }
 
 main {
   text-align: center;
-  padding: 20px 10px; /* Added horizontal padding */
+  padding: 20px 10px;
 }
 
 /* === Language Grid (Core Responsiveness) === */
@@ -126,8 +127,8 @@ main {
 }
 
 .language-card {
-  width: 100%; /* Default to full width on mobile */
-  max-width: 280px; /* Max size for a single card */
+  width: 100%;
+  max-width: 280px;
   padding: 15px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.5);
@@ -162,35 +163,35 @@ footer {
 
 /* ===== MEDIA QUERIES for Desktop/Tablet Layouts ===== */
 @media (min-width: 768px) {
-    /* Header: Keep elements aligned */
-    header {
-        flex-wrap: nowrap;
-        justify-content: space-around;
-    }
-    .xp-status, .level-display, .user-actions {
-        font-size: 0.7rem;
-    }
-    button {
-        font-size: 0.6rem;
-    }
+    /* Header: Keep elements aligned */
+    header {
+        flex-wrap: nowrap;
+        justify-content: space-around;
+    }
+    .xp-status, .level-display, .user-actions {
+        font-size: 0.7rem;
+    }
+    button {
+        font-size: 0.6rem;
+    }
 
-    /* Language Grid: Allow three columns */
-    .language-card {
-        width: calc(33.33% - 25px); /* Three columns with gap consideration */
-        max-width: none; /* Remove max width on larger screens */
-    }
+    /* Language Grid: Allow three columns */
+    .language-card {
+        width: calc(33.33% - 25px);
+        max-width: none;
+    }
 }
 @media (min-width: 1024px) {
-    /* Larger Font Size for large screens */
-    h1 {
-        font-size: 1.5rem;
-    }
-    .xp-status, .level-display, .user-actions {
-        font-size: 0.8rem;
-    }
-    button {
-        font-size: 0.65rem;
-    }
+    /* Larger Font Size for large screens */
+    h1 {
+        font-size: 1.5rem;
+    }
+    .xp-status, .level-display, .user-actions {
+        font-size: 0.8rem;
+    }
+    button {
+        font-size: 0.65rem;
+    }
 }
 </style>
 </head>
@@ -309,7 +310,7 @@ window.applyEnvironment = function(theme, animate=false) {
   const sun = document.getElementById('sun');
   const moon = document.getElementById('moon');
   const stars = document.getElementById('stars');
-  const chars = document.querySelectorAll('.bg-character'); // Redefine chars here for theme effects
+  const chars = document.querySelectorAll('.bg-character');
   if (!sky || !sun || !moon || !stars) return;
 
   if (theme === 'light') {
@@ -335,11 +336,10 @@ window.applyEnvironment = function(theme, animate=false) {
   }
 }
 
-
-// === Initial Load Theme ===
+/* ⭐ REMOVED: Initial Load Theme logic. theme.js should handle initial load and updates.
 const savedTheme = localStorage.getItem('theme') || 'dark';
 window.applyEnvironment(savedTheme, false);
-
+*/
 
 // === User Sign-in Check ===
 const currentUser = localStorage.getItem('currentUser');
