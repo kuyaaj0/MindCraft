@@ -4,11 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Account - MindCraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 <style>
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Applied gamified font */
   margin: 0;
   padding: 0;
   text-align: center;
@@ -29,6 +30,7 @@ nav button {
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
+  font-family: 'Press Start 2P', cursive; /* Ensure buttons use gamified font */
 }
 nav button:hover { background: #1ed760; }
 .container {
@@ -41,30 +43,32 @@ nav button:hover { background: #1ed760; }
   margin-right: auto;
   box-shadow: 0 0 15px #1DB954;
 }
-h2 { margin-bottom: 15px; }
+h2 { margin-bottom: 15px; font-family: 'Press Start 2P', cursive;} /* Ensure title uses gamified font */
+/* ⭐ FIXED: Apply the font to the data paragraphs */
+.container p {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    margin: 15px 0;
+}
 </style>
 </head>
 <body>
-
 <nav>
   <button onclick="location.href='../../index.html'">🏠 Home</button>
   <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
   <button onclick="logout()">🚪 Logout</button>
 </nav>
-
 <div class="container">
   <h2>👤 Account Information</h2>
   <p><b>Username:</b> <span id="username">Guest</span></p>
   <p><b>Level:</b> <span id="level">1</span></p>
   <p><b>XP:</b> <span id="xp">0</span></p>
 </div>
-
 <script>
 // =============================
 // Check login
 // =============================
 const currentUser = localStorage.getItem('currentUser');
-
 if (!currentUser) {
   alert('You must sign in first!');
   // Redirect to signin page, which is assumed to be in the same folder.
@@ -81,12 +85,12 @@ const xpEl = document.getElementById('xp');
 // =============================
 function loadUserData() {
     if (!currentUser) return;
-    
+
     // Load current XP, Level, and Max XP from storage
     let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
     let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
     let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || 100;
-    
+
     // Self-correcting logic (ensures display consistency)
     const XP_CAP_MULTIPLIER = 1.25;
     while (xp >= xpMax) {
@@ -94,16 +98,13 @@ function loadUserData() {
         level++;
         xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
     }
-
     // Display the data
     usernameEl.textContent = currentUser;
     levelEl.textContent = level;
-    xpEl.textContent = `${xp}/${xpMax}`;
-}
+    xpEl.textContent = `${xp}/${xpMax}`;}
 
 // Load data on initial page load
 loadUserData();
-
 
 // =============================
 // Listen for XP/Level changes in other tabs (Dynamic Update)
@@ -115,7 +116,6 @@ window.addEventListener('storage', (e) => {
     }
 });
 
-
 // =============================
 // Logout function
 // =============================
@@ -123,10 +123,9 @@ function logout() {
   localStorage.setItem('lastUser', currentUser); // optional tracking
   localStorage.removeItem('currentUser');
   // Assuming signin.html is in the same folder as account.html (../Account/)
-  window.location.href = 'signin.html'; 
+  window.location.href = 'signin.html';
 }
 </script>
-
 <script src="../Design/theme.js"></script>
 </body>
 </html>
