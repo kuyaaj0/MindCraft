@@ -34,7 +34,7 @@ body {
 #sun, #moon {
   position: fixed;
   right: 10%;
-  width: clamp(60px, 10vw, 80px); /* Responsive size */
+  width: clamp(60px, 10vw, 80px);
   height: clamp(60px, 10vw, 80px);
   border-radius: 50%;
   transition: all 2s ease-in-out;
@@ -63,7 +63,7 @@ body {
 /* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: clamp(5vh, 8vh, 10vh); /* Responsive bottom placement */
+  bottom: clamp(5vh, 8vh, 10vh);
   width: 90px;
   height: 330px;
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
@@ -79,11 +79,11 @@ body {
   to { background-position: -800%; }
 }
 
-/* ===== Header & Layout (Responsive) ===== */
+/* ===== Header & Layout (Mobile First: Default) ===== */
 header {
   display: flex;
-  flex-direction: column; /* ⭐ NEW: Stack vertically by default (mobile) */
-  justify-content: space-between;
+  flex-direction: column; /* Stack vertically on small screens */
+  justify-content: flex-start; /* Align items to the top/start */
   align-items: center;
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
@@ -91,21 +91,14 @@ header {
   font-family: 'Press Start 2P', cursive;
 }
 
-/* Inner container for XP/Level/Buttons to allow horizontal layout on desktop */
-.header-top-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 5px; /* Spacing for when it stacks on mobile */
-}
-
-/* Group XP and Level together on mobile for better flow */
+/* Group XP and Level elements together */
 .xp-group {
     display: flex;
-    gap: 15px;
+    justify-content: space-around; /* Distribute XP and Level evenly */
     align-items: center;
-    margin-bottom: 5px; /* Spacing below XP group on mobile */
+    width: 100%; /* Take full width on mobile */
+    max-width: 300px; /* Constraint width for cleaner look */
+    margin-bottom: 5px; /* Space below this group */
 }
 
 .xp-status, .level-display {
@@ -117,7 +110,7 @@ header {
 .user-actions {
     display: flex;
     gap: 10px;
-    margin-top: 5px; /* Spacing above buttons on mobile */
+    margin-top: 5px;
     width: 100%;
     justify-content: center;
 }
@@ -151,8 +144,8 @@ main {
 }
 
 .language-card {
-  width: 100%; /* Default to full width on mobile */
-  max-width: 280px; /* Max size for a single card */
+  width: 100%;
+  max-width: 280px;
   padding: 15px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.5);
@@ -189,23 +182,19 @@ footer {
 @media (min-width: 768px) {
     /* Header: Change to horizontal layout */
     header {
-        flex-direction: row; /* ⭐ NEW: Horizontal layout on desktop */
-        flex-wrap: nowrap;
-        justify-content: space-around;
+        flex-direction: row; /* Horizontal layout on desktop */
+        justify-content: space-between; /* Distribute space between groups */
+        padding: 10px 40px; /* Add more padding on wider screens */
     }
     
-    /* Hide the inner top row div on desktop */
-    .header-top-row {
+    /* XP Group: Set specific width to ensure balanced space with buttons */
+    .xp-group {
         width: auto;
         margin-bottom: 0;
+        gap: 40px; /* Increase gap between XP and Level display */
     }
 
-    /* XP Group: Keep horizontal and centered */
-    .xp-group {
-        margin-bottom: 0;
-    }
-
-    /* User Actions: Keep buttons grouped and smaller margin */
+    /* User Actions: Grouped to the right */
     .user-actions {
         width: auto;
         margin-top: 0;
