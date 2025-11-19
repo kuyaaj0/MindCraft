@@ -352,12 +352,21 @@ window.addEventListener('storage', (e) => {
   }
 });
 
-// === THEME ENVIRONMENT ===
-const theme = localStorage.getItem('theme') || 'light';
-applyEnvironment(theme);
+// === Load theme from storage and apply ===
+function loadTheme() {
+  const storedTheme = localStorage.getItem('theme');
+  const theme = storedTheme ? storedTheme : 'light'; // default light
+  applyEnvironment(theme);
+}
 
+// Apply theme immediately
+loadTheme();
+
+// Optional: observe changes in settings while on index
 window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') applyEnvironment(e.newValue);
+  if (e.key === 'theme') {
+    loadTheme(); // apply theme if changed in settings
+  }
 });
 
 function applyEnvironment(theme) {
