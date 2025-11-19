@@ -83,7 +83,7 @@ body {
 header {
   display: flex;
   flex-direction: column; /* Stack vertically on small screens */
-  justify-content: flex-start; /* Align items to the top/start */
+  justify-content: flex-start;
   align-items: center;
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
@@ -91,17 +91,36 @@ header {
   font-family: 'Press Start 2P', cursive;
 }
 
-/* Group XP and Level elements together */
+/* XP Grouping and Layout FIX */
 .xp-group {
     display: flex;
-    justify-content: space-around; /* Distribute XP and Level evenly */
+    justify-content: space-between; /* Space out XP and Level evenly */
     align-items: center;
     width: 100%; /* Take full width on mobile */
-    max-width: 300px; /* Constraint width for cleaner look */
+    max-width: 400px; /* Constrain width for cleaner look */
     margin-bottom: 5px; /* Space below this group */
+    padding: 0 5px;
 }
 
-.xp-status, .level-display {
+.xp-status {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between 'XP:' and the bar/value container */
+}
+
+/* ⭐ XP BAR FIX: Container to force bar and value side-by-side */
+.xp-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#xpBar {
+    width: 80px; /* Specific width for mobile visibility */
+    height: 10px;
+}
+
+.level-display {
   font-size: 0.6rem;
   text-align: center;
   font-family: 'Press Start 2P', cursive;
@@ -184,14 +203,28 @@ footer {
     header {
         flex-direction: row; /* Horizontal layout on desktop */
         justify-content: space-between; /* Distribute space between groups */
-        padding: 10px 40px; /* Add more padding on wider screens */
+        padding: 10px 40px;
     }
     
-    /* XP Group: Set specific width to ensure balanced space with buttons */
+    /* XP Group: Better desktop spacing and alignment */
     .xp-group {
         width: auto;
         margin-bottom: 0;
-        gap: 40px; /* Increase gap between XP and Level display */
+        gap: 40px;
+    }
+
+    .xp-status {
+        /* Align XP status vertically center with buttons */
+        align-items: center;
+    }
+
+    .xp-bar-container {
+        /* Increase bar size on desktop */
+        gap: 10px;
+    }
+
+    #xpBar {
+        width: 120px; /* Wider bar for desktop */
     }
 
     /* User Actions: Grouped to the right */
@@ -243,8 +276,10 @@ footer {
     <div class="xp-group">
         <div class="xp-status">
             <span>XP:</span>
-            <progress id="xpBar" value="0" max="100"></progress>
-            <span id="xpValue">0</span>
+            <div class="xp-bar-container">
+                <progress id="xpBar" value="0" max="100"></progress>
+                <span id="xpValue">0</span>
+            </div>
         </div>
         <div class="level-display">
             Level <span id="levelValue">1</span>
