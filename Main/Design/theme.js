@@ -1,7 +1,7 @@
 // =============================
 // 🌗 Global Theme Loader (Dark/Light) + Environment Sync
 // =============================
-(function() {
+function() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   const body = document.body;
 
