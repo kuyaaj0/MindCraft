@@ -265,14 +265,49 @@ finishBtn.onclick = () => {
 /* === Show Popup and Animate XP === */
 function showPopup() {
   document.querySelector(".quiz-container").classList.add('fade-out');
+ 
+  // Retrieve the current (post-quiz) XP data from storage
+  const finalXP = parseInt(localStorage.getItem('currentXP') || 0);
+  const finalLevel = parseInt(localStorage.getItem('currentLevel') || 1);
+  const nextLevelXP = finalLevel * 100; // Assuming XP target = Level * 100
+
+  // Calculate XP gained towards the new level
+  // This logic is complex because the user might have leveled up.
+  // For simplicity, we calculate the percentage of the current level completed.
+  let percentComplete;
+ 
+  // FIX: If the user just leveled up, the finalXP might be low again.
+  // We need to check if the user is now in a new level.
+  if (finalLevel > initialLevel) {
+    // If leveled up: calculate percentage within the NEW level.
+    // This calculation depends entirely on how your levels.js resets XP after a level up.
+    // Assuming currentXP holds the progress *within* the current level:
+    percentComplete = (finalXP / nextLevelXP) * 100; 
+  } else {
+    // If still in the same level: calculate percentage within the initial level target (100 in this case)
+    percentComplete = (finalXP / 100) * 100;
+  }
+
+
   setTimeout(() => {
-    document.querySelector(".quiz-container").style.display = "none";
-    const popup = document.getElementById("popupOverlay");
-    const xpBar = document.getElementById("xpBarFill");
-    popup.style.display = "flex";
-    document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`; // Display total XP earned
-    // Animate bar to 100% after delay
-    setTimeout(() => { xpBar.style.width = "100%"; }, 300);
+    document.querySelector(".quiz-container").style.display = "none";
+    const popup = document.getElementById("popupOverlay");
+    const xpBar = document.getElementById("xpBarFill");
+   
+    popup.style.display = "flex";
+   
+    // Display the total XP earned in this session
+    document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`; 
+    
+    // Display the user's actual final level
+    document.querySelector("#popupOverlay h2").textContent = `🎉 Level ${finalLevel} Complete!`;
+    
+    // Animate bar to the calculated percentage
+    setTimeout(() => { 
+        // Constraint the percentage so it doesn't go over 100% (for visual clarity)
+        xpBar.style.width = `${Math.min(percentComplete, 100)}%`; 
+    }, 300);
+  
   }, 800);
 }
 
