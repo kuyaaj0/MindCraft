@@ -135,10 +135,27 @@ function syncXPDisplay() {
   const user = localStorage.getItem('currentUser');
   if (!user) return;
 
-  const xpNow = parseInt(localStorage.getItem(`${user}_xp`)) || 0;
-  const levelNow = parseInt(localStorage.getItem(`${user}_level`)) || 1;
-  const xpCap = parseInt(localStorage.getItem(`${user}_xpMax`)) || 100;
+  let xpNow = parseInt(localStorage.getItem(`${user}_xp`)) || 0;
+  let levelNow = parseInt(localStorage.getItem(`${user}_level`)) || 1;
+  let xpCap = parseInt(localStorage.getItem(`${user}_xpMax`)) || 100;
 
+  // 🧮 Check if XP exceeds the cap (auto-level up fix)
+  let leveledUp = false;
+  while (xpNow >= xpCap) {
+    xpNow -= xpCap;
+    levelNow++;
+    xpCap = Math.floor(xpCap * 1.25);
+    leveledUp = true;
+  }
+
+  if (leveledUp) {
+    localStorage.setItem(`${user}_xp`, xpNow);
+    localStorage.setItem(`${user}_level`, levelNow);
+    localStorage.setItem(`${user}_xpMax`, xpCap);
+    alert(`🎉 Congratulations ${user}! You reached Level ${levelNow}!`);
+  }
+
+  // 🪄 Update global vars
   xp = xpNow;
   level = levelNow;
   xpMax = xpCap;
