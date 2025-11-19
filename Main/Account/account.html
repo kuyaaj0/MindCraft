@@ -8,56 +8,55 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 <style>
 body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  transition: background 0.3s, color 0.3s;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  transition: background 0.3s, color 0.3s;
 }
 nav {
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 nav button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #1DB954;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #1DB954;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 nav button:hover { background: #1ed760; }
 .container {
-  margin-top: 50px;
-  background: rgba(0,0,0,0.4);
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 0 15px #1DB954;
+  margin-top: 50px;
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 15px #1DB954;
 }
 h2 { margin-bottom: 15px; }
 </style>
 </head>
 <body>
 
-<!-- Navigation Menu -->
 <nav>
-  <button onclick="location.href='../../index.html'">🏠 Home</button>
-  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-  <button onclick="logout()">🚪 Logout</button>
+  <button onclick="location.href='../../index.html'">🏠 Home</button>
+  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  <button onclick="logout()">🚪 Logout</button>
 </nav>
 
 <div class="container">
-  <h2>👤 Account Information</h2>
-  <p><b>Username:</b> <span id="username">Guest</span></p>
-  <p><b>Level:</b> <span id="level">1</span></p>
-  <p><b>XP:</b> <span id="xp">0</span></p>
+  <h2>👤 Account Information</h2>
+  <p><b>Username:</b> <span id="username">Guest</span></p>
+  <p><b>Level:</b> <span id="level">1</span></p>
+  <p><b>XP:</b> <span id="xp">0</span></p>
 </div>
 
 <script>
@@ -65,29 +64,69 @@ h2 { margin-bottom: 15px; }
 // Check login
 // =============================
 const currentUser = localStorage.getItem('currentUser');
+
 if (!currentUser) {
-  alert('You must sign in first!');
-  window.location.href = '../Account/signin.html';
+  alert('You must sign in first!');
+  // Redirect to signin page, which is assumed to be in the same folder.
+  window.location.href = 'signin.html';
 }
 
+// --- UI Elements ---
+const usernameEl = document.getElementById('username');
+const levelEl = document.getElementById('level');
+const xpEl = document.getElementById('xp');
+
 // =============================
-// Display user data
+// Function to Load and Display User Data
 // =============================
-document.getElementById('username').textContent = currentUser;
-document.getElementById('level').textContent = localStorage.getItem(`${currentUser}_level`) || 1;
-document.getElementById('xp').textContent = localStorage.getItem(`${currentUser}_xp`) || 0;
+function loadUserData() {
+    if (!currentUser) return;
+    
+    // Load current XP, Level, and Max XP from storage
+    let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
+    let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+    let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || 100;
+    
+    // Self-correcting logic (ensures display consistency)
+    const XP_CAP_MULTIPLIER = 1.25;
+    while (xp >= xpMax) {
+        xp -= xpMax;
+        level++;
+        xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
+    }
+
+    // Display the data
+    usernameEl.textContent = currentUser;
+    levelEl.textContent = level;
+    xpEl.textContent = `${xp}/${xpMax}`;
+}
+
+// Load data on initial page load
+loadUserData();
+
+
+// =============================
+// Listen for XP/Level changes in other tabs (Dynamic Update)
+// ===================================
+window.addEventListener('storage', (e) => {
+    // Only refresh if the XP or Level data for the current user has changed
+    if (e.key && e.key.startsWith(`${currentUser}_`)) {
+        loadUserData();
+    }
+});
+
 
 // =============================
 // Logout function
 // =============================
 function logout() {
-  localStorage.setItem('lastUser', currentUser); // optional tracking
-  localStorage.removeItem('currentUser');
-  window.location.href = '../Account/signin.html'; //this is important
+  localStorage.setItem('lastUser', currentUser); // optional tracking
+  localStorage.removeItem('currentUser');
+  // Assuming signin.html is in the same folder as account.html (../Account/)
+  window.location.href = 'signin.html'; 
 }
 </script>
 
-<!-- Apply global theme system -->
 <script src="../Design/theme.js"></script>
 </body>
 </html>
