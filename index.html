@@ -294,18 +294,20 @@ footer {
 
 <!-- Scripts -->
 <script src="Main/Design/theme.js"></script>
+<script src="Main/Exp/levels.js"></script>
+
 <script>
 // === Smart Character Placement ===
 const chars = document.querySelectorAll('.bg-character');
 chars.forEach((char, i) => {
-  const delay = Math.random() * 15; // Random start delay
-  const offset = Math.random() * 10; // Small vertical variance
-  const direction = Math.random() > 0.5 ? 1 : -1; // left or right
-  const duration = 20 + Math.random() * 10; // variable walking speed
+  const delay = Math.random() * 15;
+  const offset = Math.random() * 10;
+  const direction = Math.random() > 0.5 ? 1 : -1;
+  const duration = 20 + Math.random() * 10;
 
   char.style.bottom = `${5 + offset}vh`;
   char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
-  
+
   const keyframes = `
     @keyframes move${i} {
       0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
@@ -316,32 +318,47 @@ chars.forEach((char, i) => {
   styleEl.textContent = keyframes;
   document.head.appendChild(styleEl);
 });
-  
-const currentUser = localStorage.getItem('currentUser');
-const user = localStorage.getItem('currentUser');
-let xp = 0;
-let level = 1;
 
-// Load per-user XP & Level
-if (user) {
-  xp = parseInt(localStorage.getItem(user + '_xp') || 0);
-  level = parseInt(localStorage.getItem(user + '_level') || 1);
-  // Update global fallback too (for backward compatibility)
-  localStorage.setItem('xp', xp);
-  localStorage.setItem('level', level);
-}
+// === XP System Connection ===
+const currentUser = localStorage.getItem('currentUser');
 if (!currentUser) {
   alert('You must sign in first!');
   window.location.href = 'Main/Account/signin.html';
 }
 
-document.getElementById('xpValue').textContent = xp;
-document.getElementById('levelValue').textContent = level;
-document.getElementById('xpBar').value = xp;
-document.getElementById('xpBar').max = 100; // you can later make dynamic
+// 🔹 Sync XP & Level right after the page loads
+window.addEventListener('load', () => {
+  syncXPDisplay(); // from levels.js
+});
 
+// 🔹 Re-sync every 3 seconds (for when returning from a quiz)
+setInterval(syncXPDisplay, 3000);
+
+// 🔹 Add smooth glow when XP changes
+function glowXP() {
+  const xpBar = document.getElementById('xpBar');
+  if (xpBar) {
+    xpBar.style.transition = 'box-shadow 0.6s ease';
+    xpBar.style.boxShadow = '0 0 15px #1DB954';
+    setTimeout(() => (xpBar.style.boxShadow = 'none'), 1500);
+  }
+}
+
+// 🔹 Listen for XP changes in localStorage
+window.addEventListener('storage', (e) => {
+  if (e.key && e.key.includes('_xp')) {
+    syncXPDisplay();
+    glowXP();
+  }
+});
+
+// === THEME ENVIRONMENT ===
 const theme = localStorage.getItem('theme') || 'light';
 applyEnvironment(theme);
+
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') applyEnvironment(e.newValue);
+});
 
 function applyEnvironment(theme) {
   const sky = document.getElementById('sky');
@@ -361,8 +378,6 @@ function applyEnvironment(theme) {
     sun.style.opacity = 0;
     moon.style.opacity = 1;
     stars.style.opacity = 1;
-
-    // Characters "react" to the dark
     chars.forEach(c => {
       c.style.animationPlayState = 'paused';
       c.style.transform += ' translateY(-10px)';
