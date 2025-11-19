@@ -112,7 +112,7 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 .hero-sprite {
   width: clamp(64px, 20vw, 128px);
   height: clamp(64px, 20vw, 128px);
-  background: url('/your-repo-name/Main/Assets/Characters/hero_sheet.png') no-repeat;
+  background: url('/../Main/Assets/Characters/hero_sheet.png') no-repeat;
   background-size: 1024px 128px;
   image-rendering: pixelated;
   animation: celebrateAnim 1s steps(8) infinite;
@@ -153,8 +153,8 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
 <!-- Updated paths for GitHub Pages -->
-<audio id="correctSound" src="/your-repo-name/Main/Assets/Sounds/Correct.mp3"></audio>
-<audio id="wrongSound" src="/your-repo-name/Main/Assets/Sounds/Incorrect.mp3"></audio>
+<audio id="correctSound" src="/../Main/Assets/Sounds/Correct.mp3"></audio>
+<audio id="wrongSound" src="/../Main/Assets/Sounds/Incorrect.mp3"></audio>
 
 <!-- Updated script paths -->
 <script src="/your-repo-name/Main/Exp/levels.js"></script>
@@ -328,10 +328,7 @@ function showPopup() {
 }
 
 /* === Back to Lobby with transition === */
-const goToLobby = () => {
-    // Navigate back to the root index.html (updated path)
-    window.location.href = '/your-repo-name/index.html';
-}
+window.location.href = '../../../index.html';
 
 document.getElementById('backBtn').onclick = () => {
   const popup = document.getElementById('popupOverlay');
