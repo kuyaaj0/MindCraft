@@ -359,8 +359,12 @@ function loadTheme() {
   applyEnvironment(theme);
 }
 
-// Apply theme immediately
-loadTheme();
+// Delay applying theme slightly to let theme.js load first
+window.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  applyEnvironment(savedTheme);
+});
+
 
 // Optional: observe changes in settings while on index
 window.addEventListener('storage', (e) => {
