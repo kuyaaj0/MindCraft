@@ -324,32 +324,49 @@ chars.forEach((char, i) => {
   document.head.appendChild(styleEl);
 });
 
-// === XP System Connection ===
+// === XP System ===
+const xpBar = document.getElementById('xpBar');
+const xpValue = document.getElementById('xpValue');
+const levelValue = document.getElementById('levelValue');
+
+function syncXPDisplay() {
+  let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
+  let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+
+  // Handle XP overflow
+  while (xp >= 100) {
+    xp -= 100;
+    level += 1;
+  }
+
+  xpBar.value = xp;
+  xpValue.textContent = xp;
+  levelValue.textContent = level;
+
+  localStorage.setItem(`${currentUser}_xp`, xp);
+  localStorage.setItem(`${currentUser}_level`, level);
+}
+
+// 🔹 Initial load
 const currentUser = localStorage.getItem('currentUser');
 if (!currentUser) {
   alert('You must sign in first!');
   window.location.href = 'Main/Account/signin.html';
+} else {
+  syncXPDisplay();
 }
 
-// 🔹 Sync XP & Level right after the page loads
-window.addEventListener('load', () => {
-  syncXPDisplay(); // from levels.js
-});
-
-// 🔹 Re-sync every 3 seconds (for when returning from a quiz)
+// 🔹 Resync periodically
 setInterval(syncXPDisplay, 3000);
 
-// 🔹 Add smooth glow when XP changes
+// 🔹 Glow on XP change
 function glowXP() {
-  const xpBar = document.getElementById('xpBar');
-  if (xpBar) {
-    xpBar.style.transition = 'box-shadow 0.6s ease';
-    xpBar.style.boxShadow = '0 0 15px #1DB954';
-    setTimeout(() => (xpBar.style.boxShadow = 'none'), 1500);
-  }
+  xpBar.style.transition = 'box-shadow 0.6s ease';
+  xpBar.style.boxShadow = '0 0 15px #1DB954';
+  setTimeout(() => xpBar.style.boxShadow = 'none', 1500);
 }
 
-// 🔹 Listen for XP changes in localStorage
+// Listen for XP changes
 window.addEventListener('storage', (e) => {
   if (e.key && e.key.includes('_xp')) {
     syncXPDisplay();
@@ -357,66 +374,44 @@ window.addEventListener('storage', (e) => {
   }
 });
 
-// === Load theme from storage and apply ===
-function loadTheme() {
-  const storedTheme = localStorage.getItem('theme');
-  const theme = storedTheme ? storedTheme : 'light'; // default light
-  applyEnvironment(theme);
-}
-
-// Delay applying theme slightly to let theme.js load first
-window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme') || 'dark';
-  applyEnvironment(savedTheme);
-});
-
-
-// Optional: observe changes in settings while on index
-window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') {
-    loadTheme(); // apply theme if changed in settings
-  }
-});
-
-function applyEnvironment(theme) {
+// === Theme System ===
+function applyEnvironment(theme, animate=false) {
   const sky = document.getElementById('sky');
   const sun = document.getElementById('sun');
   const moon = document.getElementById('moon');
   const stars = document.getElementById('stars');
-  const chars = document.querySelectorAll('.bg-character');
 
   if (theme === 'light') {
-    // 🌞 Daytime
     sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
-    sun.style.opacity = 1;
-    sun.style.transform = 'translateY(0)'; // rise up
-    moon.style.opacity = 0;
-    moon.style.transform = 'translateY(120px)'; // go below
     stars.style.opacity = 0;
-    chars.forEach(c => {
-      c.style.filter = 'drop-shadow(0 0 8px #1DB954)';
-      c.style.animationPlayState = 'running';
-    });
-  } else {
-    // 🌙 Nighttime
-    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
-    sun.style.opacity = 0;
-    sun.style.transform = 'translateY(120px)'; // sun sets
-    moon.style.opacity = 1;
-    moon.style.transform = 'translateY(0)'; // moon rises
-    stars.style.opacity = 1;
+    sun.style.opacity = 1;
+    moon.style.opacity = 0;
 
-    // Characters react
-    chars.forEach(c => {
-      c.style.animationPlayState = 'paused';
-      c.style.transform += ' translateY(-10px)';
-      setTimeout(() => {
-        c.style.animationPlayState = 'running';
-        c.style.transform = 'scaleX(1)';
-      }, 2000);
-    });
+    if (animate) sun.style.transform = 'translateY(0)'; // only if toggled
+    if (animate) moon.style.transform = 'translateY(120px)';
+    
+    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
+  } else {
+    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
+    stars.style.opacity = 1;
+    sun.style.opacity = 0;
+    moon.style.opacity = 1;
+
+    if (animate) sun.style.transform = 'translateY(120px)'; // only if toggled
+    if (animate) moon.style.transform = 'translateY(0)';
+    
+    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
   }
 }
+
+// Load saved theme on page load without animation
+const savedTheme = localStorage.getItem('theme') || 'dark';
+applyEnvironment(savedTheme, false);
+
+// Listen for theme changes
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') applyEnvironment(e.newValue, true);
+});
 </script>
 </body>
 </html>
