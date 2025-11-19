@@ -175,35 +175,36 @@ h4 { font-size: 0.6rem; }
 <script src="../../../Design/navigate_return.js"></script>
 
 <script>
-/* === Apply Theme === */
-const theme = localStorage.getItem('theme') || 'dark';
+/* === Remove Redundant Theme Logic (Replaced by theme.js) === */
 const hero = document.querySelector('.hero-sprite');
+// The style check below is kept ONLY to apply the correct drop-shadow to the hero sprite,
+// as the hero sprite element is unique to this page.
+const theme = localStorage.getItem('theme') || 'dark';
 if (theme === 'light') {
-  document.body.style.background = '#f5f5f5';
-  document.body.style.color = '#000';
-  document.querySelector('.quiz-container').style.background = '#eee';
-  document.querySelector('.quiz-container').style.boxShadow = '0 0 15px #999';
-  hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
+    // NOTE: document.body styles are now handled by theme.js.
+  hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
 } else {
-  hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
+  hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
 }
+
 
 /* === Quiz System === */
 const quizQuestions = [
-  { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
-  { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
-  { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
-  { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
-  { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
-  { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
-  { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
-  { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
-  { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
-  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
+  { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
+  { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
+  { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
+  { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
+  { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
+  { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
+  { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
+  { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
+  { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
+  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
 ];
 
 let currentQuestion = 0;
-let xpEarned = 0;
+let xpEarned = 0; // Keep this to track display value
+const XP_PER_QUESTION = 5; // Define XP amount
 const questionContainer = document.getElementById("questionContainer");
 const nextBtn = document.getElementById("nextBtn");
 const finishBtn = document.getElementById("finishBtn");
@@ -221,91 +222,105 @@ const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 /* === TIMER === */
 let totalTime = 15 * 60;
 const interval = setInterval(() => {
-  if (totalTime <= 0) {
-    clearInterval(interval);
-    showPopup();
-    return;
-  }
-  totalTime--;
-  const m = Math.floor(totalTime / 60);
-  const s = totalTime % 60;
-  timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
+  if (totalTime <= 0) {
+    clearInterval(interval);
+    showPopup();
+    return;
+  }
+  totalTime--;
+  const m = Math.floor(totalTime / 60);
+  const s = totalTime % 60;
+  timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
 }, 1000);
 
 /* === Load Question === */
 function loadQuestion() {
-  result.textContent = "";
-  nextBtn.style.display = "none";
-  finishBtn.style.display = "none";
+  result.textContent = "";
+  nextBtn.style.display = "none";
+  finishBtn.style.display = "none";
 
-  const q = quizQuestions[currentQuestion];
-  progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
-  questionContainer.innerHTML = `<h3>${q.question}</h3>`;
-  q.choices.forEach((choice, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.className = "choice";
-    btn.onclick = () => checkAnswer(i);
-    questionContainer.appendChild(btn);
-  });
+  const q = quizQuestions[currentQuestion];
+  progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+  questionContainer.innerHTML = `<h3>${q.question}</h3>`;
+  q.choices.forEach((choice, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = choice;
+    btn.className = "choice";
+    btn.onclick = () => checkAnswer(i);
+    questionContainer.appendChild(btn);
+  });
 }
 
 /* === Check Answer === */
 function checkAnswer(selectedIndex) {
-  const correctIndex = quizQuestions[currentQuestion].answer;
-  const choices = document.querySelectorAll(".choice");
-  choices.forEach(b => b.disabled = true);
+  const correctIndex = quizQuestions[currentQuestion].answer;
+  const choices = document.querySelectorAll(".choice");
+  choices.forEach(b => b.disabled = true);
 
-  if (selectedIndex === correctIndex) {
-    result.textContent = "✅ Correct! +5 XP";
-    xpEarned += 5;
-    if (soundEnabled) correctSound.play();
-    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
-  } else {
-    result.textContent = "❌ Wrong! No XP";
-    if (soundEnabled) wrongSound.play();
-    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
-  }
+  if (selectedIndex === correctIndex) {
+    result.textContent = `✅ Correct! +${XP_PER_QUESTION} XP`;
+    xpEarned += XP_PER_QUESTION; // Track for display
+    
+    // ⭐ FIX: Award XP using the global function from levels.js
+    if (typeof window.awardXP === 'function') {
+        window.awardXP(XP_PER_QUESTION); 
+    }
 
-  nextBtn.style.display = (currentQuestion < quizQuestions.length - 1) ? "inline-block" : "none";
-  finishBtn.style.display = (currentQuestion === quizQuestions.length - 1) ? "inline-block" : "none";
+    if (soundEnabled) correctSound.play();
+    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
+  } else {
+    result.textContent = "❌ Wrong! No XP";
+    if (soundEnabled) wrongSound.play();
+    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
+  }
+
+  nextBtn.style.display = (currentQuestion < quizQuestions.length - 1) ? "inline-block" : "none";
+  finishBtn.style.display = (currentQuestion === quizQuestions.length - 1) ? "inline-block" : "none";
 }
 
 /* === Next Question === */
 nextBtn.onclick = () => {
-  currentQuestion++;
-  if (currentQuestion < quizQuestions.length) loadQuestion();
+  currentQuestion++;
+  if (currentQuestion < quizQuestions.length) loadQuestion();
 };
 
 /* === Finish Quiz === */
 finishBtn.onclick = () => {
-  clearInterval(interval);
-  showPopup();
+  clearInterval(interval);
+  showPopup();
 };
 
 /* === Show Popup and Animate XP === */
 function showPopup() {
-  document.querySelector(".quiz-container").style.display = "none";
-  const popup = document.getElementById("popupOverlay");
-  const xpBar = document.getElementById("xpBarFill");
-  popup.style.display = "flex";
-  document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`;
+  document.querySelector(".quiz-container").classList.add('fade-out'); // Add fade out class
+  
+  // Wait for fade out to complete before showing popup
+  setTimeout(() => {
+    document.querySelector(".quiz-container").style.display = "none";
+    const popup = document.getElementById("popupOverlay");
+    const xpBar = document.getElementById("xpBarFill");
+    popup.style.display = "flex";
+    document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`; // Display total XP earned
 
-  const user = localStorage.getItem('currentUser');
-  if (user) {
-    let xp = parseInt(localStorage.getItem(user + "_xp")) || 0;
-    xp += xpEarned;
-    localStorage.setItem(user + "_xp", xp);
-  }
+    // Animate bar to 100% after delay
+    setTimeout(() => { xpBar.style.width = "100%"; }, 300);
 
-  setTimeout(() => { xpBar.style.width = "100%"; }, 300);
+    // ⭐ REMOVE: The manual XP saving logic is gone!
+    // It's already handled by awardXP in checkAnswer.
+  }, 800); // 800ms to match the fadeOut animation
+
 }
 
 /* === Back to Lobby with transition === */
+const goToLobby = () => {
+    // Navigate back to the root index.html
+    window.location.href = '../../../index.html'; 
+}
+
 document.getElementById('backBtn').onclick = () => {
-  const popup = document.getElementById('popupOverlay');
-  popup.classList.add('fade-out');
-  setTimeout(() => goToLobby(), 1000);
+  const popup = document.getElementById('popupOverlay');
+  popup.classList.add('fade-out');
+  setTimeout(() => goToLobby(), 1000);
 };
 
 /* === Start === */
