@@ -4,22 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Level 1 - HTML Quiz | MindCraft</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Design/levels.css">
 <link rel="stylesheet" href="../../../Design/global_size-FIX.css">
-
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
-  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
+  /* ⭐ REMOVED: manual background line, theme.js will handle this */
   color: #fff;
   text-align: center;
   margin: 0;
   padding: 0;
   transition: background 0.5s, color 0.5s;
 }
-
 .quiz-container {
   max-width: 700px;
   margin: 50px auto;
@@ -29,10 +26,8 @@ body {
   box-shadow: 0 0 15px #1DB954;
   transition: background 0.3s, box-shadow 0.3s;
 }
-
-h2 { color: #1DB954; margin-bottom: 10px; font-size: 0.9rem; }
-h4 { font-size: 0.6rem; }
-
+h2 { color: #1DB954; margin-bottom: 10px; font-size: 0.9rem; font-family: 'Press Start 2P', cursive; } /* ⭐ FIXED Font */
+h4 { font-size: 0.6rem; font-family: 'Press Start 2P', cursive; } /* ⭐ FIXED Font */
 .choice {
   display: block;
   margin: 10px auto;
@@ -45,9 +40,9 @@ h4 { font-size: 0.6rem; }
   color: #fff;
   border: none;
   transition: transform 0.2s, background 0.3s;
+  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED Font */
 }
 .choice:hover { background: #1ed760; transform: scale(1.05); }
-
 #result { margin-top: 20px; font-size: 0.7rem; }
 #nextBtn, #finishBtn {
   margin-top: 15px;
@@ -61,9 +56,9 @@ h4 { font-size: 0.6rem; }
   display: none;
   font-size: 0.6rem;
   transition: transform 0.3s;
+  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED Font */
 }
 #nextBtn:hover, #finishBtn:hover { background: #1ed760; transform: scale(1.1); }
-
 /* === Popup Overlay === */
 #popupOverlay {
   position: fixed;
@@ -77,16 +72,14 @@ h4 { font-size: 0.6rem; }
   color: #fff;
   z-index: 999;
   animation: fadeIn 0.8s ease;
-  padding-bottom: 10vh; /* 👈 lifts hero higher on mobile */
-  }
+  padding-bottom: 10vh;
+}
 @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
-
 #xpGain {
   color: #1DB954;
   font-size: 0.8rem;
   margin: 10px 0;
 }
-
 .xp-bar-container {
   width: 60%;
   background: #222;
@@ -101,7 +94,6 @@ h4 { font-size: 0.6rem; }
   height: 100%;
   transition: width 1.5s ease-in-out;
 }
-
 #backBtn {
   background: #ff69b4;
   border: none;
@@ -113,7 +105,6 @@ h4 { font-size: 0.6rem; }
   cursor: pointer;
 }
 #backBtn:hover { background: #ff85c1; transform: scale(1.05); }
-
 /* === Celebrating Character === */
 .hero-sprite {
   width: clamp(64px, 20vw, 128px);
@@ -125,12 +116,10 @@ h4 { font-size: 0.6rem; }
   margin-top: 10px;
   filter: drop-shadow(0 0 10px #1DB954);
 }
-  
 @keyframes celebrateAnim {
   from { background-position: 0 0; }
   to { background-position: -1024px 0; }
 }
-
 /* === Fade-Out Transition === */
 .fade-out {
   animation: fadeOut 1s ease forwards;
@@ -141,20 +130,16 @@ h4 { font-size: 0.6rem; }
 }
 </style>
 </head>
-
 <body>
 <div class="quiz-container">
   <h2>Grade 11 Quiz - Level 1: HTML Basics</h2>
   <h4 id="progress">Question 1 of 10</h4>
   <h4 id="timer">Time Left: 15:00</h4>
-
   <div id="questionContainer"></div>
   <div id="result"></div>
   <button id="nextBtn">Next Question</button>
   <button id="finishBtn">Finish Level</button>
 </div>
-
-<!-- Popup Overlay -->
 <div id="popupOverlay">
   <h2>🎉 Level Complete!</h2>
   <div class="hero-sprite"></div>
@@ -164,29 +149,22 @@ h4 { font-size: 0.6rem; }
   </div>
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
-
-<!-- Sounds -->
 <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
 
-<!-- Scripts -->
 <script src="../../../Exp/levels.js"></script>
 <script src="../../../Design/theme.js"></script>
 <script src="../../../Design/navigate_return.js"></script>
-
 <script>
-/* === Remove Redundant Theme Logic (Replaced by theme.js) === */
+// ⭐ FIX: Removed all manual theme setting. theme.js now handles the body background.
 const hero = document.querySelector('.hero-sprite');
-// The style check below is kept ONLY to apply the correct drop-shadow to the hero sprite,
-// as the hero sprite element is unique to this page.
+// The sprite filter is kept here to allow the theme to change the character's glow.
 const theme = localStorage.getItem('theme') || 'dark';
 if (theme === 'light') {
-    // NOTE: document.body styles are now handled by theme.js.
-  hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
+    hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
 } else {
-  hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
+    hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
 }
-
 
 /* === Quiz System === */
 const quizQuestions = [
@@ -199,12 +177,12 @@ const quizQuestions = [
   { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
   { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
   { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
-  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
-];
+  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }];
 
 let currentQuestion = 0;
 let xpEarned = 0; // Keep this to track display value
 const XP_PER_QUESTION = 5; // Define XP amount
+
 const questionContainer = document.getElementById("questionContainer");
 const nextBtn = document.getElementById("nextBtn");
 const finishBtn = document.getElementById("finishBtn");
@@ -214,7 +192,6 @@ const timerEl = document.getElementById("timer");
 
 const correctSound = document.getElementById("correctSound");
 const wrongSound = document.getElementById("wrongSound");
-
 const soundEnabled = localStorage.getItem('sound') === 'on';
 const vibrationEnabled = localStorage.getItem('vibration') === 'on';
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -238,7 +215,6 @@ function loadQuestion() {
   result.textContent = "";
   nextBtn.style.display = "none";
   finishBtn.style.display = "none";
-
   const q = quizQuestions[currentQuestion];
   progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
   questionContainer.innerHTML = `<h3>${q.question}</h3>`;
@@ -256,16 +232,13 @@ function checkAnswer(selectedIndex) {
   const correctIndex = quizQuestions[currentQuestion].answer;
   const choices = document.querySelectorAll(".choice");
   choices.forEach(b => b.disabled = true);
-
   if (selectedIndex === correctIndex) {
     result.textContent = `✅ Correct! +${XP_PER_QUESTION} XP`;
     xpEarned += XP_PER_QUESTION; // Track for display
-    
     // ⭐ FIX: Award XP using the global function from levels.js
     if (typeof window.awardXP === 'function') {
-        window.awardXP(XP_PER_QUESTION); 
+        window.awardXP(XP_PER_QUESTION);
     }
-
     if (soundEnabled) correctSound.play();
     if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
   } else {
@@ -273,7 +246,6 @@ function checkAnswer(selectedIndex) {
     if (soundEnabled) wrongSound.play();
     if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
   }
-
   nextBtn.style.display = (currentQuestion < quizQuestions.length - 1) ? "inline-block" : "none";
   finishBtn.style.display = (currentQuestion === quizQuestions.length - 1) ? "inline-block" : "none";
 }
@@ -292,29 +264,22 @@ finishBtn.onclick = () => {
 
 /* === Show Popup and Animate XP === */
 function showPopup() {
-  document.querySelector(".quiz-container").classList.add('fade-out'); // Add fade out class
-  
-  // Wait for fade out to complete before showing popup
+  document.querySelector(".quiz-container").classList.add('fade-out');
   setTimeout(() => {
     document.querySelector(".quiz-container").style.display = "none";
     const popup = document.getElementById("popupOverlay");
     const xpBar = document.getElementById("xpBarFill");
     popup.style.display = "flex";
     document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`; // Display total XP earned
-
     // Animate bar to 100% after delay
     setTimeout(() => { xpBar.style.width = "100%"; }, 300);
-
-    // ⭐ REMOVE: The manual XP saving logic is gone!
-    // It's already handled by awardXP in checkAnswer.
-  }, 800); // 800ms to match the fadeOut animation
-
+  }, 800);
 }
 
 /* === Back to Lobby with transition === */
 const goToLobby = () => {
     // Navigate back to the root index.html
-    window.location.href = '../../../index.html'; 
+    window.location.href = '../../../index.html';
 }
 
 document.getElementById('backBtn').onclick = () => {
