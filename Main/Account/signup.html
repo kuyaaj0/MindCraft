@@ -7,26 +7,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
 <style>
-body { 
-    font-family: 'Poppins', sans-serif; 
-    text-align: center; 
-    background: #203a43; 
-    color: white; 
+body { 
+    font-family: 'Poppins', sans-serif; 
+    text-align: center; 
+    background: #203a43; 
+    color: white; 
 }
-input { 
-    padding: 10px; 
-    width: 70%; 
-    margin: 10px; 
-    border-radius: 8px; 
-    border: none; 
+input { 
+    padding: 10px; 
+    width: 70%; 
+    margin: 10px; 
+    border-radius: 8px; 
+    border: none; 
 }
-button { 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 8px; 
-    background: #1DB954; 
-    color: white; 
-    cursor: pointer; 
+button { 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 8px; 
+    background: #1DB954; 
+    color: white; 
+    cursor: pointer; 
 }
 button:hover { background: #1ed760; }
 .message { margin: 10px; color: #ff5252; }
@@ -36,50 +36,54 @@ button:hover { background: #1ed760; }
 
 <h2>🧠 MindCraft - Sign Up</h2>
 <form id="signupForm">
-  <input type="text" id="username" placeholder="Enter username" required><br>
-  <input type="password" id="password" placeholder="Enter password" required><br>
-  <button type="submit">Create Account</button>
+  <input type="text" id="username" placeholder="Enter username" required><br>
+  <input type="password" id="password" placeholder="Enter password" required><br>
+  <button type="submit">Create Account</button>
 </form>
 <p class="message" id="message"></p>
 <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 
-<!--this one is important for theme mode-->
-<script src="Main/Design/theme.js"></script>
+<script src="../Design/theme.js"></script>
 
 <script>
 // Initialize users in localStorage if not exist
 if (!localStorage.getItem('users')) {
-    localStorage.setItem('users', JSON.stringify([]));
+    localStorage.setItem('users', JSON.stringify([]));
 }
 
 const form = document.getElementById('signupForm');
 const messageEl = document.getElementById('message');
 
 form.addEventListener('submit', function(e) {
-    e.preventDefault();
+    e.preventDefault();
 
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
 
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
 
-    // Check if username exists
-    if (users.some(u => u.username === username)) {
-        messageEl.textContent = "❌ Username already exists!";
-        return;
-    }
+    // Check if username exists
+    if (users.some(u => u.username === username)) {
+        messageEl.textContent = "❌ Username already exists!";
+        return;
+    }
 
-    // Add new user
-    users.push({ username, password, level: 1, xp: 0 });
-    localStorage.setItem('users', JSON.stringify(users));
+    // Add new user to the generic 'users' array
+    users.push({ username, password, level: 1, xp: 0 });
+    localStorage.setItem('users', JSON.stringify(users));
 
-    messageEl.style.color = "#1DB954";
-    messageEl.textContent = "✅ Account created! You can now sign in.";
+    // ⭐ FIX: Initialize user-specific keys for the XP/Level system
+    localStorage.setItem(`${username}_level`, 1);
+    localStorage.setItem(`${username}_xp`, 0);
+    localStorage.setItem(`${username}_xpMax`, 100);
 
-    // Optional: redirect after 1.5 seconds
-    setTimeout(() => {
-        window.location.href = 'signin.html';
-    }, 1500);
+    messageEl.style.color = "#1DB954";
+    messageEl.textContent = "✅ Account created! Redirecting to sign in...";
+
+    // Optional: redirect after 1.5 seconds
+    setTimeout(() => {
+        window.location.href = 'signin.html';
+    }, 1500);
 });
 </script>
 
