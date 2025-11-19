@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="Main/Design/global_size-FIX.css">
 
 <style>
+/* === Global Resets === */
 body {
   font-family: 'Press Start 2P', cursive;
   color: #fff;
@@ -18,52 +19,39 @@ body {
   overflow-x: hidden;
   position: relative;
   transition: background 1s, color 1s;
+  min-height: 100vh;
 }
 
-/* ===== Sky Background ===== */
+/* ===== Environment Elements (Controlled by JavaScript) ===== */
 #sky {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: -3;
-  background: linear-gradient(to bottom, #87ceeb, #f5f5f5);
+  /* Initial background is set by JS function call at the bottom */
   transition: background 2s;
 }
 
-/* ===== Sun & Moon ===== */
 #sun, #moon {
   position: fixed;
   right: 10%;
-  width: 80px;
-  height: 80px;
+  width: clamp(60px, 10vw, 80px); /* Responsive size */
+  height: clamp(60px, 10vw, 80px);
   border-radius: 50%;
   transition: all 2s ease-in-out;
   z-index: -2;
 }
 
-/* Sun (daytime) */
-#sun {
-  background: radial-gradient(circle, #fff200, #ff8c00);
-  opacity: 0;
-  transform: translateY(120px); /* hidden below horizon */
-}
-
-/* Moon (nighttime) */
 #moon {
-  background: radial-gradient(circle, #f0f0f0, #bdbdbd);
   box-shadow: 0 0 15px #fff;
-  opacity: 0;
-  transform: translateY(120px);
 }
 
-/* ===== Stars ===== */
 #stars {
   position: fixed;
   width: 100%;
   height: 100%;
   background: url('Main/Assets/Backgrounds/stars.png') repeat;
   background-size: cover;
-  opacity: 0;
   transition: opacity 2s;
   z-index: -1;
   animation: twinkle 6s linear infinite;
@@ -76,36 +64,28 @@ body {
 /* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: 8vh;
-  width: 90px; /* exact per-frame width */
-  height: 330px; /* full sprite height */
+  bottom: clamp(5vh, 8vh, 10vh); /* Responsive bottom placement */
+  width: 90px;
+  height: 330px;
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%; /* 8 frames horizontally */
+  background-size: 800% 100%;
   image-rendering: pixelated;
   animation: walkAnim 1s steps(8) infinite;
   z-index: -1;
-  filter: drop-shadow(0 0 10px #1DB954);
   opacity: 0.9;
 }
 
-/* Walk cycle for 8 frames */
 @keyframes walkAnim {
   from { background-position: 0; }
   to { background-position: -800%; }
 }
 
-@media (max-height: 700px) {
-  .bg-character {
-    bottom: calc(2vh + 10px);
-  }
-}
-
-/* ===== Header & Layout ===== */
+/* ===== Header & Layout (Responsive) ===== */
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Allows items to wrap on smaller screens */
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
@@ -132,18 +112,22 @@ button:hover { background: #1ed760; transform: scale(1.05); }
 
 main {
   text-align: center;
-  padding: 20px;
+  padding: 20px 10px; /* Added horizontal padding */
 }
 
+/* === Language Grid (Core Responsiveness) === */
 .language-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 25px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .language-card {
-  width: 220px;
+  width: 100%; /* Default to full width on mobile */
+  max-width: 280px; /* Max size for a single card */
   padding: 15px;
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.5);
@@ -176,25 +160,37 @@ footer {
   padding-bottom: 10px;
 }
 
-/* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-  #sun, #moon {
-    width: 60px;
-    height: 60px;
-    top: 5%;
-    right: 8%;
-  }
-  .bg-character {
-    width: 72px;
-    height: 264px;
-    background-size: 800% 100%;
-  }
-  .language-card {
-    width: 90%;
-  }
-  button {
-    font-size: 0.45rem;
-  }
+/* ===== MEDIA QUERIES for Desktop/Tablet Layouts ===== */
+@media (min-width: 768px) {
+    /* Header: Keep elements aligned */
+    header {
+        flex-wrap: nowrap;
+        justify-content: space-around;
+    }
+    .xp-status, .level-display, .user-actions {
+        font-size: 0.7rem;
+    }
+    button {
+        font-size: 0.6rem;
+    }
+
+    /* Language Grid: Allow three columns */
+    .language-card {
+        width: calc(33.33% - 25px); /* Three columns with gap consideration */
+        max-width: none; /* Remove max width on larger screens */
+    }
+}
+@media (min-width: 1024px) {
+    /* Larger Font Size for large screens */
+    h1 {
+        font-size: 1.5rem;
+    }
+    .xp-status, .level-display, .user-actions {
+        font-size: 0.8rem;
+    }
+    button {
+        font-size: 0.65rem;
+    }
 }
 </style>
 </head>
@@ -285,7 +281,7 @@ footer {
 <script src="Main/Exp/levels.js"></script>
 
 <script>
-// === Smart Character Placement === (Unique to index.html)
+// === Smart Character Placement ===
 const chars = document.querySelectorAll('.bg-character');
 chars.forEach((char, i) => {
   const delay = Math.random() * 15;
@@ -307,13 +303,14 @@ chars.forEach((char, i) => {
   document.head.appendChild(styleEl);
 });
 
-// === Theme Environment Function === (Called by theme.js)
+// === Theme Environment Function (Called by theme.js) ===
 window.applyEnvironment = function(theme, animate=false) {
   const sky = document.getElementById('sky');
   const sun = document.getElementById('sun');
   const moon = document.getElementById('moon');
   const stars = document.getElementById('stars');
-  if (!sky || !sun || !moon || !stars) return;
+  const chars = document.querySelectorAll('.bg-character'); // Redefine chars here for theme effects
+  if (!sky || !sun || !moon || !stars) return;
 
   if (theme === 'light') {
     sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
