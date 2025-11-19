@@ -34,22 +34,27 @@ body {
 /* ===== Sun & Moon ===== */
 #sun, #moon {
   position: fixed;
-  top: 8%;
   right: 10%;
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  transition: opacity 2s, transform 2s;
+  transition: all 2s ease-in-out;
   z-index: -2;
 }
+
+/* Sun (daytime) */
 #sun {
   background: radial-gradient(circle, #fff200, #ff8c00);
-  opacity: 1;
+  opacity: 0;
+  transform: translateY(120px); /* hidden below horizon */
 }
+
+/* Moon (nighttime) */
 #moon {
   background: radial-gradient(circle, #f0f0f0, #bdbdbd);
   box-shadow: 0 0 15px #fff;
   opacity: 0;
+  transform: translateY(120px);
 }
 
 /* ===== Stars ===== */
@@ -72,11 +77,11 @@ body {
 /* === Background Characters === */
 .bg-character {
   position: absolute;
-  bottom: 8vh; /* better spacing from footer */
-  width: clamp(64px, 12vw, 96px);
-  height: clamp(64px, 12vw, 96px);
+  bottom: 8vh;
+  width: 90px; /* exact per-frame width */
+  height: 330px; /* full sprite height */
   background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%;
+  background-size: 800% 100%; /* 8 frames horizontally */
   image-rendering: pixelated;
   animation: walkAnim 1s steps(8) infinite;
   z-index: -1;
@@ -84,7 +89,7 @@ body {
   opacity: 0.9;
 }
 
-/* Walk cycle */
+/* Walk cycle for 8 frames */
 @keyframes walkAnim {
   from { background-position: 0; }
   to { background-position: -800%; }
@@ -97,11 +102,11 @@ body {
 }
 
 @keyframes moveAcross {
-  0% { left: -100px; transform: scaleX(1); }
+  0% { left: -120px; transform: scaleX(1); }
   45% { left: calc(100% - 100px); transform: scaleX(1); }
   50% { transform: scaleX(-1); }
   95% { left: 0; transform: scaleX(-1); }
-  100% { left: -100px; transform: scaleX(1); }
+  100% { left: -120px; transform: scaleX(1); }
 }
 
 /* ===== Header & Layout ===== */
@@ -189,9 +194,9 @@ footer {
     right: 8%;
   }
   .bg-character {
-    width: 64px;
-    height: 64px;
-    background-size: 512px 64px;
+    width: 72px;
+    height: 264px;
+    background-size: 800% 100%;
   }
   .language-card {
     width: 90%;
@@ -381,16 +386,27 @@ function applyEnvironment(theme) {
   const chars = document.querySelectorAll('.bg-character');
 
   if (theme === 'light') {
+    // 🌞 Daytime
     sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
     sun.style.opacity = 1;
+    sun.style.transform = 'translateY(0)'; // rise up
     moon.style.opacity = 0;
+    moon.style.transform = 'translateY(120px)'; // go below
     stars.style.opacity = 0;
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
+    chars.forEach(c => {
+      c.style.filter = 'drop-shadow(0 0 8px #1DB954)';
+      c.style.animationPlayState = 'running';
+    });
   } else {
+    // 🌙 Nighttime
     sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
     sun.style.opacity = 0;
+    sun.style.transform = 'translateY(120px)'; // sun sets
     moon.style.opacity = 1;
+    moon.style.transform = 'translateY(0)'; // moon rises
     stars.style.opacity = 1;
+
+    // Characters react
     chars.forEach(c => {
       c.style.animationPlayState = 'paused';
       c.style.transform += ' translateY(-10px)';
