@@ -27,14 +27,14 @@ updateDisplay();
 animateXP();
 
 // ===============================
-// 🔄 Animation for XP bar
+// 🔄 Animation for XP bar (smooth)
 // ===============================
 function animateXP() {
   if (displayedXP < xp) displayedXP += Math.ceil((xp - displayedXP) * 0.1) || 1;
   if (displayedXP > xp) displayedXP = xp;
   if (displayedLevel !== level) displayedLevel = level;
 
-  if (xpValue) xpValue.textContent = displayedXP;
+  if (xpValue) xpValue.textContent = `${displayedXP}/${xpMax}`;
   if (xpBar) {
     xpBar.value = displayedXP;
     xpBar.max = xpMax;
@@ -63,21 +63,29 @@ function addXP(amount) {
 
   xp += amount;
 
-  // Handle leveling
+  // Handle leveling up
+  let leveledUp = false;
   while (xp >= xpMax) {
     xp -= xpMax;
-    level += 1;
-    xpMax = Math.floor(xpMax * 1.15);
-    alert(`🎉 Congratulations ${currentUser}! You've reached Level ${level}!`);
+    level++;
+    xpMax = Math.floor(xpMax * 1.25); // Increase XP requirement
+    leveledUp = true;
   }
 
-  // Save progress for this user
+  // Save progress
   localStorage.setItem(`${currentUser}_xp`, xp);
   localStorage.setItem(`${currentUser}_level`, level);
   localStorage.setItem(`${currentUser}_xpMax`, xpMax);
 
   updateDisplay();
   highlightXPBar();
+
+  // Show level up message
+  if (leveledUp) {
+    setTimeout(() => {
+      alert(`🎉 Congratulations ${currentUser}! You reached Level ${level}!`);
+    }, 300);
+  }
 }
 
 // ===============================
@@ -112,7 +120,7 @@ function resetXP() {
 // 📊 Update Display
 // ===============================
 function updateDisplay() {
-  if (xpValue) xpValue.textContent = xp;
+  if (xpValue) xpValue.textContent = `${xp}/${xpMax}`;
   if (xpBar) {
     xpBar.value = xp;
     xpBar.max = xpMax;
@@ -122,7 +130,6 @@ function updateDisplay() {
 
 // ===============================
 // 🔁 Sync XP display on other pages
-// (For example, on index.html after finishing a quiz)
 // ===============================
 function syncXPDisplay() {
   const user = localStorage.getItem('currentUser');
@@ -132,7 +139,6 @@ function syncXPDisplay() {
   const levelNow = parseInt(localStorage.getItem(`${user}_level`)) || 1;
   const xpCap = parseInt(localStorage.getItem(`${user}_xpMax`)) || 100;
 
-  // Update globals
   xp = xpNow;
   level = levelNow;
   xpMax = xpCap;
