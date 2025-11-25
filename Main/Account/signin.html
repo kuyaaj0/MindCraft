@@ -7,22 +7,87 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
 <style>
-body {     font-family: 'Poppins', sans-serif;     text-align: center;     background: #203a43;     color: white; }
-input {     padding: 10px;     width: 70%;     margin: 10px;     border-radius: 8px;     border: none; }
-button {     padding: 10px 20px;     border: none;     border-radius: 8px;     background: #1DB954;     color: white;     cursor: pointer; }
+body { 
+    font-family: 'Press Start 2P', cursive; 
+    text-align: center; 
+    background: #203a43; 
+    color: white; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+input { 
+    padding: 10px; 
+    width: 70%; 
+    margin: 10px; 
+    border-radius: 8px; 
+    border: none; 
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+}
+button { 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 8px; 
+    background: #1DB954; 
+    color: white; 
+    cursor: pointer; 
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    margin: 5px;
+    transition: background 0.3s;
+}
 button:hover { background: #1ed760; }
-.message { margin: 10px; color: #ff5252; }
+.message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
+.choice-section, .student-form, .teacher-form {
+    display: none;
+}
+.choice-section { display: block; }
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #666;
+}
+.back-btn:hover { background: #888; }
 </style>
 </head>
 <body>
-<h2>🧠 MindCraft - Sign In</h2>
-<form id="signinForm">
-  <input type="text" id="username" placeholder="Enter username" required><br>
-  <input type="password" id="password" placeholder="Enter password" required><br>
-  <button type="submit">Sign In</button>
-</form>
-<p class="message" id="message"></p>
-<p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+
+<button class="back-btn" onclick="window.location.href='../index.html'">← Back</button>
+
+<div class="choice-section" id="choiceSection">
+    <h2>🧠 MindCraft - Sign In</h2>
+    <p>Choose your role:</p>
+    <button onclick="showStudentForm()">Student</button>
+    <button onclick="showTeacherForm()">Teacher</button>
+</div>
+
+<div class="student-form" id="studentForm">
+    <h2>Student Sign In</h2>
+    <form id="studentSigninForm">
+        <input type="text" id="studentUsername" placeholder="Enter username" required><br>
+        <input type="password" id="studentPassword" placeholder="Enter password" required><br>
+        <button type="submit">Sign In</button>
+    </form>
+    <p class="message" id="studentMessage"></p>
+    <button onclick="backToChoice()">Back to Choice</button>
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+</div>
+
+<div class="teacher-form" id="teacherForm">
+    <h2>Teacher Sign In</h2>
+    <form id="teacherSigninForm">
+        <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
+        <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
+        <button type="submit">Sign In</button>
+    </form>
+    <p class="message" id="teacherMessage"></p>
+    <button onclick="backToChoice()">Back to Choice</button>
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+</div>
 
 <script src="../Design/theme.js"></script>
 
@@ -30,21 +95,42 @@ button:hover { background: #1ed760; }
 // Initialize users in localStorage if not exist
 if (!localStorage.getItem('users')) {
     localStorage.setItem('users', JSON.stringify([
-        // Keeping this default user for easy testing
-        { username: 'testuser', password: '123', level: 1, xp: 0 } 
+        // Keeping this default user for easy testing (assume student)
+        { username: 'testuser', password: '123', role: 'student', level: 1, xp: 0 } 
     ]));
 }
 
-const form = document.getElementById('signinForm');
-const messageEl = document.getElementById('message');
+// Functions to show/hide sections
+function showStudentForm() {
+    document.getElementById('choiceSection').style.display = 'none';
+    document.getElementById('studentForm').style.display = 'block';
+}
 
-form.addEventListener('submit', function(e) {
+function showTeacherForm() {
+    document.getElementById('choiceSection').style.display = 'none';
+    document.getElementById('teacherForm').style.display = 'block';
+}
+
+function backToChoice() {
+    document.getElementById('studentForm').style.display = 'none';
+    document.getElementById('teacherForm').style.display = 'none';
+    document.getElementById('choiceSection').style.display = 'block';
+    // Reset forms
+    document.getElementById('studentSigninForm').reset();
+    document.getElementById('teacherSigninForm').reset();
+    document.getElementById('studentMessage').textContent = '';
+    document.getElementById('teacherMessage').textContent = '';
+}
+
+// Student Sign In Logic
+document.getElementById('studentSigninForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const usernameInput = document.getElementById('username').value.trim();
-    const passwordInput = document.getElementById('password').value;
+    const usernameInput = document.getElementById('studentUsername').value.trim();
+    const passwordInput = document.getElementById('studentPassword').value;
+    const messageEl = document.getElementById('studentMessage');
     
     const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.username === usernameInput);
+    const user = users.find(u => u.username === usernameInput && u.role === 'student');
     
     if (!user) {
         messageEl.textContent = "❌ User not found!";
@@ -56,11 +142,11 @@ form.addEventListener('submit', function(e) {
         return;
     }
     
-    // Save current user name
+    // Save current user and role
     localStorage.setItem('currentUser', user.username);
+    localStorage.setItem('currentRole', user.role);
     
-    // ⭐ CRITICAL FIX: Ensure user-specific XP/Level keys exist
-    // This is the core data used by levels.js
+    // Ensure user-specific XP/Level keys exist
     if (!localStorage.getItem(`${user.username}_xp`)) {
         localStorage.setItem(`${user.username}_level`, user.level || 1);
         localStorage.setItem(`${user.username}_xp`, user.xp || 0);
@@ -70,12 +156,50 @@ form.addEventListener('submit', function(e) {
     messageEl.style.color = "#1DB954";
     messageEl.textContent = "✅ Sign in successful! Redirecting...";
 
-    // Redirect to index.html (main dashboard)
-    // The path from Main/Account/ is up two levels: ../../index.html
     setTimeout(() => {
-        window.location.href = '../../index.html';
+        window.location.href = '../mainPage.html';
+    }, 500);
+});
+
+// Teacher Sign In Logic
+document.getElementById('teacherSigninForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('teacherEmail').value.trim();
+    const passwordInput = document.getElementById('teacherPassword').value;
+    const messageEl = document.getElementById('teacherMessage');
+    
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find(u => u.username === emailInput && u.role === 'teacher');
+    
+    if (!user) {
+        messageEl.textContent = "❌ User not found!";
+        return;
+    }
+    
+    if (user.password !== passwordInput) {
+        messageEl.textContent = "❌ Invalid password!";
+        return;
+    }
+    
+    // Save current user and role
+    localStorage.setItem('currentUser', user.username);
+    localStorage.setItem('currentRole', user.role);
+    
+    // Ensure user-specific XP/Level keys exist
+    if (!localStorage.getItem(`${user.username}_xp`)) {
+        localStorage.setItem(`${user.username}_level`, user.level || 1);
+        localStorage.setItem(`${user.username}_xp`, user.xp || 0);
+        localStorage.setItem(`${user.username}_xpMax`, 100);
+    }
+    
+    messageEl.style.color = "#1DB954";
+    messageEl.textContent = "✅ Sign in successful! Redirecting...";
+
+    setTimeout(() => {
+        window.location.href = '../mainPage.html';
     }, 500);
 });
 </script>
+
 </body>
 </html>
