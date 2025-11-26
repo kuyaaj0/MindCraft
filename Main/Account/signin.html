@@ -52,12 +52,23 @@ button:hover { background: #1ed760; }
     background: #666;
 }
 .back-btn:hover { background: #888; }
+.back-to-choice-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #666;
+    display: none; /* Hidden by default */
+}
+.back-to-choice-btn:hover { background: #888; }
 </style>
 </head>
 <body>
 
-<!-- ✅ Back button now uses a smart function -->
-<button class="back-btn" onclick="goBack()">← Bak</button>
+<!-- Back button to go to the landing page (index.html) -->
+<button class="back-btn" id="backToLandingBtn" onclick="window.location.href='../index.html'">← Back to Landing</button>
+
+<!-- Back button to go back to the choice section (hidden initially) -->
+<!--button class="back-to-choice-btn" id="backToChoiceBtn" onclick="backToChoice()">← Back to Choice</button-->
 
 <div class="choice-section" id="choiceSection">
     <h2>🧠 MindCraft - Sign In</h2>
@@ -87,29 +98,12 @@ button:hover { background: #1ed760; }
     </form>
     <p class="message" id="teacherMessage"></p>
     <button onclick="backToChoice()">Back to Choice</button>
-    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
 <script src="../Design/theme.js"></script>
 
 <script>
-// ✅ Smart back button function
-function goBack() {
-    document.getElementById('studentForm').style.display = 'none';
-    document.getElementById('teacherForm').style.display = 'none';
-    document.getElementById('choiceSection').style.display = 'block';
-    // Reset forms and states
-    document.getElementById('studentSigninForm').reset();
-    document.getElementById('teacherSigninForm').reset();
-    document.getElementById('studentCode').style.display = 'none';
-    document.getElementById('verifyStudentCode').style.display = 'none';
-    document.getElementById('createStudentAccount').style.display = 'none';
-    document.getElementById('studentMessage').textContent = '';
-    document.getElementById('teacherMessage').textContent = '';
-    studentVerified = false;
-    studentVerificationCode = null;
-}
-
 // Initialize users in localStorage if not exist
 if (!localStorage.getItem('users')) {
     localStorage.setItem('users', JSON.stringify([
@@ -121,17 +115,23 @@ if (!localStorage.getItem('users')) {
 function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
+    document.getElementById('backToLandingBtn').style.display = 'none'; // Hide back to landing
+    document.getElementById('backToChoiceBtn').style.display = 'inline-block'; // Show back to choice
 }
 
 function showTeacherForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'block';
+    document.getElementById('backToLandingBtn').style.display = 'none'; // Hide back to landing
+    document.getElementById('backToChoiceBtn').style.display = 'inline-block'; // Show back to choice
 }
 
 function backToChoice() {
     document.getElementById('studentForm').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'none';
     document.getElementById('choiceSection').style.display = 'block';
+    document.getElementById('backToLandingBtn').style.display = 'inline-block'; // Show back to landing
+    document.getElementById('backToChoiceBtn').style.display = 'none'; // Hide back to choice
     // Reset forms
     document.getElementById('studentSigninForm').reset();
     document.getElementById('teacherSigninForm').reset();
