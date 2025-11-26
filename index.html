@@ -108,15 +108,15 @@ body {
 .auth-section {
   display: none; /* Hidden initially */
   flex-direction: row;
-  justify-content: center;
+  justify-content: center; /* Centers the buttons horizontally */
   align-items: center;
-  gap: 20px;
+  gap: 20px; /* Space between buttons */
   width: 100%;
   max-width: 400px;
 }
 
-
-.auth-btn {
+/* Separate CSS for Login Button */
+.login-btn {
   font-family: 'Press Start 2P', cursive;
   background: #1DB954;
   color: #fff;
@@ -126,12 +126,24 @@ body {
   font-size: clamp(0.7rem, 2.5vw, 1rem);
   cursor: pointer;
   transition: all 0.3s ease;
-  right: 500px;
-  flex: 1;
+  flex: 1; /* Makes buttons equal width and centered */
 }
+.login-btn:hover { background: #1ed760; transform: scale(1.05); }
 
-  
-.auth-btn:hover { background: #1ed760; transform: scale(1.05); }
+/* Separate CSS for Sign Up Button */
+.signup-btn {
+  font-family: 'Press Start 2P', cursive;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 25px;
+  font-size: clamp(0.7rem, 2.5vw, 1rem);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1; /* Makes buttons equal width and centered */
+}
+.signup-btn:hover { background: #1ed760; transform: scale(1.05); }
 
 footer {
   position: absolute;
@@ -144,13 +156,22 @@ footer {
 </head>
 <body>
 
+<div id="sky"></div>
+<div id="sun"></div>
+<div id="moon"></div>
+<div id="stars"></div>
+
+<div class="bg-character" style="animation-delay: 2s;"></div>
+<div class="bg-character" style="animation-delay: 5s;"></div>
+<div class="bg-character" style="animation-delay: 8s;"></div>
+
 <div class="landing-content">
   <h1 class="landing-title">🧠 Welcome To MindCraft</h1>
   <button class="get-started-btn" id="getStartedBtn">Get Started</button>
   
   <div class="auth-section" id="authSection">
-    <button class="auth-btn" onclick="location.href='Main/Account/signin.html'">Login</button>
-    <button class="auth-btn" onclick="location.href='Main/Account/signup.html'">Sign Up</button>
+    <button class="login-btn" onclick="location.href='Main/Account/signin.html'">Login</button>
+    <button class="signup-btn" onclick="location.href='Main/Account/signup.html'">Sign Up</button>
   </div>
 </div>
 
