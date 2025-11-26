@@ -95,12 +95,19 @@ button:hover { background: #1ed760; }
 <script>
 // ✅ Smart back button function
 function goBack() {
-    if (document.referrer) {
-        window.history.back();
-    } else {
-        // change '../index.html' if your signin.html is in the same folder as index.html
-        window.location.href = '../signup.html';
-    }
+    document.getElementById('studentForm').style.display = 'none';
+    document.getElementById('teacherForm').style.display = 'none';
+    document.getElementById('choiceSection').style.display = 'block';
+    // Reset forms and states
+    document.getElementById('studentSigninForm').reset();
+    document.getElementById('teacherSigninForm').reset();
+    document.getElementById('studentCode').style.display = 'none';
+    document.getElementById('verifyStudentCode').style.display = 'none';
+    document.getElementById('createStudentAccount').style.display = 'none';
+    document.getElementById('studentMessage').textContent = '';
+    document.getElementById('teacherMessage').textContent = '';
+    studentVerified = false;
+    studentVerificationCode = null;
 }
 
 // Initialize users in localStorage if not exist
