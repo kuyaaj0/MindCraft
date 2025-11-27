@@ -109,15 +109,10 @@ button:hover { background: #1ed760; }
     <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
-<!-- EmailJS Library -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script src="../Design/theme.js"></script>
 
 <script>
-// === Initialize EmailJS ===
-emailjs.init("YOUR_PUBLIC_KEY_HERE");
-
-// Initialize users
+// === Initialize Users ===
 if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
 
 let studentVerificationCode = null;
@@ -144,8 +139,6 @@ function backToChoice() {
     document.getElementById('choiceSection').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'none';
     document.getElementById('homeBtn').style.display = 'block';
-
-    // Reset forms
     document.getElementById('studentSignupForm').reset();
     document.getElementById('teacherSignupForm').reset();
     document.getElementById('studentCode').style.display = 'none';
@@ -160,27 +153,35 @@ function backToChoice() {
 // === Student Signup Logic ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
     const email = document.getElementById('studentEmail').value.trim();
+    const msg = document.getElementById('studentMessage');
+
     if (!email || !email.includes('@gmail.com')) {
-        document.getElementById('studentMessage').textContent = "❌ Please enter a valid Gmail address.";
+        msg.textContent = "❌ Please enter a valid Gmail address.";
         return;
     }
 
     studentVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    const templateParams = {
-        to_email: email,
-        verification_code: studentVerificationCode,
-        subject: "MindCraft Verification Code"
-    };
+    msg.style.color = "#1DB954";
+    msg.textContent = "📤 Sending verification code...";
 
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-        .then(() => {
-            document.getElementById('studentCode').style.display = 'inline-block';
-            document.getElementById('verifyStudentCode').style.display = 'inline-block';
-            document.getElementById('studentMessage').textContent = "✅ Verification code sent to your Gmail!";
-        }, () => {
-            document.getElementById('studentMessage').textContent = "❌ Failed to send email.";
-        });
+    // === Send verification using Google Apps Script ===
+    fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: email, code: studentVerificationCode })
+    })
+    .then(res => res.text())
+    .then(() => {
+        document.getElementById('studentCode').style.display = 'inline-block';
+        document.getElementById('verifyStudentCode').style.display = 'inline-block';
+        msg.style.color = "#1DB954";
+        msg.textContent = "✅ Verification code sent! Check your Gmail inbox.";
+    })
+    .catch(() => {
+        msg.style.color = "#ff5252";
+        msg.textContent = "❌ Failed to send email. Try again.";
+    });
 });
 
 document.getElementById('verifyStudentCode').addEventListener('click', function() {
@@ -193,6 +194,7 @@ document.getElementById('verifyStudentCode').addEventListener('click', function(
         document.getElementById('verifyStudentCode').style.display = 'none';
         document.getElementById('createStudentAccount').style.display = 'inline-block';
     } else {
+        msg.style.color = "#ff5252";
         msg.textContent = "❌ Invalid verification code.";
     }
 });
@@ -209,6 +211,7 @@ document.getElementById('createStudentAccount').addEventListener('click', functi
     let users = JSON.parse(localStorage.getItem('users') || '[]');
 
     if (users.some(u => u.username === username)) {
+        msg.style.color = "#ff5252";
         msg.textContent = "❌ Username already exists!";
         return;
     }
