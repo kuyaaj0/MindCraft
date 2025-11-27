@@ -41,6 +41,10 @@ button {
     transition: background 0.3s;
 }
 button:hover { background: #1ed760; }
+button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
 .message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
 .choice-section, .student-form, .teacher-form {
     display: none;
@@ -86,7 +90,11 @@ button:hover { background: #1ed760; }
         <input type="text" id="studentUsername" placeholder="Enter username" required><br>
         <input type="password" id="studentPassword" placeholder="Enter password" required><br>
         <input type="email" id="studentEmail" placeholder="Enter Gmail address" required><br>
-        <button type="button" id="sendStudentCode">Send Verification Code</button><br>
+
+        <!-- Send / Resend Buttons -->
+        <button type="button" id="sendStudentCode">Send Verification Code</button>
+        <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend available in <span id="countdown">30</span>s</span><br>
+
         <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
         <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
         <button type="button" id="createStudentAccount" style="display:none;">Create Account</button>
@@ -117,6 +125,7 @@ if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify
 
 let studentVerificationCode = null;
 let studentVerified = false;
+let resendCooldown = null;
 
 // === Section Control ===
 function showStudentForm() {
@@ -150,10 +159,13 @@ function backToChoice() {
     studentVerificationCode = null;
 }
 
-// === Student Signup Logic ===
+// === Send Verification Code ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
     const email = document.getElementById('studentEmail').value.trim();
     const msg = document.getElementById('studentMessage');
+    const sendBtn = document.getElementById('sendStudentCode');
+    const timerText = document.getElementById('resendTimer');
+    const countdown = document.getElementById('countdown');
 
     if (!email || !email.includes('@gmail.com')) {
         msg.textContent = "❌ Please enter a valid Gmail address.";
@@ -165,7 +177,9 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
     msg.style.color = "#1DB954";
     msg.textContent = "📤 Sending verification code...";
 
-    // === Send verification using Google Apps Script ===
+    sendBtn.disabled = true;
+
+    // === Send email using Google Apps Script ===
     fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -177,13 +191,29 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
         document.getElementById('verifyStudentCode').style.display = 'inline-block';
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Verification code sent! Check your Gmail inbox.";
+
+        // Start 30s cooldown timer
+        let timeLeft = 30;
+        timerText.style.display = 'inline-block';
+        countdown.textContent = timeLeft;
+        resendCooldown = setInterval(() => {
+            timeLeft--;
+            countdown.textContent = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(resendCooldown);
+                sendBtn.disabled = false;
+                timerText.style.display = 'none';
+            }
+        }, 1000);
     })
     .catch(() => {
         msg.style.color = "#ff5252";
         msg.textContent = "❌ Failed to send email. Try again.";
+        sendBtn.disabled = false;
     });
 });
 
+// === Verify Code ===
 document.getElementById('verifyStudentCode').addEventListener('click', function() {
     const code = document.getElementById('studentCode').value.trim();
     const msg = document.getElementById('studentMessage');
@@ -199,6 +229,7 @@ document.getElementById('verifyStudentCode').addEventListener('click', function(
     }
 });
 
+// === Create Account ===
 document.getElementById('createStudentAccount').addEventListener('click', function() {
     if (!studentVerified) {
         document.getElementById('studentMessage').textContent = "❌ Please verify the code first.";
