@@ -6,6 +6,7 @@
 <title>Sign Up - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
+
 <style>
 body { 
     font-family: 'Press Start 2P', cursive; 
@@ -45,19 +46,32 @@ button:hover { background: #1ed760; }
     display: none;
 }
 .choice-section { display: block; }
-.back-btn {
+
+/* === Back Buttons === */
+.back-buttons {
     position: absolute;
     top: 20px;
     left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.back-buttons button {
+    width: 160px;
     background: #666;
 }
-.back-btn:hover { background: #888; }
+.back-buttons button:hover { background: #888; }
 </style>
 </head>
 <body>
 
-<button class="back-btn" onclick="backToChoice()">← Back</button>
+<!-- 🔙 Both back buttons -->
+<div class="back-buttons">
+  <button onclick="window.location.href='../../index.html'">🏠 Home</button>
+  <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
+</div>
 
+<!-- Choice Section -->
 <div class="choice-section" id="choiceSection">
     <h2>🧠 MindCraft - Sign Up</h2>
     <p>Choose your role:</p>
@@ -65,6 +79,7 @@ button:hover { background: #1ed760; }
     <button onclick="showTeacherForm()">Teacher</button>
 </div>
 
+<!-- Student Form -->
 <div class="student-form" id="studentForm">
     <h2>Student Sign Up</h2>
     <form id="studentSignupForm">
@@ -72,13 +87,15 @@ button:hover { background: #1ed760; }
         <input type="password" id="studentPassword" placeholder="Enter password" required><br>
         <input type="email" id="studentEmail" placeholder="Enter Gmail address" required><br>
         <button type="button" id="sendStudentCode">Send Verification Code</button><br>
-        <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;"><button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
+        <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
+        <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
         <button type="button" id="createStudentAccount" style="display:none;">Create Account</button>
     </form>
     <p class="message" id="studentMessage"></p>
     <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
+<!-- Teacher Form -->
 <div class="teacher-form" id="teacherForm">
     <h2>Teacher Sign Up</h2>
     <p>Note: Only teachers with a valid DepEd (ed.gov) account can register. Obtain your verification code from the DepEd website.</p>
@@ -94,37 +111,38 @@ button:hover { background: #1ed760; }
 
 <!-- EmailJS Library -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-
 <script src="../Design/theme.js"></script>
 
 <script>
-// Initialize EmailJS (Replace with your actual public key)
-emailjs.init("YOUR_PUBLIC_KEY_HERE"); // Get this from EmailJS dashboard
+// === Initialize EmailJS ===
+emailjs.init("YOUR_PUBLIC_KEY_HERE");
 
-// Initialize users in localStorage if not exist
-if (!localStorage.getItem('users')) {
-    localStorage.setItem('users', JSON.stringify([]));
-}
+// Initialize users
+if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
 
 let studentVerificationCode = null;
 let studentVerified = false;
 
-// Functions to show/hide sections
+// === Section Control ===
 function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
+    document.getElementById('formBackBtn').style.display = 'block';
 }
 
 function showTeacherForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'block';
+    document.getElementById('formBackBtn').style.display = 'block';
 }
 
 function backToChoice() {
     document.getElementById('studentForm').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'none';
     document.getElementById('choiceSection').style.display = 'block';
-    // Reset forms and states
+    document.getElementById('formBackBtn').style.display = 'none';
+
+    // Reset forms
     document.getElementById('studentSignupForm').reset();
     document.getElementById('teacherSignupForm').reset();
     document.getElementById('studentCode').style.display = 'none';
@@ -136,17 +154,16 @@ function backToChoice() {
     studentVerificationCode = null;
 }
 
-// Student Signup Logic
+// === Student Signup Logic ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
     const email = document.getElementById('studentEmail').value.trim();
     if (!email || !email.includes('@gmail.com')) {
         document.getElementById('studentMessage').textContent = "❌ Please enter a valid Gmail address.";
         return;
     }
-    // Generate a random 6-digit code
+
     studentVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Send email using EmailJS
     const templateParams = {
         to_email: email,
         verification_code: studentVerificationCode,
@@ -154,28 +171,26 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
     };
 
     emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-        .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
+        .then(() => {
             document.getElementById('studentCode').style.display = 'inline-block';
             document.getElementById('verifyStudentCode').style.display = 'inline-block';
-            document.getElementById('studentMessage').textContent = "✅ Verification code sent to your Gmail! Check your email and enter the code.";
-        }, function(error) {
-            console.log('FAILED...', error);
-            document.getElementById('studentMessage').textContent = "❌ Failed to send email. Please try again.";
+            document.getElementById('studentMessage').textContent = "✅ Verification code sent to your Gmail!";
+        }, () => {
+            document.getElementById('studentMessage').textContent = "❌ Failed to send email.";
         });
 });
 
 document.getElementById('verifyStudentCode').addEventListener('click', function() {
     const code = document.getElementById('studentCode').value.trim();
-    const messageEl = document.getElementById('studentMessage');
+    const msg = document.getElementById('studentMessage');
     if (code === studentVerificationCode) {
         studentVerified = true;
-        messageEl.style.color = "#1DB954";
-        messageEl.textContent = "✅ Code verified! Click Create Account to finish.";
+        msg.style.color = "#1DB954";
+        msg.textContent = "✅ Code verified! Click Create Account to finish.";
         document.getElementById('verifyStudentCode').style.display = 'none';
         document.getElementById('createStudentAccount').style.display = 'inline-block';
     } else {
-        messageEl.textContent = "❌ Invalid verification code.";
+        msg.textContent = "❌ Invalid verification code.";
     }
 });
 
@@ -184,80 +199,61 @@ document.getElementById('createStudentAccount').addEventListener('click', functi
         document.getElementById('studentMessage').textContent = "❌ Please verify the code first.";
         return;
     }
+
     const username = document.getElementById('studentUsername').value.trim();
     const password = document.getElementById('studentPassword').value;
-    const messageEl = document.getElementById('studentMessage');
-
+    const msg = document.getElementById('studentMessage');
     let users = JSON.parse(localStorage.getItem('users') || '[]');
 
-    // Check if username exists
     if (users.some(u => u.username === username)) {
-        messageEl.textContent = "❌ Username already exists!";
+        msg.textContent = "❌ Username already exists!";
         return;
     }
 
-    // Add new student user
     users.push({ username, password, role: 'student', level: 1, xp: 0 });
     localStorage.setItem('users', JSON.stringify(users));
-
-    // Initialize user-specific keys
     localStorage.setItem(`${username}_level`, 1);
     localStorage.setItem(`${username}_xp`, 0);
     localStorage.setItem(`${username}_xpMax`, 100);
 
-    messageEl.style.color = "#1DB954";
-    messageEl.textContent = "✅ Student account created successfully! Redirecting to sign in...";
-
-    setTimeout(() => {
-        window.location.href = 'signin.html';
-    }, 1500);
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Account created! Redirecting...";
+    setTimeout(() => window.location.href = 'signin.html', 1500);
 });
 
-// Teacher Signup Logic (unchanged)
-document.getElementById('teacherSignupForm').addEventListener('submit', function(e) {
+// === Teacher Signup Logic ===
+document.getElementById('teacherSignupForm').addEventListener('submit', e => {
     e.preventDefault();
     const email = document.getElementById('teacherEmail').value.trim();
     const password = document.getElementById('teacherPassword').value;
     const code = document.getElementById('teacherCode').value.trim();
-    const messageEl = document.getElementById('teacherMessage');
+    const msg = document.getElementById('teacherMessage');
 
-    // Basic validation: Assume code is valid if entered (in real app, verify against DepEd API)
     if (!code) {
-        messageEl.textContent = "❌ Please enter the verification code from DepEd.";
+        msg.textContent = "❌ Enter your DepEd verification code.";
         return;
     }
-
-    // Check if email is DepEd-like (basic check)
     if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
-        messageEl.textContent = "❌ Please use a valid DepEd email address.";
+        msg.textContent = "❌ Use a valid DepEd email.";
         return;
     }
 
     let users = JSON.parse(localStorage.getItem('users') || '[]');
-
-    // Check if username (email) exists
     if (users.some(u => u.username === email)) {
-        messageEl.textContent = "❌ Account with this email already exists!";
+        msg.textContent = "❌ Account already exists!";
         return;
     }
 
-    // Add new teacher user (username is the email)
     users.push({ username: email, password, role: 'teacher', level: 1, xp: 0 });
     localStorage.setItem('users', JSON.stringify(users));
-
-    // Initialize user-specific keys
     localStorage.setItem(`${email}_level`, 1);
     localStorage.setItem(`${email}_xp`, 0);
     localStorage.setItem(`${email}_xpMax`, 100);
 
-    messageEl.style.color = "#1DB954";
-    messageEl.textContent = "✅ Teacher account created! Redirecting to sign in...";
-
-    setTimeout(() => {
-        window.location.href = 'signin.html';
-    }, 1500);
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Teacher account created! Redirecting...";
+    setTimeout(() => window.location.href = 'signin.html', 1500);
 });
 </script>
-
 </body>
 </html>
