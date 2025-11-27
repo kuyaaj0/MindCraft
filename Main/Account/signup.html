@@ -67,7 +67,7 @@ button:hover { background: #1ed760; }
 
 <!-- 🔙 Both back buttons -->
 <div class="back-buttons">
-  <button onclick="window.location.href='../../index.html'">🏠 Home</button>
+  <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
   <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
 </div>
 
@@ -128,12 +128,14 @@ function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
+    document.getElementById('homeBtn').style.display = 'none';
 }
 
 function showTeacherForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
+    document.getElementById('homeBtn').style.display = 'none';
 }
 
 function backToChoice() {
@@ -141,6 +143,7 @@ function backToChoice() {
     document.getElementById('teacherForm').style.display = 'none';
     document.getElementById('choiceSection').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'none';
+    document.getElementById('homeBtn').style.display = 'block';
 
     // Reset forms
     document.getElementById('studentSignupForm').reset();
