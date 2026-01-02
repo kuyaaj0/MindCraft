@@ -365,7 +365,24 @@ footer {
 <script src="Main/Design/theme.js"></script>
 <script src="Main/Exp/levels.js"></script>
 
-<script>
+<!-- ================== 🔥 UPDATED SCRIPT BLOCK ================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ✅ Firebase config (use your own values from Firebase console)
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+// ✅ Init
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 // === Smart Character Placement ===
 const chars = document.querySelectorAll('.bg-character');
 chars.forEach((char, i) => {
@@ -388,7 +405,7 @@ chars.forEach((char, i) => {
   document.head.appendChild(styleEl);
 });
 
-// === Theme Environment Function (Called by theme.js) ===
+// === Theme Environment Function (called by theme.js) ===
 window.applyEnvironment = function(theme, animate=false) {
   const sky = document.getElementById('sky');
   const sun = document.getElementById('sun');
@@ -402,30 +419,51 @@ window.applyEnvironment = function(theme, animate=false) {
     stars.style.opacity = 0;
     sun.style.opacity = 1;
     moon.style.opacity = 0;
-
     if (animate) sun.style.transform = 'translateY(0)';
     if (animate) moon.style.transform = 'translateY(120px)';
-    
     chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
   } else {
     sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
     stars.style.opacity = 1;
     sun.style.opacity = 0;
     moon.style.opacity = 1;
-
     if (animate) sun.style.transform = 'translateY(120px)';
     if (animate) moon.style.transform = 'translateY(0)';
-    
     chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
   }
-}
+};
 
-// === User Sign-in Check ===
-const currentUser = localStorage.getItem('currentUser');
-if (!currentUser) {
-  alert('You must sign in first!');
-  window.location.href = 'Main/Account/signin.html';
-}
+// === User Authentication + XP Load ===
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    alert("You must sign in first!");
+    window.location.href = "Main/Account/signin.html";
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    alert("No user data found.");
+    window.location.href = "Main/Account/signin.html";
+    return;
+  }
+
+  const data = snap.data();
+
+  // 🔒 Allow only students
+  if (data.role !== "student") {
+    window.location.href = "teacherPage.html";
+    return;
+  }
+
+  // ✅ Update UI
+  document.getElementById("xpValue").innerText = data.xp ?? 0;
+  document.getElementById("xpBar").value = data.xp % 100;
+  document.getElementById("levelValue").innerText = data.level ?? 1;
+});
 </script>
+<!-- ================== END UPDATED SCRIPT ================== -->
 </body>
 </html>
