@@ -8,68 +8,66 @@
 <link rel="stylesheet" href="../Design/Position.css">
 
 <style>
-body { 
-    font-family: 'Press Start 2P', cursive; 
-    text-align: center; 
-    background: #203a43; 
-    color: white; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+body {
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  background: #203a43;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
-input { 
-    padding: 10px; 
-    width: 70%; 
-    margin: 10px; 
-    border-radius: 8px; 
-    border: none; 
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.6rem;
+input {
+  padding: 10px;
+  width: 70%;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
 }
-button { 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 8px; 
-    background: #1DB954; 
-    color: white; 
-    cursor: pointer; 
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.6rem;
-    margin: 5px;
-    transition: background 0.3s;
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1DB954;
+  color: white;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  margin: 5px;
+  transition: background 0.3s;
 }
 button:hover { background: #1ed760; }
 button:disabled {
-    background: #555;
-    cursor: not-allowed;
+  background: #555;
+  cursor: not-allowed;
 }
 .message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
-.choice-section, .student-form, .teacher-form {
-    display: none;
-}
+.choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
 
 /* === Back Buttons === */
 .back-buttons {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .back-buttons button {
-    width: 160px;
-    background: #666;
+  width: 160px;
+  background: #666;
 }
 .back-buttons button:hover { background: #888; }
 </style>
 </head>
 <body>
 
-<!-- 🔙 Both back buttons -->
+<!-- 🔙 Back Buttons -->
 <div class="back-buttons">
   <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
   <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
@@ -77,219 +75,185 @@ button:disabled {
 
 <!-- Choice Section -->
 <div class="choice-section" id="choiceSection">
-    <h2>🧠 MindCraft - Sign Up</h2>
-    <p>Choose your role:</p>
-    <button onclick="showStudentForm()">Student</button>
-    <button onclick="showTeacherForm()">Teacher</button>
+  <h2>🧠 MindCraft - Sign Up</h2>
+  <p>Choose your role:</p>
+  <button onclick="showStudentForm()">Student</button>
+  <button onclick="showTeacherForm()">Teacher</button>
 </div>
 
 <!-- Student Form -->
 <div class="student-form" id="studentForm">
-    <h2>Student Sign Up</h2>
-    <form id="studentSignupForm">
-        <input type="text" id="studentUsername" placeholder="Enter username" required><br>
-        <input type="password" id="studentPassword" placeholder="Enter password" required><br>
-        <input type="email" id="studentEmail" placeholder="Enter Gmail address" required><br>
+  <h2>Student Sign Up</h2>
+  <form id="studentSignupForm">
+    <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
+    <input type="password" id="studentPassword" placeholder="Enter password" required><br>
 
-        <!-- Send / Resend Buttons -->
-        <button type="button" id="sendStudentCode">Send Verification Code</button>
-        <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend available in <span id="countdown">30</span>s</span><br>
+    <button type="button" id="sendStudentCode">Send Verification Code</button>
+    <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend available in <span id="countdown">30</span>s</span><br>
 
-        <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
-        <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
-        <button type="button" id="createStudentAccount" style="display:none;">Create Account</button>
-    </form>
-    <p class="message" id="studentMessage"></p>
-    <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+    <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
+    <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
+    <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
+  </form>
+  <p class="message" id="studentMessage"></p>
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
 <!-- Teacher Form -->
 <div class="teacher-form" id="teacherForm">
-    <h2>Teacher Sign Up</h2>
-    <p>Note: Only teachers with a valid DepEd (ed.gov) account can register. Obtain your verification code from the DepEd website.</p>
-    <form id="teacherSignupForm">
-        <input type="email" id="teacherEmail" placeholder="Enter DepEd email (e.g., teacher@ed.gov)" required><br>
-        <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
-        <input type="text" id="teacherCode" placeholder="Enter verification code from DepEd" required><br>
-        <button type="submit">Verify & Create Account</button>
-    </form>
-    <p class="message" id="teacherMessage"></p>
-    <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+  <h2>Teacher Sign Up</h2>
+  <p>Note: Only DepEd accounts can register (e.g., teacher@ed.gov).</p>
+  <form id="teacherSignupForm">
+    <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
+    <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
+    <button type="submit">Create Account</button>
+  </form>
+  <p class="message" id="teacherMessage"></p>
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
-<script src="../Design/theme.js"></script>
-
-<script>
-// === Initialize Users ===
-if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
+<script type="module">
+import { auth, db } from '../../system/firebase/database.js';
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
-// === Section Control ===
 function showStudentForm() {
-    document.getElementById('choiceSection').style.display = 'none';
-    document.getElementById('studentForm').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'block';
-    document.getElementById('homeBtn').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('studentForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
 }
 
 function showTeacherForm() {
-    document.getElementById('choiceSection').style.display = 'none';
-    document.getElementById('teacherForm').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'block';
-    document.getElementById('homeBtn').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
 }
 
-function backToChoice() {
-    document.getElementById('studentForm').style.display = 'none';
-    document.getElementById('teacherForm').style.display = 'none';
-    document.getElementById('choiceSection').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'none';
-    document.getElementById('homeBtn').style.display = 'block';
-    document.getElementById('studentSignupForm').reset();
-    document.getElementById('teacherSignupForm').reset();
-    document.getElementById('studentCode').style.display = 'none';
-    document.getElementById('verifyStudentCode').style.display = 'none';
-    document.getElementById('createStudentAccount').style.display = 'none';
-    document.getElementById('studentMessage').textContent = '';
-    document.getElementById('teacherMessage').textContent = '';
-    studentVerified = false;
-    studentVerificationCode = null;
-}
+window.backToChoice = function() {
+  document.getElementById('studentForm').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'none';
+  document.getElementById('homeBtn').style.display = 'block';
+};
 
-// === Send Verification Code ===
+// === Send Code ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
-    const email = document.getElementById('studentEmail').value.trim();
-    const msg = document.getElementById('studentMessage');
-    const sendBtn = document.getElementById('sendStudentCode');
-    const timerText = document.getElementById('resendTimer');
-    const countdown = document.getElementById('countdown');
+  const email = document.getElementById('studentEmail').value.trim();
+  const msg = document.getElementById('studentMessage');
+  const sendBtn = document.getElementById('sendStudentCode');
+  const timerText = document.getElementById('resendTimer');
+  const countdown = document.getElementById('countdown');
 
-    if (!email || !email.includes('@gmail.com')) {
-        msg.textContent = "❌ Please enter a valid Gmail address.";
-        return;
-    }
+  if (!email.includes('@gmail.com')) {
+    msg.textContent = "❌ Use a Gmail address.";
+    return;
+  }
 
-    studentVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  studentVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  msg.textContent = "📤 Sending verification code...";
+  sendBtn.disabled = true;
 
+  fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ to: email, code: studentVerificationCode })
+  }).then(() => {
     msg.style.color = "#1DB954";
-    msg.textContent = "📤 Sending verification code...";
-
-    sendBtn.disabled = true;
-
-    // === Send email using Google Apps Script ===
-    fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to: email, code: studentVerificationCode })
-    })
-    .then(res => res.text())
-    .then(() => {
-        document.getElementById('studentCode').style.display = 'inline-block';
-        document.getElementById('verifyStudentCode').style.display = 'inline-block';
-        msg.style.color = "#1DB954";
-        msg.textContent = "✅ Verification code sent! Check your Gmail inbox.";
-
-        // Start 30s cooldown timer
-        let timeLeft = 30;
-        timerText.style.display = 'inline-block';
-        countdown.textContent = timeLeft;
-        resendCooldown = setInterval(() => {
-            timeLeft--;
-            countdown.textContent = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(resendCooldown);
-                sendBtn.disabled = false;
-                timerText.style.display = 'none';
-            }
-        }, 1000);
-    })
-    .catch(() => {
-        msg.style.color = "#ff5252";
-        msg.textContent = "❌ Failed to send email. Try again.";
+    msg.textContent = "✅ Code sent! Check your Gmail inbox.";
+    document.getElementById('studentCode').style.display = 'inline-block';
+    document.getElementById('verifyStudentCode').style.display = 'inline-block';
+    let timeLeft = 30;
+    timerText.style.display = 'inline-block';
+    countdown.textContent = timeLeft;
+    resendCooldown = setInterval(() => {
+      timeLeft--;
+      countdown.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(resendCooldown);
         sendBtn.disabled = false;
-    });
+        timerText.style.display = 'none';
+      }
+    }, 1000);
+  }).catch(() => {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Failed to send email.";
+    sendBtn.disabled = false;
+  });
 });
 
 // === Verify Code ===
-document.getElementById('verifyStudentCode').addEventListener('click', function() {
-    const code = document.getElementById('studentCode').value.trim();
-    const msg = document.getElementById('studentMessage');
-    if (code === studentVerificationCode) {
-        studentVerified = true;
-        msg.style.color = "#1DB954";
-        msg.textContent = "✅ Code verified! Click Create Account to finish.";
-        document.getElementById('verifyStudentCode').style.display = 'none';
-        document.getElementById('createStudentAccount').style.display = 'inline-block';
-    } else {
-        msg.style.color = "#ff5252";
-        msg.textContent = "❌ Invalid verification code.";
-    }
+document.getElementById('verifyStudentCode').addEventListener('click', () => {
+  const code = document.getElementById('studentCode').value.trim();
+  const msg = document.getElementById('studentMessage');
+  if (code === studentVerificationCode) {
+    studentVerified = true;
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Verified! You can now create your account.";
+    document.getElementById('verifyStudentCode').style.display = 'none';
+    document.getElementById('createStudentAccount').style.display = 'inline-block';
+  } else {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Invalid code.";
+  }
 });
 
-// === Create Account ===
-document.getElementById('createStudentAccount').addEventListener('click', function() {
-    if (!studentVerified) {
-        document.getElementById('studentMessage').textContent = "❌ Please verify the code first.";
-        return;
-    }
-
-    const username = document.getElementById('studentUsername').value.trim();
-    const password = document.getElementById('studentPassword').value;
-    const msg = document.getElementById('studentMessage');
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-
-    if (users.some(u => u.username === username)) {
-        msg.style.color = "#ff5252";
-        msg.textContent = "❌ Username already exists!";
-        return;
-    }
-
-    users.push({ username, password, role: 'student', level: 1, xp: 0 });
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem(`${username}_level`, 1);
-    localStorage.setItem(`${username}_xp`, 0);
-    localStorage.setItem(`${username}_xpMax`, 100);
-
+// === Student Create Account ===
+document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('studentEmail').value.trim();
+  const password = document.getElementById('studentPassword').value;
+  const msg = document.getElementById('studentMessage');
+  if (!studentVerified) {
+    msg.textContent = "❌ Verify your email first.";
+    return;
+  }
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      email,
+      role: "student",
+      level: 1,
+      xp: 0
+    });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1500);
+    setTimeout(() => window.location.href = 'signin.html', 1200);
+  } catch (err) {
+    msg.textContent = `❌ ${err.message}`;
+  }
 });
 
-// === Teacher Signup Logic ===
-document.getElementById('teacherSignupForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const email = document.getElementById('teacherEmail').value.trim();
-    const password = document.getElementById('teacherPassword').value;
-    const code = document.getElementById('teacherCode').value.trim();
-    const msg = document.getElementById('teacherMessage');
-
-    if (!code) {
-        msg.textContent = "❌ Enter your DepEd verification code.";
-        return;
-    }
-    if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
-        msg.textContent = "❌ Use a valid DepEd email.";
-        return;
-    }
-
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    if (users.some(u => u.username === email)) {
-        msg.textContent = "❌ Account already exists!";
-        return;
-    }
-
-    users.push({ username: email, password, role: 'teacher', level: 1, xp: 0 });
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem(`${email}_level`, 1);
-    localStorage.setItem(`${email}_xp`, 0);
-    localStorage.setItem(`${email}_xpMax`, 100);
-
+// === Teacher Create Account ===
+document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('teacherEmail').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+  const msg = document.getElementById('teacherMessage');
+  if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
+    msg.textContent = "❌ Invalid DepEd email.";
+    return;
+  }
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      email,
+      role: "teacher",
+      level: 1,
+      xp: 0
+    });
     msg.style.color = "#1DB954";
-    msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1500);
+    msg.textContent = "✅ Teacher account created!";
+    setTimeout(() => window.location.href = 'signin.html', 1200);
+  } catch (err) {
+    msg.textContent = `❌ ${err.message}`;
+  }
 });
 </script>
 </body>
