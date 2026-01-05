@@ -89,7 +89,7 @@ button:disabled {
     <input type="password" id="studentPassword" placeholder="Enter password" required><br>
 
     <button type="button" id="sendStudentCode">Send Verification Code</button>
-    <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend available in <span id="countdown">30</span>s</span><br>
+    <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend in <span id="countdown">30</span>s</span><br>
 
     <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
     <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
@@ -113,7 +113,7 @@ button:disabled {
 </div>
 
 <script type="module">
-import { auth, db } from '../../system/firebase/database.js';
+import { auth, db } from '../../system/firebase/firebase.js';
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -121,6 +121,7 @@ let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
+// ==== UI Functions ====
 function showStudentForm() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('studentForm').style.display = 'block';
@@ -143,7 +144,7 @@ window.backToChoice = function() {
   document.getElementById('homeBtn').style.display = 'block';
 };
 
-// === Send Code ===
+// ==== Student Verification ====
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const msg = document.getElementById('studentMessage');
@@ -152,21 +153,22 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   const countdown = document.getElementById('countdown');
 
   if (!email.includes('@gmail.com')) {
+    msg.style.color = "#ff5252";
     msg.textContent = "❌ Use a Gmail address.";
     return;
   }
 
   studentVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  msg.style.color = "#1DB954";
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', {
+  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
   }).then(() => {
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Code sent! Check your Gmail inbox.";
+    msg.textContent = "✅ Code sent! Check Gmail.";
     document.getElementById('studentCode').style.display = 'inline-block';
     document.getElementById('verifyStudentCode').style.display = 'inline-block';
     let timeLeft = 30;
@@ -188,7 +190,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   });
 });
 
-// === Verify Code ===
+// ==== Verify Student Code ====
 document.getElementById('verifyStudentCode').addEventListener('click', () => {
   const code = document.getElementById('studentCode').value.trim();
   const msg = document.getElementById('studentMessage');
@@ -204,7 +206,7 @@ document.getElementById('verifyStudentCode').addEventListener('click', () => {
   }
 });
 
-// === Student Create Account ===
+// ==== Student Account Creation ====
 document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('studentEmail').value.trim();
@@ -224,22 +226,26 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1200);
+    setTimeout(() => window.location.href = '../Account/signin.html', 1200);
   } catch (err) {
+    msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
 });
 
-// === Teacher Create Account ===
+// ==== Teacher Account Creation ====
 document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('teacherEmail').value.trim();
   const password = document.getElementById('teacherPassword').value;
   const msg = document.getElementById('teacherMessage');
+
   if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
+    msg.style.color = "#ff5252";
     msg.textContent = "❌ Invalid DepEd email.";
     return;
   }
+
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     await setDoc(doc(db, "users", userCred.user.uid), {
@@ -249,9 +255,10 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
       xp: 0
     });
     msg.style.color = "#1DB954";
-    msg.textContent = "✅ Teacher account created!";
-    setTimeout(() => window.location.href = 'signin.html', 1200);
+    msg.textContent = "✅ Teacher account created! Redirecting...";
+    setTimeout(() => window.location.href = '../Account/signin.html', 1200);
   } catch (err) {
+    msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
 });
