@@ -47,7 +47,10 @@ nav button {
   cursor: pointer;
   transition: 0.3s;
 }
-nav button:hover { background: #1ed760; transform: scale(1.05); }
+nav button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
 
 main {
   text-align: center;
@@ -74,7 +77,10 @@ main {
   font-size: 0.6rem;
   transition: 0.3s;
 }
-.card:hover { background: rgba(29,185,84,0.25); transform: scale(1.05); }
+.card:hover {
+  background: rgba(29,185,84,0.25);
+  transform: scale(1.05);
+}
 
 footer {
   text-align: center;
@@ -114,27 +120,13 @@ footer {
   <p>© 2025 MindCraft | Teacher Panel</p>
 </footer>
 
+<!-- ✅ Centralized Firebase Integration -->
 <script type="module">
-// === Firebase Imports ===
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { auth, db } from "../system/firebase/firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// === Your Firebase Config ===
-const firebaseConfig = {
-  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-  authDomain: "mindcraft-83f81.firebaseapp.com",
-  projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.firebasestorage.app",
-  messagingSenderId: "483019456762",
-  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// === Role & Auth Check ===
+// === Check Teacher Role + Data ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("Please sign in first.");
@@ -145,27 +137,35 @@ onAuthStateChanged(auth, async (user) => {
   const snap = await getDoc(doc(db, "users", user.uid));
   if (!snap.exists()) {
     alert("User data not found.");
+    window.location.href = "Main/Account/signin.html";
     return;
   }
 
   const data = snap.data();
+
+  // ✅ Role check — redirect students away
   if (data.role !== "teacher") {
     alert("Students cannot access this page.");
-    window.location.href = "Main/mainPage.html";
+    window.location.href = "mainPage.html";
     return;
   }
 
-  // Display teacher name and level
+  // ✅ Update teacher info on dashboard
   document.getElementById("teacherName").innerText = data.name || "Teacher";
   document.getElementById("teacherLevel").innerText = `Level ${data.level || 1} – ${data.levelTitle || "New Teacher"}`;
 });
 
 // === Logout Function ===
 window.logout = async function() {
-  await signOut(auth);
-  window.location.href = "Main/Account/signin.html";
-}
+  try {
+    await signOut(auth);
+    alert("You’ve been logged out!");
+    window.location.href = "Main/Account/signin.html";
+  } catch (err) {
+    console.error("Logout error:", err);
+  }
+};
 </script>
 
 </body>
-      </html>
+</html>
