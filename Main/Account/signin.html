@@ -64,7 +64,6 @@ button:hover { background: #1ed760; }
 </head>
 <body>
 
-<!-- 🔙 Back Buttons -->
 <div class="back-buttons">
   <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
   <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
@@ -82,7 +81,7 @@ button:hover { background: #1ed760; }
 <div class="student-form" id="studentForm">
     <h2>Student Sign In</h2>
     <form id="studentSigninForm">
-        <input type="text" id="studentUsername" placeholder="Enter username" required><br>
+        <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
         <input type="password" id="studentPassword" placeholder="Enter password" required><br>
         <button type="submit">Sign In</button>
     </form>
@@ -102,17 +101,11 @@ button:hover { background: #1ed760; }
     <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 </div>
 
-<script src="../Design/theme.js"></script>
+<script type="module">
+import { auth, db } from '../../system/firebase/firebase.js';
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
-// === Initialize users if missing ===
-if (!localStorage.getItem('users')) {
-    localStorage.setItem('users', JSON.stringify([
-        { username: 'testuser', password: '123', role: 'student', level: 1, xp: 0 }
-    ]));
-}
-
-// === Section Visibility Control ===
 function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
@@ -133,82 +126,56 @@ function backToChoice() {
     document.getElementById('choiceSection').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'none';
     document.getElementById('homeBtn').style.display = 'block';
-    // Reset forms and messages
     document.getElementById('studentSigninForm').reset();
     document.getElementById('teacherSigninForm').reset();
     document.getElementById('studentMessage').textContent = '';
     document.getElementById('teacherMessage').textContent = '';
 }
 
-// === Student Sign In Logic ===
-document.getElementById('studentSigninForm').addEventListener('submit', function(e) {
+// ==== Student Sign In ====
+document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const usernameInput = document.getElementById('studentUsername').value.trim();
-    const passwordInput = document.getElementById('studentPassword').value;
-    const messageEl = document.getElementById('studentMessage');
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.username === usernameInput && u.role === 'student');
-    
-    if (!user) {
-        messageEl.textContent = "❌ User not found!";
-        return;
+    const email = document.getElementById('studentEmail').value.trim();
+    const password = document.getElementById('studentPassword').value;
+    const msg = document.getElementById('studentMessage');
+
+    try {
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
+        const snap = await getDoc(doc(db, "users", userCred.user.uid));
+        if (!snap.exists() || snap.data().role !== "student") {
+            msg.textContent = "❌ This account is not a student.";
+            return;
+        }
+        msg.style.color = "#1DB954";
+        msg.textContent = "✅ Sign in successful! Redirecting...";
+        setTimeout(() => window.location.href = "../Webside/Student.html", 800);
+    } catch(err) {
+        msg.textContent = `❌ ${err.message}`;
     }
-    
-    if (user.password !== passwordInput) {
-        messageEl.textContent = "❌ Invalid password!";
-        return;
-    }
-    
-    localStorage.setItem('currentUser', user.username);
-    localStorage.setItem('currentRole', user.role);
-    
-    if (!localStorage.getItem(`${user.username}_xp`)) {
-        localStorage.setItem(`${user.username}_level`, user.level || 1);
-        localStorage.setItem(`${user.username}_xp`, user.xp || 0);
-        localStorage.setItem(`${user.username}_xpMax`, 100);
-    }
-    
-    messageEl.style.color = "#1DB954";
-    messageEl.textContent = "✅ Sign in successful! Redirecting...";
-    setTimeout(() => window.location.href = "../Webside/Student.html"
-, 800);
 });
 
-// === Teacher Sign In Logic ===
-document.getElementById('teacherSigninForm').addEventListener('submit', function(e) {
+// ==== Teacher Sign In ====
+document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const emailInput = document.getElementById('teacherEmail').value.trim();
-    const passwordInput = document.getElementById('teacherPassword').value;
-    const messageEl = document.getElementById('teacherMessage');
-    
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.username === emailInput && u.role === 'teacher');
-    
-    if (!user) {
-        messageEl.textContent = "❌ User not found!";
-        return;
+    const email = document.getElementById('teacherEmail').value.trim();
+    const password = document.getElementById('teacherPassword').value;
+    const msg = document.getElementById('teacherMessage');
+
+    try {
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
+        const snap = await getDoc(doc(db, "users", userCred.user.uid));
+        if (!snap.exists() || snap.data().role !== "teacher") {
+            msg.textContent = "❌ This account is not a teacher.";
+            return;
+        }
+        msg.style.color = "#1DB954";
+        msg.textContent = "✅ Sign in successful! Redirecting...";
+        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
+    } catch(err) {
+        msg.textContent = `❌ ${err.message}`;
     }
-    
-    if (user.password !== passwordInput) {
-        messageEl.textContent = "❌ Invalid password!";
-        return;
-    }
-    
-    localStorage.setItem('currentUser', user.username);
-    localStorage.setItem('currentRole', user.role);
-    
-    if (!localStorage.getItem(`${user.username}_xp`)) {
-        localStorage.setItem(`${user.username}_level`, user.level || 1);
-        localStorage.setItem(`${user.username}_xp`, user.xp || 0);
-        localStorage.setItem(`${user.username}_xpMax`, 100);
-    }
-    
-    messageEl.style.color = "#1DB954";
-    messageEl.textContent = "✅ Sign in successful! Redirecting...";
-    setTimeout(() => window.location.href = "../Webside/Teacher.html"
-, 800);
 });
 </script>
+
 </body>
 </html>
