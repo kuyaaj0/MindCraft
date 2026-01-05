@@ -30,7 +30,6 @@ body {
   z-index: -3;
   transition: background 2s;
 }
-
 #sun, #moon {
   position: fixed;
   right: 10%;
@@ -40,10 +39,7 @@ body {
   transition: all 2s ease-in-out;
   z-index: -2;
 }
-
-#moon {
-  box-shadow: 0 0 15px #fff;
-}
+#moon { box-shadow: 0 0 15px #fff; }
 
 #stars {
   position: fixed;
@@ -73,67 +69,52 @@ body {
   z-index: -1;
   opacity: 0.9;
 }
-
 @keyframes walkAnim {
   from { background-position: 0; }
   to { background-position: -800%; }
 }
 
-/* ===== Header & Layout (Mobile First: Default) ===== */
+/* ===== Header & Layout ===== */
 header {
   display: flex;
-  flex-direction: column; /* Stack vertically on small screens */
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
-  font-family: 'Press Start 2P', cursive;
 }
-
-/* XP Grouping and Layout FIX */
 .xp-group {
-    display: flex;
-    justify-content: space-between; /* Space out XP and Level evenly */
-    align-items: center;
-    width: 100%; /* Take full width on mobile */
-    max-width: 400px; /* Constrain width for cleaner look */
-    margin-bottom: 5px; /* Space below this group */
-    padding: 0 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 5px;
+  padding: 0 5px;
 }
-
 .xp-status {
-    display: flex;
-    align-items: center;
-    gap: 5px; /* Space between 'XP:' and the bar/value container */
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-
-/* ⭐ XP BAR FIX: Container to force bar and value side-by-side */
 .xp-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-
-#xpBar {
-    width: 80px; /* Specific width for mobile visibility */
-    height: 10px;
-}
-
+#xpBar { width: 80px; height: 10px; }
 .level-display {
   font-size: 0.6rem;
   text-align: center;
-  font-family: 'Press Start 2P', cursive;
 }
-
 .user-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-    width: 100%;
-    justify-content: center;
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  width: 100%;
+  justify-content: center;
 }
-
 button {
   font-family: 'Press Start 2P', cursive;
   background: #1DB954;
@@ -151,8 +132,6 @@ main {
   text-align: center;
   padding: 20px 10px;
 }
-
-/* === Language Grid (Core Responsiveness) === */
 .language-grid {
   display: flex;
   flex-wrap: wrap;
@@ -161,7 +140,6 @@ main {
   max-width: 1000px;
   margin: 0 auto;
 }
-
 .language-card {
   width: 100%;
   max-width: 280px;
@@ -172,12 +150,7 @@ main {
   transition: transform 0.3s ease;
 }
 .language-card:hover { transform: scale(1.05); }
-
-.language-card img {
-  width: 60px;
-  height: 60px;
-}
-
+.language-card img { width: 60px; height: 60px; }
 .language-card select {
   margin-top: 10px;
   font-size: 0.5rem;
@@ -189,88 +162,11 @@ main {
   border: none;
   width: 100%;
 }
-
 footer {
   text-align: center;
   font-size: 0.6rem;
   margin-top: 40px;
   padding-bottom: 10px;
-}
-
-/* ===== MEDIA QUERIES for Desktop/Tablet Layouts ===== */
-@media (min-width: 480px) {
-    /* Small mobile adjustments */
-    .xp-group {
-        max-width: 450px;
-    }
-    #xpBar {
-        width: 100px;
-    }
-    .language-card {
-        width: calc(50% - 25px); /* Two columns on small tablets */
-    }
-}
-
-@media (min-width: 768px) {
-    /* Header: Change to horizontal layout */
-    header {
-        flex-direction: row; /* Horizontal layout on desktop */
-        justify-content: space-between; /* Distribute space between groups */
-        padding: 10px 40px;
-    }
-    
-    /* XP Group: Better desktop spacing and alignment */
-    .xp-group {
-        width: auto;
-        margin-bottom: 0;
-        gap: 40px;
-    }
-
-    .xp-status {
-        /* Align XP status vertically center with buttons */
-        align-items: center;
-    }
-
-    .xp-bar-container {
-        /* Increase bar size on desktop */
-        gap: 10px;
-    }
-
-    #xpBar {
-        width: 120px; /* Wider bar for desktop */
-    }
-
-    /* User Actions: Grouped to the right */
-    .user-actions {
-        width: auto;
-        margin-top: 0;
-    }
-
-    .xp-status, .level-display {
-        font-size: 0.7rem;
-    }
-    
-    button {
-        font-size: 0.6rem;
-    }
-
-    /* Language Grid: Allow three columns */
-    .language-card {
-        width: calc(33.33% - 25px);
-        max-width: none;
-    }
-}
-
-@media (min-width: 1024px) {
-    h1 {
-        font-size: 1.5rem;
-    }
-    .xp-status, .level-display {
-        font-size: 0.8rem;
-    }
-    button {
-        font-size: 0.65rem;
-    }
 }
 </style>
 </head>
@@ -286,29 +182,29 @@ footer {
 <div class="bg-character" style="animation-delay: 8s;"></div>
 
 <header>
-    <div class="xp-group">
-        <div class="xp-status">
-            <span>XP:</span>
-            <div class="xp-bar-container">
-                <progress id="xpBar" value="0" max="100"></progress>
-                <span id="xpValue">0</span>
-            </div>
-        </div>
-        <div class="level-display">
-            Level <span id="levelValue">1</span>
-        </div>
+  <div class="xp-group">
+    <div class="xp-status">
+      <span>XP:</span>
+      <div class="xp-bar-container">
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
+      </div>
     </div>
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
+  </div>
 
-    <div class="user-actions">
-        <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
-        <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
-    </div>
+  <div class="user-actions">
+    <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
+    <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+  </div>
 </header>
 
 <main class="language-select">
   <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
   <div class="language-grid">
-        <div class="language-card">
+    <div class="language-card">
       <img src="Main/Assets/Icons/html.png" alt="HTML">
       <p>HTML</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -324,7 +220,7 @@ footer {
       </select>
     </div>
 
-        <div class="language-card">
+    <div class="language-card">
       <img src="Main/Assets/Icons/css.png" alt="CSS">
       <p>CSS</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -340,7 +236,7 @@ footer {
       </select>
     </div>
 
-        <div class="language-card">
+    <div class="language-card">
       <img src="Main/Assets/Icons/js.png" alt="JavaScript">
       <p>JavaScript</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -365,26 +261,11 @@ footer {
 <script src="Main/Design/theme.js"></script>
 <script src="Main/Exp/levels.js"></script>
 
-<!-- ================== 🔥 UPDATED SCRIPT BLOCK ================== -->
+<!-- ✅ Centralized Firebase connection -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// ✅ Firebase config (use your own values from Firebase console)
-const firebaseConfig = {
-  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-  authDomain: "mindcraft-83f81.firebaseapp.com",
-  projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.firebasestorage.app",
-  messagingSenderId: "483019456762",
-  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
-};
-
-// ✅ Init
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+import { auth, db } from "../system/firebase/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // === Smart Character Placement ===
 const chars = document.querySelectorAll('.bg-character');
@@ -393,80 +274,61 @@ chars.forEach((char, i) => {
   const offset = Math.random() * 10;
   const direction = Math.random() > 0.5 ? 1 : -1;
   const duration = 20 + Math.random() * 10;
-
   char.style.bottom = `${5 + offset}vh`;
   char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
-
-  const keyframes = `
+  const styleEl = document.createElement('style');
+  styleEl.textContent = `
     @keyframes move${i} {
       0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
       50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
       100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
     }`;
-  const styleEl = document.createElement('style');
-  styleEl.textContent = keyframes;
   document.head.appendChild(styleEl);
 });
 
-// === Theme Environment Function (called by theme.js) ===
+// === Theme Environment ===
 window.applyEnvironment = function(theme, animate=false) {
   const sky = document.getElementById('sky');
   const sun = document.getElementById('sun');
   const moon = document.getElementById('moon');
   const stars = document.getElementById('stars');
   const chars = document.querySelectorAll('.bg-character');
-  if (!sky || !sun || !moon || !stars) return;
-
   if (theme === 'light') {
     sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
     stars.style.opacity = 0;
     sun.style.opacity = 1;
     moon.style.opacity = 0;
-    if (animate) sun.style.transform = 'translateY(0)';
-    if (animate) moon.style.transform = 'translateY(120px)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
   } else {
     sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
     stars.style.opacity = 1;
     sun.style.opacity = 0;
     moon.style.opacity = 1;
-    if (animate) sun.style.transform = 'translateY(120px)';
-    if (animate) moon.style.transform = 'translateY(0)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
   }
 };
 
-// === User Authentication + XP Load ===
+// === Auth Check + XP ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
     window.location.href = "Main/Account/signin.html";
     return;
   }
-
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
-
   if (!snap.exists()) {
     alert("No user data found.");
     window.location.href = "Main/Account/signin.html";
     return;
   }
-
   const data = snap.data();
-
-  // 🔒 Allow only students
   if (data.role !== "student") {
-    window.location.href = "teacherPage.html";
+    window.location.href = "teacher.html";
     return;
   }
-
-  // ✅ Update UI
   document.getElementById("xpValue").innerText = data.xp ?? 0;
   document.getElementById("xpBar").value = data.xp % 100;
   document.getElementById("levelValue").innerText = data.level ?? 1;
 });
 </script>
-<!-- ================== END UPDATED SCRIPT ================== -->
 </body>
 </html>
