@@ -10,29 +10,40 @@
 
 <style>
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Press Start 2P', cursive;
     margin: 0;
     padding: 0;
     text-align: center;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    min-height: 100vh;
     transition: background 0.3s, color 0.3s;
 }
+
 .settings-container {
     max-width: 600px;
     margin: 60px auto;
     padding: 25px;
     border-radius: 12px;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.5);
     color: #fff;
     box-shadow: 0 0 15px #1DB954;
 }
+
+.settings-container h2 {
+    margin-bottom: 20px;
+}
+
 button, select {
     margin: 10px;
     padding: 10px 20px;
-    font-size: 1em;
+    font-size: 0.8rem;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-family: 'Press Start 2P', cursive;
 }
+
 button {
     background: #1DB954;
     color: #fff;
@@ -42,11 +53,19 @@ button:hover {
     background: #1ed760;
     transform: scale(1.05);
 }
+
 .back-btn {
     background: #ff69b4;
 }
 .back-btn:hover {
     background: #ff85c1;
+}
+
+#settingsFeedback {
+    font-size: 0.6rem;
+    margin-top: 10px;
+    color: #1DB954;
+    min-height: 18px;
 }
 </style>
 </head>
@@ -77,7 +96,11 @@ button:hover {
     <br>
 
     <button class="back-btn" id="backBtn">⬅️ Back</button>
+
+    <div id="settingsFeedback"></div>
 </div>
+
+<script src="../Design/theme.js"></script>
 
 <script>
 // =============================
@@ -87,49 +110,44 @@ const theme = localStorage.getItem('theme') || 'dark';
 const sound = localStorage.getItem('sound') || 'on';
 const vibration = localStorage.getItem('vibration') || 'on';
 
-// Set select boxes to the saved values
 document.getElementById('themeSelect').value = theme;
 document.getElementById('soundSelect').value = sound;
 document.getElementById('vibrationSelect').value = vibration;
 
-// IMPORTANT: The theme is applied when theme.js loads below.
-// The custom applyTheme function is now removed, relying entirely on theme.js.
-
+const feedback = document.getElementById('settingsFeedback');
 
 // =============================
 // Save new settings
 // =============================
 document.getElementById('themeSelect').addEventListener('change', e => {
-    const newTheme = e.target.value;
-    localStorage.setItem('theme', newTheme);
-    
-    // FIX: Use the global function defined in theme.js to apply the theme
-    if (typeof window.setTheme === 'function') {
-        window.setTheme(newTheme);
-    } else {
-        // Fallback if theme.js failed to load
-        window.dispatchEvent(new StorageEvent('storage', { key: 'theme', newValue: newTheme }));
-    }
+    const newTheme = e.target.value;
+    localStorage.setItem('theme', newTheme);
+    if (typeof window.setTheme === 'function') {
+        window.setTheme(newTheme);
+    }
+    feedback.textContent = `Theme set to ${newTheme}!`;
+    setTimeout(() => feedback.textContent = '', 2000);
 });
 
 document.getElementById('soundSelect').addEventListener('change', e => {
-    localStorage.setItem('sound', e.target.value);
+    localStorage.setItem('sound', e.target.value);
+    feedback.textContent = `Sound turned ${e.target.value}!`;
+    setTimeout(() => feedback.textContent = '', 2000);
 });
+
 document.getElementById('vibrationSelect').addEventListener('change', e => {
-    localStorage.setItem('vibration', e.target.value);
+    localStorage.setItem('vibration', e.target.value);
+    feedback.textContent = `Vibration turned ${e.target.value}!`;
+    setTimeout(() => feedback.textContent = '', 2000);
 });
 
 // =============================
-// Back button (to root index.html)
+// Back button
 // =============================
 document.getElementById('backBtn').addEventListener('click', () => {
-    // Since settings.html is in Main/Settings/, we go up two levels to index.html
-    window.location.href = '../../index.html';
+    window.location.href = '../../index.html';
 });
 </script>
-
-<!-- Load global theme (so all pages match) -->
-<script src="../Design/theme.js"></script>
 
 </body>
 </html>
