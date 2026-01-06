@@ -5,7 +5,6 @@
 --another additional 
 --interactive characters
 --1.0.0.1-Beta version
---ambot
 
 
 # November 18
