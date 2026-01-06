@@ -9,123 +9,154 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 <style>
 body {
-  font-family: 'Press Start 2P', cursive; /* ⭐ FIXED: Applied gamified font */
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  transition: background 0.3s, color 0.3s;
+    font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: #203a43;
+    color: white;
+    transition: background 0.3s, color 0.3s;
 }
 nav {
-  background: rgba(0,0,0,0.6);
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }
 nav button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #1DB954;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Press Start 2P', cursive; /* Ensure buttons use gamified font */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #1DB954;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Press Start 2P', cursive;
 }
 nav button:hover { background: #1ed760; }
 .container {
-  margin-top: 50px;
-  background: rgba(0,0,0,0.4);
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 0 15px #1DB954;
+    margin-top: 50px;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 15px #1DB954;
 }
-h2 { margin-bottom: 15px; font-family: 'Press Start 2P', cursive;} /* Ensure title uses gamified font */
-/* ⭐ FIXED: Apply the font to the data paragraphs */
+h2 { margin-bottom: 15px; }
 .container p {
     font-family: 'Press Start 2P', cursive;
     font-size: 0.7rem;
-    margin: 15px 0;
+    margin: 10px 0;
+}
+#xpBar {
+    width: 80%;
+    height: 20px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: #555;
+}
+#xpBar > div {
+    height: 100%;
+    width: 0%;
+    background: #1DB954;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+.rank {
+    margin-top: 10px;
+    font-size: 0.65rem;
+    color: #FFD700;
 }
 </style>
 </head>
 <body>
 <nav>
-  <button onclick="location.href='../../index.html'">🏠 Home</button>
-  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-  <button onclick="logout()">🚪 Logout</button>
+    <button onclick="location.href='../../index.html'">🏠 Home</button>
+    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+    <button onclick="logout()">🚪 Logout</button>
 </nav>
+
 <div class="container">
-  <h2>👤 Account Information</h2>
-  <p><b>Username:</b> <span id="username">Guest</span></p>
-  <p><b>Level:</b> <span id="level">1</span></p>
-  <p><b>XP:</b> <span id="xp">0</span></p>
+    <h2>👤 Account Information</h2>
+    <p><b>Username:</b> <span id="username">Guest</span></p>
+    <p><b>Level:</b> <span id="level">1</span></p>
+    <div id="xpBar"><div></div></div>
+    <p><b>XP:</b> <span id="xp">0/100</span></p>
+    <p class="rank" id="rank">Rank: Beginner</p>
 </div>
-<script>
-// =============================
-// Check login
-// =============================
+
+<script type="module">
+import { getStudentLevelData } from '../exp/studentLV.js';
+import { getTeacherLevelData } from '../exp/teacherLV.js';
+
 const currentUser = localStorage.getItem('currentUser');
+const currentRole = localStorage.getItem('currentRole') || 'student';
+
 if (!currentUser) {
-  alert('You must sign in first!');
-  // Redirect to signin page, which is assumed to be in the same folder.
-  window.location.href = 'signin.html';
+    alert('You must sign in first!');
+    window.location.href = 'signin.html';
 }
 
 // --- UI Elements ---
 const usernameEl = document.getElementById('username');
 const levelEl = document.getElementById('level');
 const xpEl = document.getElementById('xp');
+const xpBarFill = document.querySelector('#xpBar > div');
+const rankEl = document.getElementById('rank');
 
 // =============================
 // Function to Load and Display User Data
 // =============================
 function loadUserData() {
-    if (!currentUser) return;
-
-    // Load current XP, Level, and Max XP from storage
     let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
     let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
     let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || 100;
 
-    // Self-correcting logic (ensures display consistency)
+    // Correct overflow
     const XP_CAP_MULTIPLIER = 1.25;
     while (xp >= xpMax) {
         xp -= xpMax;
         level++;
         xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
     }
-    // Display the data
+
+    // Display
     usernameEl.textContent = currentUser;
     levelEl.textContent = level;
-    xpEl.textContent = `${xp}/${xpMax}`;}
+    xpEl.textContent = `${xp}/${xpMax}`;
+    xpBarFill.style.width = `${(xp/xpMax)*100}%`;
 
-// Load data on initial page load
+    // Rank/title
+    let rankTitle = "Beginner";
+    if(currentRole === 'student') rankTitle = getStudentLevelData(parseInt(localStorage.getItem(`${currentUser}_xp`)||0)).title;
+    if(currentRole === 'teacher') rankTitle = getTeacherLevelData(parseInt(localStorage.getItem(`${currentUser}_xp`)||0)).title;
+    rankEl.textContent = `🏅 Rank: ${rankTitle}`;
+}
+
+// Initial load
 loadUserData();
 
-// =============================
-// Listen for XP/Level changes in other tabs (Dynamic Update)
-// ===================================
+// Listen for XP/Level changes in other tabs
 window.addEventListener('storage', (e) => {
-    // Only refresh if the XP or Level data for the current user has changed
-    if (e.key && e.key.startsWith(`${currentUser}_`)) {
+    if(e.key && e.key.startsWith(`${currentUser}_`)) {
         loadUserData();
     }
 });
 
 // =============================
-// Logout function
+// Logout
 // =============================
 function logout() {
-  localStorage.setItem('lastUser', currentUser); // optional tracking
-  localStorage.removeItem('currentUser');
-  // Assuming signin.html is in the same folder as account.html (../Account/)
-  window.location.href = 'signin.html';
+    localStorage.setItem('lastUser', currentUser);
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentRole');
+    window.location.href = 'signin.html';
 }
 </script>
+
 <script src="../Design/theme.js"></script>
 </body>
 </html>
