@@ -69,16 +69,16 @@ button:disabled {
 
 <!-- 🔙 Back Buttons -->
 <div class="back-buttons">
-  <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
-  <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
+  <button id="homeBtn">🏠 Home</button>
+  <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
 </div>
 
 <!-- Choice Section -->
 <div class="choice-section" id="choiceSection">
   <h2>🧠 MindCraft - Sign Up</h2>
   <p>Choose your role:</p>
-  <button onclick="showStudentForm()">Student</button>
-  <button onclick="showTeacherForm()">Teacher</button>
+  <button id="studentBtn">Student</button>
+  <button id="teacherBtn">Teacher</button>
 </div>
 
 <!-- Student Form -->
@@ -121,30 +121,42 @@ let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
-// ==== UI Functions ====
-window.showStudentForm = function() {
+// === Navigation ===
+document.getElementById("homeBtn").addEventListener("click", () => {
+  window.location.href = "../../index.html";
+});
+
+// === UI Functions ===
+function showStudentForm() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('studentForm').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'block';
   document.getElementById('homeBtn').style.display = 'none';
-};
+}
 
-window.showTeacherForm = function() {
+function showTeacherForm() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('teacherForm').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'block';
   document.getElementById('homeBtn').style.display = 'none';
-};
+}
 
-window.backToChoice = function() {
+function backToChoice() {
   document.getElementById('studentForm').style.display = 'none';
   document.getElementById('teacherForm').style.display = 'none';
   document.getElementById('choiceSection').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'none';
   document.getElementById('homeBtn').style.display = 'block';
-};
+}
 
-// ==== Student Verification ====
+// === Attach Button Events ===
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("studentBtn").addEventListener("click", showStudentForm);
+  document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
+  document.getElementById("formBackBtn").addEventListener("click", backToChoice);
+});
+
+// === Send Student Code ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const msg = document.getElementById('studentMessage');
@@ -190,7 +202,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   });
 });
 
-// ==== Verify Student Code ====
+// === Verify Code ===
 document.getElementById('verifyStudentCode').addEventListener('click', () => {
   const code = document.getElementById('studentCode').value.trim();
   const msg = document.getElementById('studentMessage');
@@ -206,7 +218,7 @@ document.getElementById('verifyStudentCode').addEventListener('click', () => {
   }
 });
 
-// ==== Student Account Creation ====
+// === Student Create Account ===
 document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('studentEmail').value.trim();
@@ -233,19 +245,17 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
   }
 });
 
-// ==== Teacher Account Creation ====
+// === Teacher Create Account ===
 document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('teacherEmail').value.trim();
   const password = document.getElementById('teacherPassword').value;
   const msg = document.getElementById('teacherMessage');
-
   if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
     msg.style.color = "#ff5252";
     msg.textContent = "❌ Invalid DepEd email.";
     return;
   }
-
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     await setDoc(doc(db, "users", userCred.user.uid), {
