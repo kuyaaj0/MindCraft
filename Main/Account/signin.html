@@ -64,16 +64,16 @@ button:hover { background: #1ed760; }
 
 <!-- 🔙 Back Buttons -->
 <div class="back-buttons">
-  <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
-  <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
+  <button id="homeBtn">🏠 Home</button>
+  <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
 </div>
 
 <!-- Role Selection -->
 <div class="choice-section" id="choiceSection">
     <h2>🧠 MindCraft - Sign In</h2>
     <p>Choose your role:</p>
-    <button onclick="showStudentForm()">Student</button>
-    <button onclick="showTeacherForm()">Teacher</button>
+    <button id="studentBtn">Student</button>
+    <button id="teacherBtn">Teacher</button>
 </div>
 
 <!-- Student Form -->
@@ -105,22 +105,27 @@ import { auth, db } from '../../system/firebase/firebase.js';
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ==== UI Functions ====
-window.showStudentForm = function() {
+// ===== Navigation Buttons =====
+document.getElementById("homeBtn").addEventListener("click", () => {
+  window.location.href = "../../index.html";
+});
+
+// ====== UI Toggle Functions ======
+function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
     document.getElementById('homeBtn').style.display = 'none';
-};
+}
 
-window.showTeacherForm = function() {
+function showTeacherForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
     document.getElementById('homeBtn').style.display = 'none';
-};
+}
 
-window.backToChoice = function() {
+function backToChoice() {
     document.getElementById('studentForm').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'none';
     document.getElementById('choiceSection').style.display = 'block';
@@ -130,7 +135,14 @@ window.backToChoice = function() {
     document.getElementById('teacherSigninForm').reset();
     document.getElementById('studentMessage').textContent = '';
     document.getElementById('teacherMessage').textContent = '';
-};
+}
+
+// === Attach Events After DOM Ready ===
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("studentBtn").addEventListener("click", showStudentForm);
+  document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
+  document.getElementById("formBackBtn").addEventListener("click", backToChoice);
+});
 
 // ==== Student Sign In ====
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
