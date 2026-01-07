@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+```html
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -122,19 +123,19 @@ let studentVerified = false;
 let resendCooldown = null;
 
 // ==== UI Functions ====
-function showStudentForm() {
+window.showStudentForm = function() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('studentForm').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'block';
   document.getElementById('homeBtn').style.display = 'none';
-}
+};
 
-function showTeacherForm() {
+window.showTeacherForm = function() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('teacherForm').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'block';
   document.getElementById('homeBtn').style.display = 'none';
-}
+};
 
 window.backToChoice = function() {
   document.getElementById('studentForm').style.display = 'none';
@@ -265,3 +266,4 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
 </script>
 </body>
 </html>
+```
