@@ -41,9 +41,7 @@ button {
 }
 button:hover { background: #1ed760; }
 .message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
-.choice-section, .student-form, .teacher-form {
-    display: none;
-}
+.choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
 
 /* === Back Buttons === */
@@ -64,6 +62,7 @@ button:hover { background: #1ed760; }
 </head>
 <body>
 
+<!-- 🔙 Back Buttons -->
 <div class="back-buttons">
   <button id="homeBtn" onclick="window.location.href='../../index.html'">🏠 Home</button>
   <button id="formBackBtn" onclick="backToChoice()" style="display:none;">⬅ Back to Form</button>
@@ -106,21 +105,22 @@ import { auth, db } from '../../system/firebase/firebase.js';
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-function showStudentForm() {
+// ==== UI Functions ====
+window.showStudentForm = function() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
     document.getElementById('homeBtn').style.display = 'none';
-}
+};
 
-function showTeacherForm() {
+window.showTeacherForm = function() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'block';
     document.getElementById('formBackBtn').style.display = 'block';
     document.getElementById('homeBtn').style.display = 'none';
-}
+};
 
-function backToChoice() {
+window.backToChoice = function() {
     document.getElementById('studentForm').style.display = 'none';
     document.getElementById('teacherForm').style.display = 'none';
     document.getElementById('choiceSection').style.display = 'block';
@@ -130,7 +130,7 @@ function backToChoice() {
     document.getElementById('teacherSigninForm').reset();
     document.getElementById('studentMessage').textContent = '';
     document.getElementById('teacherMessage').textContent = '';
-}
+};
 
 // ==== Student Sign In ====
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
