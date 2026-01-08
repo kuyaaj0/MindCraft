@@ -1,9 +1,9 @@
 // ✅ Firebase Configuration (MindCraft Project)
-// NOTE: This key is restricted to your GitHub Pages domain and safe to use.
+// NOTE: Safe for GitHub Pages (restricted domain use)
 
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // 🔐 Your Firebase configuration
 const firebaseConfig = {
@@ -19,5 +19,3 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-
-//Update firebase.js with restricted API key
