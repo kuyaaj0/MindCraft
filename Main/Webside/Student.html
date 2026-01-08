@@ -6,9 +6,9 @@
 <title>MindCraft | Grade 11 Coding Lessons</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Main/Design/Position.css">
-<link rel="stylesheet" href="Main/Design/levels.css">
-<link rel="stylesheet" href="Main/Design/global_size-FIX.css">
+<link rel="stylesheet" href="../Design/Position.css">
+<link rel="stylesheet" href="../Design/levels.css">
+<link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
 /* === Global Resets === */
@@ -300,8 +300,8 @@ footer {
     </div>
 
     <div class="user-actions">
-        <button onclick="location.href='Main/Account/account.html'">👤 Account</button>
-        <button onclick="location.href='Main/Settings/setting.html'">⚙️ Settings</button>
+        <button onclick="location.href='../Account/account.html'">👤 Account</button>
+        <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
     </div>
 </header>
 
@@ -313,30 +313,30 @@ footer {
       <p>HTML</p>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/HTML/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/HTML/lesson-2.html">Lesson 2</option>
+        <option value="../Modular/HTML/lesson-1.html">Lesson 1</option>
+        <option value="../Modular/HTML/lesson-2.html">Lesson 2</option>
       </select>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/HTML/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/HTML/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/HTML/level-3.html">Level 3</option>
+        <option value="../Levels/Quiz/HTML/level-1.html">Level 1</option>
+        <option value="../Levels/Quiz/HTML/level-2.html">Level 2</option>
+        <option value="../Levels/Quiz/HTML/level-3.html">Level 3</option>
       </select>
     </div>
 
         <div class="language-card">
-      <img src="Main/Assets/Icons/css.png" alt="CSS">
+      <img src="../Assets/Icons/css.png" alt="CSS">
       <p>CSS</p>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/CSS/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/CSS/lesson-2.html">Lesson 2</option>
+        <option value="../Modular/CSS/lesson-1.html">Lesson 1</option>
+        <option value="../Modular/CSS/lesson-2.html">Lesson 2</option>
       </select>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/CSS/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/CSS/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/CSS/level-3.html">Level 3</option>
+        <option value="../Levels/Quiz/CSS/level-1.html">Level 1</option>
+        <option value="../Levels/Quiz/CSS/level-2.html">Level 2</option>
+        <option value="../Levels/Quiz/CSS/level-3.html">Level 3</option>
       </select>
     </div>
 
@@ -345,14 +345,14 @@ footer {
       <p>JavaScript</p>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📖 Select Lesson</option>
-        <option value="Main/Modular/JS/lesson-1.html">Lesson 1</option>
-        <option value="Main/Modular/JS/lesson-2.html">Lesson 2</option>
+        <option value="../Modular/JS/lesson-1.html">Lesson 1</option>
+        <option value="../Modular/JS/lesson-2.html">Lesson 2</option>
       </select>
       <select onchange="if(this.value) window.location.href=this.value">
         <option value="">📝 Select Quiz</option>
-        <option value="Main/Levels/Quiz/JS/level-1.html">Level 1</option>
-        <option value="Main/Levels/Quiz/JS/level-2.html">Level 2</option>
-        <option value="Main/Levels/Quiz/JS/level-3.html">Level 3</option>
+        <option value="../Levels/Quiz/JS/level-1.html">Level 1</option>
+        <option value="../Levels/Quiz/JS/level-2.html">Level 2</option>
+        <option value="../Levels/Quiz/JS/level-3.html">Level 3</option>
       </select>
     </div>
   </div>
@@ -362,8 +362,8 @@ footer {
   <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
 </footer>
 
-<script src="Main/Design/theme.js"></script>
-<script src="Main/Exp/levels.js"></script>
+<script src="../Design/theme.js"></script>
+<script src="../Exp/levels.js"></script>
 
 <!-- ================== 🔥 UPDATED SCRIPT BLOCK ================== -->
 <script type="module">
@@ -440,7 +440,7 @@ window.applyEnvironment = function(theme, animate=false) {
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
-    window.location.href = "Main/Account/signin.html";
+    window.location.href = "../Account/signin.html";
     return;
   }
 
@@ -449,7 +449,7 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!snap.exists()) {
     alert("No user data found.");
-    window.location.href = "Main/Account/signin.html";
+    window.location.href = "../Account/signin.html";
     return;
   }
 
@@ -457,7 +457,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // 🔒 Allow only students
   if (data.role !== "student") {
-    window.location.href = "teacherPage.html";
+    window.location.href = "Teacher.html";
     return;
   }
 
