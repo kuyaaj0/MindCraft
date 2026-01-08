@@ -95,7 +95,7 @@ button:disabled {
     <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
   </form>
   <p class="message" id="studentMessage"></p>
-  <p>Already have an account? <a href="/MindCraft/Main/Account/signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="/../../../signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <!-- Teacher Form -->
@@ -108,11 +108,11 @@ button:disabled {
     <button type="submit">Create Account</button>
   </form>
   <p class="message" id="teacherMessage"></p>
-  <p>Already have an account? <a href="/MindCraft/Main/Account/signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="/../../../signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <script type="module">
-import { auth, db } from '/MindCraft/system/firebase/firebase.js'; // Updated path
+import { auth, db } from '/../../../firebase.js'; // Updated path
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -122,7 +122,7 @@ let resendCooldown = null;
 
 // === Navigation ===
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "/MindCraft/index.html"; // Updated path
+  window.location.href = "/../index.html"; // Updated path
 });
 
 // === UI Functions ===
@@ -259,7 +259,7 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = '/MindCraft/Main/Account/signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = '/../../../signin.html', 1200); // Updated path
   } catch (err) {
     console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
@@ -293,7 +293,7 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = '/MindCraft/Main/Account/signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = '/../../../signin.html', 1200); // Updated path
   } catch (err) {
     console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
