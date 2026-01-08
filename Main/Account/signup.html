@@ -1,12 +1,11 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css">
-
+<link rel="stylesheet" href="/your-repo-name/Main/Design/Position.css"> <!-- Updated path -->
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
@@ -96,7 +95,7 @@ button:disabled {
     <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
   </form>
   <p class="message" id="studentMessage"></p>
-  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+  <p>Already have an account? <a href="/MindCraft/Main/Account/signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <!-- Teacher Form -->
@@ -109,11 +108,11 @@ button:disabled {
     <button type="submit">Create Account</button>
   </form>
   <p class="message" id="teacherMessage"></p>
-  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+  <p>Already have an account? <a href="/MindCraft/Main/Account/signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <script type="module">
-import { auth, db } from '../../system/firebase/firebase.js';
+import { auth, db } from '/MindCraft/system/firebase/firebase.js'; // Updated path
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -123,7 +122,7 @@ let resendCooldown = null;
 
 // === Navigation ===
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "../../index.html";
+  window.location.href = "/MindCraft/index.html"; // Updated path
 });
 
 // === UI Functions ===
@@ -147,6 +146,15 @@ function backToChoice() {
   document.getElementById('choiceSection').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'none';
   document.getElementById('homeBtn').style.display = 'block';
+  // Reset student form state
+  studentVerificationCode = null;
+  studentVerified = false;
+  document.getElementById('studentSignupForm').reset();
+  document.getElementById('studentCode').style.display = 'none';
+  document.getElementById('verifyStudentCode').style.display = 'none';
+  document.getElementById('createStudentAccount').style.display = 'none';
+  document.getElementById('studentMessage').textContent = '';
+  if (resendCooldown) clearInterval(resendCooldown);
 }
 
 // === Attach Button Events ===
@@ -159,11 +167,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // === Send Student Code ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
+  const password = document.getElementById('studentPassword').value;
   const msg = document.getElementById('studentMessage');
   const sendBtn = document.getElementById('sendStudentCode');
   const timerText = document.getElementById('resendTimer');
   const countdown = document.getElementById('countdown');
 
+  if (!email || !password) {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Please fill in email and password.";
+    return;
+  }
   if (!email.includes('@gmail.com')) {
     msg.style.color = "#ff5252";
     msg.textContent = "❌ Use a Gmail address.";
@@ -175,11 +189,12 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', { // Replace YOUR_SCRIPT_ID with real ID
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
-  }).then(() => {
+  }).then(response => {
+    if (!response.ok) throw new Error('Network error');
     msg.textContent = "✅ Code sent! Check Gmail.";
     document.getElementById('studentCode').style.display = 'inline-block';
     document.getElementById('verifyStudentCode').style.display = 'inline-block';
@@ -195,9 +210,10 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
         timerText.style.display = 'none';
       }
     }, 1000);
-  }).catch(() => {
+  }).catch(err => {
+    console.error("Email send error:", err); // DEBUG
     msg.style.color = "#ff5252";
-    msg.textContent = "❌ Failed to send email.";
+    msg.textContent = "❌ Failed to send email. Check network or script ID.";
     sendBtn.disabled = false;
   });
 });
@@ -206,6 +222,11 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
 document.getElementById('verifyStudentCode').addEventListener('click', () => {
   const code = document.getElementById('studentCode').value.trim();
   const msg = document.getElementById('studentMessage');
+  if (!code) {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Enter the verification code.";
+    return;
+  }
   if (code === studentVerificationCode) {
     studentVerified = true;
     msg.style.color = "#1DB954";
@@ -238,8 +259,9 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = '../Account/signin.html', 1200);
+    setTimeout(() => window.location.href = '/MindCraft/Main/Account/signin.html', 1200); // Updated path
   } catch (err) {
+    console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
@@ -251,6 +273,11 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
   const email = document.getElementById('teacherEmail').value.trim();
   const password = document.getElementById('teacherPassword').value;
   const msg = document.getElementById('teacherMessage');
+  if (!email || !password) {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Please fill in all fields.";
+    return;
+  }
   if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
     msg.style.color = "#ff5252";
     msg.textContent = "❌ Invalid DepEd email.";
@@ -266,8 +293,9 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = '../Account/signin.html', 1200);
+    setTimeout(() => window.location.href = '/MindCraft/Main/Account/signin.html', 1200); // Updated path
   } catch (err) {
+    console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
