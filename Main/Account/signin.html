@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/../../../Position.css"> <!-- Updated path -->
+<link rel="stylesheet" href="../Design/Position.css"> <!-- Updated path -->
 <style>
 body { 
     font-family: 'Press Start 2P', cursive; 
@@ -85,7 +85,7 @@ button:hover { background: #1ed760; }
         <button type="submit">Sign In</button>
     </form>
     <p class="message" id="studentMessage"></p>
-    <p>Don’t have an account? <a href="/../../../signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
 </div>
 
 <!-- Teacher Form -->
@@ -97,17 +97,17 @@ button:hover { background: #1ed760; }
         <button type="submit">Sign In</button>
     </form>
     <p class="message" id="teacherMessage"></p>
-    <p>Don’t have an account? <a href="/../../../signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
 </div>
 
 <script type="module">
-import { auth, db } from '/../../../firebase.js'; // Updated path
+import { auth, db } from '../System/firebase.js'; // Updated path
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== Navigation Buttons =====
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "/MindCraft/index.html"; // Updated path
+  window.location.href = "../index.html"; // Updated path
 });
 
 // ====== UI Toggle Functions ======
@@ -165,7 +165,7 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
         }
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "/../../../Student.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Student.html", 800); // Updated path
     } catch(err) {
         console.error("Sign-in error:", err); // DEBUG
         msg.textContent = `❌ ${err.message}`;
@@ -193,7 +193,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
         }
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "/../../../Teacher.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800); // Updated path
     } catch(err) {
         console.error("Sign-in error:", err); // DEBUG
         msg.textContent = `❌ ${err.message}`;
