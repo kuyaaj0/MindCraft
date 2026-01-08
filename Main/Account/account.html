@@ -74,7 +74,7 @@ h2 { margin-bottom: 15px; }
 </head>
 <body>
 <nav>
-    <button onclick="location.href='../../index.html'">🏠 Home</button>
+    <button onclick="location.href='../index.html'">🏠 Home</button>
     <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
     <button onclick="logout()">🚪 Logout</button>
 </nav>
@@ -89,7 +89,7 @@ h2 { margin-bottom: 15px; }
 </div>
 
 <script type="module">
-import { getStudentLevelData } from '../exp/studentLV.js';
+import { getStudentLevelData } from '../Exp/studentLV.js';
 import { getTeacherLevelData } from '../exp/teacherLV.js';
 
 const currentUser = localStorage.getItem('currentUser');
