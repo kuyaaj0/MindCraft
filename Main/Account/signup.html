@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/your-repo-name/Main/Design/Position.css"> <!-- Updated path -->
+<link rel="stylesheet" href="../Design/Position.css"> <!-- Updated path -->
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
@@ -95,7 +95,7 @@ button:disabled {
     <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
   </form>
   <p class="message" id="studentMessage"></p>
-  <p>Already have an account? <a href="/../../../signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <!-- Teacher Form -->
@@ -108,11 +108,11 @@ button:disabled {
     <button type="submit">Create Account</button>
   </form>
   <p class="message" id="teacherMessage"></p>
-  <p>Already have an account? <a href="/../../../signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
 </div>
 
 <script type="module">
-import { auth, db } from '/../../../firebase.js'; // Updated path
+import { auth, db } from '../System/firebase.js'; // Updated path
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -122,7 +122,7 @@ let resendCooldown = null;
 
 // === Navigation ===
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "/../index.html"; // Updated path
+  window.location.href = "../index.html"; // Updated path
 });
 
 // === UI Functions ===
@@ -189,7 +189,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', { // Replace YOUR_SCRIPT_ID with real ID
+  fetch('https://script.google.com/macros/s/AKfycbyvjBa_RaZ_UAqFgQZ2anIGNmRM4_SOzHAMp-ImAL7OtICmccpLhQQV8XjM90uAfTwF/exec', { // Replace YOUR_SCRIPT_ID with real ID
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
@@ -259,7 +259,7 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = '/../../../signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = 'signin.html', 1200); // Updated path
   } catch (err) {
     console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
@@ -293,7 +293,7 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = '/../../../signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = 'signin.html', 1200); // Updated path
   } catch (err) {
     console.error("Account creation error:", err); // DEBUG
     msg.style.color = "#ff5252";
