@@ -1,3 +1,11 @@
+# January 9
+--firebase added
+--some additional fixes
+--firebase api added
+--a bit few bugs fixed
+--google script for verification added
+--1.0.0.2-Beta version 
+
 # November 19
 --optimal changes
 --mobile size display fix
