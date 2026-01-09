@@ -7,7 +7,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebas
 
 // 🔐 Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA67NwJQPqiYEoYVfTeB76v326neGIz3y8",
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
   projectId: "mindcraft-83f81",
   storageBucket: "mindcraft-83f81.firebasestorage.app",
