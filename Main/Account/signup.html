@@ -189,7 +189,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch('https://script.google.com/macros/s/AKfycby9rZ0QnM5G3vgbegMeiNBmWyiBpBLC53e28ol3O4GL4WyQ-YW_HRb7LLs7QuNrOjFz/exec', { // Replace YOUR_SCRIPT_ID with real ID
+  fetch('https://script.google.com/macros/s/AKfycbwUKiwwaSvRfn0J-balND7biyVRTh78d1VCcyzJsj5PpFOdp2vxgDYa38S9G-FCAZtW/exec', { // Replace YOUR_SCRIPT_ID with real ID
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
