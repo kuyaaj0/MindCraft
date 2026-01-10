@@ -47,8 +47,6 @@ button:disabled {
 .message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
 .choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
-
-/* === Back Buttons === */
 .back-buttons {
   position: absolute;
   top: 20px;
@@ -63,7 +61,7 @@ button:disabled {
 }
 .back-buttons button:hover { background: #888; }
 
-/* === Toast Notification === */
+/* Toast notification */
 .toast {
   position: fixed;
   bottom: 30px;
@@ -79,23 +77,11 @@ button:disabled {
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   z-index: 9999;
 }
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-.toast.error {
-  background: #ff5252;
-}
-
-/* 🧠 Adjust position for mobile (centered) */
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: #ff5252; }
 @media (max-width: 768px) {
-  .toast {
-    right: 50%;
-    transform: translate(50%, 20px);
-  }
-  .toast.show {
-    transform: translate(50%, 0);
-  }
+  .toast { right: 50%; transform: translate(50%, 20px); }
+  .toast.show { transform: translate(50%, 0); }
 }
 </style>
 </head>
@@ -118,11 +104,9 @@ button:disabled {
   <form id="studentSignupForm">
     <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
     <input type="password" id="studentPassword" placeholder="Enter password" required><br>
-
     <button type="button" id="sendStudentCode">Send Verification Code</button>
     <span id="resendTimer" style="font-size:0.6rem; display:none;">Resend in <span id="countdown">30</span>s</span><br>
-
-    <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width: 40%; margin-right: 10px;">
+    <input type="text" id="studentCode" placeholder="Enter verification code" style="display:none; width:40%; margin-right:10px;">
     <button type="button" id="verifyStudentCode" style="display:none;">Verify Code</button><br>
     <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
   </form>
@@ -142,7 +126,6 @@ button:disabled {
   <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
-<!-- Toast Container -->
 <div id="toast" class="toast"></div>
 
 <script type="module">
@@ -154,7 +137,6 @@ let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
-// === Toast Popup Function ===
 function showToast(message, isError = false) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
@@ -162,7 +144,7 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.classList.remove('show', 'error'), 3000);
 }
 
-// === Navigation ===
+// Navigation
 document.getElementById("homeBtn").addEventListener("click", () => {
   window.location.href = "../../index.html";
 });
@@ -187,7 +169,6 @@ function backToChoice() {
   document.getElementById('choiceSection').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'none';
   document.getElementById('homeBtn').style.display = 'block';
-
   studentVerificationCode = null;
   studentVerified = false;
   document.getElementById('studentSignupForm').reset();
@@ -204,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// === Send Verification Code ===
+// === Send Verification Code via Google Script Proxy ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const password = document.getElementById('studentPassword').value;
@@ -229,43 +210,42 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
+  // 🔹 Use Google Apps Script as secure proxy
   fetch("https://script.google.com/macros/s/AKfycbw8AFtcNFxWAd6-MWpyB4-ItKSGS4ayyOl9K966aIklWSYTEnDzR-MChEwQCyhwkr1IjA/exec", {
     method: "POST",
-    headers: {
-      "accept": "application/json",
-      "content-type": "application/json",
-      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
   })
-    
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => {
-    console.log("Email sent:", data);
-    showToast("✅ Verification email sent!", false);
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Code sent! Check your Gmail inbox or Spam folder.";
-    document.getElementById('studentCode').style.display = 'inline-block';
-    document.getElementById('verifyStudentCode').style.display = 'inline-block';
+    if (data.success) {
+      showToast("✅ Verification email sent!");
+      msg.style.color = "#1DB954";
+      msg.textContent = "✅ Code sent! Check your Gmail inbox or Spam folder.";
+      document.getElementById('studentCode').style.display = 'inline-block';
+      document.getElementById('verifyStudentCode').style.display = 'inline-block';
 
-    let timeLeft = 30;
-    timerText.style.display = 'inline-block';
-    countdown.textContent = timeLeft;
-    resendCooldown = setInterval(() => {
-      timeLeft--;
+      let timeLeft = 30;
+      timerText.style.display = 'inline-block';
       countdown.textContent = timeLeft;
-      if (timeLeft <= 0) {
-        clearInterval(resendCooldown);
-        sendBtn.disabled = false;
-        timerText.style.display = 'none';
-      }
-    }, 1000);
+      resendCooldown = setInterval(() => {
+        timeLeft--;
+        countdown.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(resendCooldown);
+          sendBtn.disabled = false;
+          timerText.style.display = 'none';
+        }
+      }, 1000);
+    } else {
+      throw new Error("Failed to send email");
+    }
   })
   .catch(err => {
     console.error("Email send error:", err);
     showToast("❌ Failed to send email. Try again.", true);
     msg.style.color = "#ff5252";
-    msg.textContent = "❌ Failed to send email. Check network or API key.";
+    msg.textContent = "❌ Failed to send email. Check proxy script.";
     sendBtn.disabled = false;
   });
 });
