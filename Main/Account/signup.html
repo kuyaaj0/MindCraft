@@ -86,6 +86,17 @@ button:disabled {
 .toast.error {
   background: #ff5252;
 }
+
+/* 🧠 Adjust position for mobile (centered) */
+@media (max-width: 768px) {
+  .toast {
+    right: 50%;
+    transform: translate(50%, 20px);
+  }
+  .toast.show {
+    transform: translate(50%, 0);
+  }
+}
 </style>
 </head>
 <body>
