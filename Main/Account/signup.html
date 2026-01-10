@@ -48,6 +48,7 @@ button:disabled {
 .choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
 
+/* === Back Buttons === */
 .back-buttons {
   position: absolute;
   top: 20px;
@@ -61,6 +62,30 @@ button:disabled {
   background: #666;
 }
 .back-buttons button:hover { background: #888; }
+
+/* === Toast Notification === */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #1DB954;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast.error {
+  background: #ff5252;
+}
 </style>
 </head>
 <body>
@@ -106,6 +131,9 @@ button:disabled {
   <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
+<!-- Toast Container -->
+<div id="toast" class="toast"></div>
+
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -115,7 +143,15 @@ let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
-// Navigation
+// === Toast Popup Function ===
+function showToast(message, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast' + (isError ? ' error show' : ' show');
+  setTimeout(() => toast.classList.remove('show', 'error'), 3000);
+}
+
+// === Navigation ===
 document.getElementById("homeBtn").addEventListener("click", () => {
   window.location.href = "../../index.html";
 });
@@ -157,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// === Brevo Email Sending with noreply@gmail.com ===
+// === Send Verification Code ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const password = document.getElementById('studentPassword').value;
@@ -187,10 +223,10 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
     headers: {
       "accept": "application/json",
       "content-type": "application/json",
-      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO" // Your Brevo API key
+      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO"
     },
     body: JSON.stringify({
-      sender: { name: "MindCraft", email: "noreply@gmail.com" }, // ❌ Use your verified noreply@gmail.com
+      sender: { name: "MindCraft", email: "noreply@gmail.com" },
       to: [{ email: email }],
       subject: "MindCraft Verification Code",
       htmlContent: `<p>Your MindCraft verification code is: <strong>${studentVerificationCode}</strong></p>
@@ -200,8 +236,9 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   .then(response => response.json())
   .then(data => {
     console.log("Email sent:", data);
+    showToast("✅ Verification email sent!", false);
     msg.style.color = "#1DB954";
-    msg.textContent = "✅ Code sent! Check your Gmail inbox.";
+    msg.textContent = "✅ Code sent! Check your Gmail inbox or Spam folder.";
     document.getElementById('studentCode').style.display = 'inline-block';
     document.getElementById('verifyStudentCode').style.display = 'inline-block';
 
@@ -220,6 +257,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   })
   .catch(err => {
     console.error("Email send error:", err);
+    showToast("❌ Failed to send email. Try again.", true);
     msg.style.color = "#ff5252";
     msg.textContent = "❌ Failed to send email. Check network or API key.";
     sendBtn.disabled = false;
@@ -237,75 +275,15 @@ document.getElementById('verifyStudentCode').addEventListener('click', () => {
   }
   if (code === studentVerificationCode) {
     studentVerified = true;
+    showToast("✅ Email verified successfully!");
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Verified! You can now create your account.";
     document.getElementById('verifyStudentCode').style.display = 'none';
     document.getElementById('createStudentAccount').style.display = 'inline-block';
   } else {
+    showToast("❌ Invalid verification code.", true);
     msg.style.color = "#ff5252";
     msg.textContent = "❌ Invalid code.";
-  }
-});
-
-// === Student Create Account ===
-document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('studentEmail').value.trim();
-  const password = document.getElementById('studentPassword').value;
-  const msg = document.getElementById('studentMessage');
-  if (!studentVerified) {
-    msg.textContent = "❌ Verify your email first.";
-    return;
-  }
-  try {
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "users", userCred.user.uid), {
-      email,
-      role: "student",
-      level: 1,
-      xp: 0
-    });
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1200);
-  } catch (err) {
-    console.error("Account creation error:", err);
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// === Teacher Create Account ===
-document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('teacherEmail').value.trim();
-  const password = document.getElementById('teacherPassword').value;
-  const msg = document.getElementById('teacherMessage');
-  if (!email || !password) {
-    msg.style.color = "#ff5252";
-    msg.textContent = "❌ Please fill in all fields.";
-    return;
-  }
-  if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
-    msg.style.color = "#ff5252";
-    msg.textContent = "❌ Invalid DepEd email.";
-    return;
-  }
-  try {
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    await setDoc(doc(db, "users", userCred.user.uid), {
-      email,
-      role: "teacher",
-      level: 1,
-      xp: 0
-    });
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1200);
-  } catch (err) {
-    console.error("Account creation error:", err);
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
   }
 });
 </script>
