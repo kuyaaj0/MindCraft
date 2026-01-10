@@ -236,14 +236,9 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
       "content-type": "application/json",
       "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO"
     },
-    body: JSON.stringify({
-      sender: { name: "MindCraft", email: "noreply@gmail.com" },
-      to: [{ email: email }],
-      subject: "MindCraft Verification Code",
-      htmlContent: `<p>Your MindCraft verification code is: <strong>${studentVerificationCode}</strong></p>
-                    <p>If you didn't request this code, you can safely ignore this email.</p>`
-    })
+    body: JSON.stringify({ to: email, code: studentVerificationCode })
   })
+    
   .then(response => response.json())
   .then(data => {
     console.log("Email sent:", data);
