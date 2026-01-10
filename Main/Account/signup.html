@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign Up - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css"> <!-- Updated path -->
+<link rel="stylesheet" href="../Design/Position.css">
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
@@ -48,7 +48,6 @@ button:disabled {
 .choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
 
-/* === Back Buttons === */
 .back-buttons {
   position: absolute;
   top: 20px;
@@ -66,13 +65,11 @@ button:disabled {
 </head>
 <body>
 
-<!-- 🔙 Back Buttons -->
 <div class="back-buttons">
   <button id="homeBtn">🏠 Home</button>
   <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
 </div>
 
-<!-- Choice Section -->
 <div class="choice-section" id="choiceSection">
   <h2>🧠 MindCraft - Sign Up</h2>
   <p>Choose your role:</p>
@@ -80,7 +77,6 @@ button:disabled {
   <button id="teacherBtn">Teacher</button>
 </div>
 
-<!-- Student Form -->
 <div class="student-form" id="studentForm">
   <h2>Student Sign Up</h2>
   <form id="studentSignupForm">
@@ -95,10 +91,9 @@ button:disabled {
     <button type="submit" id="createStudentAccount" style="display:none;">Create Account</button>
   </form>
   <p class="message" id="studentMessage"></p>
-  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
-<!-- Teacher Form -->
 <div class="teacher-form" id="teacherForm">
   <h2>Teacher Sign Up</h2>
   <p>Note: Only DepEd accounts can register (e.g., teacher@ed.gov).</p>
@@ -108,11 +103,11 @@ button:disabled {
     <button type="submit">Create Account</button>
   </form>
   <p class="message" id="teacherMessage"></p>
-  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p> <!-- Updated path -->
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
 </div>
 
 <script type="module">
-import { auth, db } from '../System/Database/firebase.js'; // Updated path
+import { auth, db } from '../System/Database/firebase.js';
 import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -120,12 +115,11 @@ let studentVerificationCode = null;
 let studentVerified = false;
 let resendCooldown = null;
 
-// === Navigation ===
+// Navigation
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "../../index.html"; // Updated path
+  window.location.href = "../../index.html";
 });
 
-// === UI Functions ===
 function showStudentForm() {
   document.getElementById('choiceSection').style.display = 'none';
   document.getElementById('studentForm').style.display = 'block';
@@ -146,7 +140,7 @@ function backToChoice() {
   document.getElementById('choiceSection').style.display = 'block';
   document.getElementById('formBackBtn').style.display = 'none';
   document.getElementById('homeBtn').style.display = 'block';
-  // Reset student form state
+
   studentVerificationCode = null;
   studentVerified = false;
   document.getElementById('studentSignupForm').reset();
@@ -157,14 +151,13 @@ function backToChoice() {
   if (resendCooldown) clearInterval(resendCooldown);
 }
 
-// === Attach Button Events ===
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("studentBtn").addEventListener("click", showStudentForm);
   document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// === Send Student Code ===
+// === Brevo Email Sending ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const password = document.getElementById('studentPassword').value;
@@ -189,15 +182,28 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch('https://script.google.com/macros/s/AKfycby_jNkMjXCMLQIITnL1arsl6fe-mXjAi0LPRqL92mZzxmrHfnaCUvxjjcrlmKJR8YFg/exec', { // Replace YOUR_SCRIPT_ID with real ID
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ to: email, code: studentVerificationCode })
-  }).then(response => {
-    if (!response.ok) throw new Error('Network error');
+  fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "accept": "application/json",
+      "content-type": "application/json",
+      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-3kJbuJ6jVKQFWkJ4"
+    },
+    body: JSON.stringify({
+      sender: { name: "MindCraft", email: "noreply@mindcraft.com" },
+      to: [{ email: email }],
+      subject: "MindCraft Verification Code",
+      htmlContent: `<p>Your verification code is: <strong>${studentVerificationCode}</strong></p>`
+    })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("Email sent:", data);
+    msg.style.color = "#1DB954";
     msg.textContent = "✅ Code sent! Check Gmail.";
     document.getElementById('studentCode').style.display = 'inline-block';
     document.getElementById('verifyStudentCode').style.display = 'inline-block';
+
     let timeLeft = 30;
     timerText.style.display = 'inline-block';
     countdown.textContent = timeLeft;
@@ -210,10 +216,11 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
         timerText.style.display = 'none';
       }
     }, 1000);
-  }).catch(err => {
-    console.error("Email send error:", err); // DEBUG
+  })
+  .catch(err => {
+    console.error("Email send error:", err);
     msg.style.color = "#ff5252";
-    msg.textContent = "❌ Failed to send email. Check network or script ID.";
+    msg.textContent = "❌ Failed to send email. Check network or API key.";
     sendBtn.disabled = false;
   });
 });
@@ -259,9 +266,9 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = 'signin.html', 1200);
   } catch (err) {
-    console.error("Account creation error:", err); // DEBUG
+    console.error("Account creation error:", err);
     msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
@@ -293,9 +300,9 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
     });
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Teacher account created! Redirecting...";
-    setTimeout(() => window.location.href = 'signin.html', 1200); // Updated path
+    setTimeout(() => window.location.href = 'signin.html', 1200);
   } catch (err) {
-    console.error("Account creation error:", err); // DEBUG
+    console.error("Account creation error:", err);
     msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
