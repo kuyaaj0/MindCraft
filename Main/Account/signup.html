@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// === Brevo Email Sending ===
+// === Brevo Email Sending with noreply@gmail.com ===
 document.getElementById('sendStudentCode').addEventListener('click', function() {
   const email = document.getElementById('studentEmail').value.trim();
   const password = document.getElementById('studentPassword').value;
@@ -187,20 +187,21 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
     headers: {
       "accept": "application/json",
       "content-type": "application/json",
-      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO"
+      "api-key": "xsmtpsib-80d4cf1f26a59efd3fb57d4f2e5991efdf32f9c09bd371e197ec522ef89129fd-xcyHkZwUrviW8xAO" // Your Brevo API key
     },
     body: JSON.stringify({
-      sender: { name: "MindCraft", email: "noreply@mindcraft.com" },
+      sender: { name: "MindCraft", email: "noreply@gmail.com" }, // ❌ Use your verified noreply@gmail.com
       to: [{ email: email }],
       subject: "MindCraft Verification Code",
-      htmlContent: `<p>Your verification code is: <strong>${studentVerificationCode}</strong></p>`
+      htmlContent: `<p>Your MindCraft verification code is: <strong>${studentVerificationCode}</strong></p>
+                    <p>If you didn't request this code, you can safely ignore this email.</p>`
     })
   })
   .then(response => response.json())
   .then(data => {
     console.log("Email sent:", data);
     msg.style.color = "#1DB954";
-    msg.textContent = "✅ Code sent! Check Gmail.";
+    msg.textContent = "✅ Code sent! Check your Gmail inbox.";
     document.getElementById('studentCode').style.display = 'inline-block';
     document.getElementById('verifyStudentCode').style.display = 'inline-block';
 
