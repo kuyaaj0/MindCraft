@@ -211,7 +211,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   sendBtn.disabled = true;
 
   // 🔹 Use Google Apps Script as secure proxy
-  fetch("https://script.google.com/macros/s/AKfycbyl9YSBei92yn3s-eQBuB8pDU3G7xLDJQZ_ikzO7AcA67EHG6LSMCQfhak1rJcymqFtEA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwD2zRtMpMZgiebgJyZpMQC775LdnrW96dnPO6dgLulP_pu41ucXEm7xr0FEIbNdjAl/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ to: email, code: studentVerificationCode })
