@@ -229,7 +229,7 @@ document.getElementById('sendStudentCode').addEventListener('click', function() 
   msg.textContent = "📤 Sending verification code...";
   sendBtn.disabled = true;
 
-  fetch("https://api.brevo.com/v3/smtp/email", {
+  fetch("https://script.google.com/macros/s/AKfycbw8AFtcNFxWAd6-MWpyB4-ItKSGS4ayyOl9K966aIklWSYTEnDzR-MChEwQCyhwkr1IjA/exec", {
     method: "POST",
     headers: {
       "accept": "application/json",
