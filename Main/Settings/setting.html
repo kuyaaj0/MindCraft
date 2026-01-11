@@ -142,10 +142,18 @@ document.getElementById('vibrationSelect').addEventListener('change', e => {
 });
 
 // =============================
-// Back button
+// Back button (dynamic based on role)
 // =============================
 document.getElementById('backBtn').addEventListener('click', () => {
-    window.location.href = '../Webside/Student.html';
+    const currentRole = localStorage.getItem('currentRole') || 'student';
+
+    if(currentRole === 'student') {
+        window.location.href = '../Webside/Student.html';
+    } else if(currentRole === 'teacher') {
+        window.location.href = '../Webside/Teacher.html';
+    } else {
+        window.location.href = 'signin.html';
+    }
 });
 </script>
 
