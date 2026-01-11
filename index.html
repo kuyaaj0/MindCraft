@@ -11,72 +11,21 @@
 <link rel="stylesheet" href="Main/Design/global_size-FIX.css">
 
 <style>
-/* === Global Resets === */
+/* === Global Styles === */
 body {
   font-family: 'Press Start 2P', cursive;
   color: #fff;
   margin: 0;
-  overflow-x: hidden;
-  position: relative;
-  transition: background 1s, color 1s;
+  padding: 0;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-/* ===== Environment Elements ===== */
-#sky {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -3;
-  transition: background 2s;
-}
-#sun, #moon {
-  position: fixed;
-  right: 10%;
-  width: clamp(60px, 10vw, 80px);
-  height: clamp(60px, 10vw, 80px);
-  border-radius: 50%;
-  transition: all 2s ease-in-out;
-  z-index: -2;
-}
-#moon { box-shadow: 0 0 15px #fff; }
-
-#stars {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('Main/Assets/Backgrounds/stars.png') repeat;
-  background-size: cover;
-  transition: opacity 2s;
-  z-index: -1;
-  animation: twinkle 6s linear infinite;
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-
-/* === Background Characters === */
-.bg-character {
-  position: absolute;
-  bottom: clamp(5vh, 8vh, 10vh);
-  width: 90px;
-  height: 330px;
-  background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%;
-  image-rendering: pixelated;
-  animation: walkAnim 1s steps(8) infinite;
-  z-index: -1;
-  opacity: 0.9;
-}
-@keyframes walkAnim {
-  from { background-position: 0; }
-  to { background-position: -800%; }
+  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+  transition: background 1s, color 1s;
+  overflow-x: hidden;
 }
 
 /* === Landing Content === */
@@ -105,11 +54,14 @@ body {
   transition: all 0.3s ease;
   margin-bottom: 40px;
 }
-.get-started-btn:hover { background: #1ed760; transform: scale(1.05); }
+.get-started-btn:hover { 
+  background: #1ed760; 
+  transform: scale(1.05); 
+}
 
 /* Auth Section */
 .auth-section {
-  display: none; /* hidden by default */
+  display: none; /* hidden initially */
   justify-content: center;
   align-items: center;
   gap: 20px;
@@ -118,7 +70,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Buttons inside Auth Section */
 .auth-section button {
   font-family: 'Press Start 2P', cursive;
   background: #1DB954;
@@ -149,17 +100,6 @@ footer {
 </head>
 <body>
 
-<!-- Environment -->
-<div id="sky"></div>
-<div id="sun"></div>
-<div id="moon"></div>
-<div id="stars"></div>
-
-<!-- Background Characters -->
-<div class="bg-character" style="animation-delay: 2s;"></div>
-<div class="bg-character" style="animation-delay: 5s;"></div>
-<div class="bg-character" style="animation-delay: 8s;"></div>
-
 <!-- Landing Content -->
 <div class="landing-content">
   <h1 class="landing-title">🧠 Welcome To MindCraft</h1>
@@ -178,61 +118,17 @@ footer {
 <script src="Main/Design/theme.js"></script>
 
 <script>
-// === Smart Character Placement ===
-const chars = document.querySelectorAll('.bg-character');
-chars.forEach((char, i) => {
-  const delay = Math.random() * 15;
-  const offset = Math.random() * 10;
-  const direction = Math.random() > 0.5 ? 1 : -1;
-  const duration = 20 + Math.random() * 10;
-
-  char.style.bottom = `${5 + offset}vh`;
-  char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
-
-  const keyframes = `
-    @keyframes move${i} {
-      0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-      50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
-      100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-    }`;
-  const styleEl = document.createElement('style');
-  styleEl.textContent = keyframes;
-  document.head.appendChild(styleEl);
-});
-
-// === Environment Control (from theme.js) ===
-window.applyEnvironment = function(theme, animate=false) {
-  const sky = document.getElementById('sky');
-  const sun = document.getElementById('sun');
-  const moon = document.getElementById('moon');
-  const stars = document.getElementById('stars');
-  const chars = document.querySelectorAll('.bg-character');
-  if (!sky || !sun || !moon || !stars) return;
-
-  if (theme === 'light') {
-    sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
-    stars.style.opacity = 0;
-    sun.style.opacity = 1;
-    moon.style.opacity = 0;
-    if (animate) sun.style.transform = 'translateY(0)';
-    if (animate) moon.style.transform = 'translateY(120px)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
-  } else {
-    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
-    stars.style.opacity = 1;
-    sun.style.opacity = 0;
-    moon.style.opacity = 1;
-    if (animate) sun.style.transform = 'translateY(120px)';
-    if (animate) moon.style.transform = 'translateY(0)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
-  }
-};
-
-// === Get Started Button ===
+// === Get Started Button Behavior ===
 document.getElementById('getStartedBtn').addEventListener('click', () => {
   document.getElementById('authSection').style.display = 'flex';
   document.getElementById('getStartedBtn').style.display = 'none';
 });
+
+// === Apply Theme on Load ===
+if (typeof window.applyTheme === 'function') {
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  window.applyTheme(currentTheme, false);
+}
 </script>
 </body>
 </html>
