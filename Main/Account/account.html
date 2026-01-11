@@ -7,98 +7,120 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
+
 <style>
 body {
-    font-family: 'Press Start 2P', cursive;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    background: #203a43;
-    color: white;
-    transition: background 0.3s, color 0.3s;
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background: #203a43;
+  color: white;
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
 }
+
 nav {
-    background: rgba(0,0,0,0.6);
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+  background: rgba(0,0,0,0.6);
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 nav button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 8px;
-    background: #1DB954;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Press Start 2P', cursive;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #1DB954;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Press Start 2P', cursive;
 }
 nav button:hover { background: #1ed760; }
+
 .container {
-    margin-top: 50px;
-    background: rgba(0,0,0,0.4);
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 0 0 15px #1DB954;
+  margin-top: 50px;
+  background: rgba(0,0,0,0.4);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 15px #1DB954;
 }
+
 h2 { margin-bottom: 15px; }
+
 .container p {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.7rem;
-    margin: 10px 0;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  margin: 10px 0;
 }
+
 #xpBar {
-    width: 80%;
-    height: 20px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: #555;
+  width: 80%;
+  height: 20px;
+  margin: 10px auto;
+  border-radius: 10px;
+  background: #555;
 }
+
 #xpBar > div {
-    height: 100%;
-    width: 0%;
-    background: #1DB954;
-    border-radius: 10px;
-    transition: width 0.3s ease;
+  height: 100%;
+  width: 0%;
+  background: #1DB954;
+  border-radius: 10px;
+  transition: width 0.3s ease;
 }
+
 .rank {
-    margin-top: 10px;
-    font-size: 0.65rem;
-    color: #FFD700;
+  margin-top: 10px;
+  font-size: 0.65rem;
+  color: #FFD700;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.6rem;
+  background: rgba(0,0,0,0.5);
+  padding: 5px 0;
+  color: #fff;
 }
 </style>
 </head>
+
 <body>
 <nav>
-    <button id="homeBtn">🏠 Home</button>
-    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-    <button id="logoutBtn">🚪 Logout</button>
+  <button id="homeBtn">🏠 Home</button>
+  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  <button id="logoutBtn">🚪 Logout</button>
 </nav>
 
 <div class="container">
-    <h2>👤 Account Information</h2>
-    <p><b>Username:</b> <span id="username">Guest</span></p>
-    <p><b>Level:</b> <span id="level">1</span></p>
-    <div id="xpBar"><div></div></div>
-    <p><b>XP:</b> <span id="xp">0/100</span></p>
-    <p class="rank" id="rank">Rank: Beginner</p>
+  <h2>👤 Account Information</h2>
+  <p><b>Username:</b> <span id="username">Loading...</span></p>
+  <p><b>Level:</b> <span id="level">1</span></p>
+  <div id="xpBar"><div></div></div>
+  <p><b>XP:</b> <span id="xp">0/100</span></p>
+  <p class="rank" id="rank">Rank: Beginner</p>
 </div>
 
+<footer>© 2025 MindCraft | Created by Kuya AJ & Team</footer>
+
 <script type="module">
+import { auth, db } from "../system/firebase/firebase.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStudentLevelData } from '../Exp/studentLV.js';
-import { getTeacherLevelData } from '../exp/teacherLV.js';
-
-const currentUser = localStorage.getItem('currentUser');
-const currentRole = localStorage.getItem('currentRole') || 'student';
-
-if (!currentUser) {
-    alert('You must sign in first!');
-    window.location.href = 'signin.html';
-}
+import { getTeacherLevelData } from '../Exp/teacherLV.js';
 
 // --- UI Elements ---
 const usernameEl = document.getElementById('username');
@@ -110,65 +132,55 @@ const homeBtn = document.getElementById('homeBtn');
 const logoutBtn = document.getElementById('logoutBtn');
 
 // =============================
-// Function to Load and Display User Data
+// Firebase: Load and Display User Data
 // =============================
-function loadUserData() {
-    let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
-    let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
-    let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || 100;
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    alert("You must sign in first!");
+    window.location.href = "signin.html";
+    return;
+  }
 
-    // Correct overflow
-    const XP_CAP_MULTIPLIER = 1.25;
-    while (xp >= xpMax) {
-        xp -= xpMax;
-        level++;
-        xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    alert("User data not found.");
+    window.location.href = "signin.html";
+    return;
+  }
+
+  const data = snap.data();
+  const role = data.role || "student";
+  const xp = data.xp || 0;
+  const level = data.level || 1;
+  const xpMax = data.xpMax || 100;
+  const rankTitle = 
+    role === "student"
+      ? getStudentLevelData(xp).title
+      : getTeacherLevelData(xp).title;
+
+  usernameEl.textContent = data.name || "Unknown";
+  levelEl.textContent = level;
+  xpEl.textContent = `${xp}/${xpMax}`;
+  xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
+  rankEl.textContent = `🏅 Rank: ${rankTitle}`;
+
+  // === Home button redirect ===
+  homeBtn.addEventListener('click', () => {
+    if (role === 'student') {
+      window.location.href = '../Webside/Student.html';
+    } else if (role === 'teacher') {
+      window.location.href = '../Webside/Teacher.html';
     }
+  });
 
-    // Display
-    usernameEl.textContent = currentUser;
-    levelEl.textContent = level;
-    xpEl.textContent = `${xp}/${xpMax}`;
-    xpBarFill.style.width = `${(xp/xpMax)*100}%`;
-
-    // Rank/title
-    let rankTitle = "Beginner";
-    if(currentRole === 'student') rankTitle = getStudentLevelData(parseInt(localStorage.getItem(`${currentUser}_xp`)||0)).title;
-    if(currentRole === 'teacher') rankTitle = getTeacherLevelData(parseInt(localStorage.getItem(`${currentUser}_xp`)||0)).title;
-    rankEl.textContent = `🏅 Rank: ${rankTitle}`;
-}
-
-// Initial load
-loadUserData();
-
-// Listen for XP/Level changes in other tabs
-window.addEventListener('storage', (e) => {
-    if(e.key && e.key.startsWith(`${currentUser}_`)) {
-        loadUserData();
-    }
-});
-
-// =============================
-// Home Button Logic
-// =============================
-homeBtn.addEventListener('click', () => {
-    if(currentRole === 'student') {
-        window.location.href = '../Webside/Student.html';
-    } else if(currentRole === 'teacher') {
-        window.location.href = '../Webside/Teacher.html';
-    } else {
-        window.location.href = 'signin.html';
-    }
-});
-
-// =============================
-// Logout
-// =============================
-logoutBtn.addEventListener('click', () => {
-    localStorage.setItem('lastUser', currentUser);
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('currentRole');
-    window.location.href = 'signin.html';
+  // === Logout ===
+  logoutBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    alert("You’ve been logged out!");
+    window.location.href = "signin.html";
+  });
 });
 </script>
 
