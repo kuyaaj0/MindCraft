@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Level 1 - HTML Quiz | MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../../Design/levels.css">
-<link rel="stylesheet" href="../../../../Design/global_size-FIX.css">
+<link rel="stylesheet" href="../../../Design/levels.css">
+<link rel="stylesheet" href="../../../Design/global_size-FIX.css">
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
@@ -134,12 +134,12 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
 
-<audio id="correctSound" src="../../../../Assets/Sounds/Correct.mp3"></audio>
+<audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../../Assets/Sounds/Incorrect.mp3"></audio>
 
-<script src="../../../../Exp/levels.js"></script>
-<script src="../../../../Design/theme.js"></script>
-<script src="../../../../Design/navigate_return.js"></script>
+<script src="../../../Exp/levels.js"></script>
+<script src="../../../Design/theme.js"></script>
+<script src="../../../Design/navigate_return.js"></script>
 
 <script>
 // ENVIRONMENT SETUP
@@ -150,7 +150,7 @@ const currentRole = localStorage.getItem('currentRole') || 'student';
 // Only allow students
 if (!currentUser || currentRole !== 'student') {
     alert('Only students can take the quiz!');
-    window.location.href = '../../../Main/Webside/Student.html';
+    window.location.href = '../../../Webside/Student.html';
 }
 
 let currentQuestion = 0;
@@ -264,7 +264,7 @@ function showPopup() {
 document.getElementById('backBtn').onclick = () => {
   const popup = document.getElementById('popupOverlay');
   popup.classList.add('fade-out');
-  setTimeout(() => window.location.href = '../../../../Webside/Student.html', 1000);
+  setTimeout(() => window.location.href = '../../../Webside/Student.html', 1000);
 };
 
 // START QUIZ
