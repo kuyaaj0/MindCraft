@@ -22,67 +22,10 @@ body {
   min-height: 100vh;
 }
 
-/* ===== Environment Elements (Controlled by JavaScript) ===== */
-#sky {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -3;
-  transition: background 2s;
-}
-
-#sun, #moon {
-  position: fixed;
-  right: 10%;
-  width: clamp(60px, 10vw, 80px);
-  height: clamp(60px, 10vw, 80px);
-  border-radius: 50%;
-  transition: all 2s ease-in-out;
-  z-index: -2;
-}
-
-#moon {
-  box-shadow: 0 0 15px #fff;
-}
-
-/*#stars {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('Main/Assets/Backgrounds/stars.png') repeat;
-  background-size: cover;
-  transition: opacity 2s;
-  z-index: -1;
-  animation: twinkle 6s linear infinite;*/
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
-}
-
-/* === Background Characters === */
-/*.bg-character {
-  position: absolute;
-  bottom: clamp(5vh, 8vh, 10vh);
-  width: 90px;
-  height: 330px;
-  background: url('Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 800% 100%;
-  image-rendering: pixelated;
-  animation: walkAnim 1s steps(8) infinite;
-  z-index: -1;
-  opacity: 0.9;
-}*/
-
-@keyframes walkAnim {
-  from { background-position: 0; }
-  to { background-position: -800%; }
-}
-
-/* ===== Header & Layout (Mobile First: Default) ===== */
+/* ===== Header & Layout ===== */
 header {
   display: flex;
-  flex-direction: column; /* Stack vertically on small screens */
+  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 10px 15px;
@@ -91,24 +34,22 @@ header {
   font-family: 'Press Start 2P', cursive;
 }
 
-/* XP Grouping and Layout FIX */
 .xp-group {
     display: flex;
-    justify-content: space-between; /* Space out XP and Level evenly */
+    justify-content: space-between;
     align-items: center;
-    width: 100%; /* Take full width on mobile */
-    max-width: 400px; /* Constrain width for cleaner look */
-    margin-bottom: 5px; /* Space below this group */
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 5px;
     padding: 0 5px;
 }
 
 .xp-status {
     display: flex;
     align-items: center;
-    gap: 5px; /* Space between 'XP:' and the bar/value container */
+    gap: 5px;
 }
 
-/* ⭐ XP BAR FIX: Container to force bar and value side-by-side */
 .xp-bar-container {
     display: flex;
     align-items: center;
@@ -116,14 +57,13 @@ header {
 }
 
 #xpBar {
-    width: 80px; /* Specific width for mobile visibility */
+    width: 80px;
     height: 10px;
 }
 
 .level-display {
   font-size: 0.6rem;
   text-align: center;
-  font-family: 'Press Start 2P', cursive;
 }
 
 .user-actions {
@@ -152,7 +92,7 @@ main {
   padding: 20px 10px;
 }
 
-/* === Language Grid (Core Responsiveness) === */
+/* === Language Grid === */
 .language-grid {
   display: flex;
   flex-wrap: wrap;
@@ -197,93 +137,32 @@ footer {
   padding-bottom: 10px;
 }
 
-/* ===== MEDIA QUERIES for Desktop/Tablet Layouts ===== */
+/* ===== Media Queries ===== */
 @media (min-width: 480px) {
-    /* Small mobile adjustments */
-    .xp-group {
-        max-width: 450px;
-    }
-    #xpBar {
-        width: 100px;
-    }
-    .language-card {
-        width: calc(50% - 25px); /* Two columns on small tablets */
-    }
+    .xp-group { max-width: 450px; }
+    #xpBar { width: 100px; }
+    .language-card { width: calc(50% - 25px); }
 }
 
 @media (min-width: 768px) {
-    /* Header: Change to horizontal layout */
-    header {
-        flex-direction: row; /* Horizontal layout on desktop */
-        justify-content: space-between; /* Distribute space between groups */
-        padding: 10px 40px;
-    }
-    
-    /* XP Group: Better desktop spacing and alignment */
-    .xp-group {
-        width: auto;
-        margin-bottom: 0;
-        gap: 40px;
-    }
-
-    .xp-status {
-        /* Align XP status vertically center with buttons */
-        align-items: center;
-    }
-
-    .xp-bar-container {
-        /* Increase bar size on desktop */
-        gap: 10px;
-    }
-
-    #xpBar {
-        width: 120px; /* Wider bar for desktop */
-    }
-
-    /* User Actions: Grouped to the right */
-    .user-actions {
-        width: auto;
-        margin-top: 0;
-    }
-
-    .xp-status, .level-display {
-        font-size: 0.7rem;
-    }
-    
-    button {
-        font-size: 0.6rem;
-    }
-
-    /* Language Grid: Allow three columns */
-    .language-card {
-        width: calc(33.33% - 25px);
-        max-width: none;
-    }
+    header { flex-direction: row; justify-content: space-between; padding: 10px 40px; }
+    .xp-group { width: auto; margin-bottom: 0; gap: 40px; }
+    .xp-bar-container { gap: 10px; }
+    #xpBar { width: 120px; }
+    .user-actions { width: auto; margin-top: 0; }
+    .xp-status, .level-display { font-size: 0.7rem; }
+    button { font-size: 0.6rem; }
+    .language-card { width: calc(33.33% - 25px); max-width: none; }
 }
 
 @media (min-width: 1024px) {
-    h1 {
-        font-size: 1.5rem;
-    }
-    .xp-status, .level-display {
-        font-size: 0.8rem;
-    }
-    button {
-        font-size: 0.65rem;
-    }
+    h1 { font-size: 1.5rem; }
+    .xp-status, .level-display { font-size: 0.8rem; }
+    button { font-size: 0.65rem; }
 }
 </style>
 </head>
 <body>
-
-<div id="sky"></div>
-<div id="sun"></div>
-<div id="moon"></div>
-<div id="stars"></div>
-
-<div class="bg-character" style="animation-delay: 2s;"></div>
-<div class="bg-character" style="animation-delay: 5s;"></div>
-<div class="bg-character" style="animation-delay: 8s;"></div>
 
 <header>
     <div class="xp-group">
@@ -324,7 +203,7 @@ footer {
       </select>
     </div>
 
-        <div class="language-card">
+    <div class="language-card">
       <img src="../Assets/Icons/css.png" alt="CSS">
       <p>CSS</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -340,7 +219,7 @@ footer {
       </select>
     </div>
 
-        <div class="language-card">
+    <div class="language-card">
       <img src="Main/Assets/Icons/js.png" alt="JavaScript">
       <p>JavaScript</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -365,13 +244,11 @@ footer {
 <script src="../Design/theme.js"></script>
 <script src="../Exp/levels.js"></script>
 
-<!-- ================== 🔥 UPDATED SCRIPT BLOCK ================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ✅ Firebase config (use your own values from Firebase console)
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -381,60 +258,15 @@ const firebaseConfig = {
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
-// ✅ Init
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// === Smart Character Placement ===
-const chars = document.querySelectorAll('.bg-character');
-chars.forEach((char, i) => {
-  const delay = Math.random() * 15;
-  const offset = Math.random() * 10;
-  const direction = Math.random() > 0.5 ? 1 : -1;
-  const duration = 20 + Math.random() * 10;
-
-  char.style.bottom = `${5 + offset}vh`;
-  char.style.animation = `walkAnim 1s steps(8) infinite, move${i} ${duration}s linear ${delay}s infinite`;
-
-  const keyframes = `
-    @keyframes move${i} {
-      0% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-      50% { left: ${direction === 1 ? '100%' : '-120px'}; transform: scaleX(${direction}); }
-      100% { left: ${direction === 1 ? '-120px' : '100%'}; transform: scaleX(${direction}); }
-    }`;
-  const styleEl = document.createElement('style');
-  styleEl.textContent = keyframes;
-  document.head.appendChild(styleEl);
-});
-
-// === Theme Environment Function (called by theme.js) ===
-window.applyEnvironment = function(theme, animate=false) {
-  const sky = document.getElementById('sky');
-  const sun = document.getElementById('sun');
-  const moon = document.getElementById('moon');
-  const stars = document.getElementById('stars');
-  const chars = document.querySelectorAll('.bg-character');
-  if (!sky || !sun || !moon || !stars) return;
-
-  if (theme === 'light') {
-    sky.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
-    stars.style.opacity = 0;
-    sun.style.opacity = 1;
-    moon.style.opacity = 0;
-    if (animate) sun.style.transform = 'translateY(0)';
-    if (animate) moon.style.transform = 'translateY(120px)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 8px #1DB954)');
-  } else {
-    sky.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
-    stars.style.opacity = 1;
-    sun.style.opacity = 0;
-    moon.style.opacity = 1;
-    if (animate) sun.style.transform = 'translateY(120px)';
-    if (animate) moon.style.transform = 'translateY(0)';
-    chars.forEach(c => c.style.filter = 'drop-shadow(0 0 10px #fff)');
-  }
-};
+// === Theme environment remains intact ===
+if (typeof window.applyTheme === 'function') {
+  const currentTheme = localStorage.getItem('theme') || 'dark';
+  window.applyTheme(currentTheme, false);
+}
 
 // === User Authentication + XP Load ===
 onAuthStateChanged(auth, async (user) => {
@@ -467,6 +299,5 @@ onAuthStateChanged(auth, async (user) => {
   document.getElementById("levelValue").innerText = data.level ?? 1;
 });
 </script>
-<!-- ================== END UPDATED SCRIPT ================== -->
 </body>
 </html>
