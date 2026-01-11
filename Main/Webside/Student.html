@@ -310,6 +310,15 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// ✅ Apply stored theme instantly
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.applyTheme === 'function') {
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    window.applyTheme(currentTheme, false);
+  }
+});
+
+// Firebase Authentication
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
