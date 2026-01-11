@@ -318,7 +318,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Firebase Authentication
+// ✅ Firebase Authentication
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -339,21 +339,26 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Update XP + Level UI
+  // === Update XP + Level UI ===
   document.getElementById("xpValue").innerText = data.xp ?? 0;
   document.getElementById("xpBar").value = data.xp % 100;
   document.getElementById("levelValue").innerText = data.level ?? 1;
 
-  // ✅ Welcome popup logic
+  // === Welcome Popup Logic (only once per login session) ===
   const welcomeOverlay = document.getElementById("welcomeOverlay");
   const name = user.displayName || data.name || user.email.split('@')[0];
   document.getElementById("studentName").textContent = name;
-  welcomeOverlay.style.display = "flex";
 
-  // Auto hide after 3 seconds
-  setTimeout(() => {
-    welcomeOverlay.style.display = "none";
-  }, 3000);
+  // Show welcome only if not shown yet this session
+  if (!sessionStorage.getItem("welcomeShown")) {
+    sessionStorage.setItem("welcomeShown", "true");
+    welcomeOverlay.style.display = "flex";
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+      welcomeOverlay.style.display = "none";
+    }, 3000);
+  }
 });
 </script>
 </body>
