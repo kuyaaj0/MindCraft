@@ -156,6 +156,11 @@ logoutBtn.addEventListener("click", async () => {
   }
 });
 
+  // 🔍 Debug visual test
+if (!auth || !db) {
+  alert("⚠️ Firebase failed to load. Please use HTTP/HTTPS instead of file://");
+}
+
 // === Firebase Authentication ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -193,9 +198,6 @@ onAuthStateChanged(auth, async (user) => {
   xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
   rankEl.textContent = `🏅 Rank: ${rankTitle}`;
 });
-
-console.log("Auth:", auth);
-console.log("DB:", db);
 </script>
 
 <script src="../Design/theme.js"></script>
