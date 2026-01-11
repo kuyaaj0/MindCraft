@@ -193,6 +193,9 @@ onAuthStateChanged(auth, async (user) => {
   xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
   rankEl.textContent = `🏅 Rank: ${rankTitle}`;
 });
+
+console.log("Auth:", auth);
+console.log("DB:", db);
 </script>
 
 <script src="../Design/theme.js"></script>
