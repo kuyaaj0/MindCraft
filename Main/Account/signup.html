@@ -102,6 +102,7 @@ button:disabled {
 <div class="student-form" id="studentForm">
   <h2>Student Sign Up</h2>
   <form id="studentSignupForm">
+    <input type="text" id="studentName" placeholder="Enter your name" required><br>
     <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
     <input type="password" id="studentPassword" placeholder="Enter password" required><br>
     <button type="submit">Create Account</button>
@@ -114,6 +115,7 @@ button:disabled {
   <h2>Teacher Sign Up</h2>
   <p>Note: Only DepEd accounts can register (e.g., teacher@ed.gov).</p>
   <form id="teacherSignupForm">
+    <input type="text" id="teacherName" placeholder="Enter your name" required><br>
     <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
     <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
     <button type="submit">Create Account</button>
@@ -172,18 +174,22 @@ document.addEventListener("DOMContentLoaded", () => {
 // === Student Sign Up + Firebase Verification ===
 document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+  const name = document.getElementById('studentName').value.trim();
   const email = document.getElementById('studentEmail').value.trim();
   const password = document.getElementById('studentPassword').value;
   const msg = document.getElementById('studentMessage');
 
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
     await setDoc(doc(db, "users", userCred.user.uid), {
+      name,
       email,
       role: "student",
       verified: false,
       level: 1,
-      xp: 0
+      xp: 0,
+      xpMax: 100
     });
 
     await sendEmailVerification(userCred.user);
@@ -204,6 +210,7 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
 // === Teacher Sign Up ===
 document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+  const name = document.getElementById('teacherName').value.trim();
   const email = document.getElementById('teacherEmail').value.trim();
   const password = document.getElementById('teacherPassword').value;
   const msg = document.getElementById('teacherMessage');
@@ -216,13 +223,17 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
 
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
     await setDoc(doc(db, "users", userCred.user.uid), {
+      name,
       email,
       role: "teacher",
       verified: true,
       level: 1,
-      xp: 0
+      xp: 0,
+      xpMax: 100
     });
+
     showToast("✅ Teacher account created!");
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Teacher account created successfully!";
