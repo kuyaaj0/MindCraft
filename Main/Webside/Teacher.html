@@ -16,11 +16,11 @@ body {
   color: #fff;
   margin: 0;
   overflow-x: hidden;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
   min-height: 100vh;
   transition: background 1s, color 1s;
 }
 
+/* Header */
 header {
   background: rgba(0,0,0,0.6);
   border-bottom: 2px solid #1DB954;
@@ -28,6 +28,7 @@ header {
   text-align: center;
 }
 
+/* Navigation */
 nav {
   display: flex;
   flex-wrap: wrap;
@@ -52,6 +53,7 @@ nav button:hover {
   transform: scale(1.05);
 }
 
+/* Main content */
 main {
   text-align: center;
   padding: 20px 10px;
@@ -82,6 +84,7 @@ main {
   transform: scale(1.05);
 }
 
+/* Footer */
 footer {
   text-align: center;
   font-size: 0.6rem;
@@ -120,42 +123,55 @@ footer {
   <p>© 2025 MindCraft | Teacher Panel</p>
 </footer>
 
-<!-- ✅ Centralized Firebase Integration -->
+<!-- Theme Script -->
+<script src="Main/Design/theme.js"></script>
+<script>
+  // Keep theme functionality even without environmental elements
+  window.applyEnvironment = function(theme, animate=false) {
+    if (theme === 'light') {
+      document.body.style.background = 'linear-gradient(to bottom, #87ceeb, #f5f5f5)';
+    } else {
+      document.body.style.background = 'linear-gradient(to bottom, #0f2027, #203a43, #2c5364)';
+    }
+  };
+</script>
+
+<!-- Firebase + Teacher Auth -->
 <script type="module">
 import { auth, db } from "../system/firebase/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// === Check Teacher Role + Data ===
+// Check Teacher Role
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("Please sign in first.");
-    window.location.href = "Main/Account/signin.html";
+    window.location.href = "../Account/signin.html";
     return;
   }
 
   const snap = await getDoc(doc(db, "users", user.uid));
   if (!snap.exists()) {
     alert("User data not found.");
-    window.location.href = "Main/Account/signin.html";
+    window.location.href = "../Account/signin.html";
     return;
   }
 
   const data = snap.data();
 
-  // ✅ Role check — redirect students away
+  // Redirect non-teachers
   if (data.role !== "teacher") {
     alert("Students cannot access this page.");
-    window.location.href = "mainPage.html";
+    window.location.href = "Student.html";
     return;
   }
 
-  // ✅ Update teacher info on dashboard
+  // Update teacher info
   document.getElementById("teacherName").innerText = data.name || "Teacher";
   document.getElementById("teacherLevel").innerText = `Level ${data.level || 1} – ${data.levelTitle || "New Teacher"}`;
 });
 
-// === Logout Function ===
+// Logout Function
 window.logout = async function() {
   try {
     await signOut(auth);
