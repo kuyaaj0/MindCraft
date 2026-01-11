@@ -11,54 +11,57 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-/* === Global Resets === */
+/* === Global Reset === */
 body {
   font-family: 'Press Start 2P', cursive;
   color: #fff;
   margin: 0;
+  padding: 0;
   overflow-x: hidden;
-  position: relative;
   transition: background 1s, color 1s;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ===== Header & Layout ===== */
+/* ===== Header ===== */
 header {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 10px 15px;
+  padding: 10px 0;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
-  font-family: 'Press Start 2P', cursive;
+  box-sizing: border-box;
 }
 
 .xp-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 5px;
-    padding: 0 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 5px;
+  padding: 0 10px;
 }
 
 .xp-status {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .xp-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 #xpBar {
-    width: 80px;
-    height: 10px;
+  width: 80px;
+  height: 10px;
 }
 
 .level-display {
@@ -67,11 +70,12 @@ header {
 }
 
 .user-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-    width: 100%;
-    justify-content: center;
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 button {
@@ -87,9 +91,11 @@ button {
 }
 button:hover { background: #1ed760; transform: scale(1.05); }
 
+/* === Main Content === */
 main {
   text-align: center;
   padding: 20px 10px;
+  flex-grow: 1;
 }
 
 /* === Language Grid === */
@@ -130,64 +136,70 @@ main {
   width: 100%;
 }
 
+/* === Footer === */
 footer {
+  background: rgba(0, 0, 0, 0.4);
   text-align: center;
   font-size: 0.6rem;
-  margin-top: 40px;
-  padding-bottom: 10px;
+  padding: 6px 0;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(29,185,84,0.4);
+  margin-top: auto;
 }
 
 /* ===== Media Queries ===== */
 @media (min-width: 480px) {
-    .xp-group { max-width: 450px; }
-    #xpBar { width: 100px; }
-    .language-card { width: calc(50% - 25px); }
+  .xp-group { max-width: 450px; }
+  #xpBar { width: 100px; }
+  .language-card { width: calc(50% - 25px); }
 }
 
 @media (min-width: 768px) {
-    header { flex-direction: row; justify-content: space-between; padding: 10px 40px; }
-    .xp-group { width: auto; margin-bottom: 0; gap: 40px; }
-    .xp-bar-container { gap: 10px; }
-    #xpBar { width: 120px; }
-    .user-actions { width: auto; margin-top: 0; }
-    .xp-status, .level-display { font-size: 0.7rem; }
-    button { font-size: 0.6rem; }
-    .language-card { width: calc(33.33% - 25px); max-width: none; }
+  header { flex-direction: row; justify-content: space-between; padding: 10px 40px; }
+  .xp-group { width: auto; margin-bottom: 0; gap: 40px; }
+  .xp-bar-container { gap: 10px; }
+  #xpBar { width: 120px; }
+  .user-actions { width: auto; margin-top: 0; }
+  .xp-status, .level-display { font-size: 0.7rem; }
+  button { font-size: 0.6rem; }
+  .language-card { width: calc(33.33% - 25px); max-width: none; }
 }
 
 @media (min-width: 1024px) {
-    h1 { font-size: 1.5rem; }
-    .xp-status, .level-display { font-size: 0.8rem; }
-    button { font-size: 0.65rem; }
+  h1 { font-size: 1.5rem; }
+  .xp-status, .level-display { font-size: 0.8rem; }
+  button { font-size: 0.65rem; }
 }
 </style>
 </head>
 <body>
 
 <header>
-    <div class="xp-group">
-        <div class="xp-status">
-            <span>XP:</span>
-            <div class="xp-bar-container">
-                <progress id="xpBar" value="0" max="100"></progress>
-                <span id="xpValue">0</span>
-            </div>
-        </div>
-        <div class="level-display">
-            Level <span id="levelValue">1</span>
-        </div>
+  <div class="xp-group">
+    <div class="xp-status">
+      <span>XP:</span>
+      <div class="xp-bar-container">
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
+      </div>
     </div>
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
+  </div>
 
-    <div class="user-actions">
-        <button onclick="location.href='../Account/account.html'">👤 Account</button>
-        <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-    </div>
+  <div class="user-actions">
+    <button onclick="location.href='../Account/account.html'">👤 Account</button>
+    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  </div>
 </header>
 
 <main class="language-select">
   <h1>🧠 GRADE 11 — CHOOSE A CODING LANGUAGE</h1>
   <div class="language-grid">
-        <div class="language-card">
+    <div class="language-card">
       <img src="../Assets/Icons/html.png" alt="HTML">
       <p>HTML</p>
       <select onchange="if(this.value) window.location.href=this.value">
@@ -262,13 +274,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// === Theme environment remains intact ===
+// Theme system stays functional
 if (typeof window.applyTheme === 'function') {
   const currentTheme = localStorage.getItem('theme') || 'dark';
   window.applyTheme(currentTheme, false);
 }
 
-// === User Authentication + XP Load ===
+// Firebase Authentication
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -276,9 +288,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-
+  const snap = await getDoc(doc(db, "users", user.uid));
   if (!snap.exists()) {
     alert("No user data found.");
     window.location.href = "../Account/signin.html";
@@ -286,14 +296,12 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const data = snap.data();
-
-  // 🔒 Allow only students
   if (data.role !== "student") {
     window.location.href = "Teacher.html";
     return;
   }
 
-  // ✅ Update UI
+  // Update UI
   document.getElementById("xpValue").innerText = data.xp ?? 0;
   document.getElementById("xpBar").value = data.xp % 100;
   document.getElementById("levelValue").innerText = data.level ?? 1;
