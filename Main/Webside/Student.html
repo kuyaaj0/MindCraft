@@ -11,7 +11,6 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-/* === Global Reset === */
 * { box-sizing: border-box; }
 html, body {
   width: 100%;
@@ -152,6 +151,31 @@ footer {
   margin-top: auto;
 }
 
+/* === Welcome Popup === */
+#welcomeOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  color: #1DB954;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  font-family: 'Press Start 2P', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  z-index: 999;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); }
+  10%, 80% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
 /* ===== Media Queries ===== */
 @media (min-width: 480px) {
   .xp-group { max-width: 450px; }
@@ -182,6 +206,11 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- ✅ Welcome Popup -->
+<div id="welcomeOverlay" style="display:none;">
+  <p>🎉 Welcome, <span id="studentName">Student</span>!</p>
+</div>
 
 <header>
   <div class="xp-group">
@@ -281,13 +310,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Keep theme functional
-if (typeof window.applyTheme === 'function') {
-  const currentTheme = localStorage.getItem('theme') || 'dark';
-  window.applyTheme(currentTheme, false);
-}
-
-// Firebase Authentication
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -308,10 +330,21 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Update UI
+  // Update XP + Level UI
   document.getElementById("xpValue").innerText = data.xp ?? 0;
   document.getElementById("xpBar").value = data.xp % 100;
   document.getElementById("levelValue").innerText = data.level ?? 1;
+
+  // ✅ Welcome popup logic
+  const welcomeOverlay = document.getElementById("welcomeOverlay");
+  const name = user.displayName || data.name || user.email.split('@')[0];
+  document.getElementById("studentName").textContent = name;
+  welcomeOverlay.style.display = "flex";
+
+  // Auto hide after 3 seconds
+  setTimeout(() => {
+    welcomeOverlay.style.display = "none";
+  }, 3000);
 });
 </script>
 </body>
