@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css"> <!-- Updated path -->
+<link rel="stylesheet" href="../Design/Position.css">
 <style>
 body { 
     font-family: 'Press Start 2P', cursive; 
@@ -44,7 +44,7 @@ button:hover { background: #1ed760; }
 .choice-section, .student-form, .teacher-form { display: none; }
 .choice-section { display: block; }
 
-/* === Back Buttons === */
+/* Back Buttons */
 .back-buttons {
     position: absolute;
     top: 20px;
@@ -62,7 +62,7 @@ button:hover { background: #1ed760; }
 </head>
 <body>
 
-<!-- 🔙 Back Buttons -->
+<!-- Back Buttons -->
 <div class="back-buttons">
   <button id="homeBtn">🏠 Home</button>
   <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
@@ -85,7 +85,7 @@ button:hover { background: #1ed760; }
         <button type="submit">Sign In</button>
     </form>
     <p class="message" id="studentMessage"></p>
-    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 </div>
 
 <!-- Teacher Form -->
@@ -97,20 +97,20 @@ button:hover { background: #1ed760; }
         <button type="submit">Sign In</button>
     </form>
     <p class="message" id="teacherMessage"></p>
-    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p> <!-- Updated path -->
+    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 </div>
 
 <script type="module">
-import { auth, db } from '../System/Database/firebase.js'; // Updated path
+import { auth, db } from '../System/Database/firebase.js';
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== Navigation Buttons =====
 document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "../../index.html"; // Updated path
+  window.location.href = "../../index.html";
 });
 
-// ====== UI Toggle Functions ======
+// ===== UI Toggle Functions =====
 function showStudentForm() {
     document.getElementById('choiceSection').style.display = 'none';
     document.getElementById('studentForm').style.display = 'block';
@@ -137,14 +137,13 @@ function backToChoice() {
     document.getElementById('teacherMessage').textContent = '';
 }
 
-// === Attach Events After DOM Ready ===
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("studentBtn").addEventListener("click", showStudentForm);
   document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// ==== Student Sign In ====
+// ==== Sign In Logic (Student) ====
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('studentEmail').value.trim();
@@ -163,16 +162,21 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
             msg.textContent = "❌ This account is not a student.";
             return;
         }
+
+        // Store name & role locally for instant account display
+        localStorage.setItem("cachedName", snap.data().name || "Student");
+        localStorage.setItem("currentRole", "student");
+
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "../Webside/Student.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Student.html", 800);
     } catch(err) {
-        console.error("Sign-in error:", err); // DEBUG
+        console.error("Sign-in error:", err);
         msg.textContent = `❌ ${err.message}`;
     }
 });
 
-// ==== Teacher Sign In ====
+// ==== Sign In Logic (Teacher) ====
 document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('teacherEmail').value.trim();
@@ -191,11 +195,16 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
             msg.textContent = "❌ This account is not a teacher.";
             return;
         }
+
+        // Store name & role locally for instant account display
+        localStorage.setItem("cachedName", snap.data().name || "Teacher");
+        localStorage.setItem("currentRole", "teacher");
+
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
     } catch(err) {
-        console.error("Sign-in error:", err); // DEBUG
+        console.error("Sign-in error:", err);
         msg.textContent = `❌ ${err.message}`;
     }
 });
