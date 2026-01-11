@@ -12,12 +12,17 @@
 
 <style>
 /* === Global Reset === */
-body {
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
+* { box-sizing: border-box; }
+html, body {
+  width: 100%;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+}
+
+body {
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
   transition: background 1s, color 1s;
   min-height: 100vh;
   display: flex;
@@ -26,7 +31,7 @@ body {
 
 /* ===== Header ===== */
 header {
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -34,7 +39,6 @@ header {
   padding: 10px 0;
   background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
-  box-sizing: border-box;
 }
 
 .xp-group {
@@ -143,8 +147,7 @@ footer {
   font-size: 0.6rem;
   padding: 6px 0;
   color: #fff;
-  width: 100%;
-  box-sizing: border-box;
+  width: 100vw;
   border-top: 1px solid rgba(29,185,84,0.4);
   margin-top: auto;
 }
@@ -157,7 +160,11 @@ footer {
 }
 
 @media (min-width: 768px) {
-  header { flex-direction: row; justify-content: space-between; padding: 10px 40px; }
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 40px;
+  }
   .xp-group { width: auto; margin-bottom: 0; gap: 40px; }
   .xp-bar-container { gap: 10px; }
   #xpBar { width: 120px; }
@@ -274,7 +281,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Theme system stays functional
+// Keep theme functional
 if (typeof window.applyTheme === 'function') {
   const currentTheme = localStorage.getItem('theme') || 'dark';
   window.applyTheme(currentTheme, false);
