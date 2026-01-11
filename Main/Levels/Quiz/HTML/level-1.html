@@ -105,20 +105,6 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
   font-size: clamp(0.5rem, 1.5vw, 0.6rem);
 }
 #backBtn:hover { background: #ff85c1; transform: scale(1.05); }
-.hero-sprite {
-  width: clamp(64px, 20vw, 128px);
-  height: clamp(64px, 20vw, 128px);
-  background: url('../../../Main/Assets/Characters/hero_sheet.png') no-repeat;
-  background-size: 1024px 128px;
-  image-rendering: pixelated;
-  animation: celebrateAnim 1s steps(8) infinite;
-  margin-top: 10px;
-  filter: drop-shadow(0 0 10px #1DB954);
-}
-@keyframes celebrateAnim {
-  from { background-position: 0 0; }
-  to { background-position: -1024px 0; }
-}
 .fade-out {
   animation: fadeOut 1s ease forwards;
 }
@@ -138,9 +124,9 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
   <button id="nextBtn">Next Question</button>
   <button id="finishBtn">Finish Level</button>
 </div>
+
 <div id="popupOverlay">
   <h2>🎉 Level Complete!</h2>
-  <div class="hero-sprite"></div>
   <p id="xpGain">+0 XP Gained</p>
   <div class="xp-bar-container">
     <div class="xp-bar-fill" id="xpBarFill"></div>
@@ -157,15 +143,9 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 
 <script>
 // ENVIRONMENT SETUP
-const hero = document.querySelector('.hero-sprite');
 const theme = localStorage.getItem('theme') || 'dark';
-if (theme === 'light') {
-    hero.style.filter = 'drop-shadow(0 0 10px #ffcc00)';
-} else {
-    hero.style.filter = 'drop-shadow(0 0 10px #1DB954) drop-shadow(0 0 20px #1DB954)';
-}
-
 const currentUser = localStorage.getItem('currentUser');
+const currentRole = localStorage.getItem('currentRole') || 'student';
 if (!currentUser) alert('No user logged in!');
 
 let currentQuestion = 0;
@@ -185,6 +165,7 @@ const soundEnabled = localStorage.getItem('sound') === 'on';
 const vibrationEnabled = localStorage.getItem('vibration') === 'on';
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+// QUIZ QUESTIONS
 const quizQuestions = [
   { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
   { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
@@ -208,6 +189,7 @@ const interval = setInterval(() => {
   timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
 }, 1000);
 
+// LOAD QUESTION
 function loadQuestion() {
   result.textContent = "";
   nextBtn.style.display = "none";
@@ -231,6 +213,7 @@ function loadQuestion() {
   });
 }
 
+// CHECK ANSWER
 function checkAnswer(selectedIndex) {
   const correctIndex = quizQuestions[currentQuestion].answer;
   const choices = document.querySelectorAll(".choice");
@@ -255,10 +238,10 @@ function checkAnswer(selectedIndex) {
 nextBtn.onclick = () => { currentQuestion++; loadQuestion(); };
 finishBtn.onclick = () => { clearInterval(interval); showPopup(); };
 
+// SHOW POPUP
 function showPopup() {
   document.querySelector(".quiz-container").classList.add('fade-out');
   const finalXP = parseInt(localStorage.getItem(`${currentUser}_xp`) || 0);
-  const finalLevel = parseInt(localStorage.getItem(`${currentUser}_level`) || 1);
   const xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`) || 100);
   const percentComplete = Math.min((finalXP / xpMax) * 100, 100);
 
@@ -272,10 +255,16 @@ function showPopup() {
   }, 800);
 }
 
+// BACK BUTTON - ROLE BASED
 document.getElementById('backBtn').onclick = () => {
   const popup = document.getElementById('popupOverlay');
   popup.classList.add('fade-out');
-  setTimeout(() => window.location.href = '../../../index.html', 1000);
+
+  const targetPage = currentRole === 'teacher' 
+      ? '../../../Main/Webside/Teacher.html' 
+      : '../../../Main/Webside/Student.html';
+
+  setTimeout(() => window.location.href = targetPage, 1000);
 };
 
 // START QUIZ
