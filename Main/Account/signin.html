@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Main/Design/Position.css"> <!-- Updated path -->
+<link rel="stylesheet" href="../Design/Position.css"> <!-- Updated path -->
 <style>
 body { 
     font-family: 'Press Start 2P', cursive; 
@@ -165,7 +165,7 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
         }
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "Main/Webside/Student.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Student.html", 800); // Updated path
     } catch(err) {
         console.error("Sign-in error:", err); // DEBUG
         msg.textContent = `❌ ${err.message}`;
@@ -193,7 +193,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
         }
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "Main/Webside/Teacher.html", 800); // Updated path
+        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800); // Updated path
     } catch(err) {
         console.error("Sign-in error:", err); // DEBUG
         msg.textContent = `❌ ${err.message}`;
