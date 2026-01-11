@@ -116,66 +116,65 @@ footer {
 <footer>© 2025 MindCraft | Created by Kuya AJ & Team</footer>
 
 <script type="module">
-import { auth, db } from "../System/database/firebase.js";
+import { auth, db } from "../System/Database/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStudentLevelData } from '../Exp/studentLV.js';
-import { getTeacherLevelData } from '../Exp/teacherLV.js';
+import { getStudentLevelData } from "../Exp/studentLV.js";
+import { getTeacherLevelData } from "../Exp/teacherLV.js";
 
-// --- UI Elements ---
-const usernameEl = document.getElementById('username');
-const levelEl = document.getElementById('level');
-const xpEl = document.getElementById('xp');
-const xpBarFill = document.querySelector('#xpBar > div');
-const rankEl = document.getElementById('rank');
-const homeBtn = document.getElementById('homeBtn');
-const logoutBtn = document.getElementById('logoutBtn');
+// === UI Elements ===
+const usernameEl = document.getElementById("username");
+const levelEl = document.getElementById("level");
+const xpEl = document.getElementById("xp");
+const xpBarFill = document.querySelector("#xpBar > div");
+const rankEl = document.getElementById("rank");
+const homeBtn = document.getElementById("homeBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-// ✅ 1. Show cached name immediately if available
-const cachedName = localStorage.getItem('cachedName');
+// === Show cached name immediately ===
+const cachedName = localStorage.getItem("cachedName");
 if (cachedName) usernameEl.textContent = cachedName;
 
-// ✅ 2. Always attach Home button instantly
-homeBtn.addEventListener('click', () => {
-  const role = localStorage.getItem('currentRole');
-  if (role === 'teacher') {
-    window.location.href = '../Webside/Teacher.html';
-  } else {
-    window.location.href = '../Webside/Student.html';
+// === Home button (works instantly) ===
+homeBtn.addEventListener("click", () => {
+  const role = localStorage.getItem("currentRole") || "student";
+  window.location.href = role === "teacher"
+    ? "../Webside/Teacher.html"
+    : "../Webside/Student.html";
+});
+
+// === Logout button ===
+logoutBtn.addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    localStorage.removeItem("cachedName");
+    localStorage.removeItem("currentRole");
+    alert("You’ve been logged out!");
+    window.location.href = "signin.html";
+  } catch (err) {
+    console.error("Logout error:", err);
   }
 });
 
-// =============================
-// Firebase: Load and Display User Data
-// =============================
+// === Firebase Authentication ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    alert("You must sign in first!");
     window.location.href = "signin.html";
     return;
   }
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
-
-  // Determine display name first
-  let displayName = "Unknown";
-  if (user.displayName) {
-    displayName = user.displayName; // Google sign-in
-  } else if (user.email) {
-    displayName = user.email.split('@')[0]; // email prefix
-  }
-
-  if (snap.exists()) {
-    const data = snap.data();
-    if (data.name) displayName = data.name;
-  }
-
-  // Cache the name for faster next load
-  localStorage.setItem('cachedName', displayName);
-
-  // If no Firestore data, still show defaults
   const data = snap.exists() ? snap.data() : {};
+
+  // Determine display name
+  let displayName =
+    data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
+
+  // Cache for next quick load
+  localStorage.setItem("cachedName", displayName);
+
+  // Update user info
   const role = data.role || "student";
   const xp = data.xp || 0;
   const level = data.level || 1;
@@ -183,29 +182,16 @@ onAuthStateChanged(auth, async (user) => {
   localStorage.setItem("currentRole", role);
 
   const rankTitle =
-    role === "student"
-      ? getStudentLevelData(xp).title
-      : getTeacherLevelData(xp).title;
+    role === "teacher"
+      ? getTeacherLevelData(xp).title
+      : getStudentLevelData(xp).title;
 
-  // === Update UI ===
+  // Update UI
   usernameEl.textContent = displayName;
   levelEl.textContent = level;
   xpEl.textContent = `${xp}/${xpMax}`;
   xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
   rankEl.textContent = `🏅 Rank: ${rankTitle}`;
-});
-
-// =============================
-// Logout
-// =============================
-logoutBtn.addEventListener('click', async () => {
-  try {
-    await signOut(auth);
-    alert("You’ve been logged out!");
-    window.location.href = "signin.html";
-  } catch (err) {
-    console.error("Logout error:", err);
-  }
 });
 </script>
 
