@@ -74,9 +74,9 @@ h2 { margin-bottom: 15px; }
 </head>
 <body>
 <nav>
-    <button onclick="location.href='../Webside/Student.html'">🏠 Home</button>
+    <button id="homeBtn">🏠 Home</button>
     <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-    <button onclick="logout()">🚪 Logout</button>
+    <button id="logoutBtn">🚪 Logout</button>
 </nav>
 
 <div class="container">
@@ -106,6 +106,8 @@ const levelEl = document.getElementById('level');
 const xpEl = document.getElementById('xp');
 const xpBarFill = document.querySelector('#xpBar > div');
 const rankEl = document.getElementById('rank');
+const homeBtn = document.getElementById('homeBtn');
+const logoutBtn = document.getElementById('logoutBtn');
 
 // =============================
 // Function to Load and Display User Data
@@ -147,14 +149,27 @@ window.addEventListener('storage', (e) => {
 });
 
 // =============================
+// Home Button Logic
+// =============================
+homeBtn.addEventListener('click', () => {
+    if(currentRole === 'student') {
+        window.location.href = '../Webside/Student.html';
+    } else if(currentRole === 'teacher') {
+        window.location.href = '../Webside/Teacher.html';
+    } else {
+        window.location.href = 'signin.html';
+    }
+});
+
+// =============================
 // Logout
 // =============================
-function logout() {
+logoutBtn.addEventListener('click', () => {
     localStorage.setItem('lastUser', currentUser);
     localStorage.removeItem('currentUser');
     localStorage.removeItem('currentRole');
     window.location.href = 'signin.html';
-}
+});
 </script>
 
 <script src="../Design/theme.js"></script>
