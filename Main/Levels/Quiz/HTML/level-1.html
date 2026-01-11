@@ -146,7 +146,12 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 const theme = localStorage.getItem('theme') || 'dark';
 const currentUser = localStorage.getItem('currentUser');
 const currentRole = localStorage.getItem('currentRole') || 'student';
-if (!currentUser) alert('No user logged in!');
+
+// Only allow students
+if (!currentUser || currentRole !== 'student') {
+    alert('Only students can take the quiz!');
+    window.location.href = '../../../Main/Webside/Student.html';
+}
 
 let currentQuestion = 0;
 let xpEarned = 0;
@@ -255,16 +260,11 @@ function showPopup() {
   }, 800);
 }
 
-// BACK BUTTON - ROLE BASED
+// BACK BUTTON (always student lobby)
 document.getElementById('backBtn').onclick = () => {
   const popup = document.getElementById('popupOverlay');
   popup.classList.add('fade-out');
-
-  const targetPage = currentRole === 'teacher' 
-      ? '../../../Main/Webside/Teacher.html' 
-      : '../../../Main/Webside/Student.html';
-
-  setTimeout(() => window.location.href = targetPage, 1000);
+  setTimeout(() => window.location.href = '../../../Main/Webside/Student.html', 1000);
 };
 
 // START QUIZ
