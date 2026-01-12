@@ -1,6 +1,9 @@
 // ===================================
-// 🎮 MindCraft Level & XP System (Main/Exp/levels.js) – Improved
+// 🎮 MindCraft Level & XP System (Main/Exp/levels.js) – Firestore Synced
 // ===================================
+
+import { auth, db } from "../System/Database/firebase.js";
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // --- GLOBAL XP CONSTANTS ---
 const XP_CAP_DEFAULT = 100;
@@ -8,20 +11,23 @@ const XP_CAP_MULTIPLIER = 1.25;
 
 // ===================================
 // 🛠️ Core XP Calculation Function (Global)
-function awardXP(amount) {
-    const currentUser = localStorage.getItem('currentUser');
+async function awardXP(amount) {
+    const user = auth.currentUser;
+    const currentUser = user ? user.uid : localStorage.getItem('currentUser');
+
     if (!currentUser) {
         console.warn("Cannot award XP: No user logged in.");
         return;
     }
 
+    // --- LocalStorage XP system ---
     let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
     let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
     let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
 
     xp += amount;
-
     let leveledUp = false;
+
     while (xp >= xpMax) {
         xp -= xpMax;
         level++;
@@ -29,14 +35,44 @@ function awardXP(amount) {
         leveledUp = true;
     }
 
+    // Save locally
     localStorage.setItem(`${currentUser}_xp`, xp);
     localStorage.setItem(`${currentUser}_level`, level);
     localStorage.setItem(`${currentUser}_xpMax`, xpMax);
-
     window.dispatchEvent(new Event('storage'));
 
+    // --- Firestore Sync (only if signed in) ---
+    if (user) {
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const snap = await getDoc(userRef);
+            const data = snap.exists() ? snap.data() : {};
+
+            const currentXP = data.xp || 0;
+            const newXP = currentXP + amount;
+            let newLevel = data.level || 1;
+            let newXpMax = data.xpMax || 100;
+
+            // Optional: handle level-up logic in Firestore too
+            if (newXP >= newXpMax) {
+                newLevel++;
+                newXpMax = Math.floor(newXpMax * XP_CAP_MULTIPLIER);
+            }
+
+            await updateDoc(userRef, {
+                xp: newXP,
+                level: newLevel,
+                xpMax: newXpMax
+            });
+
+            console.log(`✅ Synced ${amount} XP → Firestore`);
+        } catch (err) {
+            console.error("⚠️ Error syncing XP to Firestore:", err);
+        }
+    }
+
+    // --- UI Feedback for Level Up ---
     if (leveledUp) {
-        // Instead of alert, show a subtle message in the UI (if exists)
         const levelMsg = document.getElementById('levelUpMessage');
         if (levelMsg) {
             levelMsg.textContent = `🎉 Congrats! You reached Level ${level}!`;
