@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Design/levels.css">
 <link rel="stylesheet" href="../../../Design/global_size-FIX.css">
+
 <style>
 body {
   font-family: 'Press Start 2P', cursive;
@@ -137,138 +138,160 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
 
-<script src="../../../Exp/levels.js"></script>
-<script src="../../../Design/theme.js"></script>
-<script src="../../../Design/navigate_return.js"></script>
+<script type="module">
+import { auth, db } from "../../../System/Database/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
-// ENVIRONMENT SETUP
-const theme = localStorage.getItem('theme') || 'dark';
-const currentUser = localStorage.getItem('currentUser');
-const currentRole = localStorage.getItem('currentRole') || 'student';
+import "../../../Exp/levels.js";
+import "../../../Design/theme.js";
+import "../../../Design/navigate_return.js";
 
-// Only allow students
-if (!currentUser || currentRole !== 'student') {
-    alert('Only students can take the quiz!');
-    window.location.href = '../../../Webside/Student.html';
-}
-
-let currentQuestion = 0;
-let xpEarned = 0;
-const XP_PER_QUESTION = 5;
-
-const questionContainer = document.getElementById("questionContainer");
-const nextBtn = document.getElementById("nextBtn");
-const finishBtn = document.getElementById("finishBtn");
-const result = document.getElementById("result");
-const progress = document.getElementById("progress");
-const timerEl = document.getElementById("timer");
-
-const correctSound = document.getElementById("correctSound");
-const wrongSound = document.getElementById("wrongSound");
-const soundEnabled = localStorage.getItem('sound') === 'on';
-const vibrationEnabled = localStorage.getItem('vibration') === 'on';
-const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-// QUIZ QUESTIONS
-const quizQuestions = [
-  { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
-  { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
-  { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
-  { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
-  { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
-  { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
-  { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
-  { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
-  { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
-  { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
-];
-
-// TIMER
-let totalTime = 15 * 60;
-const interval = setInterval(() => {
-  if (totalTime <= 0) { clearInterval(interval); showPopup(); return; }
-  totalTime--;
-  const m = Math.floor(totalTime / 60);
-  const s = totalTime % 60;
-  timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
-}, 1000);
-
-// LOAD QUESTION
-function loadQuestion() {
-  result.textContent = "";
-  nextBtn.style.display = "none";
-  finishBtn.style.display = "none";
-  questionContainer.innerHTML = "";
-  if (currentQuestion >= quizQuestions.length) return;
-
-  const q = quizQuestions[currentQuestion];
-  progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
-  const questionEl = document.createElement("h3");
-  questionEl.textContent = q.question;
-  questionContainer.appendChild(questionEl);
-
-  q.choices.forEach((choice, i) => {
-    const btn = document.createElement("button");
-    btn.textContent = choice;
-    btn.className = "choice";
-    btn.disabled = false;
-    btn.onclick = () => checkAnswer(i);
-    questionContainer.appendChild(btn);
-  });
-}
-
-// CHECK ANSWER
-function checkAnswer(selectedIndex) {
-  const correctIndex = quizQuestions[currentQuestion].answer;
-  const choices = document.querySelectorAll(".choice");
-  choices.forEach(b => b.disabled = true);
-
-  if (selectedIndex === correctIndex) {
-    result.textContent = `✅ Correct! +${XP_PER_QUESTION} XP`;
-    xpEarned += XP_PER_QUESTION;
-    if (typeof window.awardXP === 'function') window.awardXP(XP_PER_QUESTION);
-    if (soundEnabled) correctSound.play();
-    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
-  } else {
-    result.textContent = "❌ Wrong! No XP";
-    if (soundEnabled) wrongSound.play();
-    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
+// 🧠 Verify Firebase user + role before quiz starts
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    alert("⚠️ You must be signed in to access the quiz!");
+    window.location.href = "../../../Account/signin.html";
+    return;
   }
 
-  nextBtn.style.display = (currentQuestion < quizQuestions.length - 1) ? "inline-block" : "none";
-  finishBtn.style.display = (currentQuestion === quizQuestions.length - 1) ? "inline-block" : "none";
-}
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (!snap.exists()) {
+      alert("⚠️ User data not found!");
+      window.location.href = "../../../Account/signin.html";
+      return;
+    }
 
-nextBtn.onclick = () => { currentQuestion++; loadQuestion(); };
-finishBtn.onclick = () => { clearInterval(interval); showPopup(); };
+    const role = snap.data().role || "student";
+    if (role !== "student") {
+      alert("🚫 Only students can take this quiz!");
+      window.location.href = "../../../Webside/Teacher.html";
+      return;
+    }
 
-// SHOW POPUP
-function showPopup() {
-  document.querySelector(".quiz-container").classList.add('fade-out');
-  const finalXP = parseInt(localStorage.getItem(`${currentUser}_xp`) || 0);
-  const xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`) || 100);
-  const percentComplete = Math.min((finalXP / xpMax) * 100, 100);
+    // ✅ Authorized student — start quiz
+    initQuiz();
 
-  setTimeout(() => {
-    document.querySelector(".quiz-container").style.display = "none";
+  } catch (err) {
+    console.error("Role check error:", err);
+    alert("⚠️ Error verifying user. Please log in again.");
+    window.location.href = "../../../Account/signin.html";
+  }
+});
+
+// ==================== QUIZ FUNCTIONALITY ==================== //
+function initQuiz() {
+  let currentQuestion = 0;
+  let xpEarned = 0;
+  const XP_PER_QUESTION = 5;
+
+  const quizQuestions = [
+    { question: "What does HTML stand for?", choices: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlinks and Text Mark Language", "Home Tool Markup Language"], answer: 0 },
+    { question: "Which HTML element is used to define a paragraph?", choices: ["<p>", "<h1>", "<div>", "<span>"], answer: 0 },
+    { question: "Which attribute is used to link a CSS file in HTML?", choices: ["href", "src", "link", "rel"], answer: 0 },
+    { question: "What is the correct HTML element for the largest heading?", choices: ["<h6>", "<heading>", "<h1>", "<head>"], answer: 2 },
+    { question: "Which HTML element is used to display an image?", choices: ["<img>", "<picture>", "<image>", "<src>"], answer: 0 },
+    { question: "How do you create a hyperlink in HTML?", choices: ["<a href='url'>link</a>", "<link>link</link>", "<hyperlink url=''>link</hyperlink>", "<url>link</url>"], answer: 0 },
+    { question: "Which HTML element defines an unordered list?", choices: ["<ul>", "<ol>", "<li>", "<list>"], answer: 0 },
+    { question: "Which attribute specifies an alternative text for an image?", choices: ["alt", "src", "title", "text"], answer: 0 },
+    { question: "Which HTML element is used for inserting a line break?", choices: ["<break>", "<lb>", "<br>", "<hr>"], answer: 2 },
+    { question: "Which tag is used to define the document’s title?", choices: ["<title>", "<head>", "<meta>", "<header>"], answer: 0 }
+  ];
+
+  const questionContainer = document.getElementById("questionContainer");
+  const nextBtn = document.getElementById("nextBtn");
+  const finishBtn = document.getElementById("finishBtn");
+  const result = document.getElementById("result");
+  const progress = document.getElementById("progress");
+  const timerEl = document.getElementById("timer");
+  const correctSound = document.getElementById("correctSound");
+  const wrongSound = document.getElementById("wrongSound");
+  const soundEnabled = localStorage.getItem('sound') === 'on';
+  const vibrationEnabled = localStorage.getItem('vibration') === 'on';
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  // TIMER
+  let totalTime = 15 * 60;
+  const interval = setInterval(() => {
+    if (totalTime <= 0) { clearInterval(interval); showPopup(); return; }
+    totalTime--;
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+
+  // LOAD QUESTION
+  function loadQuestion() {
+    result.textContent = "";
+    nextBtn.style.display = "none";
+    finishBtn.style.display = "none";
+    questionContainer.innerHTML = "";
+    if (currentQuestion >= quizQuestions.length) return;
+
+    const q = quizQuestions[currentQuestion];
+    progress.textContent = `Question ${currentQuestion + 1} of ${quizQuestions.length}`;
+    const questionEl = document.createElement("h3");
+    questionEl.textContent = q.question;
+    questionContainer.appendChild(questionEl);
+
+    q.choices.forEach((choice, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = choice;
+      btn.className = "choice";
+      btn.onclick = () => checkAnswer(i);
+      questionContainer.appendChild(btn);
+    });
+  }
+
+  // CHECK ANSWER
+  function checkAnswer(selectedIndex) {
+    const correctIndex = quizQuestions[currentQuestion].answer;
+    const choices = document.querySelectorAll(".choice");
+    choices.forEach(b => b.disabled = true);
+
+    if (selectedIndex === correctIndex) {
+      result.textContent = `✅ Correct! +${XP_PER_QUESTION} XP`;
+      xpEarned += XP_PER_QUESTION;
+      if (soundEnabled) correctSound.play();
+      if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate(100);
+    } else {
+      result.textContent = "❌ Wrong! No XP";
+      if (soundEnabled) wrongSound.play();
+      if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([200,100,200]);
+    }
+
+    nextBtn.style.display = (currentQuestion < quizQuestions.length - 1) ? "inline-block" : "none";
+    finishBtn.style.display = (currentQuestion === quizQuestions.length - 1) ? "inline-block" : "none";
+  }
+
+  nextBtn.onclick = () => { currentQuestion++; loadQuestion(); };
+  finishBtn.onclick = () => { clearInterval(interval); showPopup(); };
+
+  // SHOW POPUP
+  function showPopup() {
+    document.querySelector(".quiz-container").classList.add('fade-out');
     const popup = document.getElementById("popupOverlay");
-    popup.style.display = "flex";
-    document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`;
-    document.querySelector("#popupOverlay h2").textContent = `🎉 Quiz Complete!`;
-    setTimeout(() => { document.getElementById("xpBarFill").style.width = `${percentComplete}%`; }, 300);
-  }, 800);
+    setTimeout(() => {
+      document.querySelector(".quiz-container").style.display = "none";
+      popup.style.display = "flex";
+      document.getElementById("xpGain").textContent = `+${xpEarned} XP Gained`;
+      setTimeout(() => {
+        document.getElementById("xpBarFill").style.width = "100%";
+      }, 300);
+    }, 800);
+  }
+
+  // BACK BUTTON
+  document.getElementById('backBtn').onclick = () => {
+    const popup = document.getElementById('popupOverlay');
+    popup.classList.add('fade-out');
+    setTimeout(() => window.location.href = '../../../Webside/Student.html', 1000);
+  };
+
+  // START QUIZ
+  loadQuestion();
 }
-
-// BACK BUTTON (always student lobby)
-document.getElementById('backBtn').onclick = () => {
-  const popup = document.getElementById('popupOverlay');
-  popup.classList.add('fade-out');
-  setTimeout(() => window.location.href = '../../../Webside/Student.html', 1000);
-};
-
-// START QUIZ
-loadQuestion();
 </script>
 </body>
 </html>
