@@ -24,10 +24,9 @@ body {
   background: rgba(0,0,0,0.5);
   border-radius: 12px;
   box-shadow: 0 0 15px #1DB954;
-  transition: background 0.3s, box-shadow 0.3s;
 }
-h2 { color: #1DB954; margin-bottom: 10px; font-size: clamp(0.8rem, 2vw, 0.9rem); font-family: 'Press Start 2P', cursive; }
-h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cursive; }
+h2 { color: #1DB954; margin-bottom: 10px; font-size: clamp(0.8rem, 2vw, 0.9rem); }
+h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); }
 .choice {
   display: block;
   margin: 10px auto;
@@ -139,13 +138,22 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); font-family: 'Press Start 2P', cur
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
 
 <script type="module">
-import { auth, db } from "../../../System/Database/firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import "../../../Exp/levels.js";
-import "../../../Design/theme.js";
-import "../../../Design/navigate_return.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // 🧠 Verify Firebase user + role before quiz starts
 onAuthStateChanged(auth, async (user) => {
@@ -268,10 +276,45 @@ function initQuiz() {
   nextBtn.onclick = () => { currentQuestion++; loadQuestion(); };
   finishBtn.onclick = () => { clearInterval(interval); showPopup(); };
 
-  // SHOW POPUP
-  function showPopup() {
+  // ✅ FIXED — SAVE XP PROGRESS
+  async function showPopup() {
     document.querySelector(".quiz-container").classList.add('fade-out');
     const popup = document.getElementById("popupOverlay");
+
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const snap = await getDoc(userRef);
+        let data = snap.exists() ? snap.data() : {};
+        let oldXP = data.xp || 0;
+        let oldLevel = data.level || 1;
+        let xpMax = data.xpMax || 100;
+
+        let newXP = oldXP + xpEarned;
+        let newLevel = oldLevel;
+
+        while (newXP >= xpMax) {
+          newXP -= xpMax;
+          newLevel++;
+          xpMax = Math.floor(xpMax * 1.1);
+        }
+
+        await updateDoc(userRef, {
+          xp: newXP,
+          level: newLevel,
+          xpMax: xpMax
+        });
+
+        localStorage.setItem(`${user.uid}_xp`, newXP);
+        localStorage.setItem(`${user.uid}_level`, newLevel);
+
+        console.log(`✅ XP Saved: +${xpEarned} (Total: ${newXP}, Level: ${newLevel})`);
+      }
+    } catch (err) {
+      console.error("⚠️ Error saving XP:", err);
+    }
+
     setTimeout(() => {
       document.querySelector(".quiz-container").style.display = "none";
       popup.style.display = "flex";
@@ -289,7 +332,6 @@ function initQuiz() {
     setTimeout(() => window.location.href = '../../../Webside/Student.html', 1000);
   };
 
-  // START QUIZ
   loadQuestion();
 }
 </script>
