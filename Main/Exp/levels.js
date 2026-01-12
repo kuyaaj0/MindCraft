@@ -1,163 +1,135 @@
 // ===================================
-// 🎮 MindCraft Level & XP System (Main/Exp/levels.js) – Firestore Synced
+// 🎮 MindCraft Level & XP System (Main/Exp/levels.js)
+// Firestore + Local Storage Synced Version
 // ===================================
 
 import { auth, db } from "../System/Database/firebase.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// --- GLOBAL XP CONSTANTS ---
 const XP_CAP_DEFAULT = 100;
 const XP_CAP_MULTIPLIER = 1.25;
 
 // ===================================
-// 🛠️ Core XP Calculation Function (Global)
+// 🏆 Award XP (Local + Firestore)
 async function awardXP(amount) {
-    const user = auth.currentUser;
-    const currentUser = user ? user.uid : localStorage.getItem('currentUser');
+  const user = auth.currentUser;
+  const localID = localStorage.getItem("currentUser");
 
-    if (!currentUser) {
-        console.warn("Cannot award XP: No user logged in.");
-        return;
+  if (!user && !localID) {
+    console.warn("⚠️ Cannot award XP: No logged in user.");
+    return;
+  }
+
+  // === LOCAL STORAGE ===
+  const key = user ? user.uid : localID;
+  let xp = parseInt(localStorage.getItem(`${key}_xp`)) || 0;
+  let level = parseInt(localStorage.getItem(`${key}_level`)) || 1;
+  let xpMax = parseInt(localStorage.getItem(`${key}_xpMax`)) || XP_CAP_DEFAULT;
+
+  xp += amount;
+  let leveledUp = false;
+
+  while (xp >= xpMax) {
+    xp -= xpMax;
+    level++;
+    xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
+    leveledUp = true;
+  }
+
+  localStorage.setItem(`${key}_xp`, xp);
+  localStorage.setItem(`${key}_level`, level);
+  localStorage.setItem(`${key}_xpMax`, xpMax);
+  window.dispatchEvent(new Event("storage"));
+
+  // === FIRESTORE SYNC ===
+  if (user) {
+    try {
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+      const data = snap.exists() ? snap.data() : {};
+
+      // merge Firestore XP and local XP safely
+      const newXP = (data.xp || 0) + amount;
+      let newLevel = data.level || 1;
+      let newXpMax = data.xpMax || 100;
+
+      if (newXP >= newXpMax) {
+        newLevel++;
+        newXpMax = Math.floor(newXpMax * XP_CAP_MULTIPLIER);
+      }
+
+      await updateDoc(userRef, {
+        xp: newXP,
+        level: newLevel,
+        xpMax: newXpMax
+      });
+
+      console.log(`✅ Firestore XP updated: +${amount} XP (Total: ${newXP})`);
+    } catch (err) {
+      console.error("⚠️ Error syncing XP:", err);
     }
+  }
 
-    // --- LocalStorage XP system ---
-    let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
-    let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
-    let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
-
-    xp += amount;
-    let leveledUp = false;
-
-    while (xp >= xpMax) {
-        xp -= xpMax;
-        level++;
-        xpMax = Math.floor(xpMax * XP_CAP_MULTIPLIER);
-        leveledUp = true;
+  // === OPTIONAL LEVEL-UP FEEDBACK ===
+  if (leveledUp) {
+    const msg = document.getElementById("levelUpMessage");
+    if (msg) {
+      msg.textContent = `🎉 Level ${level} Reached!`;
+      msg.style.opacity = 1;
+      setTimeout(() => (msg.style.opacity = 0), 3000);
+    } else {
+      console.log(`🎉 Level Up → ${level}`);
     }
-
-    // Save locally
-    localStorage.setItem(`${currentUser}_xp`, xp);
-    localStorage.setItem(`${currentUser}_level`, level);
-    localStorage.setItem(`${currentUser}_xpMax`, xpMax);
-    window.dispatchEvent(new Event('storage'));
-
-    // --- Firestore Sync (only if signed in) ---
-    if (user) {
-        try {
-            const userRef = doc(db, "users", user.uid);
-            const snap = await getDoc(userRef);
-            const data = snap.exists() ? snap.data() : {};
-
-            const currentXP = data.xp || 0;
-            const newXP = currentXP + amount;
-            let newLevel = data.level || 1;
-            let newXpMax = data.xpMax || 100;
-
-            // Optional: handle level-up logic in Firestore too
-            if (newXP >= newXpMax) {
-                newLevel++;
-                newXpMax = Math.floor(newXpMax * XP_CAP_MULTIPLIER);
-            }
-
-            await updateDoc(userRef, {
-                xp: newXP,
-                level: newLevel,
-                xpMax: newXpMax
-            });
-
-            console.log(`✅ Synced ${amount} XP → Firestore`);
-        } catch (err) {
-            console.error("⚠️ Error syncing XP to Firestore:", err);
-        }
-    }
-
-    // --- UI Feedback for Level Up ---
-    if (leveledUp) {
-        const levelMsg = document.getElementById('levelUpMessage');
-        if (levelMsg) {
-            levelMsg.textContent = `🎉 Congrats! You reached Level ${level}!`;
-            levelMsg.style.opacity = '1';
-            setTimeout(() => { levelMsg.style.opacity = '0'; }, 3500);
-        } else {
-            console.log(`🎉 Congrats ${currentUser}! Level ${level}`);
-        }
-    }
+  }
 }
 
 window.awardXP = awardXP;
 
-// --- Helper Functions ---
+// Simple wrappers for lessons and quizzes
 window.gainLessonXP = () => awardXP(10);
 window.gainQuizXP = (isCorrect) => { if (isCorrect) awardXP(5); };
 
 // ===================================
-// 🖥️ XP Display Logic
+// 🖥️ XP Bar Display Logic (for Student.html header)
 function initializeXPDisplay() {
-    const currentUser = localStorage.getItem('currentUser');
-    if (!currentUser) return;
+  const currentUser = localStorage.getItem("currentUser");
+  if (!currentUser) return;
 
-    const xpValue = document.getElementById('xpValue');
-    const xpBar = document.getElementById('xpBar');
-    const levelValue = document.getElementById('levelValue');
+  const xpValue = document.getElementById("xpValue");
+  const xpBar = document.getElementById("xpBar");
+  const levelValue = document.getElementById("levelValue");
+  if (!xpBar || !xpValue || !levelValue) return;
 
-    if (!xpBar || !xpValue || !levelValue) return;
+  let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
+  let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+  let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
+  let displayedXP = xp;
 
-    let level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
-    let xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
-    let xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
-    let displayedXP = xp;
-    let displayedLevel = level;
+  function updateLocal() {
+    xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
+    level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
+    xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
+  }
 
-    function updateLocalVars() {
-        level = parseInt(localStorage.getItem(`${currentUser}_level`)) || 1;
-        xp = parseInt(localStorage.getItem(`${currentUser}_xp`)) || 0;
-        xpMax = parseInt(localStorage.getItem(`${currentUser}_xpMax`)) || XP_CAP_DEFAULT;
+  function animateXP() {
+    if (displayedXP < xp) displayedXP += Math.ceil((xp - displayedXP) * 0.2);
+    else if (displayedXP > xp) displayedXP = xp;
+
+    xpValue.textContent = `${displayedXP}/${xpMax}`;
+    xpBar.value = displayedXP;
+    xpBar.max = xpMax;
+    levelValue.textContent = level;
+
+    requestAnimationFrame(animateXP);
+  }
+
+  window.addEventListener("storage", (e) => {
+    if (e.key && (e.key.includes("_xp") || e.key.includes("_level"))) {
+      updateLocal();
     }
+  });
 
-    function animateXP() {
-        if (displayedLevel !== level) {
-            displayedXP = 0;
-            displayedLevel = level;
-        }
-
-        if (displayedXP < xp) {
-            displayedXP += Math.ceil((xp - displayedXP) * 0.1) || 1;
-            if (displayedXP > xp) displayedXP = xp;
-        } else if (displayedXP > xp) {
-            displayedXP = xp;
-        }
-
-        xpValue.textContent = `${Math.floor(displayedXP)}/${xpMax}`;
-        xpBar.value = displayedXP;
-        xpBar.max = xpMax;
-        levelValue.textContent = displayedLevel;
-
-        requestAnimationFrame(animateXP);
-    }
-
-    function highlightXPBar() {
-        xpBar.classList.add('xp-updated');
-        setTimeout(() => xpBar.classList.remove('xp-updated'), 1200);
-    }
-
-    window.resetXP = function() {
-        localStorage.setItem(`${currentUser}_xp`, 0);
-        localStorage.setItem(`${currentUser}_level`, 1);
-        localStorage.setItem(`${currentUser}_xpMax`, XP_CAP_DEFAULT);
-        window.dispatchEvent(new Event('storage'));
-        updateLocalVars();
-    }
-
-    window.addEventListener('storage', (e) => {
-        if (e.key && (e.key.includes('_xp') || e.key.includes('_level'))) {
-            updateLocalVars();
-            highlightXPBar();
-        }
-    });
-
-    updateLocalVars();
-    animateXP();
+  animateXP();
 }
 
-// Initialize display
 initializeXPDisplay();
