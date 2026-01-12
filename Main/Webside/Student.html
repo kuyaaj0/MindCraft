@@ -295,7 +295,7 @@ footer {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -311,9 +311,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // ✅ Apply stored theme instantly
-window.addEventListener('DOMContentLoaded', () => {
-  if (typeof window.applyTheme === 'function') {
-    const currentTheme = localStorage.getItem('theme') || 'dark';
+window.addEventListener("DOMContentLoaded", () => {
+  if (typeof window.applyTheme === "function") {
+    const currentTheme = localStorage.getItem("theme") || "dark";
     window.applyTheme(currentTheme, false);
   }
 });
@@ -326,7 +326,8 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  const snap = await getDoc(doc(db, "users", user.uid));
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
   if (!snap.exists()) {
     alert("No user data found.");
     window.location.href = "../Account/signin.html";
@@ -339,25 +340,45 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // === Update XP + Level UI ===
-  document.getElementById("xpValue").innerText = data.xp ?? 0;
-  document.getElementById("xpBar").value = data.xp % 100;
-  document.getElementById("levelValue").innerText = data.level ?? 1;
+  // === 🔁 XP Synchronization Logic ===
+  const localXP = parseInt(localStorage.getItem(`${user.uid}_xp`)) || 0;
+  const localLevel = parseInt(localStorage.getItem(`${user.uid}_level`)) || 1;
+  const firestoreXP = data.xp ?? 0;
+  const firestoreLevel = data.level ?? 1;
+  const xpMax = data.xpMax ?? 100;
 
-  // === Welcome Popup Logic (only once per login session) ===
+  let finalXP = Math.max(localXP, firestoreXP);
+  let finalLevel = Math.max(localLevel, firestoreLevel);
+
+  // ✅ If local XP is higher, push it to Firestore
+  if (localXP > firestoreXP) {
+    try {
+      await updateDoc(userRef, {
+        xp: finalXP,
+        level: finalLevel,
+        xpMax: xpMax
+      });
+      console.log(`🔁 Synced local XP (${localXP}) → Firestore`);
+    } catch (err) {
+      console.error("⚠️ Error syncing XP to Firestore:", err);
+    }
+  }
+
+  // === Update UI ===
+  document.getElementById("xpValue").innerText = finalXP;
+  document.getElementById("xpBar").value = finalXP % xpMax;
+  document.getElementById("xpBar").max = xpMax;
+  document.getElementById("levelValue").innerText = finalLevel;
+
+  // === Welcome Popup Logic (only once per session) ===
   const welcomeOverlay = document.getElementById("welcomeOverlay");
-  const name = user.displayName || data.name || user.email.split('@')[0];
+  const name = user.displayName || data.name || user.email.split("@")[0];
   document.getElementById("studentName").textContent = name;
 
-  // Show welcome only if not shown yet this session
   if (!sessionStorage.getItem("welcomeShown")) {
     sessionStorage.setItem("welcomeShown", "true");
     welcomeOverlay.style.display = "flex";
-
-    // Hide after 3 seconds
-    setTimeout(() => {
-      welcomeOverlay.style.display = "none";
-    }, 3000);
+    setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
   }
 });
 </script>
