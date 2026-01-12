@@ -122,42 +122,83 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase
 import { getStudentLevelData } from "../Exp/student-LV.js";
 import { getTeacherLevelData } from "../Exp/teacher-LV.js";
 
-alert("✅ Firebase loaded successfully");
-
+// === UI Elements ===
+const usernameEl = document.getElementById("username");
+const levelEl = document.getElementById("level");
+const xpEl = document.getElementById("xp");
+const xpBarFill = document.querySelector("#xpBar > div");
+const rankEl = document.getElementById("rank");
 const homeBtn = document.getElementById("homeBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
-homeBtn.addEventListener("click", () => {
-  alert("🏠 Home button clicked");
+// === Home button (redirect by role) ===
+homeBtn.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    window.location.href = "signin.html";
+    return;
+  }
+
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (snap.exists()) {
+      const role = snap.data().role || "student";
+      if (role === "teacher") {
+        window.location.href = "../Webside/Teacher.html";
+      } else {
+        window.location.href = "../Webside/Student.html";
+      }
+    } else {
+      alert("⚠️ User data not found in Firestore");
+    }
+  } catch (err) {
+    console.error("Home redirect error:", err);
+  }
 });
 
+// === Logout ===
 logoutBtn.addEventListener("click", async () => {
-  alert("🚪 Logout button clicked");
   try {
     await signOut(auth);
-    alert("✅ Signed out");
+    localStorage.removeItem("cachedName");
+    localStorage.removeItem("currentRole");
     window.location.href = "signin.html";
   } catch (err) {
-    alert("❌ Logout error: " + err.message);
+    console.error("Logout error:", err);
   }
 });
 
+// === Firebase: Load User Data ===
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    alert("⚠️ No user logged in");
     window.location.href = "signin.html";
     return;
   }
 
-  alert("👤 User detected: " + (user.displayName || user.email));
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+  const data = snap.exists() ? snap.data() : {};
 
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (!snap.exists()) {
-    alert("⚠️ User data not found in Firestore");
-    return;
-  }
+  // Determine name (Google or manual)
+  const displayName =
+    data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
 
-  alert("📦 Firestore data loaded successfully");
+  // Update UI
+  const role = data.role || "student";
+  const xp = data.xp || 0;
+  const level = data.level || 1;
+  const xpMax = data.xpMax || 100;
+
+  const rankTitle =
+    role === "teacher"
+      ? getTeacherLevelData(xp).title
+      : getStudentLevelData(xp).title;
+
+  usernameEl.textContent = displayName;
+  levelEl.textContent = level;
+  xpEl.textContent = `${xp}/${xpMax}`;
+  xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
+  rankEl.textContent = `🏅 Rank: ${rankTitle}`;
 });
 </script>
 
