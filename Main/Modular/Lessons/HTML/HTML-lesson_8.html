@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💠 Block vs Inline, div & span - Cyberpunk Lesson 8</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            color: #ff00ff;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: '💿 CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: '👁️ BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: '⚡ LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        .warning {
+            background: rgba(255, 20, 147, 0.15);
+            border-left-color: #ff1493 !important;
+        }
+
+        .warning::before {
+            content: '⚠️ WARNING';
+            color: #ff1493 !important;
+            text-shadow: 0 0 15px #ff1493;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Block vs Inline Elements</h1>
+            <p class="subtitle">🎮 LESSON 8 - DIV & SPAN Page Structure Matrix</p>
+        </header>
+
+        <section id="block-elements">
+            <h2>01. 🔲 Block Elements (Full Width)</h2>
+            <div class="explanation">
+                <span class="highlight">Block elements</span> take up the <strong>FULL WIDTH</strong> of their container and always start on a <strong>NEW LINE</strong>.
+                They stack vertically like building blocks. Common block elements: <span class="highlight">&lt;div&gt;</span>, <span class="highlight">&lt;p&gt;</span>, <span class="highlight">&lt;h1&gt;-&lt;h6&gt;</span>.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;div style="background:#ff00ff33"&gt;🔲 BLOCK 1&lt;/div&gt;
+&lt;div style="background:#00ffff33"&gt;🔲 BLOCK 2&lt;/div&gt;
+&lt;p style="background:#ffff0033"&gt;📝 BLOCK 3&lt;/p&gt;
+&lt;!-- ALL stack VERTICALLY! --&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <div style="background:rgba(255,0,255,0.3); color:#fff; padding:20px; margin-bottom:15px; border:2px solid #ff00ff; border-radius:10px;">🔲 BLOCK DIV #1 (Full Width)</div>
+                <div style="background:rgba(0,255,255,0.3); color:#000; padding:20px; margin-bottom:15px; border:2px solid #00ffff; border-radius:10px;">🔲 BLOCK DIV #2 (Full Width)</div>
+                <p style="background:rgba(255,255,0,0.3); color:#000; padding:20px; border:2px solid #ffff00; border-radius:10px;">📝 PARAGRAPH (Also Block!)</p>
+            </div>
+        </section>
+
+        <section id="inline-elements">
+            <h2>02. ➰ Inline Elements (Text Flow)</h2>
+            <div class="explanation">
+                <span class="highlight">Inline elements</span> only take the space they need and flow <strong>WITHIN THE TEXT LINE</strong>.
+                They NEVER start new lines. Perfect for styling words: <span class="highlight">&lt;span&gt;</span>, <span class="highlight">&lt;a&gt;</span>, <span class="highlight">&lt;strong&gt;</span>.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;Normal &lt;span style="color:#00ffff"&gt;INLINE&lt;/span&gt; normal text&lt;/p&gt;
+&lt;a href="#"&gt;🔗 LINK&lt;/a&gt; &lt;strong&gt;STRONG&lt;/strong&gt; &lt;em&gt;EM&lt;/em&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="font-size:1.3em; line-height:2em;">
+                    This sentence has an 
+                    <span style="color:#00ffff; background:rgba(0,255,255,0.3); padding:8px 15px; border-radius:12px; border:2px solid #00ffff;">➰ INLINE SPAN</span> 
+                    inside the same line!
+                </p>
+                <p style="font-size:1.2em; line-height:2em;">
+                    <a href="#" style="color:#ff00ff; text-decoration:none; background:rgba(255,0,255,0.2); padding:10px 20px; border-radius:15px; border:2px solid #ff00ff;">🔗 CYBER LINK</a>
+                    <strong style="color:#00ffff; background:rgba(0,255,255,0.15); padding:5px 10px; border-radius:8px;">➰ STRONG</strong>
+                    <em style="color:#ff1493; background:rgba(255,20,147,0.15); padding:5px 10px; border-radius:8px;">➰ ITALIC</em>
+                </p>
+            </div>
+        </section>
+
+        <section id="div-span">
+            <h2>03. ⚡ DIV vs SPAN Superpowers</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;div&gt;</span> = <strong>BLOCK CONTAINER</strong> (groups layout sections)<br>
+                <span class="highlight">&lt;span&gt;</span> = <strong>INLINE CONTAINER</strong> (styles text inside lines)
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;div class="cyber-card"&gt;  &lt;!-- BLOCK wrapper --&gt;
+    &lt;h3&gt;Cyber Card&lt;/h3&gt;
+    &lt;p&gt;This has &lt;span class="neon"&gt;neon text&lt;/span&gt;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <div style="background:rgba(10,15,50,0.9); border:3px solid #00ffff; border-radius:20px; padding:30px; margin:20px 0; box-shadow:0 0 30px rgba(0,255,255,0.5);">
+                    <h3 style="color:#ff00ff; margin:0 0 15px 0; font-size:1.5em;">🚀 Cyberpunk Card</h3>
+                    <p style="margin:0; font-family:'Roboto Mono'; font-size:1.1em; line-height:1.6;">
+                        This entire card is a 
+                        <span style="color:#00ffff; background:rgba(0,255,255,0.3); padding:8px 15px; border-radius:12px; border:2px solid #00ffff; box-shadow:0 0 20px rgba(0,255,255,0.6);">➰ SPAN (inline)</span> 
+                        inside a &lt;div&gt; BLOCK wrapper!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="structure">
+            <h2>04. 🏗️ Page Structure Wrappers</h2>
+            <div class="explanation">
+                Real websites use <span class="highlight">&lt;div class="container"&gt;</span> as the main wrapper, then &lt;header&gt;, &lt;main&gt;, &lt;footer&gt; inside.
+                Every section gets its own block container for perfect organization.
+            </div>
+            <ul class="examples">
+                <li>
+                    <strong>✅ PERFECT STRUCTURE:</strong><br>
+                    <code>&lt;div class="container"&gt;</code><br>
+                    <code>&nbsp;&nbsp;&lt;header&gt;Logo + Menu&lt;/header&gt;</code><br>
+                    <code>&nbsp;&nbsp;&lt;main&gt;Content&lt;/main&gt;</code><br>
+                    <code>&nbsp;&nbsp;&lt;footer&gt;Copyright&lt;/footer&gt;</code><br>
+                    <code>&lt;/div&gt;</code>
+                </li>
+                <li class="warning">
+                    <strong>❌ DON'T DO THIS:</strong><br>
+                    <code>&lt;span class="main"&gt;← WRONG! Spans can't be containers&lt;/span&gt;</code>
+                </li>
+            </ul>
+        </section>
+
+        <section id="challenge" class="final-challenge">
+            <h2>06. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Build your own <strong>CYBERPUNK PROFILE CARD</strong> using &lt;div&gt; (block wrapper) and &lt;span&gt; (inline highlights)!
+                Add your name, school, and skills with neon colors.
+            </div>
+            <div class="code-block final-challenge">
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Cyber Profile&lt;/title&gt;
+    &lt;style&gt;
+        body { background:#000; color:#00ffff; font-family:monospace; }
+        .profile { 
+            background:rgba(10,15,50,0.9); 
+            border:3px solid #ff00ff; 
+            padding:30px; 
+            border-radius:20px;
+            max-width:400px; margin:50px auto;
+            box-shadow:0 0 40px #ff00ff;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="profile"&gt;  &lt;!-- BLOCK WRAPPER --&gt;
+        &lt;h2 style="color:#ff00ff"&gt;🚀 [YOUR NAME]&lt;/h2&gt;
+        &lt;p&gt;I study &lt;span style="color:#00ffff"&gt;IT Programming&lt;/span&gt; at&lt;br&gt;
+           Central Mindanao University!&lt;/p&gt;
+        &lt;p&gt;Skills: &lt;span style="color:#ff1493"&gt;HTML&lt;/span&gt;, 
+           &lt;span style="color:#00ffff"&gt;CSS&lt;/span&gt;, 
+           &lt;span style="color:#ffff00"&gt;JavaScript&lt;/span&gt;&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>💻 READY TO CODE?</h3>
+            <p><strong>1️⃣</strong> Copy ALL code → <strong>2️⃣</strong> VS Code → <strong>3️⃣</strong> Save <code>html-block-inline.html</code></p>
+            <p><strong>4️⃣</strong> Open browser → <strong>5️⃣</strong> Build your profile card challenge!</p>
+            <p>✨ <strong>Dark neon pixelated cyberpunk theme</strong> - Perfect for CMU IT students! ✨</p>
+        </footer>
+    </div>
+</body>
+</html>

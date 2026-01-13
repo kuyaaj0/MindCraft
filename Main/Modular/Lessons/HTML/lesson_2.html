@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 HTML Headings & Paragraphs - Cyberpunk Lesson 2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: '💿 CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: '👁️ BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: '⚡ LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        .warning {
+            background: rgba(255, 20, 147, 0.15);
+            border-left-color: #ff1493 !important;
+        }
+
+        .warning::before {
+            content: '⚠️ WARNING';
+            color: #ff1493 !important;
+            text-shadow: 0 0 15px #ff1493;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HTML Headings & Paragraphs</h1>
+            <p class="subtitle">🎮 LESSON 2 - Cyberpunk Typography Matrix</p>
+        </header>
+
+        <section id="headings">
+            <h2>01. Heading Levels h1 → h6</h2>
+            <div class="explanation">
+                Headings create <span class="highlight">document structure</span> like chapters in a book. 
+                <strong>h1 = Main Title</strong> (use ONLY ONCE per page). h2-h6 = subsections. 
+                Size decreases, importance decreases.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;h1&gt;Main Page Title&lt;/h1&gt;     ✅ Biggest, most important
+&lt;h2&gt;Section Title&lt;/h2&gt;       ✅ Medium important  
+&lt;h3&gt;Subsection&lt;/h3&gt;          ✅ Smaller
+&lt;h4&gt;Detail&lt;/h4&gt;              ✅ Even smaller
+&lt;h5&gt;Fine detail&lt;/h5&gt;         ✅ Tiny
+&lt;h6&gt;Tiniest&lt;/h6&gt;             ✅ Smallest</code></pre>
+            </div>
+            <div class="demo-output">
+                <h1 style="color:#ff00ff;font-size:2.5em;">🌀 MAIN TITLE (h1)</h1>
+                <h2 style="color:#00ffff;font-size:2em;">Section Header (h2)</h2>
+                <h3 style="color:#ff1493;font-size:1.7em;">Subsection (h3)</h3>
+                <h4 style="color:#00bfff;font-size:1.4em;">Detail (h4)</h4>
+                <h5 style="color:#ff69b4;font-size:1.2em;">Fine (h5)</h5>
+                <h6 style="color:#00ffff;font-size:1em;">Tiny (h6)</h6>
+            </div>
+        </section>
+
+        <section id="paragraphs">
+            <h2>02. Paragraphs &lt;p&gt;</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;p&gt;</span> creates text blocks with proper spacing. 
+                Browsers add margins automatically. Perfect for readable content.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;This is a paragraph. Browsers add space above/below automatically.&lt;/p&gt;
+&lt;p&gt;Another paragraph. Perfect spacing between paragraphs!&lt;/p&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="font-size:1.2em;color:#e0e0ff;">This paragraph has nice spacing above and below. Perfect for reading!</p>
+                <p style="font-size:1.2em;color:#d0d0ff;">Second paragraph. Notice the space between paragraphs is automatic!</p>
+            </div>
+        </section>
+
+        <section id="line-breaks">
+            <h2>03. Line Breaks &lt;br&gt;</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;br&gt;</span> forces new line WITHOUT paragraph spacing. 
+                Use for addresses, poems, short breaks. Self-closing tag.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;Line 1&lt;br&gt;Line 2&lt;br&gt;Line 3&lt;/p&gt;
+&lt;address&gt;
+    Central Mindanao University&lt;br&gt;
+    Maramag, Bukidnon&lt;br&gt;
+    Philippines 8714
+&lt;/address&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="color:#00ff88;font-family:monospace;">Line 1<br>Line 2<br>Line 3</p>
+                <address style="color:#ff69b4;font-style:italic;">
+                    Central Mindanao University<br>
+                    Maramag, Bukidnon<br>
+                    Philippines 8714
+                </address>
+            </div>
+        </section>
+
+        <section id="structure">
+            <h2>04. Proper Document Structure</h2>
+            <div class="explanation">
+                Use headings like an <span class="highlight">outline</span>: h1 (main topic) → h2 (sections) → 
+                h3 (subsections). Paragraphs explain each section.
+            </div>
+            <ul class="examples">
+                <li>
+                    <strong>✅ GOOD STRUCTURE:</strong><br>
+                    <code>&lt;h1&gt;My Website&lt;/h1&gt;</code><br>
+                    <code>&lt;h2&gt;About Me&lt;/h2&gt;</code><br>
+                    <code>&lt;p&gt;My bio...&lt;/p&gt;</code><br>
+                    <code>&lt;h2&gt;Projects&lt;/h2&gt;</code>
+                </li>
+                <li class="warning">
+                    <strong>❌ BAD (jumping levels):</strong><br>
+                    <code>&lt;h1&gt;Title&lt;/h1&gt;</code><br>
+                    <code>&lt;h3&gt;Skip h2!&lt;/h3&gt;</code> ← Confusing!
+                </li>
+            </ul>
+        </section>
+
+        <section id="best-practices">
+            <h2>05. SEO & Accessibility Rules</h2>
+            <div class="explanation">
+                Search engines and screen readers follow your heading order. 
+                <strong>Never skip levels</strong> (h1 → h2 → h3). Use for structure, not styling.
+            </div>
+            <ul class="examples">
+                <li><span class="highlight">h1 = ONE per page</span> (main topic)</li>
+                <li><span class="highlight">h2 = main sections</span></li>
+                <li><span class="highlight">Paragraphs explain each section</span></li>
+                <li><span class="highlight">&lt;br&gt; = line breaks only</span> (poems, addresses)</li>
+            </ul>
+        </section>
+
+        <section id="challenge">
+            <h2>06. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Copy the code below. Change headings/paragraphs to create your own page about 
+                <strong>yourself, school, or projects</strong>!
+            </div>
+            <div class="code-block final-challenge">
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Cyberpunk Portfolio&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;🚀 [YOUR NAME] Portfolio&lt;/h1&gt;
+    
+    &lt;h2&gt;About Me&lt;/h2&gt;
+    &lt;p&gt;I study at Central Mindanao University.&lt;br&gt;
+    I love coding and cyberpunk design!&lt;/p&gt;
+    
+    &lt;h2&gt;My Projects&lt;/h2&gt;
+    &lt;p&gt;• Student Enrollment System&lt;br&gt;
+    • Gamified Learning App&lt;br&gt;
+    • Neon Website Themes&lt;/p&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>💻 READY TO CODE?</h3>
+            <p><strong>1️⃣</strong> Copy ALL code → <strong>2️⃣</strong> VS Code → <strong>3️⃣</strong> Save <code>html-headings.html</code></p>
+            <p><strong>4️⃣</strong> Open browser → <strong>5️⃣</strong> Edit the challenge code!</p>
+            <p>✨ <strong>Dark neon pixelated cyberpunk theme</strong> - Perfect for IT students! ✨</p>
+        </footer>
+    </div>
+</body>
+</html>

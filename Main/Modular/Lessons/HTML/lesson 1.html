@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Structure & Elements Lesson</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120,219,255,0.2) 0%, transparent 50%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, transparent 49%, rgba(255,105,180,0.03) 50%, rgba(255,105,180,0.03) 51%, transparent 52%),
+                linear-gradient(-45deg, transparent 49%, rgba(0,191,255,0.03) 50%, rgba(0,191,255,0.03) 51%, transparent 52%);
+            background-size: 20px 20px;
+            animation: pixelGrid 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes pixelGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid #ff69b4;
+            border-image: linear-gradient(45deg, #ff69b4, #00bfff, #ff69b4) 1;
+            border-radius: 15px;
+            box-shadow: 
+                0 0 30px rgba(255, 105, 180, 0.4),
+                0 0 60px rgba(0, 191, 255, 0.3),
+                inset 0 0 20px rgba(255, 105, 180, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff69b4, #00bfff, #ff1493, #1e90ff);
+            animation: neonGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { box-shadow: 0 0 20px rgba(255, 105, 180, 0.6); }
+            to { box-shadow: 0 0 40px rgba(0, 191, 255, 0.6); }
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.9) 0%, rgba(0, 191, 255, 0.9) 50%, rgba(255, 20, 147, 0.9) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, #ff69b4, #00bfff) 1;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff69b4, #00bfff, transparent);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px rgba(255, 105, 180, 0.8),
+                0 0 20px rgba(0, 191, 255, 0.6);
+            margin-bottom: 10px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            font-weight: 700;
+        }
+
+        section {
+            padding: 40px;
+            position: relative;
+        }
+
+        section:nth-child(even) {
+            background: rgba(20, 20, 40, 0.5);
+        }
+
+        h2 {
+            color: transparent;
+            background: linear-gradient(135deg, #ff69b4, #00bfff, #ff1493);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            position: relative;
+            text-shadow: none;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff69b4, #00bfff);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+        }
+
+        .code-example {
+            background: rgba(10, 15, 30, 0.9);
+            border: 2px solid #ff69b4;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 20px rgba(255, 105, 180, 0.3),
+                inset 0 0 10px rgba(0, 191, 255, 0.1);
+        }
+
+        .code-example::before {
+            content: 'CODE EXAMPLE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #0f0f1a;
+            color: #ff69b4;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .code-example pre {
+            margin: 0;
+            color: #00ff88;
+        }
+
+        .highlight {
+            background: rgba(255, 105, 180, 0.2);
+            color: #ffb6c1;
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 105, 180, 0.5);
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.4);
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            background: rgba(255, 105, 180, 0.1);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            margin: 12px 0;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        ul li:hover {
+            background: rgba(255, 105, 180, 0.2);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+            transform: translateX(5px);
+        }
+
+        ul li:before {
+            content: "✧ ";
+            color: #ff69b4;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.8);
+        }
+
+        .bad-example {
+            background: rgba(139, 0, 139, 0.15) !important;
+            border-color: rgba(255, 20, 147, 0.5) !important;
+        }
+
+        .bad-example li:before {
+            content: "✗ ";
+            color: #ff1493;
+            text-shadow: 0 0 5px rgba(255, 20, 147, 0.8);
+        }
+
+        .bad-example li:hover {
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        footer {
+            background: rgba(20, 20, 40, 0.8);
+            color: #00ffcc;
+            text-align: center;
+            padding: 25px;
+            font-size: 1em;
+            border-top: 2px solid rgba(0, 191, 255, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        code {
+            background: rgba(0, 191, 255, 0.1);
+            color: #00bfff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            section { padding: 25px 20px; }
+            h1 { font-size: 2.2em; }
+            .code-example { font-size: 13px; padding: 20px; }
+        }
+
+        /* Pixelated scanlines */
+        section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 105, 180, 0.1);
+            box-shadow: 
+                0 2px 0 rgba(0, 191, 255, 0.05),
+                0 4px 0 rgba(255, 105, 180, 0.05);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HTML Structure & Elements</h1>
+            <p class="subtitle">Neon Cyberpunk Edition - Complete Beginner Lesson</p>
+        </header>
+
+        <section id="doctype">
+            <h2>1. DOCTYPE Declaration</h2>
+            <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the <span class="highlight">very first line</span>. It tells browsers this is HTML5 and ensures proper rendering. Without it, browsers use "quirks mode" which breaks layouts.[web:1]</p>
+            <div class="code-example">
+                <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="html-tag">
+            <h2>2. &lt;html&gt; Root Element</h2>
+            <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content. It wraps <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>. Use <code>lang="en"</code> attribute for accessibility.[web:1][web:4]</p>
+            <div class="code-example">
+                <pre><code>&lt;html lang="en"&gt;
+  <!-- All content here -->
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="head">
+            <h2>3. &lt;head&gt; Element</h2>
+            <p><code>&lt;head&gt;</code> holds <span class="highlight">metadata only</span>: title, charset, viewport for mobile, links to CSS/JS. Nothing in <code>&lt;head&gt;</code> shows on the page.[web:1]</p>
+            <div class="code-example">
+                <pre><code>&lt;head&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;/head&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="body">
+            <h2>4. &lt;body&gt; Element</h2>
+            <p><code>&lt;body&gt;</code> contains <span class="highlight">all visible content</span>: text, images, links, etc. Exactly <strong>one per page</strong>.[web:1]</p>
+        </section>
+
+        <section id="tags">
+            <h2>5. HTML Tags & Elements</h2>
+            <p>Tags create elements: opening <code>&lt;tag&gt;</code>, content, closing <

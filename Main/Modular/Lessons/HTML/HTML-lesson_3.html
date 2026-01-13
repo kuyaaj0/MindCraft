@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 HTML Text Formatting - Cyberpunk Lesson 3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid - SAME as Lesson 2 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: '💿 CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: rgba(255, 0, 255, 0.2);
+            color: #ffb6ff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 0, 255, 0.6);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+            font-weight: bold;
+            animation: highlightPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 255, 0.7); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: '👁️ BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: '⚡ LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        /* FIXED: Proper warning class */
+        .warning {
+            border-left-color: #ff1493 !important;
+            background: rgba(255, 20, 147, 0.15) !important;
+            position: relative;
+        }
+
+        .warning::before {
+            content: '⚠️ WARNING';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #ff1493;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff1493;
+            animation: blink 2s infinite;
+        }
+
+        .warning:hover {
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.6) !important;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>HTML Text Formatting</h1>
+            <p class="subtitle">🎮 LESSON 3 - Cyberpunk Text Effects</p>
+        </header>
+
+        <section id="bold-italic">
+            <h2>01. Bold & Italic Tags</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;strong&gt;</span> = <strong>IMPORTANT content</strong> (screen readers announce)<br>
+                <span class="highlight">&lt;em&gt;</span> = <em>EMPHASIS/stress</em> (spoken differently)<br>
+                Use semantic tags for meaning, not just looks!
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;Always use &lt;strong&gt;semantic tags&lt;/strong&gt;!&lt;/p&gt;
+&lt;p&gt;This has &lt;em&gt;emphasis&lt;/em&gt; (spoken stress).&lt;/p&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="font-size:1.3em;color:#e0e0ff;">Always use <strong style="color:#ff00ff;">semantic tags</strong>!</p>
+                <p style="font-size:1.3em;color:#d0d0ff;">This has <em style="color:#00ffff;">emphasis</em> (spoken stress).</p>
+            </div>
+        </section>
+
+        <section id="size-tags">
+            <h2>02. Size Formatting</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;small&gt;</span> = Fine print/copyright<br>
+                <span class="highlight">&lt;sup&gt;</span> = Superscript (x², footnotes)<br>
+                <span class="highlight">&lt;sub&gt;</span> = Subscript (H₂O, chemistry)
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;Copyright &lt;small&gt;© 2026&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;Area = x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Water = H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="font-size:1.2em;">Copyright <small style="color:#ff69b4;">© 2026 CMU</small></p>
+                <p style="font-size:1.4em;">Area = x<sup style="color:#ff00ff;">2</sup></p>
+                <p style="font-size:1.4em;">Water = H<sub style="color:#00ffff;">2</sub>O</p>
+            </div>
+        </section>
+
+        <section id="quotes">
+            <h2>03. Quotes & Citations</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;blockquote&gt;</span> = Long quotes (indented)<br>
+                <span class="highlight">&lt;q&gt;</span> = Short inline quotes<br>
+                <span class="highlight">&lt;cite&gt;</span> = Source names/titles
+            </div>
+            <ul class="examples">
+                <li>
+                    <code>&lt;blockquote&gt;"Code is poetry"&lt;/blockquote&gt;</code><br>
+                    <div style="margin:20px 0;font-style:italic;color:#ff00ff;font-size:1.2em;">
+                        "Code is poetry"
+                    </div>
+                </li>
+                <li>
+                    <code>E&lt;q&gt;mc&lt;sup&gt;2&lt;/sup&gt;&lt;/q&gt;</code><br>
+                    <span style="font-size:1.2em;">E<q style="color:#00ffff;">mc²</q></span>
+                </li>
+            </ul>
+        </section>
+
+        <section id="code-text">
+            <h2>04. Code & Technical Text</h2>
+            <div class="explanation">
+                <span class="highlight">&lt;code&gt;</span> = Inline code<br>
+                <span class="highlight">&lt;pre&gt;</pre></span> = Preformatted (keeps spaces)<br>
+                <span class="highlight">&lt;kbd&gt;</span> = Keyboard keys
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;p&gt;Type &lt;code&gt;console.log&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Press &lt;kbd&gt;Ctrl+S&lt;/kbd&gt; to save&lt;/p&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p>Type <code style="color:#00ff88;background:rgba(0,255,136,0.2);">console.log</code></p>
+                <p>Press <kbd style="color:#ff69b4;border:1px solid #ff69b4;padding:4px 8px;">Ctrl+S</kbd> to save</p>
+            </div>
+        </section>
+
+        <section id="rules">
+            <h2>05. Golden Rules</h2>
+            <div class="explanation">
+                <strong>SEMANTIC = Meaning</strong> → &lt;strong&gt;, &lt;em&gt;, &lt;cite&gt;<br>
+                <strong>VISUAL = Looks only</strong> → &lt;b&gt;, &lt;i&gt; (avoid!)<br>
+                Screen readers + Google love semantic tags!
+            </div>
+            <ul class="examples">
+                <li>✅ <code>&lt;strong&gt;Important&lt;/strong&gt;</code></li>
+                <li class="warning">❌ <code>&lt;b&gt;Just bold&lt;/b&gt;</code></li>
+                <li>✅ <code>&lt;em&gt;Stress&lt;/em&gt;</code></li>
+                <li class="warning">❌ <code>&lt;i&gt;Just italic&lt;/i&gt;</code></li>
+            </ul>
+        </section>
+
+        <section id="challenge">
+            <h2>06. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Copy this code. Make your <strong>personal bio</strong> using ALL formatting tags!
+            </div>
+            <div class="code-block final-challenge">
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My &lt;em&gt;Cyberpunk&lt;/em&gt; Bio&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;🚀 &lt;strong&gt;[YOUR NAME]&lt;/strong&gt;&lt;/h1&gt;
+    
+    &lt;p&gt;I study &lt;strong&gt;IT&lt;/strong&gt; at &lt;cite&gt;Central Mindanao University&lt;/cite&gt;.&lt;/p&gt;
+    
+    &lt;p&gt;Formula: Passion&lt;sup&gt;2&lt;/sup&gt; + Code = Success&lt;/p&gt;
+    
+    &lt;p&gt;Pro tip: &lt;kbd&gt;Ctrl+S&lt;/kbd&gt; → &lt;code&gt;Live Server&lt;/code&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>💻 READY TO CODE?</h3>
+            <p><strong>1️⃣</strong> Copy ALL code → <strong>2️⃣</strong> VS Code → <strong>3️⃣</strong> Save <code>html-formatting.html</code></p>
+            <p><strong>4️⃣</strong> Open browser → <strong>5️⃣</strong> Practice formatting!</p>
+            <p>✨ <strong>FIXED: .error-demo → .warning</strong> - Same style as Lesson 2! ✨</p>
+        </footer>
+    </div>
+</body>
+</html>
