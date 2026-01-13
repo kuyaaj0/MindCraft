@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic HTML & Accessibility - Cyberpunk Lesson 20</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        nav {
+            background: rgba(10, 15, 50, 0.9);
+            padding: 20px;
+            border-bottom: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #00ffff;
+            text-decoration: none;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: bold;
+            padding: 12px 24px;
+            border: 2px solid transparent;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        nav a:hover {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' SEMANTIC CODE';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-semantic {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-semantic::before {
+            content: ' ACCESSIBLE OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        .cyber-form {
+            background: rgba(10, 15, 50, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #00ffff;
+            font-family: 'Roboto Mono', monospace;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff00ff;
+            border-radius: 10px;
+            color: #e0e0e0;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        img {
+            max-width: 300px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            nav ul { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CMU Cyberpunk Portal</h1>
+        <p>Welcome to Information Technology Department</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#courses">COURSES</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="semantic">
+            <h2>01. Semantic HTML5 Tags</h2>
+            <div class="explanation">
+                Use <span class="highlight">header</span>, <span class="highlight">nav</span>, <span class="highlight">main</span>, 
+                <span class="highlight">section</span>, <span class="highlight">article</span>, <span class="highlight">footer</span>.
+                Screen readers + SEO love semantic tags!
+            </div>
+        </section>
+
+        <section id="structure">
+            <h2>02. Perfect Page Structure</h2>
+            <div class="demo-semantic">
+                <header>
+                    <h1>Logo & Site Title</h1>
+                </header>
+                <nav>Navigation Menu</nav>
+                <main>
+                    <section>
+                        <article>Blog Post 1</article>
+                        <article>Blog Post 2</article>
+                    </section>
+                </main>
+                <footer>Copyright 2026</footer>
+            </div>
+        </section>
+
+        <section id="accessibility">
+            <h2>03. Accessibility Rules</h2>
+            <div class="explanation">
+                <span class="highlight">alt="description"</span> for ALL images. 
+                <span class="highlight">label for="id"</span> for ALL forms. 
+                <span class="highlight">aria-label</span> for icons.
+            </div>
+            <div class="demo-semantic">
+                <form class="cyber-form">
+                    <div class="form-group">
+                        <label for="studentid">Student ID</label>
+                        <input type="text" id="studentid" name="studentid" aria-describedby="help">
+                        <small id="help">Enter your CMU ID (2024-IT-0001)</small>
+                    </div>
+                </form>
+                <img src="https://via.placeholder.com/300x200/ff00ff/00ffff?text=CMU+LOGO" 
+                     alt="Central Mindanao University IT Department Logo with cyberpunk neon design">
+            </div>
+        </section>
+
+        <section id="bad-vs-good">
+            <h2>04. BAD vs GOOD Examples</h2>
+            <ul class="examples">
+                <li class="warning">
+                    <strong>❌ BAD:</strong> <code>&lt;div class="header"&gt;</code> → No meaning
+                </li>
+                <li>
+                    <strong>✅ GOOD:</strong> <code>&lt;header&gt;&lt;h1&gt;Title&lt;/h1&gt;&lt;/header&gt;</code>
+                </li>
+                <li class="warning">
+                    <strong>❌ BAD:</strong> <code>&lt;img src="logo.png"&gt;</code> → No alt text
+                </li>
+                <li>
+                    <strong>✅ GOOD:</strong> <code>&lt;img src="logo.png" alt="CMU Logo"&gt;</code>
+                </li>
+            </ul>
+        </section>
+
+        <section id="challenge">
+            <h2>05. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Build COMPLETE SEMANTIC CMU PORTAL using ALL semantic tags + accessibility!
+            </div>
+            <div class="code-block final-challenge">
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;title&gt;CMU IT Portal&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;CMU Information Technology&lt;/h1&gt;
+    &lt;/header&gt;
+    
+    &lt;nav&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#home"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+    
+    &lt;main&gt;
+        &lt;section aria-labelledby="courses"&gt;
+            &lt;h2 id="courses"&gt;Our Courses&lt;/```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic HTML & Accessibility - Cyberpunk Lesson 20</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        nav {
+            background: rgba(10, 15, 50, 0.9);
+            padding: 20px;
+            border-bottom: 2px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #00ffff;
+            text-decoration: none;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        nav a:hover {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' SEMANTIC CODE';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        .demo-semantic {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-semantic::before {
+            content: ' LIVE STRUCTURE';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        .cyber-form {
+            background: rgba(10, 15, 50, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #00ffff;
+            font-family: 'Roboto Mono', monospace;
+            margin-bottom: 8px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        article {
+            background: rgba(255, 0, 255, 0.08);
+            border-left: 5px solid #ff00ff;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            nav ul { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CMU Cyberpunk Portal</h1>
+        <p>Welcome to Information Technology</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#home">HOME</a></li>
+            <li><a href="#courses">COURSES</a></li>
+            <li><a href="#labs">LABS</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section id="semantic">
+                <h2>01. Semantic HTML5 Tags</h2>
+                <div class="explanation">
+                    <span class="highlight">header, nav, main, section, article, footer</span> = 
+                    tell browsers "what" content means, not just "how" it looks.
+                </div>
+                <div class="demo-semantic">
+                    <header>Top branding/navigation</header>
+                    <nav>Main menu links</nav>
+                    <main>Primary page content</main>
+                    <section>Themed content blocks</section>
+                    <article>Independent content</article>
+                    <footer>Page bottom info</footer>
+                </div>
+            </section>
+
+            <section id="structure">
+                <h2>02. Perfect Page Structure</h2>
+                <div class="explanation">
+                    Every page needs: <span class="highlight">header → nav → main → footer</span>. 
+                    Use <span class="highlight">section</span> and <span class="highlight">article</span> inside main.
+                </div>
+                <div class="code-block">
+                    <pre><code>&lt;header&gt;Logo + Title&lt;/header&gt;
+&lt;nav&gt;Menu links&lt;/nav&gt;
+&lt;main&gt;
+    &lt;section&gt;Content area 1&lt;/section&gt;
+    &lt;article&gt;Blog post&lt;/article&gt;
+&lt;/main&gt;
+&lt;footer&gt;Copyright&lt;/footer&gt;</code></pre>
+                </div>
+            </section>
+
+            <section id="accessibility">
+                <h2>03. Accessibility Features</h2>
+                <div class="explanation">
+                    <span class="highlight">alt=""</span> = image descriptions for screen readers. 
+                    <span class="highlight">label for=""</span> = connects labels to inputs.
+                </div>
+                <div class="demo-semantic">
+                    <figure>
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZmYwMGZmIi8+PHRleHQgeD0iNTAlIiB5PSI5MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzAwMDAwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UkVBRCBBTEVSVCE8L3RleHQ+PC9zdmc+" 
+                             alt="CMU Cyberpunk Programming Lab with neon lights and coding students">
+                        <figcaption>CMU IT Lab (screen reader reads this too!)</figcaption>
+                    </figure>
+                </div>
+            </section>
+
+            <section id="forms">
+                <h2>04. Accessible Forms</h2>
+                <div class="explanation">
+                    Always use <span class="highlight">label for="id"</span> matching input <span class="highlight">id</span>.
+                </div>
+                <form class="cyber-form" aria-label="Student Registration Form">
+                    <div class="form-group">
+                        <label for="studentname">Full Name:</label>
+                        <input type="text" id="studentname" name="name" aria-required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentemail">Email:</label>
+                        <input type="email" id="studentemail" name="email">
+                    </div>
+                </form>
+            </section>
+
+            <section id="articles">
+                <h2>05. Article vs Section</h2>
+                <div class="explanation">
+                    <span class="highlight">article</span> = standalone content (blog post). 
+                    <span class="highlight">section</span> = themed content group.
+                </div>
+                <article>
+                    <h3>Latest CMU IT News</h3>
+                    <p>New cyberpunk curriculum launched! Students love neon themes.</p>
+                </article>
+                <section>
+                    <h3>Programming Tracks</h3>
+                    <p>Web Dev → Mobile → AI → Cyber Security</p>
+                </section>
+            </section>
+
+            <section id="challenge">
+                <h2>06. YOUR CHALLENGE!</h2>
+                <div class="explanation">
+                    Build COMPLETE CMU IT DEPARTMENT PAGE with perfect semantic structure!
+                </div>
+                <div class="code-block final-challenge">
+                    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;CMU IT&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+    &lt;h1&gt;CMU Information Technology&lt;/h1&gt;
+&lt;/header&gt;
+
+&lt;nav&gt;&lt;/nav&gt;
+&lt;main&gt;
+    &lt;section aria-label="Courses"&gt;
+        &lt;article&gt;
+            &lt;h2&gt;BS Information Technology&lt;/h2&gt;
+            &lt;img src="cmu.jpg" alt="CMU campus"&gt;
+            &lt;p&gt;Cyberpunk coding!&lt;/p&gt;
+        &lt;/article&gt;
+    &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer&gt;© 2026 CMU&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <h3>ACCESSIBILITY COMPLETE</h3>
+        <p>Copy ALL code → VS Code → Save as <code>semantic-lesson20.html</code></p>
+        <p>Test with screen reader → Check structure → Perfect SEO + Accessibility!</p>
+        <p>Dark neon pixelated cyberpunk theme - Screen reader friendly!</p>
+    </footer>
+</body>
+</html>

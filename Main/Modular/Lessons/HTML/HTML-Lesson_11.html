@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using CSS with HTML - Cyberpunk Lesson 11</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cyberpunk pixel grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 40px;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 4em;
+            text-shadow: 0 0 40px #ff00ff, 0 0 60px #00ffff;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        section {
+            padding: 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px #ff00ff;
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.08);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            margin-bottom: 30px;
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1em;
+            color: #00ffff;
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border-radius: 15px;
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #00ffff;
+            border-top: 3px solid #ff00ff;
+            text-shadow: 0 0 20px #00ffff;
+            background: rgba(15, 15, 55, 0.9);
+        }
+
+        .highlight { 
+            color: #ff00ff; 
+            font-weight: bold; 
+            text-shadow: 0 0 10px #ff00ff; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Using CSS with HTML</h1>
+            <p class="subtitle">Lesson 11 - Cyberpunk Styling Matrix</p>
+        </header>
+
+        <section id="intro">
+            <h2>01. What is CSS?</h2>
+            <div class="explanation">
+                CSS, or <span class="highlight">Cascading Style Sheets</span>, defines how HTML elements look —
+                like their color, size, layout, or animation. HTML structures your page; CSS gives it <strong>style and personality</strong>.
+            </div>
+        </section>
+
+        <section id="inline-css">
+            <h2>02. Inline CSS</h2>
+            <div class="explanation">
+                Inline CSS is written directly inside an HTML tag using the
+                <span class="highlight">style</span> attribute. It applies only to that element.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;h2 style="color:deeppink; font-size:30px;"&gt;Hello Neon!&lt;/h2&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <h2 style="color:deeppink; font-size:30px;">Hello Neon!</h2>
+            </div>
+        </section>
+
+        <section id="internal-css">
+            <h2>03. Internal CSS</h2>
+            <div class="explanation">
+                Internal CSS is placed inside the <span class="highlight">&lt;style&gt;</span> tag in the
+                <span class="highlight">&lt;head&gt;</span> section. It styles elements across the same page.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;style&gt;
+    p {
+        color: cyan;
+        font-family: 'Roboto Mono', monospace;
+    }
+&lt;/style&gt;
+
+&lt;p&gt;This is styled using internal CSS.&lt;/p&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="color:cyan;font-family:'Roboto Mono',monospace;">This is styled using internal CSS.</p>
+            </div>
+        </section>
+
+        <section id="external-css">
+            <h2>04. External CSS</h2>
+            <div class="explanation">
+                External CSS is written in a separate file (like <span class="highlight">style.css</span>),
+                then linked to your HTML using the <span class="highlight">&lt;link&gt;</span> tag.
+                This method is best for large websites since one file controls multiple pages.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;!-- HTML File (index.html) --&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h2&gt;Cyber CSS Demo&lt;/h2&gt;
+&lt;/body&gt;
+
+--- style.css ---
+h2 {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+}</code></pre>
+            </div>
+            <div class="demo-output">
+                <h2 style="color:#00ffff;text-shadow:0 0 10px #00ffff;">Cyber CSS Demo</h2>
+            </div>
+        </section>
+
+        <section id="comparison">
+            <h2>05. Comparison Summary</h2>
+            <div class="explanation">
+                Here's how all three types of CSS compare:
+            </div>
+            <div class="code-block">
+                <pre><code>INLINE    → style="color:blue;" (1 HTML element)
+INTERNAL  → uses &lt;style&gt; inside &lt;head&gt; (1 HTML page)
+EXTERNAL  → linked .css file (multiple pages)</code></pre>
+            </div>
+        </section>
+
+        <section id="challenge">
+            <h2>06. Your Challenge!</h2>
+            <div class="explanation">
+                Create a web page with inline, internal, and external CSS!  
+                Experiment with your own dark neon design.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;h1 style="color:#ff00ff;"&gt;My Neon Website&lt;/h1&gt;
+&lt;style&gt;
+    body { background:black; color:cyan; }
+&lt;/style&gt;
+&lt;p&gt;This text glows using internal CSS.&lt;/p&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <p>Copy this into Visual Studio Code → Save as <code>css-with-html.html</code></p>
+            <p>Want extra glow? Create a <strong>style.css</strong> and link it!</p>
+            <p>⚡ Dark Neon Cyberpunk Design for IT Learners ⚡</p>
+        </footer>
+    </div>
+</body>
+</html>

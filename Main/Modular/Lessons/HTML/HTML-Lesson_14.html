@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Design - Cyberpunk Lesson 14</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        /* Responsive Demo Styles */
+        .responsive-demo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .responsive-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .fixed-width { width: 400px; background: rgba(255, 0, 255, 0.2); }
+        .percent-width { width: 50%; background: rgba(0, 255, 255, 0.2); }
+        .responsive-img { width: 100%; height: auto; border-radius: 10px; }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: ' LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .responsive-demo { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Responsive Design Basics</h1>
+            <p class="subtitle">LESSON 14 - Cyberpunk Mobile Matrix</p>
+        </header>
+
+        <section id="viewport">
+            <h2>01. Viewport Meta Tag</h2>
+            <div class="explanation">
+                The <span class="highlight">viewport meta tag</span> tells mobile browsers 
+                to show your site correctly. Without it, phones zoom out too much.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;meta name="viewport" 
+    content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+            </div>
+            <div class="demo-output">
+                <strong>Desktop:</strong> Full width, normal zoom<br>
+                <strong>Mobile:</strong> Fits phone screen perfectly (no tiny zoom-out)
+            </div>
+        </section>
+
+        <section id="percentage-widths">
+            <h2>02. Percentage Widths</h2>
+            <div class="explanation">
+                Use <span class="highlight">%</span> instead of fixed pixels. Elements 
+                shrink/grow with screen size automatically.
+            </div>
+            <div class="code-block">
+                <pre><code>.container { width: 90%; max-width: 1200px; }
+.box { width: 50%; }  /* Half screen */
+.image { width: 100%; }</code></pre>
+            </div>
+            <div class="demo-output">
+                <div class="responsive-demo">
+                    <div class="responsive-box fixed-width">
+                        FIXED 400px - Never changes
+                    </div>
+                    <div class="responsive-box percent-width">
+                        50% WIDTH - Shrinks on mobile
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="responsive-images">
+            <h2>03. Responsive Images</h2>
+            <div class="explanation">
+                Images with <span class="highlight">width: 100%; height: auto;</span> 
+                scale perfectly on all devices without distortion.
+            </div>
+            <div class="code-block">
+                <pre><code>img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+}</code></pre>
+            </div>
+            <div class="demo-output">
+                <img src="https://via.placeholder.com/600x300/ff00ff/000000?text=CYBERPUNK+IMAGE" 
+                     alt="Cyberpunk Image" class="responsive-img">
+                <p style="text-align:center;color:#00ffff;">Above image scales perfectly on phones!</p>
+            </div>
+        </section>
+
+        <section id="media-queries">
+            <h2>04. Media Queries</h2>
+            <div class="explanation">
+                Change styles based on screen size using <span class="highlight">@media</span>.
+            </div>
+            <ul class="examples">
+                <li>
+                    <strong>Tablets (768px and down):</strong><br>
+                    <code>@media (max-width: 768px) { h1 { font-size: 2em; } }</code>
+                </li>
+                <li>
+                    <strong>Phones (480px and down):</strong><br>
+                    <code>@media (max-width: 480px) { .container { padding: 10px; } }</code>
+                </li>
+            </ul>
+        </section>
+
+        <section id="challenge">
+            <h2>05. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Make your portfolio responsive! Test on phone browser and resize desktop window.
+            </div>
+            <div class="code-block">
+                <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div style="width:90%;max-width:800px;margin:20px auto;"&gt;
+        &lt;h1 style="font-size:2.5em;"&gt;[YOUR NAME]&lt;/h1&gt;
+        &lt;img src="your-photo.jpg" style="width:100%;height:auto;"&gt;
+        &lt;p style="width:100%;"&gt;CMU IT Student Portfolio&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>READY TO GO MOBILE?</h3>
+            <p>Copy ALL code → VS Code → Save as <code>responsive-lesson14.html</code></p>
+            <p>Resize browser window → Test on phone → See magic happen!</p>
+            <p>Dark neon pixelated cyberpunk theme - Works on ALL devices!</p>
+        </footer>
+    </div>
+</body>
+</html>
