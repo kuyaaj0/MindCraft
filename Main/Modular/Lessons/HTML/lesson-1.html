@@ -7,11 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Orbitron', monospace;
@@ -123,14 +119,8 @@
             font-weight: 700;
         }
 
-        section {
-            padding: 40px;
-            position: relative;
-        }
-
-        section:nth-child(even) {
-            background: rgba(20, 20, 40, 0.5);
-        }
+        section { padding: 40px; position: relative; }
+        section:nth-child(even) { background: rgba(20, 20, 40, 0.5); }
 
         h2 {
             color: transparent;
@@ -143,7 +133,6 @@
             margin-bottom: 25px;
             padding-bottom: 15px;
             position: relative;
-            text-shadow: none;
         }
 
         h2::after {
@@ -186,10 +175,7 @@
             font-weight: bold;
         }
 
-        .code-example pre {
-            margin: 0;
-            color: #00ff88;
-        }
+        .code-example pre { margin: 0; color: #00ff88; }
 
         .highlight {
             background: rgba(255, 105, 180, 0.2);
@@ -200,48 +186,19 @@
             box-shadow: 0 0 8px rgba(255, 105, 180, 0.4);
         }
 
-        ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
+        ul { list-style: none; padding-left: 0; }
         ul li {
             background: rgba(255, 105, 180, 0.1);
             border: 1px solid rgba(255, 105, 180, 0.3);
             margin: 12px 0;
             padding: 20px;
             border-radius: 10px;
-            position: relative;
             transition: all 0.3s ease;
         }
-
         ul li:hover {
             background: rgba(255, 105, 180, 0.2);
             box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
             transform: translateX(5px);
-        }
-
-        ul li:before {
-            content: "✧ ";
-            color: #ff69b4;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 105, 180, 0.8);
-        }
-
-        .bad-example {
-            background: rgba(139, 0, 139, 0.15) !important;
-            border-color: rgba(255, 20, 147, 0.5) !important;
-        }
-
-        .bad-example li:before {
-            content: "✗ ";
-            color: #ff1493;
-            text-shadow: 0 0 5px rgba(255, 20, 147, 0.8);
-        }
-
-        .bad-example li:hover {
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
         }
 
         footer {
@@ -270,7 +227,6 @@
             .code-example { font-size: 13px; padding: 20px; }
         }
 
-        /* Pixelated scanlines */
         section::after {
             content: '';
             position: absolute;
@@ -295,7 +251,7 @@
 
         <section id="doctype">
             <h2>1. DOCTYPE Declaration</h2>
-            <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the <span class="highlight">very first line</span>. It tells browsers this is HTML5 and ensures proper rendering. Without it, browsers use "quirks mode" which breaks layouts.[web:1]</p>
+            <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the <span class="highlight">very first line</span>. It tells browsers this is HTML5.</p>
             <div class="code-example">
                 <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
             </div>
@@ -303,17 +259,17 @@
 
         <section id="html-tag">
             <h2>2. &lt;html&gt; Root Element</h2>
-            <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content. It wraps <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code>. Use <code>lang="en"</code> attribute for accessibility.[web:1][web:4]</p>
+            <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content.</p>
             <div class="code-example">
                 <pre><code>&lt;html lang="en"&gt;
-  <!-- All content here -->
+  &lt;!-- All content here --&gt;
 &lt;/html&gt;</code></pre>
             </div>
         </section>
 
         <section id="head">
             <h2>3. &lt;head&gt; Element</h2>
-            <p><code>&lt;head&gt;</code> holds <span class="highlight">metadata only</span>: title, charset, viewport for mobile, links to CSS/JS. Nothing in <code>&lt;head&gt;</code> shows on the page.[web:1]</p>
+            <p><code>&lt;head&gt;</code> holds <span class="highlight">metadata only</span>: title, charset, viewport, CSS/JS links.</p>
             <div class="code-example">
                 <pre><code>&lt;head&gt;
   &lt;title&gt;My Page&lt;/title&gt;
@@ -325,9 +281,49 @@
 
         <section id="body">
             <h2>4. &lt;body&gt; Element</h2>
-            <p><code>&lt;body&gt;</code> contains <span class="highlight">all visible content</span>: text, images, links, etc. Exactly <strong>one per page</strong>.[web:1]</p>
+            <p><code>&lt;body&gt;</code> contains <span class="highlight">all visible content</span>: text, images, links, etc.</p>
         </section>
 
         <section id="tags">
             <h2>5. HTML Tags & Elements</h2>
-            <p>Tags create elements: opening <code>&lt;tag&gt;</code>, content, closing <
+            <p>Tags create elements with an opening tag, content, and closing tag.</p>
+            <div class="code-example">
+                <pre><code>&lt;p&gt;Hello World!&lt;/p&gt;</code></pre>
+            </div>
+            <ul>
+                <li><strong>Opening Tag:</strong> <code>&lt;p&gt;</code></li>
+                <li><strong>Closing Tag:</strong> <code>&lt;/p&gt;</code></li>
+                <li><strong>Content:</strong> The text or other elements between the tags.</li>
+            </ul>
+        </section>
+
+        <footer>
+            <p>© 2025 MindCraft | End of Lesson 1</p>
+        </footer>
+    </div>
+
+    <script>
+    // 📋 Copy Code Feature
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".code-example").forEach((box) => {
+        const btn = document.createElement("button");
+        btn.textContent = "📋 Copy";
+        btn.style.cssText = `
+          position: absolute; top: 8px; right: 10px;
+          font-size: 0.8rem; color: #fff;
+          background: #ff69b4; border: none;
+          border-radius: 5px; padding: 5px 10px;
+          cursor: pointer; font-family: 'Orbitron', sans-serif;
+        `;
+        btn.onclick = () => {
+          const codeText = box.querySelector("pre").innerText;
+          navigator.clipboard.writeText(codeText);
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => btn.textContent = "📋 Copy", 1500);
+        };
+        box.appendChild(btn);
+      });
+    });
+    </script>
+</body>
+</html>
