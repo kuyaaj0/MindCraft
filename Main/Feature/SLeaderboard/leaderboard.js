@@ -1,7 +1,7 @@
 // ===============================================
 // 🏆 MindCraft Live Leaderboard System (Optimized + Scrollable + Live Updates)
 // ===============================================
-
+//fixed
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
