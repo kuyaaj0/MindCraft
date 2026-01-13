@@ -259,7 +259,7 @@ footer {
 <main class="language-select">
   <h1>CHOOSE A CODING LANGUAGE</h1>
   <div class="language-grid">
-    <!-- Language cards same as before -->
+    <!-- Language Cards (HTML, CSS, JS) same as before -->
     <div class="language-card">
       <img src="../Assets/Icons/html.png" alt="HTML">
       <p>HTML</p>
@@ -275,7 +275,6 @@ footer {
         <option value="../Levels/Quiz/HTML/level-3.html">Level 3</option>
       </select>
     </div>
-
     <div class="language-card">
       <img src="../Assets/Icons/css.png" alt="CSS">
       <p>CSS</p>
@@ -291,7 +290,6 @@ footer {
         <option value="../Levels/Quiz/CSS/level-3.html">Level 3</option>
       </select>
     </div>
-
     <div class="language-card">
       <img src="../Assets/Icons/js.png" alt="JavaScript">
       <p>JavaScript</p>
@@ -322,7 +320,7 @@ footer {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -345,7 +343,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Firebase Authentication + XP Sync + Rank Display
+// Firebase Authentication + XP Sync + Live Rank
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -367,6 +365,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  // XP Sync
   const localXP = parseInt(localStorage.getItem(`${user.uid}_xp`)) || 0;
   const localLevel = parseInt(localStorage.getItem(`${user.uid}_level`)) || 1;
   const firestoreXP = data.xp ?? 0;
@@ -400,26 +399,34 @@ onAuthStateChanged(auth, async (user) => {
     setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
   }
 
-  // ✅ Calculate rank
-  try {
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("xp", "desc"), orderBy("level", "desc"));
-    const userDocs = await getDocs(q);
+  // ===============================
+  // 🔥 LIVE RANK DISPLAY
+  // ===============================
+  const rankDisplay = document.getElementById("rankDisplay");
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+
+  onSnapshot(q, (snapshot) => {
     let rank = 1;
-    userDocs.forEach(docSnap => {
-      if (docSnap.id === user.uid) return;
-      rank++;
+    let found = false;
+
+    snapshot.forEach(docSnap => {
+      if (docSnap.id === user.uid && !found) {
+        found = true;
+        return;
+      }
+      if (!found) rank++;
     });
 
-    const rankDisplay = document.getElementById("rankDisplay");
     rankDisplay.innerText = `Rank: #${rank}`;
-
     if (rank <= 3) {
       rankDisplay.classList.add("rank-top");
+    } else {
+      rankDisplay.classList.remove("rank-top");
     }
-  } catch (err) {
-    console.error("Error calculating rank:", err);
-  }
+  }, err => {
+    console.error("Error updating live rank:", err);
+  });
 });
 </script>
 </body>
