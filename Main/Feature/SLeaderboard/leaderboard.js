@@ -1,5 +1,5 @@
 // ===============================================
-// 🏆 MindCraft Live Leaderboard System (Top 3 Glow + Live Updates)
+// 🏆 MindCraft Live Leaderboard System (Optimized + Scrollable + Live Updates)
 // ===============================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -36,7 +36,7 @@ function createLeaderboardPopup(currentUID) {
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
     color: #fff; font-family: 'Press Start 2P', cursive;
-    z-index: 1000; padding: 20px; overflow-y: auto;
+    z-index: 1000; padding: 20px;
   `;
 
   const container = document.createElement("div");
@@ -49,6 +49,9 @@ function createLeaderboardPopup(currentUID) {
     max-width: 650px;
     box-shadow: 0 0 12px #1DB95433;
     text-align: center;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
   `;
 
   const title = document.createElement("h2");
@@ -58,6 +61,18 @@ function createLeaderboardPopup(currentUID) {
     margin-bottom: 15px;
     font-size: clamp(0.9rem, 3vw, 1.1rem);
     text-shadow: 0 0 6px #1DB95455;
+  `;
+
+  // Scrollable leaderboard container
+  const scrollArea = document.createElement("div");
+  scrollArea.style.cssText = `
+    overflow-y: auto;
+    max-height: 60vh;
+    width: 100%;
+    border-top: 1px solid #1DB95455;
+    border-bottom: 1px solid #1DB95455;
+    scrollbar-width: thin;
+    scrollbar-color: #1DB954 #111;
   `;
 
   const table = document.createElement("table");
@@ -77,9 +92,11 @@ function createLeaderboardPopup(currentUID) {
       </tr>
     </thead>
     <tbody id="leaderboardBody">
-      <tr><td colspan="4" style="padding:10px;">Loading...</td></tr>
+      <tr><td colspan="4" style="padding:10px;">⏳ Loading leaderboard...</td></tr>
     </tbody>
   `;
+
+  scrollArea.appendChild(table);
 
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "❌ Close";
@@ -100,12 +117,11 @@ function createLeaderboardPopup(currentUID) {
   closeBtn.onclick = () => overlay.remove();
 
   container.appendChild(title);
-  container.appendChild(table);
+  container.appendChild(scrollArea);
   container.appendChild(closeBtn);
   overlay.appendChild(container);
   document.body.appendChild(overlay);
 
-  // Start live leaderboard
   liveLeaderboard(currentUID);
 }
 
@@ -114,29 +130,32 @@ function createLeaderboardPopup(currentUID) {
 // ===============================================
 function liveLeaderboard(currentUID) {
   const leaderboardRef = collection(db, "users");
-
-  // Listen live, order by level then XP descending
   const q = query(leaderboardRef, orderBy("level", "desc"), orderBy("xp", "desc"));
 
+  const body = document.getElementById("leaderboardBody");
+
+  // Real-time snapshot
   onSnapshot(q, (snapshot) => {
     const users = [];
     snapshot.forEach((doc) => {
       const data = doc.data();
       users.push({
         uid: doc.id,
-        name: data.name || data.username || "Unknown",
+        name: data.name || "Unknown",
         level: data.level || 1,
         xp: data.xp || 0
       });
     });
 
-    const body = document.getElementById("leaderboardBody");
-    if (!body) return;
+    if (users.length === 0) {
+      body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
+      return;
+    }
 
-    body.innerHTML = users.slice(0, 100).map((u, i) => {
+    // Render only top 100 for performance
+    const rows = users.slice(0, 100).map((u, i) => {
       const rank = i + 1;
       let glow = "";
-
       if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
       else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
       else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
@@ -154,7 +173,9 @@ function liveLeaderboard(currentUID) {
       `;
     }).join("");
 
-    // Pulsing glow for top users
+    body.innerHTML = rows;
+
+    // Add glow animation once
     if (!document.getElementById("glowAnimation")) {
       const style = document.createElement("style");
       style.id = "glowAnimation";
@@ -170,6 +191,7 @@ function liveLeaderboard(currentUID) {
     }
   }, (err) => {
     console.error("⚠️ Live leaderboard error:", err);
+    body.innerHTML = `<tr><td colspan="4" style="padding:10px;">Error loading leaderboard.</td></tr>`;
   });
 }
 
