@@ -197,34 +197,6 @@ footer {
   10%, 80% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.05); }
 }
-
-/* ===== Media Queries ===== */
-@media (min-width: 480px) {
-  .xp-group { max-width: 450px; }
-  #xpBar { width: 100px; }
-  .language-card { width: calc(50% - 25px); }
-}
-
-@media (min-width: 768px) {
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 40px;
-  }
-  .xp-group { width: auto; margin-bottom: 0; gap: 40px; }
-  .xp-bar-container { gap: 10px; }
-  #xpBar { width: 120px; }
-  .user-actions { width: auto; margin-top: 0; }
-  .xp-status, .level-display { font-size: 0.7rem; }
-  button { font-size: 0.6rem; }
-  .language-card { width: calc(33.33% - 25px); max-width: none; }
-}
-
-@media (min-width: 1024px) {
-  h1 { font-size: 1.5rem; }
-  .xp-status, .level-display { font-size: 0.8rem; }
-  button { font-size: 0.65rem; }
-}
 </style>
 </head>
 <body>
@@ -259,7 +231,7 @@ footer {
 <main class="language-select">
   <h1>CHOOSE A CODING LANGUAGE</h1>
   <div class="language-grid">
-    <!-- Language Cards (HTML, CSS, JS) same as before -->
+    <!-- Language Cards -->
     <div class="language-card">
       <img src="../Assets/Icons/html.png" alt="HTML">
       <p>HTML</p>
@@ -320,7 +292,7 @@ footer {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -343,7 +315,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Firebase Authentication + XP Sync + Live Rank
+// Firebase Authentication + XP Display + Live Rank
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -365,30 +337,21 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // XP Sync
-  const localXP = parseInt(localStorage.getItem(`${user.uid}_xp`)) || 0;
-  const localLevel = parseInt(localStorage.getItem(`${user.uid}_level`)) || 1;
-  const firestoreXP = data.xp ?? 0;
-  const firestoreLevel = data.level ?? 1;
+  // ✅ Always use Firestore as the source of truth
+  const finalXP = data.xp ?? 0;
+  const finalLevel = data.level ?? 1;
   const xpMax = data.xpMax ?? 100;
-
-  let finalXP = Math.max(localXP, firestoreXP);
-  let finalLevel = Math.max(localLevel, firestoreLevel);
-
-  if (localXP > firestoreXP) {
-    try {
-      await updateDoc(userRef, { xp: finalXP, level: finalLevel, xpMax });
-      console.log(`🔁 Synced local XP (${localXP}) → Firestore`);
-    } catch (err) {
-      console.error("⚠️ Error syncing XP to Firestore:", err);
-    }
-  }
 
   document.getElementById("xpValue").innerText = finalXP;
   document.getElementById("xpBar").value = finalXP % xpMax;
   document.getElementById("xpBar").max = xpMax;
   document.getElementById("levelValue").innerText = finalLevel;
 
+  // Store latest XP locally for caching
+  localStorage.setItem(`${user.uid}_xp`, finalXP);
+  localStorage.setItem(`${user.uid}_level`, finalLevel);
+
+  // ✅ Welcome popup
   const welcomeOverlay = document.getElementById("welcomeOverlay");
   const name = user.displayName || data.name || user.email.split("@")[0];
   document.getElementById("studentName").textContent = name;
@@ -399,9 +362,7 @@ onAuthStateChanged(auth, async (user) => {
     setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
   }
 
-  // ===============================
-  // 🔥 LIVE RANK DISPLAY
-  // ===============================
+  // ✅ LIVE RANK DISPLAY
   const rankDisplay = document.getElementById("rankDisplay");
   const usersRef = collection(db, "users");
   const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
