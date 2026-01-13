@@ -115,6 +115,7 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); }
 </style>
 </head>
 <body>
+
 <div class="quiz-container">
   <h2>Grade 11 Quiz - Level 1: HTML Basics</h2>
   <h4 id="progress">Question 1 of 10</h4>
@@ -134,13 +135,30 @@ h4 { font-size: clamp(0.5rem, 1.5vw, 0.6rem); }
   <button id="backBtn">⬅ Back to Lobby</button>
 </div>
 
+<!-- ✅ Corrected sound file paths -->
 <audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
 <audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
 
+<!-- ✅ Theme loader -->
+<script src="../../../Design/theme.js"></script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  if (typeof window.applyTheme === 'function') {
+    const currentTheme = localStorage.getItem('theme') || 'dark';
+    window.applyTheme(currentTheme, false);
+  } else {
+    document.body.style.background = '#111'; // fallback
+  }
+});
+</script>
+
+<!-- ✅ Firebase + Quiz Logic -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import "../../../Design/navigate_return.js";
+import "../../../Design/theme.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -276,7 +294,7 @@ function initQuiz() {
   nextBtn.onclick = () => { currentQuestion++; loadQuestion(); };
   finishBtn.onclick = () => { clearInterval(interval); showPopup(); };
 
-  // ✅ FIXED — SAVE XP PROGRESS
+  // ✅ SAVE XP TO FIRESTORE
   async function showPopup() {
     document.querySelector(".quiz-container").classList.add('fade-out');
     const popup = document.getElementById("popupOverlay");
