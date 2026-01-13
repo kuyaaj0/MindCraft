@@ -1,5 +1,5 @@
 // ===============================================
-// 🏆 MindCraft Leaderboard System (Top 3 Glow Edition)
+// 🏆 MindCraft Leaderboard System (Responsive + Top 3 Glow)
 // Path: Main/Feature/SLeaderboard/leaderboard.js
 // ===============================================
 
@@ -23,7 +23,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 // ===============================================
-// 🧩 Create Popup Dynamically
+// 🧩 Create Popup Dynamically (with Responsive Style)
 // ===============================================
 function createLeaderboardPopup(currentUID) {
   if (document.getElementById("leaderboardOverlay")) return; // prevent duplicates
@@ -48,8 +48,10 @@ function createLeaderboardPopup(currentUID) {
     border: 2px solid #1DB954;
     border-radius: 12px;
     padding: 20px;
-    width: 90%; max-width: 650px;
+    width: 95%;
+    max-width: 650px;
     box-shadow: 0 0 12px #1DB95433;
+    text-align: center;
   `;
 
   const title = document.createElement("h2");
@@ -57,7 +59,7 @@ function createLeaderboardPopup(currentUID) {
   title.style = `
     color: #1DB954;
     margin-bottom: 15px;
-    font-size: clamp(0.8rem, 2vw, 1rem);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
     text-shadow: 0 0 6px #1DB95455;
   `;
 
@@ -65,9 +67,8 @@ function createLeaderboardPopup(currentUID) {
   table.style = `
     width: 100%;
     border-collapse: collapse;
-    text-align: center;
     color: #1DB954;
-    font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+    font-size: clamp(0.5rem, 1.8vw, 0.7rem);
   `;
   table.innerHTML = `
     <thead>
@@ -91,11 +92,14 @@ function createLeaderboardPopup(currentUID) {
     border: none;
     border-radius: 8px;
     color: white;
-    padding: 8px 14px;
+    padding: 8px 16px;
     font-family: 'Press Start 2P', cursive;
     cursor: pointer;
-    font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+    font-size: clamp(0.5rem, 2vw, 0.7rem);
+    transition: transform 0.3s;
   `;
+  closeBtn.onmouseenter = () => (closeBtn.style.transform = "scale(1.05)");
+  closeBtn.onmouseleave = () => (closeBtn.style.transform = "scale(1)");
   closeBtn.onclick = () => overlay.remove();
 
   container.appendChild(title);
@@ -136,10 +140,10 @@ async function loadLeaderboard(currentUID) {
       const rank = i + 1;
       let glowColor = "none";
 
-      // ✨ Subtle Glow for Top 3
-      if (rank === 1) glowColor = "0 0 10px rgba(255, 215, 0, 0.4)";       // gold
-      else if (rank === 2) glowColor = "0 0 8px rgba(192,192,192,0.3)";   // silver
-      else if (rank === 3) glowColor = "0 0 8px rgba(205,127,50,0.25)";   // bronze
+      // ✨ Soft Glow for Top 3
+      if (rank === 1) glowColor = "0 0 12px rgba(255,215,0,0.35)";       // gold
+      else if (rank === 2) glowColor = "0 0 10px rgba(192,192,192,0.3)"; // silver
+      else if (rank === 3) glowColor = "0 0 10px rgba(205,127,50,0.25)"; // bronze
 
       const rowStyle = `
         background: rgba(255,255,255,0.02);
@@ -148,7 +152,7 @@ async function loadLeaderboard(currentUID) {
       `;
 
       const hoverStyle = `
-        onmouseenter="this.style.background='rgba(255,255,255,0.05)'"
+        onmouseenter="this.style.background='rgba(255,255,255,0.06)'"
         onmouseleave="this.style.background='rgba(255,255,255,0.02)'"
       `;
 
