@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Structure & Elements - Cyberpunk Lesson 1</title>
+    <title>HTML Structure & Elements Lesson</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-
-        * { margin:0; padding:0; box-sizing:border-box; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Orbitron', monospace;
-            background:#0a0a0a;
-            color:#e0e0e0;
-            min-height:100vh;
-            padding:20px;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
             background-image:
                 radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
@@ -24,11 +24,13 @@
         }
 
         body::before {
-            content:'';
+            content: '';
             position: fixed;
-            top:0; left:0;
-            width:100%; height:100%;
-            background-image:
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
                 linear-gradient(45deg, transparent 49%, rgba(255,105,180,0.03) 50%, rgba(255,105,180,0.03) 51%, transparent 52%),
                 linear-gradient(-45deg, transparent 49%, rgba(0,191,255,0.03) 50%, rgba(0,191,255,0.03) 51%, transparent 52%);
             background-size: 20px 20px;
@@ -36,148 +38,235 @@
             z-index: -1;
         }
 
-        @keyframes pixelGrid { 0%{transform:translate(0,0);} 100%{transform:translate(20px,20px);} }
+        @keyframes pixelGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
 
         .container {
-            max-width:1200px;
-            margin:0 auto;
-            background: rgba(15,15,25,0.95);
-            border:2px solid #ff69b4;
-            border-image: linear-gradient(45deg,#ff69b4,#00bfff,#ff69b4) 1;
-            border-radius:15px;
-            box-shadow: 0 0 30px rgba(255,105,180,0.4), 0 0 60px rgba(0,191,255,0.3), inset 0 0 20px rgba(255,105,180,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid #ff69b4;
+            border-image: linear-gradient(45deg, #ff69b4, #00bfff, #ff69b4) 1;
+            border-radius: 15px;
+            box-shadow: 
+                0 0 30px rgba(255, 105, 180, 0.4),
+                0 0 60px rgba(0, 191, 255, 0.3),
+                inset 0 0 20px rgba(255, 105, 180, 0.1);
             backdrop-filter: blur(10px);
-            overflow:hidden;
-            position:relative;
-        }
-
-        header {
-            background: linear-gradient(135deg, rgba(255,105,180,0.9) 0%, rgba(0,191,255,0.9) 50%, rgba(255,20,147,0.9) 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            border-bottom:3px solid transparent;
-            border-image: linear-gradient(90deg,#ff69b4,#00bfff) 1;
-            padding:40px;
-            text-align:center;
-            position:relative;
-        }
-
-        h1 {
-            font-size:3em;
-            font-weight:900;
-            text-shadow: 0 0 10px rgba(255,105,180,0.8), 0 0 20px rgba(0,191,255,0.6);
-            margin-bottom:10px;
-            animation: titlePulse 3s ease-in-out infinite;
-        }
-
-        @keyframes titlePulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
-
-        .subtitle { font-size:1.3em; color:#00ffcc; text-shadow:0 0 10px rgba(0,255,204,0.5); font-weight:700; }
-
-        section { padding:40px; position:relative; }
-        section:nth-child(even){ background: rgba(20,20,40,0.5); }
-
-        h2 {
-            color:transparent;
-            background: linear-gradient(135deg,#ff69b4,#00bfff,#ff1493);
-            background-clip: text;
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-            font-size:2.2em;
-            font-weight:700;
-            margin-bottom:25px;
-            padding-bottom:15px;
-            position:relative;
-        }
-
-        h2::after {
-            content:'';
-            position:absolute;
-            bottom:0; left:0;
-            width:60px; height:4px;
-            background: linear-gradient(90deg,#ff69b4,#00bfff);
-            border-radius:2px;
-            box-shadow:0 0 10px rgba(255,105,180,0.6);
-        }
-
-        .code-example {
-            background: rgba(10,15,30,0.9);
-            border:2px solid #ff69b4;
-            border-radius:12px;
-            padding:25px;
-            margin:25px 0;
-            font-family:'Courier New', monospace;
-            font-size:14px;
-            line-height:1.6;
-            overflow-x:auto;
-            position:relative;
-            box-shadow:0 0 20px rgba(255,105,180,0.3), inset 0 0 10px rgba(0,191,255,0.1);
-        }
-
-        .code-example::before {
-            content:'CODE EXAMPLE';
-            position:absolute;
-            top:-12px;
-            left:20px;
-            background:#0f0f1a;
-            color:#ff69b4;
-            padding:0 15px;
-            font-size:12px;
-            font-weight:bold;
-        }
-
-        .copy-btn {
-            position:absolute;
-            top:10px; right:10px;
-            background:#ff69b4;
-            color:#0a0a0a;
-            border:none;
-            padding:5px 10px;
-            border-radius:8px;
-            font-weight:bold;
-            cursor:pointer;
-            box-shadow:0 0 10px #ff69b4;
-            transition:0.3s;
-        }
-
-        .copy-btn:hover {
-            background:#00bfff;
-            color:#fff;
-            box-shadow:0 0 15px #00bfff;
-        }
-
-        .highlight { background: rgba(255,105,180,0.2); color:#ffb6c1; padding:3px 8px; border-radius:5px; border:1px solid rgba(255,105,180,0.5); }
-
-        footer {
-            background: rgba(20,20,40,0.8);
-            color:#00ffcc;
-            text-align:center;
-            padding:25px;
-            font-size:1em;
-            border-top:2px solid rgba(0,191,255,0.5);
-            text-shadow:0 0 10px rgba(0,255,204,0.5);
+            overflow: hidden;
             position: relative;
         }
 
-        .exit-button {
-            display:inline-block;
-            margin:20px 0;
-            padding:15px 30px;
-            color:#ff69b4;
-            font-weight:bold;
-            text-decoration:none;
-            border:2px solid #ff69b4;
-            border-radius:25px;
-            text-shadow:0 0 10px #ff69b4;
-            transition: all 0.3s ease;
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff69b4, #00bfff, #ff1493, #1e90ff);
+            animation: neonGlow 2s ease-in-out infinite alternate;
         }
 
-        .exit-button:hover {
+        @keyframes neonGlow {
+            from { box-shadow: 0 0 20px rgba(255, 105, 180, 0.6); }
+            to { box-shadow: 0 0 40px rgba(0, 191, 255, 0.6); }
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.9) 0%, rgba(0, 191, 255, 0.9) 50%, rgba(255, 20, 147, 0.9) 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            border-bottom: 3px solid transparent;
+            border-image: linear-gradient(90deg, #ff69b4, #00bfff) 1;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff69b4, #00bfff, transparent);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 10px rgba(255, 105, 180, 0.8),
+                0 0 20px rgba(0, 191, 255, 0.6);
+            margin-bottom: 10px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #00ffcc;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+            font-weight: 700;
+        }
+
+        /* Exit Button Styles */
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            background: #ff1493;
+            border: 2px solid #ff69b4;
+            border-radius: 8px;
+            padding: 6px 14px;
+            text-decoration: none;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.7);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .exit-btn:hover {
             background: #ff69b4;
-            color:#0a0a0a;
-            box-shadow:0 0 20px #ff69b4;
-            transform:scale(1.05);
+            color: #0a0a0a;
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.8);
+            transform: scale(1.05);
+        }
+
+        section { padding: 40px; position: relative; }
+        section:nth-child(even) { background: rgba(20, 20, 40, 0.5); }
+
+        h2 {
+            color: transparent;
+            background: linear-gradient(135deg, #ff69b4, #00bfff, #ff1493);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff69b4, #00bfff);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+        }
+
+        .code-example {
+            background: rgba(10, 15, 30, 0.9);
+            border: 2px solid #ff69b4;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 20px rgba(255, 105, 180, 0.3),
+                inset 0 0 10px rgba(0, 191, 255, 0.1);
+        }
+
+        .code-example::before {
+            content: 'CODE EXAMPLE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #0f0f1a;
+            color: #ff69b4;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .code-example pre { margin: 0; color: #00ff88; }
+
+        .highlight {
+            background: rgba(255, 105, 180, 0.2);
+            color: #ffb6c1;
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 105, 180, 0.5);
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.4);
+        }
+
+        ul { list-style: none; padding-left: 0; }
+        ul li {
+            background: rgba(255, 105, 180, 0.1);
+            border: 1px solid rgba(255, 105, 180, 0.3);
+            margin: 12px 0;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        ul li:hover {
+            background: rgba(255, 105, 180, 0.2);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+            transform: translateX(5px);
+        }
+
+        footer {
+            background: rgba(20, 20, 40, 0.8);
+            color: #00ffcc;
+            text-align: center;
+            padding: 25px;
+            font-size: 1em;
+            border-top: 2px solid rgba(0, 191, 255, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        code {
+            background: rgba(0, 191, 255, 0.1);
+            color: #00bfff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            section { padding: 25px 20px; }
+            h1 { font-size: 2.2em; }
+            .code-example { font-size: 13px; padding: 20px; }
+            .exit-btn { top: 10px; right: 10px; padding: 4px 10px; font-size: 0.8rem; }
+        }
+
+        section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 105, 180, 0.1);
+            box-shadow: 
+                0 2px 0 rgba(0, 191, 255, 0.05),
+                0 4px 0 rgba(255, 105, 180, 0.05);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -186,62 +275,84 @@
         <header>
             <h1>HTML Structure & Elements</h1>
             <p class="subtitle">Neon Cyberpunk Edition - Complete Beginner Lesson</p>
+            <a href="index.html" class="exit-btn">EXIT</a>
         </header>
 
-        <!-- Example sections -->
         <section id="doctype">
             <h2>1. DOCTYPE Declaration</h2>
-            <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the <span class="highlight">very first line</span>.</p>
+            <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the <span class="highlight">very first line</span>. It tells browsers this is HTML5.</p>
             <div class="code-example">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
             </div>
         </section>
 
         <section id="html-tag">
             <h2>2. &lt;html&gt; Root Element</h2>
+            <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content.</p>
             <div class="code-example">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <pre><code>&lt;html lang="en"&gt;...&lt;/html&gt;</code></pre>
+                <pre><code>&lt;html lang="en"&gt;
+  &lt;!-- All content here --&gt;
+&lt;/html&gt;</code></pre>
             </div>
         </section>
 
         <section id="head">
             <h2>3. &lt;head&gt; Element</h2>
+            <p><code>&lt;head&gt;</code> holds <span class="highlight">metadata only</span>: title, charset, viewport, CSS/JS links.</p>
             <div class="code-example">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 <pre><code>&lt;head&gt;
-    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;title&gt;My Page&lt;/title&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
 &lt;/head&gt;</code></pre>
             </div>
         </section>
 
         <section id="body">
             <h2>4. &lt;body&gt; Element</h2>
-            <div class="code-example">
-                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-                <pre><code>&lt;body&gt;
-    &lt;h1&gt;Hello World&lt;/h1&gt;
-&lt;/body&gt;</code></pre>
-            </div>
+            <p><code>&lt;body&gt;</code> contains <span class="highlight">all visible content</span>: text, images, links, etc.</p>
         </section>
 
-        <!-- Exit Lesson Button -->
-        <a href="Student.html" class="exit-button">Exit Lesson</a>
+        <section id="tags">
+            <h2>5. HTML Tags & Elements</h2>
+            <p>Tags create elements with an opening tag, content, and closing tag.</p>
+            <div class="code-example">
+                <pre><code>&lt;p&gt;Hello World!&lt;/p&gt;</code></pre>
+            </div>
+            <ul>
+                <li><strong>Opening Tag:</strong> <code>&lt;p&gt;</code></li>
+                <li><strong>Closing Tag:</strong> <code>&lt;/p&gt;</code></li>
+                <li><strong>Content:</strong> The text or other elements between the tags.</li>
+            </ul>
+        </section>
 
         <footer>
-            <p>✨ Neon Cyberpunk HTML Lesson ✨</p>
+            <p>© 2025 MindCraft | End of Lesson 1</p>
         </footer>
     </div>
 
     <script>
-        function copyCode(btn) {
-            const code = btn.nextElementSibling.innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.innerText = 'Copied!';
-                setTimeout(()=>{btn.innerText='Copy';},1500);
-            });
-        }
+    // 📋 Copy Code Feature
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".code-example").forEach((box) => {
+        const btn = document.createElement("button");
+        btn.textContent = "📋 Copy";
+        btn.style.cssText = `
+          position: absolute; top: 8px; right: 10px;
+          font-size: 0.8rem; color: #fff;
+          background: #ff69b4; border: none;
+          border-radius: 5px; padding: 5px 10px;
+          cursor: pointer; font-family: 'Orbitron', sans-serif;
+        `;
+        btn.onclick = () => {
+          const codeText = box.querySelector("pre").innerText;
+          navigator.clipboard.writeText(codeText);
+          btn.textContent = "✅ Copied!";
+          setTimeout(() => btn.textContent = "📋 Copy", 1500);
+        };
+        box.appendChild(btn);
+      });
+    });
     </script>
 </body>
 </html>
