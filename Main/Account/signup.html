@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// === Student Sign Up + Firebase Verification ===
+// === Student Sign Up + Firebase Verification + Leaderboard Ready ===
 document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('studentName').value.trim();
@@ -182,6 +182,7 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
+    // ✅ Updated setDoc for live leaderboard
     await setDoc(doc(db, "users", userCred.user.uid), {
       name,
       email,
@@ -189,7 +190,11 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
       verified: false,
       level: 1,
       xp: 0,
-      xpMax: 100
+      xpMax: 100,
+      totalXP: 0,
+      completedLessons: [],
+      completedQuizzes: [],
+      createdAt: new Date()
     });
 
     await sendEmailVerification(userCred.user);
@@ -197,9 +202,7 @@ document.getElementById('studentSignupForm').addEventListener('submit', async (e
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Account created! Please verify your Gmail before signing in.";
 
-    setTimeout(() => {
-      window.location.href = "signin.html";
-    }, 3000);
+    setTimeout(() => window.location.href = "signin.html", 3000);
   } catch (err) {
     console.error("Signup error:", err);
     msg.style.color = "#ff5252";
@@ -229,9 +232,7 @@ document.getElementById('teacherSignupForm').addEventListener('submit', async (e
       email,
       role: "teacher",
       verified: true,
-      level: 1,
-      xp: 0,
-      xpMax: 100
+      createdAt: new Date()
     });
 
     showToast("✅ Teacher account created!");
