@@ -228,6 +228,7 @@ footer {
 
   <div class="user-actions">
     <button onclick="location.href='../Account/account.html'">👤 Account</button>
+    <button id="leaderboardBtn">🏆 Leaderboard</button>
     <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
   </div>
 </header>
@@ -289,8 +290,10 @@ footer {
   <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
 </footer>
 
+<!-- Scripts -->
 <script src="../Design/theme.js"></script>
 <script src="../Exp/levels.js"></script>
+<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -318,7 +321,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ✅ Firebase Authentication
+// ✅ Firebase Authentication + XP Sync
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -340,7 +343,6 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // === 🔁 XP Synchronization Logic ===
   const localXP = parseInt(localStorage.getItem(`${user.uid}_xp`)) || 0;
   const localLevel = parseInt(localStorage.getItem(`${user.uid}_level`)) || 1;
   const firestoreXP = data.xp ?? 0;
@@ -350,27 +352,20 @@ onAuthStateChanged(auth, async (user) => {
   let finalXP = Math.max(localXP, firestoreXP);
   let finalLevel = Math.max(localLevel, firestoreLevel);
 
-  // ✅ If local XP is higher, push it to Firestore
   if (localXP > firestoreXP) {
     try {
-      await updateDoc(userRef, {
-        xp: finalXP,
-        level: finalLevel,
-        xpMax: xpMax
-      });
+      await updateDoc(userRef, { xp: finalXP, level: finalLevel, xpMax });
       console.log(`🔁 Synced local XP (${localXP}) → Firestore`);
     } catch (err) {
       console.error("⚠️ Error syncing XP to Firestore:", err);
     }
   }
 
-  // === Update UI ===
   document.getElementById("xpValue").innerText = finalXP;
   document.getElementById("xpBar").value = finalXP % xpMax;
   document.getElementById("xpBar").max = xpMax;
   document.getElementById("levelValue").innerText = finalLevel;
 
-  // === Welcome Popup Logic (only once per session) ===
   const welcomeOverlay = document.getElementById("welcomeOverlay");
   const name = user.displayName || data.name || user.email.split("@")[0];
   document.getElementById("studentName").textContent = name;
