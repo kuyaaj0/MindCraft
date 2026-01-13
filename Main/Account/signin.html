@@ -188,12 +188,18 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
 
         if (needsUpdate) {
             await setDoc(userRef, data, { merge: true });
-            console.log("🔄 Old student account fields updated.");
+            console.log("🔄 Old student account fields updated in Firebase.");
         }
 
-        // Store name & role locally for instant account display
+        // ==== Store all relevant data locally for Student.html ====
         localStorage.setItem("cachedName", data.name || "Student");
         localStorage.setItem("currentRole", "student");
+        localStorage.setItem("level", data.level);
+        localStorage.setItem("xp", data.xp);
+        localStorage.setItem("xpMax", data.xpMax);
+        localStorage.setItem("totalXP", data.totalXP);
+        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons));
+        localStorage.setItem("completedQuizzes", JSON.stringify(data.completedQuizzes));
 
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
@@ -219,15 +225,19 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
 
     try {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
-        const snap = await getDoc(doc(db, "users", userCred.user.uid));
+        const userRef = doc(db, "users", userCred.user.uid);
+        const snap = await getDoc(userRef);
 
         if (!snap.exists() || snap.data().role !== "teacher") {
             msg.textContent = "❌ This account is not a teacher.";
             return;
         }
 
-        // Store name & role locally for instant account display
-        localStorage.setItem("cachedName", snap.data().name || "Teacher");
+        let data = snap.data();
+
+        // Optional: Auto-update teacher fields here if needed in future
+
+        localStorage.setItem("cachedName", data.name || "Teacher");
         localStorage.setItem("currentRole", "teacher");
 
         msg.style.color = "#1DB954";
