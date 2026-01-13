@@ -103,7 +103,7 @@ button:hover { background: #1ed760; }
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== Navigation Buttons =====
 document.getElementById("homeBtn").addEventListener("click", () => {
@@ -143,6 +143,16 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
+// ==== Default fields for new features ====
+const defaultStudentFields = {
+    level: 1,
+    xp: 0,
+    xpMax: 100,
+    totalXP: 0,
+    completedLessons: [],
+    completedQuizzes: []
+};
+
 // ==== Sign In Logic (Student) ====
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -157,19 +167,38 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
 
     try {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
-        const snap = await getDoc(doc(db, "users", userCred.user.uid));
+        const userRef = doc(db, "users", userCred.user.uid);
+        const snap = await getDoc(userRef);
+
         if (!snap.exists() || snap.data().role !== "student") {
             msg.textContent = "❌ This account is not a student.";
             return;
         }
 
+        let data = snap.data();
+
+        // ✅ Auto-update missing fields for old accounts
+        let needsUpdate = false;
+        for (const key in defaultStudentFields) {
+            if (!(key in data)) {
+                data[key] = defaultStudentFields[key];
+                needsUpdate = true;
+            }
+        }
+
+        if (needsUpdate) {
+            await setDoc(userRef, data, { merge: true });
+            console.log("🔄 Old student account fields updated.");
+        }
+
         // Store name & role locally for instant account display
-        localStorage.setItem("cachedName", snap.data().name || "Student");
+        localStorage.setItem("cachedName", data.name || "Student");
         localStorage.setItem("currentRole", "student");
 
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
         setTimeout(() => window.location.href = "../Webside/Student.html", 800);
+
     } catch(err) {
         console.error("Sign-in error:", err);
         msg.textContent = `❌ ${err.message}`;
@@ -191,6 +220,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
     try {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         const snap = await getDoc(doc(db, "users", userCred.user.uid));
+
         if (!snap.exists() || snap.data().role !== "teacher") {
             msg.textContent = "❌ This account is not a teacher.";
             return;
@@ -203,6 +233,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
         setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
+
     } catch(err) {
         console.error("Sign-in error:", err);
         msg.textContent = `❌ ${err.message}`;
