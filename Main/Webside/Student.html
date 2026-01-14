@@ -292,7 +292,7 @@ footer {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -307,7 +307,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Apply stored theme instantly
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof window.applyTheme === "function") {
     const currentTheme = localStorage.getItem("theme") || "dark";
@@ -315,7 +314,6 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Firebase Authentication + XP Display + Live Rank
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -337,24 +335,25 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // ✅ Always use Firestore as the source of truth
+  // ✅ Firestore is the main source
   const finalXP = data.xp ?? 0;
   const finalLevel = data.level ?? 1;
   const xpMax = data.xpMax ?? 100;
 
+  // 🧩 Always update local cache to match Firestore
+  localStorage.setItem(`${user.uid}_xp`, finalXP);
+  localStorage.setItem(`${user.uid}_level`, finalLevel);
+
+  // 🖥️ Display XP + Level
   document.getElementById("xpValue").innerText = finalXP;
   document.getElementById("xpBar").value = finalXP % xpMax;
   document.getElementById("xpBar").max = xpMax;
   document.getElementById("levelValue").innerText = finalLevel;
 
-  // Store latest XP locally for caching
-  localStorage.setItem(`${user.uid}_xp`, finalXP);
-  localStorage.setItem(`${user.uid}_level`, finalLevel);
-
-  // ✅ Welcome popup
-  const welcomeOverlay = document.getElementById("welcomeOverlay");
+  // 🎉 Welcome overlay
   const name = user.displayName || data.name || user.email.split("@")[0];
   document.getElementById("studentName").textContent = name;
+  const welcomeOverlay = document.getElementById("welcomeOverlay");
 
   if (!sessionStorage.getItem("welcomeShown")) {
     sessionStorage.setItem("welcomeShown", "true");
@@ -362,7 +361,7 @@ onAuthStateChanged(auth, async (user) => {
     setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
   }
 
-  // ✅ LIVE RANK DISPLAY
+  // 🏅 LIVE RANK SYSTEM
   const rankDisplay = document.getElementById("rankDisplay");
   const usersRef = collection(db, "users");
   const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
@@ -380,12 +379,9 @@ onAuthStateChanged(auth, async (user) => {
     });
 
     rankDisplay.innerText = `Rank: #${rank}`;
-    if (rank <= 3) {
-      rankDisplay.classList.add("rank-top");
-    } else {
-      rankDisplay.classList.remove("rank-top");
-    }
-  }, err => {
+    if (rank <= 3) rankDisplay.classList.add("rank-top");
+    else rankDisplay.classList.remove("rank-top");
+  }, (err) => {
     console.error("Error updating live rank:", err);
   });
 });
