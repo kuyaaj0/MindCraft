@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maps & Sets + Type Conversion – Cyberpunk Lesson 15</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: matrixFlow 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes matrixFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+      border-radius: 25px;
+      box-shadow:
+        0 0 60px rgba(255,0,255,0.5),
+        0 0 120px rgba(0,255,255,0.4),
+        inset 0 0 40px rgba(255,0,255,0.1);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+      text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+      animation: pulseHue 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseHue {
+      0%, 100% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(180deg); }
+    }
+
+    .subtitle {
+      font-size: 1.6em;
+      background: linear-gradient(90deg, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientScroll 4s infinite ease-in-out;
+    }
+
+    @keyframes gradientScroll {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15,10,45,0.7);
+    }
+
+    h2 {
+      font-size: 2.6em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.2em;
+      background: rgba(255,0,255,0.05);
+      padding: 25px;
+      border-left: 5px solid #ff00ff;
+      border-radius: 10px;
+      color: #d0d0ff;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 25px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      color: #aefaff;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0, 20, 60, 0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 30px;
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 50px;
+      background: rgba(15,15,55,0.95);
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff;
+      border-top: 3px solid #ff00ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Maps, Sets & Type Conversion</h1>
+      <p class="subtitle">Lesson 15 - Cyberpunk Data Systems</p>
+    </header>
+
+    <section id="maps">
+      <h2>01. Map Basics</h2>
+      <div class="explanation">
+        A <span class="highlight">Map</span> stores key-value pairs (like an object) — but keys can be of any type (even objects!).  
+        Use methods like <span class="highlight">set()</span>, <span class="highlight">get()</span>, and <span class="highlight">has()</span> to work with data.
+      </div>
+      <div class="code-block">
+<pre><code>let hackerMap = new Map();
+hackerMap.set("alias", "Neo");
+hackerMap.set("level", 9000);
+hackerMap.set("gear", ["Gloves", "Visor"]);
+
+console.log(hackerMap.get("alias"));
+console.log(hackerMap.has("level"));
+console.log(hackerMap.size);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Neo<br>
+        true<br>
+        3
+      </div>
+    </section>
+
+    <section id="sets">
+      <h2>02. Set Basics</h2>
+      <div class="explanation">
+        A <span class="highlight">Set</span> stores unique values — duplicates are automatically removed.  
+        Ideal for lists where repeat entries aren’t allowed.
+      </div>
+      <div class="code-block">
+<pre><code>let neonSet = new Set(["cyber", "punk", "cyber"]);
+neonSet.add("matrix");
+console.log(neonSet);
+console.log(neonSet.size);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → {"cyber", "punk", "matrix"}<br>
+        3
+      </div>
+    </section>
+
+    <section id="typeof">
+      <h2>03. typeof Operator</h2>
+      <div class="explanation">
+        The <span class="highlight">typeof</span> operator identifies the data type of a value or variable.  
+        Perfect for debugging type mismatches.
+      </div>
+      <div class="code-block">
+<pre><code>let name = "V";
+let age = 27;
+let active = true;
+let tools = ["deck", "blade"];
+console.log(typeof name);
+console.log(typeof age);
+console.log(typeof active);
+console.log(typeof tools);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → string<br>
+        number<br>
+        boolean<br>
+        object
+      </div>
+    </section>
+
+    <section id="conversion">
+      <h2>04. Type Conversion</h2>
+      <div class="explanation">
+        You can change data types manually using constructors:  
+        <span class="highlight">String()</span>, <span class="highlight">Number()</span>, and <span class="highlight">Boolean()</span>.
+      </div>
+      <div class="code-block">
+<pre><code>let score = "100";
+let realNumber = Number(score);  
+console.log(realNumber + 20);
+
+let active = false;
+let text = String(active);
+console.log("Converted:", text);
+
+let value = 0;
+console.log(Boolean(value)); // false
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → 120<br>
+        Converted: false<br>
+        false
+      </div>
+    </section>
+
+    <section id="practice">
+      <h2>05. Combining Maps, Sets, and Conversion</h2>
+      <div class="explanation">
+        You can use all three features together for professional data handling — e.g., converting a Set to an Array from a Map.
+      </div>
+      <div class="code-block">
+<pre><code>let cyberMap = new Map([
+  ["city", "Night City"],
+  ["fame", 99]
+]);
+let cyberSet = new Set(["Neon", "Chrome", "Neon"]);
+
+let arrayFromSet = Array.from(cyberSet);
+let mapKeys = Array.from(cyberMap.keys());
+
+console.log(arrayFromSet);
+console.log(mapKeys);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → ["Neon", "Chrome"]<br>
+        ["city", "fame"]
+      </div>
+    </section>
+
+    <footer>
+      <h3>⚡ Neo-Hacker Challenge</h3>
+      <p>Create a <span class="highlight">Map</span> for a fictional player with properties like name and level.</p>
+      <p>Use a <span class="highlight">Set</span> for their unique weapons, and test data types with <span class="highlight">typeof</span>.</p>
+      <p>Then practice conversions using <code>String()</code> and <code>Number()</code>!</p>
+      <p>Save file as <code>lesson15-maps-sets.html</code> and explore your data-driven code world!</p>
+    </footer>
+  </div>
+</body>
+</html>

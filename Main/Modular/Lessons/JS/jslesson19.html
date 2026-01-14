@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Errors & Debugging – Cyberpunk Lesson 19</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: gridMove 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+      border-radius: 25px;
+      box-shadow: 0 0 60px rgba(255,0,255,0.5),
+                  0 0 120px rgba(0,255,255,0.4),
+                  inset 0 0 40px rgba(255,0,255,0.08);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+
+    .subtitle {
+      font-size: 1.4em;
+      background: linear-gradient(90deg, #00ffff, #ff1493, #ff00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 4s infinite ease;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+    section:nth-child(even) { background: rgba(15,10,45,0.7); }
+
+    h2 {
+      font-size: 2.6em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      background: rgba(255,0,255,0.05);
+      border-left: 4px solid #ff00ff;
+      padding: 25px;
+      border-radius: 10px;
+      color: #d0d0ff;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      font-size: 1.1em;
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      border-radius: 15px;
+      padding: 30px;
+      font-family: 'Roboto Mono', monospace;
+      color: #aefaff;
+      margin-bottom: 25px;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0,20,60,0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      padding: 25px;
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .highlight { color: #ff00ff; font-weight: bold; }
+
+    footer {
+      background: rgba(15,15,55,0.95);
+      color: #00ffff;
+      text-align: center;
+      padding: 50px;
+      border-top: 3px solid #ff00ff;
+      text-shadow: 0 0 20px #00ffff;
+    }
+
+    button {
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      color: black;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 25px;
+      font-family: 'Orbitron', monospace;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 0 15px #ff00ff;
+      transition: all .3s;
+    }
+
+    button:hover { transform: scale(1.1); box-shadow: 0 0 25px #00ffff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Errors & Debugging</h1>
+      <p class="subtitle">Lesson 19 – Cyberpunk Code Diagnostics Lab</p>
+    </header>
+
+    <section id="intro">
+      <h2>01. Why Debugging Matters</h2>
+      <div class="explanation">
+        Even the best coders make mistakes! <span class="highlight">Debugging</span> is the process of finding and fixing errors in your JavaScript code.  
+        Understanding how to interpret errors, log data, and handle issues gracefully will make your code reliable and professional.
+      </div>
+    </section>
+
+    <section id="trycatch">
+      <h2>02. Handling Errors with try/catch</h2>
+      <div class="explanation">
+        JavaScript stops execution when an error occurs. But you can “catch” issues  
+        using a <span class="highlight">try...catch</span> block to handle them safely without breaking your entire program.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;script&gt;
+try {
+  let result = 10 / userInput; // userInput not defined → error
+  console.log(result);
+} catch (error) {
+  console.log("An error occurred:", error.message);
+}
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → “An error occurred: userInput is not defined”
+      </div>
+    </section>
+
+    <section id="console-tools">
+      <h2>03. Using Console Tools</h2>
+      <div class="explanation">
+        The browser’s <span class="highlight">Console</span> is your #1 debugging tool.  
+        Use <span class="highlight">console.log()</span> to track data,  
+        <span class="highlight">console.error()</span> for issues, and  
+        <span class="highlight">console.warn()</span> for warnings.
+      </div>
+      <div class="code-block">
+<pre><code>console.log("Data received!");
+console.warn("Low memory detected!");
+console.error("System crash – restart module!");</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Different messages appear in the console with colorful labels.
+      </div>
+    </section>
+
+    <section id="common-errors">
+      <h2>04. Common Coding Mistakes</h2>
+      <div class="explanation">
+        Watch out for these frequent errors while coding:
+        <ul>
+          <li><span class="highlight">Undefined Variables:</span> Using a variable before declaring it.</li>
+          <li><span class="highlight">Typos:</span> Misspelling function or variable names (case-sensitive!).</li>
+          <li><span class="highlight">Missing Brackets:</span> Forgetting <code>{ }</code> or <code>( )</code> in conditions or calls.</li>
+          <li><span class="highlight">Wrong Data Types:</span> Adding numbers and strings together incorrectly.</li>
+          <li><span class="highlight">DOM Timing:</span> Trying to access elements before the HTML is loaded.</li>
+        </ul>
+      </div>
+      <div class="demo-output">
+        Example → “TypeError: Cannot read property ‘value’ of null”
+      </div>
+    </section>
+
+    <section id="best-practices">
+      <h2>05. Debugging Best Practices</h2>
+      <div class="explanation">
+        <ul>
+          <li>Use <span class="highlight">console.log()</span> liberally to trace variable values.</li>
+          <li>Fix one error at a time and retest after each change.</li>
+          <li>Keep your functions short and focused for easier debugging.</li>
+          <li>Always read the full error message — it shows file, line, and type.</li>
+          <li>Use browser DevTools’ <span class="highlight">Sources</span> tab to place breakpoints.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="challenge">
+      <h2>06. Debugging Challenge</h2>
+      <div class="explanation">
+        Test your patience and skill!  
+        Find and fix the error in the code below using DevTools or try/catch.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;script&gt;
+try {
+  let x = 5;
+  let y = 0;
+  if (y === 0) throw "Division by zero!";
+  let result = x / y;
+  console.log("Result:", result);
+} catch (e) {
+  console.error("⚠ Error detected:", e);
+} finally {
+  console.log("Program finished.");
+}
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Error handled gracefully: “Division by zero!”
+      </div>
+    </section>
+
+    <footer>
+      <h3>⚡ Neon Debugging Wisdom</h3>
+      <p>Errors aren’t failures — they are clues leading you to perfect code.</p>
+      <p>Use <span class="highlight">try/catch</span> to protect, <span class="highlight">console.log()</span> to track,  
+      and your <span class="highlight">mind</span> to master debugging brilliance!</p>
+      <p>Save as <code>lesson19-errors-debugging.html</code> — open the Console to test and learn!</p>
+    </footer>
+  </div>
+</body>
+</html>

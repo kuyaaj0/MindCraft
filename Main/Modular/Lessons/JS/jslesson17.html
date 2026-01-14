@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Events – Cyberpunk Lesson 17</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: cyberFlow 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes cyberFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+      border-radius: 25px;
+      box-shadow:
+        0 0 60px rgba(255,0,255,0.5),
+        0 0 120px rgba(0,255,255,0.4),
+        inset 0 0 40px rgba(255,0,255,0.08);
+      overflow: hidden;
+      backdrop-filter: blur(15px);
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    .subtitle {
+      font-size: 1.5em;
+      background: linear-gradient(90deg, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientScroll 4s ease infinite;
+    }
+
+    @keyframes gradientScroll {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15,10,45,0.7);
+    }
+
+    h2 {
+      font-size: 2.6em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      background: rgba(255,0,255,0.05);
+      border-left: 4px solid #ff00ff;
+      padding: 25px;
+      border-radius: 10px;
+      color: #d0d0ff;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      font-size: 1.1em;
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      border-radius: 15px;
+      padding: 30px;
+      font-family: 'Roboto Mono', monospace;
+      color: #aefaff;
+      margin-bottom: 25px;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0, 20, 60, 0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      padding: 25px;
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      background: rgba(15,15,55,0.95);
+      color: #00ffff;
+      text-align: center;
+      padding: 50px;
+      text-shadow: 0 0 20px #00ffff;
+      border-top: 3px solid #ff00ff;
+    }
+
+    button {
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      color: #000;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'Orbitron', monospace;
+      box-shadow: 0 0 15px #00ffff;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 25px #ff00ff;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript Events</h1>
+      <p class="subtitle">Lesson 17 - Cyberpunk Interaction Matrix</p>
+    </header>
+
+    <section id="intro">
+      <h2>01. What Are Events?</h2>
+      <div class="explanation">
+        <span class="highlight">Events</span> are actions that happen in the browser — like clicking, typing,  
+        submitting a form, or hovering over an element. JavaScript can respond to these dynamically to make  
+        websites interactive.
+      </div>
+    </section>
+
+    <section id="onclick">
+      <h2>02. The onclick Event</h2>
+      <div class="explanation">
+        The simplest event in JavaScript is <span class="highlight">onclick</span>.  
+        It runs code when the user clicks the element.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;button onclick="alert('Cyber click!')"&gt;Click Me&lt;/button&gt;
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → A pop-up alert appears when the button is clicked.
+      </div>
+    </section>
+
+    <section id="addEvent">
+      <h2>03. addEventListener()</h2>
+      <div class="explanation">
+        Instead of inline code, we often use <span class="highlight">addEventListener()</span> —  
+        it "listens" for actions and runs a function when an event occurs.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;button id="hackerBtn"&gt;Activate&lt;/button&gt;
+
+&lt;script&gt;
+let button = document.getElementById("hackerBtn");
+button.addEventListener("click", function(){
+  alert("Access Granted!");
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Alert "Access Granted!" appears when pressed.
+      </div>
+    </section>
+
+    <section id="form">
+      <h2>04. Handling Form Submissions</h2>
+      <div class="explanation">
+        Forms can trigger <span class="highlight">submit</span> events.  
+        Use <strong>preventDefault()</strong> to stop reloading the page.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;form id="loginForm"&gt;
+  &lt;input type="text" placeholder="Username"&gt;
+  &lt;button&gt;Login&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+let form = document.getElementById("loginForm");
+form.addEventListener("submit", function(event){
+  event.preventDefault(); // Stop page refresh
+  alert("Form submitted successfully!");
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Alert displays without refreshing the page.
+      </div>
+    </section>
+
+    <section id="keys">
+      <h2>05. Key Press Events</h2>
+      <div class="explanation">
+        The <span class="highlight">keydown</span> event fires when any key is pressed on the keyboard.  
+        Perfect for game controls or dynamic text effects!
+      </div>
+      <div class="code-block">
+<pre><code>&lt;input type="text" id="inputBox" placeholder="Type something..."&gt;
+
+&lt;script&gt;
+let box = document.getElementById("inputBox");
+box.addEventListener("keydown", function(e){
+  console.log("Key pressed:", e.key);
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Logs each key you press inside the input box.
+      </div>
+    </section>
+
+    <section id="hover">
+      <h2>06. Mouse Events</h2>
+      <div class="explanation">
+        You can also capture hovering or leaving an element using  
+        <span class="highlight">mouseover</span> and <span class="highlight">mouseout</span>.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="panel"&gt;Hover over me!&lt;/div&gt;
+
+&lt;script&gt;
+let panel = document.getElementById("panel");
+
+panel.addEventListener("mouseover", () => {
+  panel.style.color = "#00ffff";
+  panel.textContent = "Neon Energy Detected!";
+});
+
+panel.addEventListener("mouseout", () => {
+  panel.style.color = "#ff00ff";
+  panel.textContent = "Hover again!";
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → The text and color change when you hover and leave.
+      </div>
+    </section>
+
+    <footer>
+      <h3>💥 Cyber Challenge</h3>
+      <p>Create buttons that trigger different actions using <span class="highlight">addEventListener()</span>.  
+      Try combining events like <span class="highlight">click</span>, <span class="highlight">mouseover</span>, and <span class="highlight">keydown</span>.</p>
+      <p>Save as <code>lesson17-events.html</code> and test your cyber-interactive powers!</p>
+    </footer>
+  </div>
+</body>
+</html>

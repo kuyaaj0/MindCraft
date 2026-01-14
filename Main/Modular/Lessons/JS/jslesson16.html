@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Basics – Cyberpunk Lesson 16</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: cyberFlow 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes cyberFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+      border-radius: 25px;
+      box-shadow:
+        0 0 60px rgba(255,0,255,0.5),
+        0 0 120px rgba(0,255,255,0.4),
+        inset 0 0 40px rgba(255,0,255,0.08);
+      overflow: hidden;
+      backdrop-filter: blur(15px);
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
+      animation: neonPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes neonPulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    .subtitle {
+      font-size: 1.5em;
+      background: linear-gradient(90deg, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientScroll 4s ease infinite;
+    }
+
+    @keyframes gradientScroll {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15,10,45,0.7);
+    }
+
+    h2 {
+      font-size: 2.5em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      line-height: 1.8;
+      background: rgba(255,0,255,0.05);
+      color: #d0d0ff;
+      border-left: 5px solid #ff00ff;
+      padding: 25px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      font-size: 1.1em;
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      border-radius: 15px;
+      padding: 30px;
+      font-family: 'Roboto Mono', monospace;
+      color: #aefaff;
+      margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      background: rgba(0, 20, 60, 0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      padding: 25px;
+      color: #00ffff;
+      font-family: monospace;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      background: rgba(15,15,55,0.95);
+      text-align: center;
+      color: #00ffff;
+      padding: 50px;
+      text-shadow: 0 0 20px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>DOM Basics</h1>
+      <p class="subtitle">Lesson 16 - Cyberpunk Web Control Matrix</p>
+    </header>
+
+    <section id="intro">
+      <h2>01. What is the DOM?</h2>
+      <div class="explanation">
+        The <span class="highlight">Document Object Model (DOM)</span> represents your web page as an object tree.  
+        JavaScript can access and modify HTML elements through it. It’s how your code <strong>controls</strong> the web interface.
+      </div>
+    </section>
+
+    <section id="select">
+      <h2>02. Selecting Elements</h2>
+      <div class="explanation">
+        To control an element, you must first <span class="highlight">select</span> it.  
+        Two common ways are <strong>getElementById()</strong> and <strong>querySelector()</strong>.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;h2 id="title"&gt;Welcome, NetRunner!&lt;/h2&gt;
+
+&lt;script&gt;
+let header = document.getElementById("title");
+console.log(header);
+
+let section = document.querySelector("h2");
+console.log(section);
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Logs the &lt;h2&gt; element to console.
+      </div>
+    </section>
+
+    <section id="content">
+      <h2>03. Reading and Changing Content</h2>
+      <div class="explanation">
+        You can read or replace text using <span class="highlight">textContent</span>  
+        or even add HTML code with <span class="highlight">innerHTML</span>.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;p id="status"&gt;System Offline&lt;/p&gt;
+
+&lt;script&gt;
+let info = document.getElementById("status");
+info.textContent = "System Online";       // Just text
+// info.innerHTML = "&lt;strong&gt;System Online&lt;/strong&gt;";
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>System Online</strong>
+      </div>
+    </section>
+
+    <section id="attributes">
+      <h2>04. Reading & Modifying Attributes</h2>
+      <div class="explanation">
+        Attributes such as <span class="highlight">src</span>, <span class="highlight">href</span>, or custom data  
+        can be changed dynamically through <strong>getAttribute()</strong> and <strong>setAttribute()</strong>.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;img id="avatar" src="cyber.png" alt="Avatar"&gt;
+
+&lt;script&gt;
+let img = document.getElementById("avatar");
+let source = img.getAttribute("src");
+console.log("Old source:", source);
+
+img.setAttribute("src", "neon-avatar.png");
+&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Image source updated to neon-avatar.png.
+      </div>
+    </section>
+
+    <section id="style">
+      <h2>05. Changing Styles Dynamically</h2>
+      <div class="explanation">
+        The <span class="highlight">style</span> property lets you modify CSS through JavaScript,  
+        allowing interactive or animated effects without switching files.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="panel"&gt;Access Granted&lt;/div&gt;
+
+&lt;script&gt;
+let panel = document.getElementById("panel");
+panel.style.color = "#00ffff";
+panel.style.backgroundColor = "#100030";
+panel.style.fontSize = "24px";
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Text appears in neon cyan with styled background.
+      </div>
+    </section>
+
+    <section id="challenge">
+      <h2>06. DOM Challenge</h2>
+      <div class="explanation">
+        Try this mini project: select a paragraph using <span class="highlight">querySelector()</span>,  
+        change its text, and update its style color to your favorite neon!
+      </div>
+      <div class="code-block">
+<pre><code>&lt;p id="cyber-msg"&gt;Neural Interface Offline&lt;/p&gt;
+
+&lt;script&gt;
+let msg = document.querySelector("#cyber-msg");
+msg.textContent = "Neural Interface Online ⚡";
+msg.style.color = "#ff00ff";
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → ⚡ Neural Interface Online (in neon pink)
+      </div>
+    </section>
+
+    <footer>
+      <h3>💡 HoloTips</h3>
+      <p>Use <span class="highlight">getElementById</span> for direct access by ID, or <span class="highlight">querySelector</span> for flexible CSS-style selection.</p>
+      <p>Save as <code>lesson16-dom.html</code> and view the dynamic web control in action!</p>
+    </footer>
+  </div>
+</body>
+</html>

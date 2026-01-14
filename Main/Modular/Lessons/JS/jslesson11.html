@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Strings & String Methods – Cyberpunk JS Lesson 11</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: cyberGrid 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes cyberGrid {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+      100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8, 8, 25, 0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+      border-radius: 25px;
+      box-shadow:
+        0 0 60px rgba(255, 0, 255, 0.5),
+        0 0 120px rgba(0, 255, 255, 0.4),
+        inset 0 0 40px rgba(255, 0, 255, 0.08);
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow:
+        0 0 30px #ff00ff,
+        0 0 60px #00ffff,
+        0 0 90px #ff00ff;
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03) hue-rotate(180deg); }
+    }
+
+    .subtitle {
+      font-size: 1.5em;
+      background: linear-gradient(45deg, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 4s ease infinite;
+      font-weight: 600;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15, 10, 45, 0.7);
+    }
+
+    h2 {
+      font-size: 2.5em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.2em;
+      color: #d0d0ff;
+      background: rgba(255, 0, 255, 0.05);
+      padding: 25px;
+      border-left: 4px solid #ff00ff;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    .code-block {
+      background: rgba(10, 15, 50, 0.95);
+      padding: 25px;
+      border-radius: 15px;
+      border: 2px solid #00ffff;
+      font-family: 'Roboto Mono', monospace;
+      color: #c0faff;
+      margin-bottom: 25px;
+      box-shadow: 0 0 30px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0, 20, 60, 0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 15px;
+      padding: 25px;
+      color: #00ffff;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      color: #00ffff;
+      padding: 40px;
+      background: rgba(15,15,55,0.95);
+      border-top: 3px solid #ff00ff;
+      text-shadow: 0 0 20px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript Strings & Methods</h1>
+      <p class="subtitle">Lesson 11 - Cyberpunk Coding Realm</p>
+    </header>
+
+    <section id="length">
+      <h2>01. String Length</h2>
+      <div class="explanation">
+        The <span class="highlight">length</span> property counts the number of characters (letters, spaces, symbols) in a string.
+      </div>
+      <div class="code-block">
+<pre><code>let text = "Cyberpunk";
+let count = text.length;
+console.log(count); // 9
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>9</strong>
+      </div>
+    </section>
+
+    <section id="slice">
+      <h2>02. slice()</h2>
+      <div class="explanation">
+        The <span class="highlight">slice(start, end)</span> method extracts part of a string and returns it as a new one. The end index is not included.
+      </div>
+      <div class="code-block">
+<pre><code>let word = "Neon Future";
+let result = word.slice(0, 4);
+console.log(result); // Neon
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>Neon</strong>
+      </div>
+    </section>
+
+    <section id="substring">
+      <h2>03. substring()</h2>
+      <div class="explanation">
+        The <span class="highlight">substring(start, end)</span> works similar to slice but does not accept negative indexes.
+      </div>
+      <div class="code-block">
+<pre><code>let name = "Cyber Universe";
+let part = name.substring(6, 14);
+console.log(part); // Universe
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>Universe</strong>
+      </div>
+    </section>
+
+    <section id="replace">
+      <h2>04. replace()</h2>
+      <div class="explanation">
+        The <span class="highlight">replace()</span> method swaps a part of a string with another text. Only the first match is replaced by default.
+      </div>
+      <div class="code-block">
+<pre><code>let phrase = "I love Java.";
+let newPhrase = phrase.replace("Java", "JavaScript");
+console.log(newPhrase); // I love JavaScript.
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>I love JavaScript.</strong>
+      </div>
+    </section>
+
+    <section id="split">
+      <h2>05. split()</h2>
+      <div class="explanation">
+        The <span class="highlight">split()</span> method breaks a string into an array using a separator (like a space or comma).
+      </div>
+      <div class="code-block">
+<pre><code>let sentence = "Code Neon Dreams";
+let words = sentence.split(" ");
+console.log(words); // ["Code", "Neon", "Dreams"]
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>["Code", "Neon", "Dreams"]</strong>
+      </div>
+    </section>
+
+    <section id="template-literals">
+      <h2>06. Template Literals</h2>
+      <div class="explanation">
+        Template literals use backticks (<span class="highlight">`</span>) to allow embedding variables easily using <span class="highlight">${}</span>.
+      </div>
+      <div class="code-block">
+<pre><code>let hero = "V";
+let city = "Night City";
+let message = `Hello, ${hero}! Welcome to ${city}.`;
+console.log(message);
+// Hello, V! Welcome to Night City.
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → <strong>Hello, V! Welcome to Night City.</strong>
+      </div>
+    </section>
+
+    <footer>
+      <h3>🎯 Challenge Zone</h3>
+      <p>Write your own code using <span class="highlight">slice</span>, <span class="highlight">replace</span>, and <span class="highlight">template literals</span> to describe your favorite game or character!</p>
+      <p>Save as <code>lesson11-strings.html</code> and open in your browser.</p>
+    </footer>
+  </div>
+</body>
+</html>

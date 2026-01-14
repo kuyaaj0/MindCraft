@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arrays & Array Methods – Cyberpunk Lesson 13</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: cyberGrid 25s linear infinite;
+      z-index: -2;
+    }
+
+    @keyframes cyberGrid {
+      0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+      100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+      border-radius: 25px;
+      box-shadow:
+        0 0 60px rgba(255,0,255,0.5),
+        0 0 120px rgba(0,255,255,0.4),
+        inset 0 0 40px rgba(255,0,255,0.08);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 
+        0 0 30px #ff00ff,
+        0 0 60px #00ffff,
+        0 0 90px #ff00ff;
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+      50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+    }
+
+    .subtitle {
+      font-size: 1.6em;
+      background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+      background-size: 200% 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+      animation: gradientFlow 4s ease infinite;
+      text-shadow: 0 0 25px #00ffff;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15,10,45,0.7);
+    }
+
+    h2 {
+      font-size: 2.8em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 35px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.2em;
+      line-height: 1.9;
+      margin-bottom: 40px;
+      color: #d0d0ff;
+      background: rgba(255,0,255,0.05);
+      padding: 25px;
+      border-radius: 15px;
+      border-left: 4px solid #ff00ff;
+      box-shadow: inset 0 0 20px rgba(255,0,255,0.1);
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      border-radius: 20px;
+      padding: 35px;
+      margin: 35px 0;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      line-height: 1.8;
+      overflow-x: auto;
+      box-shadow: 
+        0 0 40px rgba(0,255,255,0.5),
+        inset 0 0 25px rgba(255,0,255,0.1);
+    }
+
+    .demo-output {
+      background: rgba(0,20,60,0.9);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 30px;
+      margin: 25px 0;
+      color: #00ffff;
+      font-family: monospace;
+      box-shadow: 0 0 30px rgba(0,255,255,0.4);
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      background: rgba(15,15,55,0.95);
+      color: #00ffff;
+      text-align: center;
+      padding: 50px;
+      font-family: 'Roboto Mono', monospace;
+      border-top: 4px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+      text-shadow: 0 0 20px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript Arrays & Array Methods</h1>
+      <p class="subtitle">Lesson 13 - Cyberpunk Data Matrix</p>
+    </header>
+
+    <section id="array-basics">
+      <h2>01. What is an Array?</h2>
+      <div class="explanation">
+        An <span class="highlight">Array</span> stores multiple values in one variable.  
+        Think of it as a cyber storage box with compartments (index numbers start from 0).
+      </div>
+      <div class="code-block">
+<pre><code>let colors = ["Neon", "Magenta", "Cyan", "Blue"];
+console.log(colors[0]); // Neon
+console.log(colors.length); // 4
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Neon<br>
+        4
+      </div>
+    </section>
+
+    <section id="push-pop">
+      <h2>02. push() & pop()</h2>
+      <div class="explanation">
+        The <span class="highlight">push()</span> method adds a new item to the end of the array.  
+        The <span class="highlight">pop()</span> method removes the last item.
+      </div>
+      <div class="code-block">
+<pre><code>let cyberGears = ["Helmet", "Gloves", "Boots"];
+cyberGears.push("Visor");
+console.log(cyberGears); 
+
+cyberGears.pop();
+console.log(cyberGears);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → ["Helmet", "Gloves", "Boots", "Visor"]<br>
+        Then → ["Helmet", "Gloves", "Boots"]
+      </div>
+    </section>
+
+    <section id="shift">
+      <h2>03. shift()</h2>
+      <div class="explanation">
+        The <span class="highlight">shift()</span> method removes the first element of an array and shifts all others left.
+      </div>
+      <div class="code-block">
+<pre><code>let players = ["V", "Johnny", "Panam"];
+players.shift();
+console.log(players);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → ["Johnny", "Panam"]
+      </div>
+    </section>
+
+    <section id="map">
+      <h2>04. map()</h2>
+      <div class="explanation">
+        The <span class="highlight">map()</span> method creates a new array by performing a function on every element.
+      </div>
+      <div class="code-block">
+<pre><code>let digits = [1, 2, 3, 4];
+let doubleDigits = digits.map(num => num * 2);
+console.log(doubleDigits);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → [2, 4, 6, 8]
+      </div>
+    </section>
+
+    <section id="filter">
+      <h2>05. filter()</h2>
+      <div class="explanation">
+        The <span class="highlight">filter()</span> method returns a new array with elements that pass a test condition.
+      </div>
+      <div class="code-block">
+<pre><code>let levels = [10, 25, 40, 55, 70];
+let high = levels.filter(level => level > 40);
+console.log(high);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → [55, 70]
+      </div>
+    </section>
+
+    <section id="forEach">
+      <h2>06. forEach()</h2>
+      <div class="explanation">
+        The <span class="highlight">forEach()</span> method runs a function for each item — perfect for printing or displaying all elements.
+      </div>
+      <div class="code-block">
+<pre><code>let weapons = ["Katana", "Pistol", "Rifle"];
+weapons.forEach(w => console.log("Weapon:", w));
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output →<br>
+        Weapon: Katana<br>
+        Weapon: Pistol<br>
+        Weapon: Rifle
+      </div>
+    </section>
+
+    <section id="find">
+      <h2>07. find()</h2>
+      <div class="explanation">
+        The <span class="highlight">find()</span> method returns the first element that satisfies a condition.
+      </div>
+      <div class="code-block">
+<pre><code>let health = [50, 75, 90, 100];
+let firstFull = health.find(h => h === 100);
+console.log(firstFull);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → 100
+      </div>
+    </section>
+
+    <section id="sort">
+      <h2>08. sort()</h2>
+      <div class="explanation">
+        The <span class="highlight">sort()</span> method arranges array items alphabetically or numerically (if compared properly).
+      </div>
+      <div class="code-block">
+<pre><code>let cities = ["Tokyo", "Manila", "Seoul", "Osaka"];
+cities.sort();
+console.log(cities);
+
+let numbers = [30, 5, 100, 2];
+numbers.sort((a, b) => a - b);
+console.log(numbers);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → ["Manila", "Osaka", "Seoul", "Tokyo"]<br>
+        [2, 5, 30, 100]
+      </div>
+    </section>
+
+    <footer>
+      <h3>🧠 Lesson Challenge</h3>
+      <p>Create your own futuristic array of cyber items. Use <span class="highlight">map, filter, and sort</span> to transform your data!</p>
+      <p>Save as <code>lesson13-arrays.html</code> → open it → and enjoy your glowing JS lab!</p>
+    </footer>
+  </div>
+</body>
+</html>

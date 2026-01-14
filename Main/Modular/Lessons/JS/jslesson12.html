@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numbers, Math, Dates – Cyberpunk Lesson 12</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff25 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff25 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: pixelFlow 25s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes pixelFlow {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8, 8, 25, 0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #1e90ff) 1;
+      border-radius: 25px;
+      box-shadow: 0 0 60px rgba(255,0,255,0.4), 0 0 100px rgba(0,255,255,0.3);
+      overflow: hidden;
+      padding-bottom: 50px;
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 4px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+      animation: glow 3s infinite ease-in-out;
+    }
+
+    @keyframes glow {
+      0%, 100% { filter: hue-rotate(0deg); }
+      50% { filter: hue-rotate(180deg); }
+    }
+
+    .subtitle {
+      font-size: 1.4em;
+      background: linear-gradient(90deg, #00ffff, #ff1493, #ff00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px #00ffff;
+      animation: gradientMove 4s infinite ease-in-out;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+
+    section:nth-child(even) {
+      background: rgba(15,10,45,0.7);
+    }
+
+    h2 {
+      font-size: 2.5em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      background: rgba(255,0,255,0.05);
+      padding: 25px;
+      border-left: 4px solid #ff00ff;
+      border-radius: 10px;
+      color: #d0d0ff;
+      font-size: 1.2em;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .code-block {
+      background: rgba(10, 15, 50, 0.95);
+      border: 2px solid #00ffff;
+      border-radius: 15px;
+      padding: 25px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 16px;
+      color: #9ef2ff;
+      margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0, 20, 60, 0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      padding: 25px;
+      color: #00ffff;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      color: #00ffff;
+      background: rgba(15,15,55,0.95);
+      padding: 40px;
+      text-shadow: 0 0 20px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript Numbers, Math & Dates</h1>
+      <p class="subtitle">Lesson 12 - Cyberpunk Data Calculations</p>
+    </header>
+
+    <section id="numbers">
+      <h2>01. Number Basics & Methods</h2>
+      <div class="explanation">
+        JavaScript uses the <span class="highlight">Number</span> type for both integers and decimals.
+        You can convert, fix decimals, and check values using Number methods.
+      </div>
+      <div class="code-block">
+<pre><code>let x = 45.6789;
+console.log(x.toFixed(2));   // keeps 2 decimals
+console.log(x.toString());   // changes number to string
+console.log(Number("123"));  // converts string to number
+console.log(Number.isInteger(45)); // checks if value is integer
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → 45.68<br>
+        "45.6789"<br>
+        123<br>
+        true
+      </div>
+    </section>
+
+    <section id="math">
+      <h2>02. Math Object Methods</h2>
+      <div class="explanation">
+        The <span class="highlight">Math</span> object lets you perform mathematical tasks:
+        rounding, powers, roots, and randomization.
+      </div>
+      <div class="code-block">
+<pre><code>console.log(Math.round(7.6));   // 8 (rounds to nearest)
+console.log(Math.floor(7.6));   // 7 (rounds down)
+console.log(Math.ceil(7.2));    // 8 (rounds up)
+console.log(Math.pow(3, 2));    // 9 (3²)
+console.log(Math.sqrt(25));     // 5 (square root)
+console.log(Math.random());     // random between 0 and 1
+console.log(Math.floor(Math.random() * 10)); // random 0-9
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output: 8, 7, 8, 9, 5, 0.### (random example)
+      </div>
+    </section>
+
+    <section id="dates">
+      <h2>03. Working with Dates</h2>
+      <div class="explanation">
+        JavaScript’s <span class="highlight">Date</span> object represents moments in time.  
+        You can create and extract year, month, hour, and more.
+      </div>
+      <div class="code-block">
+<pre><code>let today = new Date();
+console.log(today);
+
+let year = today.getFullYear();
+let month = today.getMonth() + 1; // months 0-11
+let day = today.getDate();
+let time = today.toLocaleTimeString();
+
+console.log(`Today: ${month}/${day}/${year}`);
+console.log(`Time: ${time}`);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Today: 1/13/2026<br>
+        Time: 6:00:00 PM (example)
+      </div>
+    </section>
+
+    <section id="challenge">
+      <h2>04. Cyber Challenge</h2>
+      <div class="explanation">
+        Combine <span class="highlight">Math</span> and <span class="highlight">Date</span>!  
+        Create a program that generates a lucky number (1–100) with the current date and time.
+      </div>
+      <div class="code-block">
+<pre><code>let lucky = Math.floor(Math.random() * 100) + 1;
+let now = new Date();
+let msg = `Your lucky number for ${now.toDateString()} is ${lucky}`;
+console.log(msg);
+</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → "Your lucky number for Tue Jan 13 2026 is 73"
+      </div>
+    </section>
+
+    <footer>
+      <h3>🔮 Neon Data Mastery</h3>
+      <p>Explore the futuristic power of <span class="highlight">Numbers</span>, <span class="highlight">Math</span>, and <span class="highlight">Dates</span> in your JavaScript programs!</p>
+      <p>Save this file as <code>lesson12-numbers.html</code> and view your glowing calculations!</p>
+    </footer>
+  </div>
+</body>
+</html>

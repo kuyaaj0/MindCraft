@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOM Manipulation – Cyberpunk Lesson 18</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, #ff00ff25 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, #00ffff25 0%, transparent 40%),
+        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: gridMove 25s infinite linear;
+      z-index: -1;
+    }
+
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 50px 50px; }
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+      border-radius: 25px;
+      box-shadow: 0 0 60px rgba(255,0,255,0.5),
+                  0 0 120px rgba(0,255,255,0.4),
+                  inset 0 0 40px rgba(255,0,255,0.08);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+    }
+
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+      animation: neonPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes neonPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.85; }
+    }
+
+    .subtitle {
+      font-size: 1.5em;
+      background: linear-gradient(90deg, #00ffff, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 4s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    section {
+      padding: 60px 50px;
+      border-bottom: 2px solid rgba(255,0,255,0.3);
+    }
+    section:nth-child(even) { background: rgba(15,10,45,0.7); }
+
+    h2 {
+      font-size: 2.6em;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 25px;
+    }
+
+    .explanation {
+      font-family: 'Roboto Mono', monospace;
+      background: rgba(255,0,255,0.05);
+      border-left: 4px solid #ff00ff;
+      padding: 25px;
+      color: #d0d0ff;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      line-height: 1.8;
+      font-size: 1.1em;
+    }
+
+    .code-block {
+      background: rgba(10,15,50,0.95);
+      border: 2px solid transparent;
+      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+      border-radius: 15px;
+      padding: 30px;
+      font-family: 'Roboto Mono', monospace;
+      color: #aefaff;
+      margin-bottom: 25px;
+      box-shadow: 0 0 40px rgba(0,255,255,0.4);
+    }
+
+    .demo-output {
+      font-family: monospace;
+      background: rgba(0,20,60,0.9);
+      border: 2px solid #ff00ff;
+      border-radius: 10px;
+      padding: 25px;
+      color: #00ffff;
+      margin-bottom: 15px;
+    }
+
+    .highlight { color: #ff00ff; font-weight: bold; }
+
+    button {
+      background: linear-gradient(90deg, #ff00ff, #00ffff);
+      border: none;
+      color: #000;
+      font-family: 'Orbitron', monospace;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 0 20px #00ffff;
+      margin-top: 10px;
+    }
+
+    button:hover { box-shadow: 0 0 25px #ff00ff; transform: scale(1.05); }
+
+    footer {
+      background: rgba(15,15,55,0.95);
+      color: #00ffff;
+      text-align: center;
+      padding: 50px;
+      text-shadow: 0 0 20px #00ffff;
+      border-top: 3px solid #ff00ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>DOM Manipulation</h1>
+      <p class="subtitle">Lesson 18 - Cyberpunk Interface Builder</p>
+    </header>
+
+    <section id="intro">
+      <h2>01. What is DOM Manipulation?</h2>
+      <div class="explanation">
+        <span class="highlight">DOM manipulation</span> means changing your webpage structure and content using JavaScript.  
+        You can create new elements, delete them, or modify their styles and classes dynamically.
+      </div>
+    </section>
+
+    <section id="create">
+      <h2>02. Creating Elements</h2>
+      <div class="explanation">
+        Use <span class="highlight">document.createElement()</span> and <span class="highlight">appendChild()</span>  
+        to add brand-new elements to your HTML.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="container"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+let box = document.createElement("p");
+box.textContent = "Welcome to the Neon Grid!";
+document.getElementById("container").appendChild(box);
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → A paragraph appears saying “Welcome to the Neon Grid!”
+      </div>
+    </section>
+
+    <section id="remove">
+      <h2>03. Removing Elements</h2>
+      <div class="explanation">
+        You can remove elements using <span class="highlight">remove()</span> or  
+        <span class="highlight">removeChild()</span> methods.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="arena"&gt;
+  &lt;p&gt;Cyber Element 1&lt;/p&gt;
+  &lt;p id="removeMe"&gt;Remove This One&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+let target = document.getElementById("removeMe");
+target.remove(); // Instantly deletes the element
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → “Remove This One” disappears instantly.
+      </div>
+    </section>
+
+    <section id="classChange">
+      <h2>04. Changing Classes & Styles</h2>
+      <div class="explanation">
+        The <span class="highlight">classList</span> property allows adding, removing, and toggling CSS classes dynamically.  
+        This makes interactive styling easy and effective.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;style&gt;
+.glow {
+  color: #00ffff;
+  text-shadow: 0 0 20px #00ffff;
+}
+&lt;/style&gt;
+
+&lt;h3 id="neonText"&gt;Activate Glow&lt;/h3&gt;
+&lt;button id="toggleBtn"&gt;Toggle Glow&lt;/button&gt;
+
+&lt;script&gt;
+let neon = document.getElementById("neonText");
+let btn = document.getElementById("toggleBtn");
+
+btn.addEventListener("click", () => {
+  neon.classList.toggle("glow");
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Click toggles glowing neon effect on text.
+      </div>
+    </section>
+
+    <section id="updateStyle">
+      <h2>05. Updating Inline Styles</h2>
+      <div class="explanation">
+        The <span class="highlight">style</span> property lets you directly control element CSS through JavaScript.  
+        You can modify colors, positions, and animations in real-time.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="cyberBox"&gt;Neural Block&lt;/div&gt;
+&lt;button id="moveBtn"&gt;Shift Position&lt;/button&gt;
+
+&lt;script&gt;
+let box = document.getElementById("cyberBox");
+let move = document.getElementById("moveBtn");
+
+move.addEventListener("click", () => {
+  box.style.color = "#ff00ff";
+  box.style.transform = "translateX(100px)";
+  box.style.transition = "0.8s";
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → “Neural Block” moves sideways and changes to pink.
+      </div>
+    </section>
+
+    <section id="challenge">
+      <h2>06. Cyber Building Challenge</h2>
+      <div class="explanation">
+        Try creating an app that adds new glowing messages every time you click a button,  
+        and removes one message with another button. Style them dynamically for extra glow.
+      </div>
+      <div class="code-block">
+<pre><code>&lt;div id="messageArea"&gt;&lt;/div&gt;
+&lt;button id="addMsg"&gt;Add Message&lt;/button&gt;
+&lt;button id="removeMsg"&gt;Remove Last&lt;/button&gt;
+
+&lt;script&gt;
+let area = document.getElementById("messageArea");
+let add = document.getElementById("addMsg");
+let remove = document.getElementById("removeMsg");
+
+add.addEventListener("click", () => {
+  let msg = document.createElement("p");
+  msg.textContent = "⚡ Neon message added!";
+  msg.style.color = "#00ffff";
+  msg.style.textShadow = "0 0 20px #00ffff";
+  area.appendChild(msg);
+});
+
+remove.addEventListener("click", () => {
+  if (area.lastChild) area.lastChild.remove();
+});
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Adds or removes glowing messages dynamically.
+      </div>
+    </section>
+
+    <footer>
+      <h3>🚀 Final Tip</h3>
+      <p>DOM manipulation powers dynamic webpages — combine with events to build full interactivity!</p>
+      <p>Save as <code>lesson18-dom-manipulation.html</code> and experience your glowing creations!</p>
+    </footer>
+  </div>
+</body>
+</html>

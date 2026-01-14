@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Storage & Simple App – Cyberpunk Lesson 20</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Orbitron', monospace;
+      background: #000;
+      color: #e0e0e0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(circle at 20% 20%, #ff00ff25 0%, transparent 40%),
+                  radial-gradient(circle at 80% 80%, #00ffff25 0%, transparent 40%),
+                  linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                  linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+      animation: cyberFlow 25s linear infinite;
+      z-index: -2;
+    }
+    @keyframes cyberFlow { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+    .container {
+      max-width: 1200px;
+      margin: 25px auto;
+      background: rgba(8,8,25,0.97);
+      border: 3px solid transparent;
+      border-image: linear-gradient(45deg,#ff00ff,#00ffff,#ff1493) 1;
+      border-radius: 25px;
+      box-shadow: 0 0 60px rgba(255,0,255,0.5),
+                  0 0 120px rgba(0,255,255,0.4),
+                  inset 0 0 40px rgba(255,0,255,0.08);
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+    }
+    header {
+      text-align: center;
+      padding: 60px 40px;
+      border-bottom: 5px solid transparent;
+      border-image: linear-gradient(90deg,#ff00ff,#00ffff) 1;
+    }
+    h1 {
+      font-size: 4em;
+      font-weight: 900;
+      background: linear-gradient(135deg,#ff00ff,#00ffff,#ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px #ff00ff,0 0 80px #00ffff;
+      animation: neonPulse 3s ease-in-out infinite;
+    }
+    @keyframes neonPulse{0%,100%{opacity:1;}50%{opacity:0.85;}}
+    .subtitle {
+      font-size:1.6em;
+      background:linear-gradient(90deg,#00ffff,#ff1493,#ff00ff);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      animation:gradientMove 4s ease infinite;
+    }
+    @keyframes gradientMove{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    section { padding:60px 50px; border-bottom:2px solid rgba(255,0,255,0.3); }
+    section:nth-child(even){background:rgba(15,10,45,0.7);}
+    h2 {
+      font-size:2.6em;font-weight:900;
+      background:linear-gradient(135deg,#ff00ff,#00ffff);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      margin-bottom:25px;
+    }
+    .explanation {
+      font-family:'Roboto Mono',monospace;
+      background:rgba(255,0,255,0.05);
+      border-left:4px solid #ff00ff;
+      padding:25px;border-radius:10px;
+      color:#d0d0ff;line-height:1.8;font-size:1.1em;
+      margin-bottom:30px;
+    }
+    .code-block {
+      background:rgba(10,15,50,0.9);
+      border:2px solid transparent;
+      border-image:linear-gradient(45deg,#00ffff,#ff00ff) 1;
+      border-radius:15px;padding:30px;
+      font-family:'Roboto Mono',monospace;
+      color:#aefaff;box-shadow:0 0 40px rgba(0,255,255,0.4);
+      margin-bottom:25px;
+    }
+    .demo-output {
+      background:rgba(0,20,60,0.9);
+      border:2px solid #ff00ff;
+      border-radius:12px;
+      padding:25px;
+      color:#00ffff;
+      font-family:monospace;
+      margin-bottom:20px;
+    }
+    .highlight { color:#ff00ff;font-weight:bold; }
+    button {
+      background:linear-gradient(90deg,#ff00ff,#00ffff);
+      color:black;border:none;border-radius:8px;
+      padding:10px 25px;cursor:pointer;
+      font-family:'Orbitron',monospace;font-weight:bold;
+      box-shadow:0 0 15px #ff00ff;transition:0.3s;
+    }
+    button:hover{box-shadow:0 0 25px #00ffff;transform:scale(1.05);}
+    input{
+      background:rgba(0,0,0,0.7);color:#00ffff;
+      border:2px solid #00ffff;
+      border-radius:8px;
+      padding:10px;font-family:'Roboto Mono',monospace;
+      width:60%;
+      margin-right:10px;
+    }
+    ul { list-style:none; padding:0; }
+    li {
+      background:rgba(255, 0, 255, 0.08);
+      border-left:5px solid #00ffff;
+      padding:15px;margin:10px 0;border-radius:10px;
+      font-family:'Roboto Mono',monospace;
+      color:#fff;display:flex;justify-content:space-between;
+    }
+    footer {
+      background: rgba(15, 15, 55, 0.95);
+      color: #00ffff; text-align: center;
+      padding:50px; border-top:4px solid transparent;
+      border-image: linear-gradient(90deg, #ff00ff,#00ffff) 1;
+      text-shadow:0 0 20px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Local Storage & Simple App</h1>
+      <p class="subtitle">Lesson 20 – Cyberpunk Data Vault</p>
+    </header>
+
+    <section id="intro">
+      <h2>01. What is Local Storage?</h2>
+      <div class="explanation">
+        <span class="highlight">localStorage</span> allows websites to store small pieces of data directly in the user's browser.  
+        It’s permanent (until manually cleared) and perfect for saving <strong>notes, preferences, or app state</strong> – all without a database.
+      </div>
+    </section>
+
+    <section id="basics">
+      <h2>02. Storing and Retrieving Data</h2>
+      <div class="explanation">
+        Use these commands to save and load values:
+        <ul>
+          <li><span class="highlight">localStorage.setItem("key", "value")</span> → Save data.</li>
+          <li><span class="highlight">localStorage.getItem("key")</span> → Retrieve data.</li>
+          <li><span class="highlight">localStorage.removeItem("key")</span> → Delete one entry.</li>
+          <li><span class="highlight">localStorage.clear()</span> → Clear all data.</li>
+        </ul>
+      </div>
+      <div class="code-block">
+<pre><code>&lt;script&gt;
+localStorage.setItem("username", "Neo");
+let user = localStorage.getItem("username");
+console.log("Welcome back,", user);
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Logs “Welcome back, Neo” to the console.
+      </div>
+    </section>
+
+    <section id="app">
+      <h2>03. Building a Cyber Notes App</h2>
+      <div class="explanation">
+        Let’s create an app that saves notes directly into <span class="highlight">localStorage</span>.  
+        Even if you close the browser, your data stays safe inside the neon matrix!
+      </div>
+
+      <div class="demo-output">
+        <input type="text" id="noteInput" placeholder="Type a note..." />
+        <button id="addNote">Add Note</button>
+        <button id="clearAll">Clear All</button>
+        <ul id="noteList"></ul>
+      </div>
+
+      <div class="code-block">
+<pre><code>&lt;script&gt;
+const input = document.getElementById("noteInput");
+const addBtn = document.getElementById("addNote");
+const clearBtn = document.getElementById("clearAll");
+const list = document.getElementById("noteList");
+
+// Load saved notes
+let notes = JSON.parse(localStorage.getItem("notes")) || [];
+renderNotes();
+
+addBtn.addEventListener("click", () => {
+  if(input.value.trim() === "") return;
+  notes.push(input.value);
+  localStorage.setItem("notes", JSON.stringify(notes));
+  input.value = "";
+  renderNotes();
+});
+
+clearBtn.addEventListener("click", () => {
+  notes = [];
+  localStorage.clear();
+  renderNotes();
+});
+
+function renderNotes(){
+  list.innerHTML = "";
+  notes.forEach((note, index) => {
+    let li = document.createElement("li");
+    li.textContent = note;
+    let del = document.createElement("button");
+    del.textContent = "Delete";
+    del.onclick = () => { notes.splice(index,1);
+      localStorage.setItem("notes", JSON.stringify(notes));
+      renderNotes();
+    };
+    li.appendChild(del);
+    list.appendChild(li);
+  });
+}
+&lt;/script&gt;</code></pre>
+      </div>
+      <div class="demo-output">
+        Output → Type a note, click “Add Note”, and it stays even after refreshing!
+      </div>
+    </section>
+
+    <section id="challenge">
+      <h2>04. Your Challenge</h2>
+      <div class="explanation">
+        Customize this app into your own **Cyber Todo List** or **Personal Journal**:  
+        <ul>
+          <li>Add timestamps to each entry.</li>
+          <li>Use different neon colors for priorities.</li>
+          <li>Provide edit functionality using <span class="highlight">prompt()</span>.</li>
+        </ul>
+      </div>
+      <div class="code-block final-challenge">
+<pre><code>&lt;script&gt;
+// Tip: Add timestamps!
+let now = new Date().toLocaleString();
+let note = { text: input.value, time: now };
+&lt;/script&gt;</code></pre>
+      </div>
+    </section>
+
+    <footer>
+      <h3>💾 Cyber Data Mastery</h3>
+      <p>Now you know how to store data locally using <span class="highlight">localStorage</span>.</p>
+      <p>Save as <code>lesson20-localstorage-app.html</code> and code your cyber interactive world!</p>
+    </footer>
+  </div>
+</body>
+</html>
