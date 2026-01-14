@@ -1,3 +1,6 @@
+# January 14
+-- New Members to collab the Mindcraft community
+
 # January 9
 --firebase added
 --some additional fixes
