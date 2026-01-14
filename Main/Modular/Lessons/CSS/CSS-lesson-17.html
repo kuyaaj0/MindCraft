@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables & Forms Styling - Cyberpunk Lesson 17</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 3.6em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            overflow-x: auto;
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        /* ==== TABLE STYLES ==== */
+        .cyber-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(10, 15, 50, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .cyber-table th {
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.1em;
+            border-bottom: 3px solid rgba(255, 0, 255, 0.4);
+            text-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+
+        .cyber-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            color: #e0e0ff;
+        }
+
+        .cyber-table tr {
+            transition: all 0.3s ease;
+        }
+
+        .cyber-table tr:nth-child(even) {
+            background: rgba(0, 255, 255, 0.05);
+        }
+
+        .cyber-table tr:hover {
+            background: rgba(0, 255, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            transform: scale(1.01);
+        }
+
+        /* ==== FORM STYLES ==== */
+        .cyber-form {
+            max-width: 500px;
+            background: rgba(10, 15, 50, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            box-shadow: 
+                0 0 40px rgba(255, 0, 255, 0.4),
+                inset 0 0 30px rgba(0, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #00ffff;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 20, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 12px;
+            color: #e0e0ff;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 255, 0.6),
+                inset 0 0 20px rgba(255, 0, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .cyber-button {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: #000;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+
+        .cyber-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.7);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.1em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .cyber-table {
+                font-size: 0.9em;
+            }
+            .cyber-form {
+                padding: 25px;
+                margin: 0 10px;
+            }
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Tables & Forms Styling</h1>
+        <p class="subtitle">LESSON 17 - Cyberpunk Data Interface</p>
+    </header>
+
+    <!-- 01: TABLES -->
+    <section id="tables">
+        <h2>01. Styling Tables &lt;table&gt;</h2>
+        <div class="explanation">
+            Tables display data in rows and columns. Remove default ugly borders with <span class="highlight">border-collapse: collapse</span> 
+            and create neon grid lines with custom borders and hover effects for perfect readability.
+        </div>
+        <div class="code-block">
+<pre><code>&lt;table class="cyber-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Student ID&lt;/th&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Course&lt;/th&gt;
+            &lt;th&gt;Status&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;CMU001&lt;/td&gt;
+            &lt;td&gt;Juan Dela Cruz&lt;/td&gt;
+            &lt;td&gt;BS Information Technology&lt;/td&gt;
+            &lt;td&gt;Active&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+
+<style>
+.cyber-table {
+    border-collapse: collapse;
+    background: rgba(10, 15, 50, 0.95);
+    border-radius: 15px;
+}
+.cyber-table th {
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    background-clip: text;
+    padding: 20px 15px;
+}
+.cyber-table tr:hover {
+    background: rgba(0, 255, 255, 0.15);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+}
+</style></code></pre>
+        </div>
+        <div class="demo-output">
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Program</th>
+                        <th>Status</th>
+                        <th>GPA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CMU001</td>
+                        <td>Juan Dela Cruz</td>
+                        <td>BS Information Technology</td>
+                        <td><span style="color:#00ff88;">Active</span></td>
+                        <td>1.75</td>
+                    </tr>
+                    <tr>
+                        <td>CMU002</td>
+                        <td>Maria Santos</td>
+                        <td>BS Computer Science</td>
+                        <td><span style="color:#ffaa00;">On Leave</span></td>
+                        <td>1.85</td>
+                    </tr>
+                    <tr>
+                        <td>CMU003</td>
+                        <td>Pedro Reyes</td>
+                        <td>BS Information Systems</td>
+                        <td><span style="color:#00ff88;">Active</span></td>
+                        <td>1.25</td>
+                    </tr>
+                    <tr>
+                        <td>CMU004</td>
+                        <td>Ana Lim</td>
+                        <td>BS Information Technology</td>
+                        <td><span style="color:#ff4444;">Graduated</span></td>
+                        <td>1.15</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- 02: FORMS -->
+    <section id="forms">
+        <h2>02. Styling Forms &lt;form&gt;</h2>
+        <div class="explanation">
+            Forms collect user input. Style inputs with <span class="highlight">transparent backgrounds</span>, neon borders, 
+            and focus states that glow when clicked. Use consistent padding and labels for clean, professional interfaces.
+        </div>
+        <div class="code-block">
+<pre><code>&lt;form class="cyber-form"&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Student ID&lt;/label&gt;
+        &lt;input type="text" placeholder="CMU001234" required&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Full Name&lt;/label&gt;
+        &lt;input type="text" placeholder="Enter your full name"&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+        &lt;label&gt;Program&lt;/label&gt;
+        &lt;select&gt;
+            &lt;option&gt;BS Information Technology&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/div&gt;
+    &lt;button class="cyber-button"&gt;Register Student&lt;/button&gt;
+&lt;/form&gt;
+
+<style>
+.form-group input {
+    padding: 15px 20px;
+    background: rgba(0, 0, 20, 0.8);
+    border: 2px solid rgba(0, 255, 255, 0.4);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+input:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
+}</style></code></pre>
+        </div>
+        <div class="demo-output">
+            <form class="cyber-form">
+                <div class="form-group">
+                    <label>Student ID</label>
+                    <input type="text" placeholder="CMU001234" required>
+                </div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Program</label>
+                    <select>
+                        <option>Select Program</option>
+                        <option>BS Information Technology</option>
+                        <option>BS Computer Science</option>
+                        <option>BS Information Systems</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select>
+                        <option>Active</option>
+                        <option>On Leave</option>
+                        <option>Graduated</option>
+                    </select>
+                </div>
+                <button type="submit" class="cyber-button">Register Student</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- 03: TABLE + FORM TOGETHER -->
+    <section id="combined">
+        <h2>03. Student Dashboard Example</h2>
+        <div class="explanation">
+            Combine tables and forms for <span class="highlight">complete admin dashboards</span>. 
+            The table shows existing data, the form adds new records. Both use consistent neon styling.
+        </div>
+        <div class="demo-output" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+            <div>
+                <h3 style="color: #00ffff; margin-bottom: 20px;">Student Records</h3>
+                <table class="cyber-table" style="font-size: 0.9em;">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CMU001</td>
+                            <td>J. Cruz</td>
+                            <td>BS IT</td>
+                        </tr>
+                        <tr>
+                            <td>CMU002</td>
+                            <td>M. Santos</td>
+                            <td>BS CS</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <h3 style="color: #ff00ff; margin-bottom: 20px;">Add New Student</h3>
+                <form class="cyber-form" style="padding: 25px;">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="text" placeholder="Student ID" style="font-size: 0.9em;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <input type="text" placeholder="Full Name" style="font-size: 0.9em;">
+                    </div>
+                    <button class="cyber-button" style="font-size: 0.95em; padding: 12px;">Add Student</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04: BEST PRACTICES -->
+    <section id="best-practices">
+        <h2>04. Pro Tips & Best Practices</h2>
+        <ul class="examples" style="list-style: none; padding: 0;">
+            <li style="background: rgba(0, 255, 255, 0.08); border-left: 6px solid #00ffff; margin: 25px 0; padding: 30px; border-radius: 15px;">
+                <strong>Tables:</strong> Always use <code>&lt;thead&gt;</code> for headers and <code>&lt;tbody&gt;</code> for data. 
+                Hover effects make scanning data easier.
+            </li>
+            <li style="background: rgba(0, 255, 255, 0.08); border-left: 6px solid #00ffff; margin: 25px 0; padding: 30px; border-radius: 15px;">
+                <strong>Forms:</strong> Use <code>label</code> tags with proper association. Focus states are crucial for accessibility.
+            </li>
+            <li style="background: rgba(255, 20, 147, 0.15); border-left: 6px solid #ff1493 !important; margin: 25px 0; padding: 30px; border-radius: 15px;">
+                <strong>Never:</strong> Skip labels or use tiny unreadable fonts in tables. Always make forms keyboard accessible.
+            </li>
+        </ul>
+    </section>
+
+    <!-- 05: CHALLENGE -->
+    <section id="challenge">
+        <h2>05. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Create your own <span class="highlight">Student Management Dashboard</span> for Central Mindanao University. 
+            Add your real courses, student data, and form fields!
+        </div>
+        <div class="code-block final-challenge">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;CMU Student Dashboard&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #e0e0e0;
+            font-family: 'Roboto Mono', monospace;
+            padding: 20px;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(10,15,50,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #00ffff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(0,0,20,0.8);
+            border-radius: 10px;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0,255,255,0.3);
+        }
+        th {
+            background: #ff00ff;
+            color: #000;
+        }
+        form {
+            background: rgba(0,0,20,0.9);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        input, select, button {
+            padding: 12px;
+            margin: 5px 0;
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            background: rgba(0,0,10,0.8);
+            color: #e0e0e0;
+            width: 100%;
+        }
+        button {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="dashboard"&gt;
+        &lt;h1 style="color: #00ffff; text-align: center; margin-bottom: 30px;"&gt;
+            CMU Student Management
+        &lt;/h1&gt;
+
+        &lt;!-- YOUR STUDENT TABLE --&gt;
+        &lt;table&gt;
+            &lt;thead&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;ID&lt;/th&gt;
+                    &lt;th&gt;Name&lt;/th&gt;
+                    &lt;th&gt;Course&lt;/th&gt;
+                    &lt;th&gt;Year&lt;/th&gt;
+                &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+                &lt;tr&gt;
+                    &lt;td&gt;CMU001&lt;/td&gt;
+                    &lt;td&gt;[YOUR NAME]&lt;/td&gt;
+                    &lt;td&gt;BS Information Technology&lt;/td&gt;
+                    &lt;td&gt;3rd Year&lt;/td&gt;
+                &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+
+        &lt;!-- YOUR STUDENT FORM --&gt;
+        &lt;form&gt;
+            &lt;h3 style="color: #ff00ff; margin-bottom: 20px;"&gt;
+                Add New Student
+            &lt;/h3&gt;
+            &lt;input type="text" placeholder="Student ID"&gt;
+            &lt;input type="text" placeholder="Full Name"&gt;
+            &lt;select&gt;
+                &lt;option&gt;BS Information Technology&lt;/option&gt;
+                &lt;option&gt;BS Computer Science&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;input type="text" placeholder="Year Level"&gt;
+            &lt;button type="submit"&gt;Add Student&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>READY TO CODE?</h3>
+        <p>Copy ALL code → VS Code → Save as <code>tables-forms-lesson17.html</code> → Open in browser → Build your dashboard!</p>
+        <p><strong>Dark neon pixelated cyberpunk tables & forms</strong> – perfect for IT student enrollment systems and admin dashboards!</p>
+    </footer>
+</div>
+</body>
+</html>

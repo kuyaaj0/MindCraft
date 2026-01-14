@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transitions & Hover Effects - Cyberpunk Lesson 18</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 3.6em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        /* ==== TRANSITION & HOVER EFFECTS ==== */
+        .cyber-button {
+            display: inline-block;
+            padding: 18px 35px;
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2));
+            color: #e0e0ff;
+            text-decoration: none;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: 2px solid rgba(255, 0, 255, 0.5);
+            border-radius: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cyber-button:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4));
+            border-color: #00ffff;
+            box-shadow: 
+                0 15px 40px rgba(0, 255, 255, 0.6),
+                0 0 50px rgba(255, 0, 255, 0.5);
+            color: #fff;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+
+        .cyber-card {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px;
+            width: 280px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+        }
+
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ff00ff);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .cyber-card:hover {
+            transform: translateY(-15px) rotateX(5deg) scale(1.03);
+            border-color: #ff00ff;
+            box-shadow: 
+                0 25px 60px rgba(255, 0, 255, 0.5),
+                0 0 60px rgba(0, 255, 255, 0.4),
+                inset 0 0 30px rgba(255, 0, 255, 0.1);
+        }
+
+        .cyber-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cyber-link {
+            color: #00ffff;
+            text-decoration: none;
+            padding: 12px 25px;
+            border: 1px solid rgba(0, 255, 255, 0.6);
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .cyber-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .cyber-link:hover {
+            color: #fff;
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+            transform: translateY(-3px);
+        }
+
+        .cyber-link:hover::after {
+            width: 80%;
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.1em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .cyber-card { margin: 10px; width: auto; }
+            .button-grid { grid-template-columns: 1fr; }
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Transitions & Hover Effects</h1>
+        <p class="subtitle">LESSON 18 - Cyberpunk Animation Matrix</p>
+    </header>
+
+  <!-- 01: TRANSITIONS EXPLAINED (FIXED WITH LIVE DEMO) -->
+<section id="transitions">
+    <h2>01. What is transition?</h2>
+    <div class="explanation">
+        <span class="highlight">transition</span> creates smooth animations between states (normal → hover). 
+        The secret is <strong>transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)</strong> - this makes everything 
+        animate smoothly over 0.4 seconds with a natural easing curve.
+    </div>
+    <div class="code-block">
+<pre><code>/* BASIC TRANSITION */
+.button {
+    transition: all 0.4s ease;  /* all properties, 0.4s, smooth easing */
+}
+
+.button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,255,255,0.5);
+}
+
+/* SPECIFIC PROPERTIES */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}</code></pre>
+    </div>
+    <div class="demo-output">
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+            <!-- NO TRANSITION (INSTANT) -->
+            <div style="
+                padding: 20px 30px; 
+                background: rgba(255,0,255,0.2); 
+                border: 2px solid #ff00ff; 
+                border-radius: 15px; 
+                color: #fff; 
+                font-family: 'Roboto Mono', monospace;
+                font-weight: bold;
+            " onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 30px rgba(255,0,255,0.8)'"
+               onmouseout="this.style.transform=''; this.style.boxShadow=''">
+                NO TRANSITION<br>
+                <small>(Instant change)</small>
+            </div>
+            
+            <!-- WITH TRANSITION (SMOOTH) -->
+            <div style="
+                padding: 20px 30px; 
+                background: rgba(0,255,255,0.2); 
+                border: 2px solid #00ffff; 
+                border-radius: 15px; 
+                color: #000; 
+                font-family: 'Roboto Mono', monospace;
+                font-weight: bold;
+                transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            " onmouseover="this.style.transform='translateY(-8px) scale(1.05)'; this.style.boxShadow='0 15px 40px rgba(0,255,255,0.8)'"
+               onmouseout="this.style.transform=''; this.style.boxShadow='0 5px 20px rgba(0,255,255,0.3)'">
+                SMOOTH TRANSITION<br>
+                <small>(0.4s animation)</small>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; color: #00ffff; font-family: 'Roboto Mono', monospace;">
+            Hover both boxes above ↑
+        </div>
+    </div>
+</section>
+
+
+    <!-- 02: BUTTON HOVER EFFECTS -->
+    <section id="buttons">
+        <h2>02. Neon Button Animations</h2>
+        <div class="explanation">
+            Buttons lift up, glow brighter, and show a <span class="highlight">shimmer effect</span> on hover. 
+            The <code>::before</code> pseudo-element creates the moving light sweep across the button.
+        </div>
+        <div class="code-block">
+<pre><code>.cyber-button {
+    padding: 18px 35px;
+    border: 2px solid rgba(255,0,255,0.5);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cyber-button::before {
+    content: '';
+    position: absolute;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+    transition: left 0.6s ease;
+}
+
+.cyber-button:hover::before {
+    left: 100%;  /* shimmer moves across */
+}
+
+.cyber-button:hover {
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(0,255,255,0.6);
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="button-grid">
+                <a href="#" class="cyber-button">Portfolio</a>
+                <a href="#" class="cyber-button">Projects</a>
+                <a href="#" class="cyber-button">GitHub</a>
+                <a href="#" class="cyber-button">Download CV</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03: CARD HOVER EFFECTS -->
+    <section id="cards">
+        <h2>03. 3D Card Animations</h2>
+        <div class="explanation">
+            Cards lift up with 3D rotation and glow effects. The top border <span class="highlight">shimmers</span> 
+            when hovered using a scaling transform on the <code>::before</code> element.
+        </div>
+        <div class="code-block">
+<pre><code>.cyber-card {
+    border: 2px solid rgba(0,255,255,0.4);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cyber-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.cyber-card:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    border-color: #ff00ff;
+    box-shadow: 0 25px 60px rgba(255,0,255,0.5);
+}
+
+.cyber-card:hover::before {
+    transform: scaleX(1);  /* border glow appears */
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="card-grid">
+                <div class="cyber-card">
+                    <h3 style="color: #00ffff; margin-bottom: 15px;">Enrollment System</h3>
+                    <p>Student registration web app with neon cyberpunk theme.</p>
+                </div>
+                <div class="cyber-card">
+                    <h3 style="color: #ff00ff; margin-bottom: 15px;">Gamified Learning</h3>
+                    <p>Interactive learning platform for CMU students.</p>
+                </div>
+                <div class="cyber-card">
+                    <h3 style="color: #00ffff; margin-bottom: 15px;">Portfolio Site</h3>
+                    <p>Your personal cyberpunk showcase website.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04: LINK HOVER EFFECTS -->
+    <section id="links">
+        <h2>04. Link Underline Animations</h2>
+        <div class="explanation">
+            Links get an animated underline that grows from the center. Smooth color changes and glow effects 
+            make navigation feel alive and responsive.
+        </div>
+        <div class="demo-output">
+            <div style="text-align: center;">
+                <a href="#" class="cyber-link">About Me</a>
+                <a href="#" class="cyber-link">My Projects</a>
+                <a href="#" class="cyber-link">Contact</a>
+                <a href="#" class="cyber-link">GitHub</a>
+                <a href="#" class="cyber-link">Download Resume</a>
+            </div>
+        </div>
+        <div class="code-block">
+<pre><code>.cyber-link {
+    color: #00ffff;
+    border: 1px solid rgba(0,255,255,0.6);
+    transition: all 0.3s ease;
+}
+
+.cyber-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.cyber-link:hover::after {
+    width: 80%;  /* underline grows */
+}</code></pre>
+        </div>
+    </section>
+
+    <!-- 05: EASING FUNCTIONS -->
+    <section id="easing">
+        <h2>05. Best Easing Functions</h2>
+        <div class="explanation">
+            <span class="highlight">cubic-bezier(0.25, 0.46, 0.45, 0.94)</span> = smooth natural motion<br>
+            <strong>ease</strong> = simple smooth<br>
+            <strong>ease-in-out</strong> = slow start + end<br>
+            Never use <strong>linear</strong> - feels robotic!
+        </div>
+        <ul class="examples" style="list-style: none; padding: 0;">
+            <li style="background: rgba(0, 255, 255, 0.08); border-left: 6px solid #00ffff; margin: 25px 0; padding: 30px; border-radius: 15px;">
+                <code>transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);</code><br>
+                Perfect for buttons and cards - feels premium!
+            </li>
+            <li style="background: rgba(255, 20, 147, 0.15); border-left: 6px solid #ff1493 !important; margin: 25px 0; padding: 30px; border-radius: 15px;">
+                <strong>AVOID:</strong> <code>transition: all 0s;</code> or no transition<br>
+                Instant changes feel cheap and unprofessional.
+            </li>
+        </ul>
+    </section>
+
+    <!-- 06: CHALLENGE -->
+    <section id="challenge">
+        <h2>06. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Build your own <span class="highlight">CMU Portfolio with hover effects</span>. 
+            Add your real projects and make every button/card/link interactive!
+        </div>
+        <div class="code-block final-challenge">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My CMU Portfolio&lt;/title&gt;
+    &lt;style&gt;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #e0e0e0;
+            font-family: 'Orbitron', monospace;
+            padding: 20px;
+        }
+        .portfolio {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .project-card {
+            background: rgba(10,15,50,0.95);
+            border: 2px solid rgba(0,255,255,0.4);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .project-card:hover {
+            transform: translateY(-15px);
+            border-color: #ff00ff;
+            box-shadow: 0 25px 50px rgba(255,0,255,0.5);
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            padding: 15px 30px;
+            border: 2px solid #ff00ff;
+            background: rgba(255,0,255,0.1);
+            color: #e0e0ff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.4s ease;
+            font-family: 'Roboto Mono', monospace;
+        }
+        .nav-btn:hover {
+            background: rgba(0,255,255,0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,255,255,0.5);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="portfolio"&gt;
+        &lt;h1 style="color: #00ffff; margin-bottom: 20px;"&gt;
+            [YOUR NAME] - CMU IT Student
+        &lt;/h1&gt;
+        &lt;p style="color: #ff00ff; font-size: 1.2em; margin-bottom: 40px;"&gt;
+            Central Mindanao University
+        &lt;/p&gt;
+
+        &lt;div class="nav-buttons"&gt;
+            &lt;a href="#" class="nav-btn"&gt;About&lt;/a&gt;
+            &lt;a href="#" class="nav-btn"&gt;Projects&lt;/a&gt;
+            &lt;a href="#" class="nav-btn"&gt;Skills&lt;/a&gt;
+            &lt;a href="#" class="nav-btn"&gt;Contact&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class="project-grid"&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 style="color: #00ffff;"&gt;Enrollment System&lt;/h3&gt;
+                &lt;p&gt;Web app for student registration.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 style="color: #ff00ff;"&gt;Gamified Learning&lt;/h3&gt;
+                &lt;p&gt;Interactive education platform.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="project-card"&gt;
+                &lt;h3 style="color: #00ffff;"&gt;Portfolio Site&lt;/h3&gt;
+                &lt;p&gt;Cyberpunk personal website.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>READY TO CODE?</h3>
+        <p>Copy ALL code → VS Code → Save as <code>hover-effects-lesson18.html</code> → Open in browser → Watch the magic! ✨</p>
+        <p><strong>Dark neon pixelated cyberpunk transitions</strong> – perfect for professional IT student portfolios! 🚀</p>
+    </footer>
+</div>
+</body>
+</html>

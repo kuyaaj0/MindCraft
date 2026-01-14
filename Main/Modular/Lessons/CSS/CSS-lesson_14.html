@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS with HTML & Flexbox Layout - Cyberpunk Lesson</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 3.6em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: ' LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        .warning {
+            background: rgba(255, 20, 147, 0.15);
+            border-left-color: #ff1493 !important;
+        }
+
+        .warning::before {
+            content: ' WARNING';
+            color: #ff1493 !important;
+            text-shadow: 0 0 15px #ff1493;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        /* FLEXBOX DEMO STYLES */
+        .flex-demo-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            padding: 15px 25px;
+            border: 2px solid #00ffff;
+        }
+
+        .flex-demo-nav .logo {
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #ff00ff;
+        }
+
+        .flex-demo-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .flex-demo-nav a {
+            color: #e0e0ff;
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .flex-demo-nav a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .flex-card-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .flex-card {
+            background: rgba(10, 10, 40, 0.95);
+            border-radius: 15px;
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            width: 260px;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .flex-card h3 {
+            color: #00ffff;
+            font-size: 1.2em;
+        }
+
+        .flex-center-box-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 220px;
+            border-radius: 18px;
+            border: 2px dashed #00ffff;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .flex-center-box {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 18px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95em;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.7);
+            text-align: center;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.1em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .flex-demo-nav {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .flex-demo-nav ul {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>CSS & Flexbox Layout</h1>
+        <p class="subtitle">LESSON 11 & 14 - Cyberpunk Style + Flexbox Grid</p>
+    </header>
+
+    <!-- 11. USING CSS WITH HTML -->
+    <section id="css-intro">
+        <h2>01. Three Ways to Use CSS</h2>
+        <div class="explanation">
+            CSS controls the <span class="highlight">design</span> of the page: colors, fonts, spacing, layout.  
+            There are <strong>three main ways</strong> to connect CSS to HTML: inline, internal, and external (separate .css file). [web:10][web:4]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- INLINE CSS: style attribute on the tag --&gt;
+&lt;h1 style="color:#ff00ff; text-align:center;"&gt;
+    Neon Title
+&lt;/h1&gt;
+
+&lt;!-- INTERNAL CSS: inside &lt;style&gt; in the &lt;head&gt; --&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        body {
+            background-color: #000;
+            color: #e0e0e0;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;!-- EXTERNAL CSS: separate file style.css --&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;</code></pre>
+        </div>
+        <div class="demo-output">
+            <h1 style="color:#ff00ff; text-align:center; margin-bottom:10px;">
+                INLINE STYLED TITLE
+            </h1>
+            <p style="text-align:center; color:#00ffff;">
+                This line is styled directly on the element using the style attribute.
+            </p>
+        </div>
+    </section>
+
+    <section id="inline-internal-external">
+        <h2>02. Inline vs Internal vs External</h2>
+        <div class="explanation">
+            <span class="highlight">Inline CSS</span> is written inside the HTML tag and affects only that element.  
+            <span class="highlight">Internal CSS</span> is in a &lt;style&gt; tag in the head and styles the whole page. [web:4][web:10]
+        </div>
+        <ul class="examples">
+            <li>
+                <strong>INLINE CSS (quick, but messy):</strong><br>
+                <code>&lt;p style="color:#ff1493; font-size:18px;"&gt;Pink text.&lt;/p&gt;</code><br>
+                Good for testing but hard to maintain when the project grows.
+            </li>
+            <li>
+                <strong>INTERNAL CSS (one page only):</strong><br>
+                <code>&lt;style&gt; p { color:#00ffff; } &lt;/style&gt;</code><br>
+                Nice for small single-page demos or lessons.
+            </li>
+            <li class="warning">
+                <strong>BEST PRACTICE = EXTERNAL CSS:</strong><br>
+                <code>&lt;link rel="stylesheet" href="style.css"&gt;</code><br>
+                One stylesheet can style many pages and makes your code organized. [web:1][web:8]
+            </li>
+        </ul>
+    </section>
+
+    <section id="external-link">
+        <h2>03. Linking an External CSS File</h2>
+        <div class="explanation">
+            External CSS lives in a separate <span class="highlight">.css file</span> and is linked with a &lt;link&gt; tag inside the &lt;head&gt;.  
+            The <strong>rel="stylesheet"</strong> and <strong>href="style.css"</strong> attributes tell the browser where the design file is. [web:5][web:8]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- index.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Neon Portfolio&lt;/title&gt;
+
+    &lt;!-- Connect external CSS file --&gt;
+    &lt;link rel="stylesheet" href="neon-style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Neon Cyberpunk Page&lt;/h1&gt;
+    &lt;p&gt;Styled from an external CSS file!&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+        <div class="explanation">
+            In <strong>neon-style.css</strong> you put only CSS, no HTML tags.  
+            This separation makes your layout easy to reuse and faster to load because the CSS file can be cached. [web:1][web:10]
+        </div>
+        <div class="code-block">
+<pre><code>/* neon-style.css */
+body {
+    background: #000000;
+    color: #e0e0e0;
+    font-family: 'Orbitron', monospace;
+}
+
+h1 {
+    color: #ff00ff;
+    text-align: center;
+}
+
+p {
+    color: #00ffff;
+}</code></pre>
+        </div>
+    </section>
+
+    <!-- 14. FLEXBOX FOR LAYOUT -->
+    <section id="flexbox-intro">
+        <h2>04. Flexbox Superpower Layout</h2>
+        <div class="explanation">
+            Flexbox is used to create <span class="highlight">responsive layouts</span> like navbars, card grids, and centered boxes.  
+            You turn a container into a flexbox with <strong>display: flex;</strong> and then control alignment with properties like justify-content and align-items. [web:3][web:6]
+        </div>
+        <div class="code-block">
+<pre><code>.flex-container {
+    display: flex;              /* activate flexbox */
+    justify-content: center;    /* horizontal alignment */
+    align-items: center;        /* vertical alignment */
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="flex-center-box-wrapper">
+                <div class="flex-center-box">
+                    CENTERED WITH FLEXBOX
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="flexbox-navbar">
+        <h2>05. Flexbox Navbar Example</h2>
+        <div class="explanation">
+            A navbar is a row of links; Flexbox makes it easy to space the logo on the left and links on the right.  
+            <strong>justify-content: space-between;</strong> pushes items to the edges, while align-items: center keeps them vertically aligned. [web:3][web:6]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- HTML --&gt;
+&lt;nav class="flex-demo-nav"&gt;
+    &lt;div class="logo"&gt;NEON NAV&lt;/div&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+/* CSS */
+.flex-demo-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <nav class="flex-demo-nav">
+                <div class="logo">NEON NAV</div>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Projects</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <section id="flexbox-cards">
+        <h2>06. Card Grids with Flexbox</h2>
+        <div class="explanation">
+            A card grid is just a flex container that <span class="highlight">wraps</span> its children into multiple rows.  
+            Using <strong>flex-wrap: wrap</strong> and <strong>gap</strong> creates a responsive layout without complex floats. [web:3][web:6]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- HTML --&gt;
+&lt;div class="flex-card-grid"&gt;
+    &lt;div class="flex-card"&gt;
+        &lt;h3&gt;Project 1&lt;/h3&gt;
+        &lt;p&gt;Enrollment System&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="flex-card"&gt;
+        &lt;h3&gt;Project 2&lt;/h3&gt;
+        &lt;p&gt;Gamified Learning App&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="flex-card"&gt;
+        &lt;h3&gt;Project 3&lt;/h3&gt;
+        &lt;p&gt;Neon Portfolio&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+/* CSS */
+.flex-card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="flex-card-grid">
+                <div class="flex-card">
+                    <h3>Project 1</h3>
+                    <p>Student Enrollment System</p>
+                </div>
+                <div class="flex-card">
+                    <h3>Project 2</h3>
+                    <p>Gamified Learning Platform</p>
+                </div>
+                <div class="flex-card">
+                    <h3>Project 3</h3>
+                    <p>Neon Cyberpunk Portfolio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="challenge">
+        <h2>07. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Copy the template below and build your own page that uses <span class="highlight">external CSS + flexbox navbar + card grid + centered box</span>.  
+            Change the text to be about <strong>yourself, your school, or your IT projects</strong>.
+        </div>
+        <div class="code-block final-challenge">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Flexbox Neon Page&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;nav class="main-nav"&gt;
+        &lt;div class="logo"&gt;[YOUR LOGO]&lt;/div&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#projects"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/nav&gt;
+
+    &lt;section id="about"&gt;
+        &lt;h1&gt;[YOUR NAME]&lt;/h1&gt;
+        &lt;p&gt;I study at [YOUR SCHOOL] and I love coding neon cyberpunk websites.&lt;/p&gt;
+    &lt;/section&gt;
+
+    &lt;section id="projects"&gt;
+        &lt;h2&gt;My Projects&lt;/h2&gt;
+        &lt;div class="card-grid"&gt;
+            &lt;div class="card"&gt;
+                &lt;h3&gt;Project A&lt;/h3&gt;
+                &lt;p&gt;Describe project here.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="card"&gt;
+                &lt;h3&gt;Project B&lt;/h3&gt;
+                &lt;p&gt;Describe project here.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="card"&gt;
+                &lt;h3&gt;Project C&lt;/h3&gt;
+                &lt;p&gt;Describe project here.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+    &lt;section id="contact"&gt;
+        &lt;h2&gt;Centered Contact Box&lt;/h2&gt;
+        &lt;div class="center-wrapper"&gt;
+            &lt;div class="center-box"&gt;
+                &lt;p&gt;Email: you@example.com&lt;/p&gt;
+                &lt;p&gt;IG: @yourhandle&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/section&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>READY TO CODE?</h3>
+        <p>Copy ALL code → VS Code → Save as <code>css-flexbox-lesson.html</code> → Open in browser.</p>
+        <p><strong>Dark neon pixelated cyberpunk flexbox layout</strong> – perfect for IT students practicing CSS + layout.</p>
+    </footer>
+</div>
+</body>
+</html>

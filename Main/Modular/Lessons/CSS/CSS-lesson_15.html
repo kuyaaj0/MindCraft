@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid Basics - Cyberpunk Lesson 15</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 3.6em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.6em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: ' LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        .warning {
+            background: rgba(255, 20, 147, 0.15);
+            border-left-color: #ff1493 !important;
+        }
+
+        .warning::before {
+            content: ' WARNING';
+            color: #ff1493 !important;
+            text-shadow: 0 0 15px #ff1493;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        /* ==== CSS GRID DEMO STYLES ==== */
+
+        /* Simple 2-column grid for demo-output 1 */
+        .grid-demo-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 equal columns */ /* [web:12][web:18] */
+            gap: 20px; /* space between items */ /* [web:14][web:20] */
+        }
+
+        .grid-box {
+            background: rgba(10, 10, 40, 0.95);
+            border-radius: 15px;
+            border: 2px solid #ff00ff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* 3-column grid demo */
+        .grid-demo-three {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 equal columns */ /* [web:13] */
+            gap: 20px;
+        }
+
+        /* Explicit rows demo */
+        .grid-demo-rows {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 100px 60px; /* fixed heights for first two rows */ /* [web:13] */
+            gap: 10px;
+        }
+
+        .grid-item-small {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px dashed #00ffff;
+            border-radius: 10px;
+            font-size: 0.85em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0ff;
+            padding: 5px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.1em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .grid-demo-two,
+            .grid-demo-three {
+                grid-template-columns: 1fr; /* stack on small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>CSS Grid Basics</h1>
+        <p class="subtitle">LESSON 15 - Neon Cyber Grid Layout</p>
+    </header>
+
+    <!-- 01: WHAT IS CSS GRID -->
+    <section id="grid-intro">
+        <h2>01. What is CSS Grid?</h2>
+        <div class="explanation">
+            CSS Grid is a <span class="highlight">2D layout system</span> for creating rows and columns at the same time. [web:13][web:14]
+            It is perfect for dashboards, galleries, and multi-column layouts because you can control columns, rows, and gaps between items. [web:13][web:17]
+        </div>
+        <div class="code-block">
+<pre><code>.grid-container {
+    display: grid;              /* Turn this element into a grid container */
+    grid-template-columns: 1fr 1fr 1fr;  /* 3 equal-width columns */
+    gap: 20px;                  /* Space between rows and columns */
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="grid-demo-three">
+                <div class="grid-box">GRID ITEM 1</div>
+                <div class="grid-box">GRID ITEM 2</div>
+                <div class="grid-box">GRID ITEM 3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02: GRID TEMPLATE COLUMNS -->
+    <section id="grid-columns">
+        <h2>02. grid-template-columns</h2>
+        <div class="explanation">
+            <span class="highlight">grid-template-columns</span> defines how many columns you have and how wide each column is. [web:12][web:13]
+            You can use fixed units (px), percentages, or flexible units like <strong>fr</strong> (fraction of free space). [web:14]
+        </div>
+        <div class="code-block">
+<pre><code>.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* two equal columns */
+}
+
+.three-columns {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr; /* first is fixed 200px, others share remaining space */
+}
+
+.auto-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns using repeat() */  /* [web:13] */
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="grid-demo-two">
+                <div class="grid-box">
+                    LEFT COLUMN<br>(1fr)
+                </div>
+                <div class="grid-box">
+                    RIGHT COLUMN<br>(1fr)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03: GRID TEMPLATE ROWS -->
+    <section id="grid-rows">
+        <h2>03. grid-template-rows</h2>
+        <div class="explanation">
+            <span class="highlight">grid-template-rows</span> sets the height of each row in the grid. [web:13][web:14]
+            If you do not set it, rows automatically grow to fit their content, which is often fine for basic layouts. [web:14]
+        </div>
+        <div class="code-block">
+<pre><code>.fixed-rows {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 80px 120px; /* first row 80px, second row 120px */
+    gap: 10px;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="grid-demo-rows">
+                <div class="grid-item-small">Row 1 - Col 1</div>
+                <div class="grid-item-small">Row 1 - Col 2</div>
+                <div class="grid-item-small">Row 1 - Col 3</div>
+                <div class="grid-item-small">Row 2 - Col 1</div>
+                <div class="grid-item-small">Row 2 - Col 2</div>
+                <div class="grid-item-small">Row 2 - Col 3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04: GAP -->
+    <section id="grid-gap">
+        <h2>04. gap (row & column gap)</h2>
+        <div class="explanation">
+            The <span class="highlight">gap</span> property sets the empty space between rows and columns, like gutters between cards. [web:17][web:20]
+            You can give one value for both directions, or two values: first for row-gap and second for column-gap. [web:14][web:20]
+        </div>
+        <div class="code-block">
+<pre><code>.equal-gap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;           /* 20px between rows and columns */
+}
+
+.different-gap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px 40px;      /* 10px row-gap, 40px column-gap */
+}</code></pre>
+        </div>
+        <ul class="examples">
+            <li>
+                <strong>Clean card layout:</strong><br>
+                Use <code>gap: 20px;</code> to avoid elements sticking to each other and improve readability in dashboards and galleries. [web:17][web:20]
+            </li>
+            <li class="warning">
+                <strong>Do not use margins everywhere:</strong><br>
+                Using margin on each card can be harder to control; <code>gap</code> is made specifically for grid spacing. [web:17]
+            </li>
+        </ul>
+    </section>
+
+    <!-- 05: SIMPLE TWO-COLUMN LAYOUT -->
+    <section id="two-column">
+        <h2>05. Simple Two-Column Layout</h2>
+        <div class="explanation">
+            A two-column layout is common for <span class="highlight">sidebar + main content</span> pages. [web:12][web:18]
+            You can give the sidebar less space and the main content more space using fractional units like <strong>1fr 3fr</strong>. [web:18]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- HTML --&gt;
+&lt;div class="layout-two-column"&gt;
+    &lt;aside class="sidebar"&gt;Sidebar (links, menu)&lt;/aside&gt;
+    &lt;main class="main-content"&gt;Main content area&lt;/main&gt;
+&lt;/div&gt;
+
+/* CSS */
+.layout-two-column {
+    display: grid;
+    grid-template-columns: 1fr 3fr;  /* sidebar smaller, main bigger */
+    gap: 20px;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="grid-demo-two" style="grid-template-columns: 1fr 3fr;">
+                <div class="grid-box">
+                    SIDEBAR<br>(1fr)
+                </div>
+                <div class="grid-box">
+                    MAIN CONTENT<br>(3fr)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 06: SIMPLE THREE-COLUMN LAYOUT -->
+    <section id="three-column">
+        <h2>06. Simple Three-Column Layout</h2>
+        <div class="explanation">
+            A three-column layout is useful for <span class="highlight">cards, features, or stats</span> in a row. [web:13][web:16]
+            Using <strong>grid-template-columns: repeat(3, 1fr);</strong> creates three equal columns that adapt to the container. [web:13][web:14]
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!-- HTML --&gt;
+&lt;section class="features-grid"&gt;
+    &lt;div class="feature"&gt;Column 1&lt;/div&gt;
+    &lt;div class="feature"&gt;Column 2&lt;/div&gt;
+    &lt;div class="feature"&gt;Column 3&lt;/div&gt;
+&lt;/section&gt;
+
+/* CSS */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 3 equal columns */
+    gap: 20px;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div class="grid-demo-three">
+                <div class="grid-box">COLUMN 1</div>
+                <div class="grid-box">COLUMN 2</div>
+                <div class="grid-box">COLUMN 3</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 07: YOUR CHALLENGE -->
+    <section id="challenge">
+        <h2>07. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Copy the starter template below and build your own <span class="highlight">CSS Grid page</span> with 2-column and 3-column sections.  
+            Customize it for <strong>your portfolio, school subjects, or IT projects</strong>.
+        </div>
+        <div class="code-block final-challenge">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My CSS Grid Page&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            background: #000;
+            color: #e0e0e0;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .two-cols {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        .three-cols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .box {
+            background: #060619;
+            border: 2px solid #ff00ff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;div class="wrapper"&gt;
+        &lt;h1&gt;[YOUR NAME] - Grid Layout&lt;/h1&gt;
+
+        &lt;h2&gt;Two Column Section&lt;/h2&gt;
+        &lt;div class="two-cols"&gt;
+            &lt;div class="box"&gt;
+                Left: About Me, school, hobbies.
+            &lt;/div&gt;
+            &lt;div class="box"&gt;
+                Right: Longer description of your IT journey.
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;h2&gt;Three Column Section&lt;/h2&gt;
+        &lt;div class="three-cols"&gt;
+            &lt;div class="box"&gt;Project 1&lt;/div&gt;
+            &lt;div class="box"&gt;Project 2&lt;/div&gt;
+            &lt;div class="box"&gt;Project 3&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>READY TO CODE?</h3>
+        <p>Copy ALL code → VS Code → Save as <code>css-grid-lesson15.html</code> → Open in browser.</p>
+        <p><strong>Dark neon pixelated cyber grid layout</strong> – perfect for IT students learning CSS Grid columns, rows, and gaps. [web:13][web:14]</p>
+    </footer>
+</div>
+</body>
+</html>
