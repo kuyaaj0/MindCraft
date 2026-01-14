@@ -2,7 +2,8 @@
 -- New Members to collab the Mindcraft community
 -- hi guys
 -- hopefully mo gana
--- collab complete
+-- collab complete-
+-- another new of collaboration 
 
 # January 9
 --firebase added
