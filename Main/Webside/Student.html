@@ -275,46 +275,27 @@ footer {
     <div class="language-grid">
 
       <!-- HTML Card -->
-      <div class="language-card">
+      <div class="language-card" id="htmlCard">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <!-- Lessons 1–20 -->
-          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/HTML/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/HTML/level-${i+1}.html">Level ${i+1}</option>`).join("")}
-        </select>
+        <select id="htmlLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="htmlQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
       <!-- CSS Card -->
-      <div class="language-card">
+      <div class="language-card" id="cssCard">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/CSS/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/CSS/level-${i+1}.html">Level ${i+1}</option>`).join("")}
-        </select>
+        <select id="cssLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="cssQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
       <!-- JavaScript Card -->
-      <div class="language-card">
+      <div class="language-card" id="jsCard">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/JS/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/JS/level-${i+1}.html">Level ${i+1}</option>`).join("")}
-        </select>
+        <select id="jsLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="jsQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
     </div>
@@ -329,6 +310,39 @@ footer {
 <script src="../Exp/levels.js"></script>
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
+<!-- ✅ Auto-generate lessons and quizzes -->
+<script>
+function populateOptions(prefix, count, type, folder) {
+  const select = document.getElementById(`${prefix}${type}`);
+  const isLesson = type === "Lessons";
+  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+  const subfolder = isLesson ? "Lessons" : "Quiz";
+  const basePath = isLesson
+    ? `../Modular/${subfolder}/${folder}/lesson-`
+    : `../Levels/${subfolder}/${folder}/level-`;
+
+  const opt = document.createElement("option");
+  opt.textContent = label;
+  opt.value = "";
+  select.appendChild(opt);
+
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = `${basePath}${i}.html`;
+    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+    select.appendChild(option);
+  }
+}
+
+populateOptions("html", 20, "Lessons", "HTML");
+populateOptions("html", 20, "Quizzes", "HTML");
+populateOptions("css", 20, "Lessons", "CSS");
+populateOptions("css", 20, "Quizzes", "CSS");
+populateOptions("js", 20, "Lessons", "JS");
+populateOptions("js", 20, "Quizzes", "JS");
+</script>
+
+<!-- ✅ Firebase Auth / XP / Rank -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
