@@ -1,27 +1,32 @@
 // ===================================
 // 🎮 MindCraft Level & XP System (Main/Exp/levels.js)
-// Compatible with normal <script> usage (no imports)
 // ===================================
 
 const XP_CAP_DEFAULT = 100;
 const XP_CAP_MULTIPLIER = 1.25;
+const XP_SYNC_KEY = "pendingXP"; // for offline XP cache
 
 // ===================================
 // 🏆 Award XP (Local + Firestore)
 async function awardXP(amount) {
-  // ✅ Use global auth/db from firebase.js (already loaded)
-  const user = typeof auth !== 'undefined' ? auth.currentUser : null;
-  const localID = localStorage.getItem("currentUser");
+  // Wait for Firebase auth to fully initialize
+  let user = typeof auth !== 'undefined' ? auth.currentUser : null;
+  if (!user) {
+    // Wait a moment in case auth is still initializing
+    await new Promise(res => setTimeout(res, 500));
+    user = typeof auth !== 'undefined' ? auth.currentUser : null;
+  }
 
-  if (!user && !localID) {
+  const localID = user ? user.uid : localStorage.getItem("currentUser");
+  if (!localID) {
     console.warn("⚠️ Cannot award XP: No logged-in user.");
     return;
   }
 
-  const key = user ? user.uid : localID;
-  let xp = parseInt(localStorage.getItem(`${key}_xp`)) || 0;
-  let level = parseInt(localStorage.getItem(`${key}_level`)) || 1;
-  let xpMax = parseInt(localStorage.getItem(`${key}_xpMax`)) || XP_CAP_DEFAULT;
+  // Local cache values
+  let xp = parseInt(localStorage.getItem(`${localID}_xp`)) || 0;
+  let level = parseInt(localStorage.getItem(`${localID}_level`)) || 1;
+  let xpMax = parseInt(localStorage.getItem(`${localID}_xpMax`)) || XP_CAP_DEFAULT;
 
   xp += amount;
   let leveledUp = false;
@@ -33,13 +38,13 @@ async function awardXP(amount) {
     leveledUp = true;
   }
 
-  // ✅ Save locally
-  localStorage.setItem(`${key}_xp`, xp);
-  localStorage.setItem(`${key}_level`, level);
-  localStorage.setItem(`${key}_xpMax`, xpMax);
+  // Save locally
+  localStorage.setItem(`${localID}_xp`, xp);
+  localStorage.setItem(`${localID}_level`, level);
+  localStorage.setItem(`${localID}_xpMax`, xpMax);
   window.dispatchEvent(new Event("storage"));
 
-  // ✅ Firestore sync (only if signed in)
+  // Try Firestore sync
   if (user && typeof db !== 'undefined') {
     try {
       const { doc, getDoc, updateDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
@@ -58,10 +63,20 @@ async function awardXP(amount) {
       }
 
       await updateDoc(userRef, { xp: newXP, level: newLevel, xpMax: newXpMax });
-      console.log(`✅ Firestore XP updated: +${amount} XP (Total: ${newXP}, Level: ${newLevel})`);
+      console.log(`✅ Firestore XP synced: +${amount} XP (Total: ${newXP}, Level: ${newLevel})`);
+
+      // Clear pending XP cache if it exists
+      localStorage.removeItem(XP_SYNC_KEY);
     } catch (err) {
-      console.error("⚠️ Error syncing XP:", err);
+      console.warn("⚠️ Firestore sync failed. Caching XP locally for retry.", err);
+      // Store unsynced XP in cache
+      const pending = parseInt(localStorage.getItem(XP_SYNC_KEY) || "0");
+      localStorage.setItem(XP_SYNC_KEY, pending + amount);
     }
+  } else {
+    // Offline or no auth yet → store unsynced XP
+    const pending = parseInt(localStorage.getItem(XP_SYNC_KEY) || "0");
+    localStorage.setItem(XP_SYNC_KEY, pending + amount);
   }
 
   // 🎉 Level-up feedback
@@ -77,9 +92,21 @@ async function awardXP(amount) {
   }
 }
 
-window.awardXP = awardXP;
-window.gainLessonXP = () => awardXP(10);
-window.gainQuizXP = (isCorrect) => { if (isCorrect) awardXP(5); };
+// ===================================
+// 🔁 Auto-sync pending XP when online
+async function syncPendingXP() {
+  const pending = parseInt(localStorage.getItem(XP_SYNC_KEY) || "0");
+  if (pending > 0 && typeof auth !== 'undefined' && auth.currentUser) {
+    console.log(`🔄 Syncing ${pending} pending XP...`);
+    await awardXP(pending);
+    localStorage.removeItem(XP_SYNC_KEY);
+  }
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("online", syncPendingXP);
+  setTimeout(syncPendingXP, 2000); // retry shortly after load
+}
 
 // ===================================
 // 🖥️ XP Display Logic
@@ -123,3 +150,8 @@ function initializeXPDisplay() {
 }
 
 initializeXPDisplay();
+
+// Expose to global
+window.awardXP = awardXP;
+window.gainLessonXP = () => awardXP(10);
+window.gainQuizXP = (isCorrect) => { if (isCorrect) awardXP(5); };
