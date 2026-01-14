@@ -153,18 +153,12 @@ main {
 .language-grid::-webkit-scrollbar {
   height: 8px;
 }
-.language-grid::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.1);
-  border-radius: 5px;
-}
 .language-grid::-webkit-scrollbar-thumb {
   background: #1DB954;
   border-radius: 5px;
 }
-.language-grid::-webkit-scrollbar-thumb:hover {
-  background: #1ed760;
-}
 
+/* === Language Card === */
 .language-card {
   flex: 0 0 auto;
   width: 280px;
@@ -187,6 +181,7 @@ main {
   font-size: 0.6rem;
 }
 
+/* === Scrollable Dropdowns === */
 .language-card select {
   margin-top: 10px;
   font-size: 0.5rem;
@@ -197,6 +192,12 @@ main {
   color: #fff;
   border: none;
   width: 100%;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.language-card select option {
+  font-size: 0.5rem;
 }
 
 /* === Footer === */
@@ -279,15 +280,12 @@ footer {
         <p>HTML</p>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📖 Select Lesson</option>
-          <!-- Can expand dynamically to Lesson 1–20 -->
-          <option value="../Modular/Lessons/HTML/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/Lessons/HTML/lesson-2.html">Lesson 2</option>
+          <!-- Lessons 1–20 -->
+          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/HTML/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/HTML/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/HTML/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/HTML/level-3.html">Level 3</option>
+          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/HTML/level-${i+1}.html">Level ${i+1}</option>`).join("")}
         </select>
       </div>
 
@@ -297,14 +295,11 @@ footer {
         <p>CSS</p>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📖 Select Lesson</option>
-          <option value="../Modular/Lessons/CSS/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/Lessons/CSS/lesson-2.html">Lesson 2</option>
+          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/CSS/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/CSS/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/CSS/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/CSS/level-3.html">Level 3</option>
+          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/CSS/level-${i+1}.html">Level ${i+1}</option>`).join("")}
         </select>
       </div>
 
@@ -314,14 +309,11 @@ footer {
         <p>JavaScript</p>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📖 Select Lesson</option>
-          <option value="../Modular/Lessons/JS/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/Lessons/JS/lesson-2.html">Lesson 2</option>
+          ${Array.from({length:20},(_,i)=>`<option value="../Modular/Lessons/JS/lesson-${i+1}.html">Lesson ${i+1}</option>`).join("")}
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/JS/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/JS/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/JS/level-3.html">Level 3</option>
+          ${Array.from({length:20},(_,i)=>`<option value="../Levels/Quiz/JS/level-${i+1}.html">Level ${i+1}</option>`).join("")}
         </select>
       </div>
 
