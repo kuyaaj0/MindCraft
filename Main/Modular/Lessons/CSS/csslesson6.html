@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Box Model - Cyberpunk Lesson 6</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            border-bottom: 5px solid;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            color: #00ffff;
+            text-shadow: 0 0 25px #00ffff;
+            font-weight: 700;
+        }
+
+        section {
+            padding: 60px 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.6em;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            background: rgba(255, 0, 255, 0.05);
+            color: #d0d0ff;
+            padding: 25px;
+            border-left: 5px solid #ff00ff;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            line-height: 1.9;
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
+            color: #00ffff;
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 25px;
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.5);
+        }
+
+        .demo-output::before {
+            content: 'BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border-radius: 20px;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            text-shadow: 0 0 15px #00ffff;
+            border-top: 3px solid #ff00ff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2em; }
+            section { padding: 40px 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CSS Box Model</h1>
+        <p class="subtitle">Lesson 6 - Understanding Spaces & Borders</p>
+    </header>
+
+    <section id="intro">
+        <h2>01. What is the Box Model?</h2>
+        <div class="explanation">
+            Every HTML element is a <span style="color:#ff00ff;">box</span>.  
+            The CSS Box Model describes how much space an element takes up and how its different layers — 
+            <strong>content, padding, border, and margin</strong> — affect layout and spacing.
+        </div>
+    </section>
+
+    <section id="content">
+        <h2>02. Content</h2>
+        <div class="explanation">
+            The <span style="color:#00ffff;">content</span> area is where your text, images, or other elements appear.  
+            It’s the “core” box.
+        </div>
+        <div class="code-block">
+<pre><code>div {
+    width: 200px;
+    height: 100px;
+    background-color: #111144;
+    color: #00ffff;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div style="width:200px;height:100px;background:#111144;color:#00ffff;padding:10px;">
+                Content area - contains text or media.
+            </div>
+        </div>
+    </section>
+
+    <section id="padding">
+        <h2>03. Padding</h2>
+        <div class="explanation">
+            <span style="color:#ff00ff;">Padding</span> is the inner space between the content and the border.
+            It adds breathing room inside the box.
+        </div>
+        <div class="code-block">
+<pre><code>div {
+    padding: 20px;
+    background-color: #111144;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div style="background:#111144;padding:20px;color:#00ffff;width:200px;">
+                🌐 The padding pushes the content inward.
+            </div>
+        </div>
+    </section>
+
+    <section id="border">
+        <h2>04. Border</h2>
+        <div class="explanation">
+            The <span style="color:#00ffff;">border</span> wraps around the padding and content.
+            It creates outlines or frames around the box.
+        </div>
+        <div class="code-block">
+<pre><code>div {
+    border: 4px solid #00ffff;
+    padding: 20px;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div style="border:4px solid #00ffff;padding:20px;width:200px;color:#fff;">
+                This box has a glowing cyan border.
+            </div>
+        </div>
+    </section>
+
+    <section id="margin">
+        <h2>05. Margin</h2>
+        <div class="explanation">
+            <span style="color:#ff1493;">Margin</span> is the outer space outside the border.  
+            It separates one element from another — like invisible walls between boxes.
+        </div>
+        <div class="code-block">
+<pre><code>div {
+    margin: 30px;
+    border: 2px solid #ff00ff;
+}</code></pre>
+        </div>
+        <div class="demo-output">
+            <div style="margin:20px;border:2px solid #ff00ff;padding:10px;width:200px;color:#fff;">
+                👾 Margins create space outside this box.
+            </div>
+        </div>
+    </section>
+
+    <section id="box-sizing">
+        <h2>06. box-sizing</h2>
+        <div class="explanation">
+            By default, <span style="color:#00ffff;">width</span> & <span style="color:#00ffff;">height</span> only include 
+            the <strong>content</strong>. The <span style="color:#ff00ff;">box-sizing</span> property changes that.
+        </div>
+
+        <ul class="examples">
+            <li><strong>content-box:</strong> (default) width = content only.</li>
+            <li><strong>border-box:</strong> width includes padding & border — easier for responsive design.</li>
+        </ul>
+
+        <div class="code-block">
+<pre><code>.default-box {
+    box-sizing: content-box;
+}
+
+.border-box {
+    box-sizing: border-box;
+}</code></pre>
+        </div>
+
+        <div class="demo-output" style="display:flex;gap:25px;">
+            <div style="background:#111144;color:#00ffff;width:150px;padding:20px;border:4px solid #00ffff;box-sizing:content-box;">
+                Content-box<br>(Appears larger)
+            </div>
+            <div style="background:#111144;color:#ff00ff;width:150px;padding:20px;border:4px solid #ff00ff;box-sizing:border-box;">
+                Border-box<br>(Stays same size)
+            </div>
+        </div>
+    </section>
+
+    <section id="challenge">
+        <h2>07. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Create 3 boxes using different <span style="color:#ff00ff;">padding, borders, and margins</span>.
+            Then compare the difference between <span style="color:#00ffff;">content-box</span> and <span style="color:#ff1493;">border-box</span>.
+        </div>
+
+        <div class="code-block">
+<pre><code>&lt;div style="width:200px;height:100px;padding:15px;border:4px solid #00ffff;margin:20px;box-sizing:border-box;"&gt;
+    Cyber Box Model Example
+&lt;/div&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>💠 The Neon Box Matrix</h3>
+        <p>Save as <code>lesson6-box-model.html</code> → Open in browser → Experiment!</p>
+        <p>Observe how changing padding, borders, and margins affect your layout!</p>
+    </footer>
+</div>
+
+</body>
+</html>

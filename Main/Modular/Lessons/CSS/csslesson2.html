@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2 - Adding CSS: External, Internal & Inline</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(255, 0, 255, 0.5), 0 0 120px rgba(0, 255, 255, 0.4);
+            position: relative;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 4em;
+            text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .subtitle {
+            color: #00ffff;
+            font-size: 1.5em;
+            animation: gradientFlow 4s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { color: #00ffff; }
+            50% { color: #ff00ff; }
+            100% { color: #00ffff; }
+        }
+
+        section {
+            padding: 60px 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+        }
+
+        .explanation {
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            margin-bottom: 40px;
+            border-left: 5px solid #ff00ff;
+            border-radius: 10px;
+            font-size: 1.2em;
+            color: #d0d0ff;
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            font-family: 'Roboto Mono', monospace;
+            color: #00ffff;
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 25px;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            border-top: 4px solid #ff00ff;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Adding CSS to HTML</h1>
+            <p class="subtitle">Lesson 2 - External, Internal & Inline Styles</p>
+        </header>
+
+        <section id="intro">
+            <h2>01. What is CSS?</h2>
+            <div class="explanation">
+                CSS (Cascading Style Sheets) is what gives color, layout, and life to a web page. It controls how HTML elements look — from fonts and colors to animations and responsiveness.
+            </div>
+        </section>
+
+        <section id="external">
+            <h2>02. External CSS</h2>
+            <div class="explanation">
+                External CSS is written in a <span style="color:#ff00ff;">.css</span> file and linked to your HTML using the <code>&lt;link&gt;</code> tag inside the <code>&lt;head&gt;</code>.  
+                It’s best for large websites to keep the design consistent across pages.
+            </div>
+            <div class="code-block">
+<pre><code>&lt;!-- HTML file (index.html) --&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+
+&lt;!-- style.css --&gt;
+body {
+  background-color: black;
+  color: cyan;
+}</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <p style="color:#00ffff;">✅ All pages share the same design file (style.css).</p>
+            </div>
+        </section>
+
+        <section id="internal">
+            <h2>02. Internal CSS</h2>
+            <div class="explanation">
+                Internal CSS is placed inside a <code>&lt;style&gt;</code> tag in the <code>&lt;head&gt;</code> section.  
+                It’s good for single-page custom designs when you don’t need external files.
+            </div>
+
+            <div class="code-block">
+<pre><code>&lt;head&gt;
+  &lt;style&gt;
+    body {
+      background-color: #000;
+      color: #ff00ff;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;This heading uses internal CSS&lt;/h1&gt;
+&lt;/body&gt;</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <h1 style="color:#ff00ff;">This heading uses internal CSS</h1>
+            </div>
+        </section>
+
+        <section id="inline">
+            <h2>04. Inline CSS</h2>
+            <div class="explanation">
+                Inline CSS goes directly into an HTML tag using the <code>style</code> attribute.  
+                It’s best used for quick tests or unique one-time edits — not for full websites.
+            </div>
+
+            <div class="code-block">
+<pre><code>&lt;h1 style="color:#00ffff;background:#111;padding:10px;"&gt;
+  Inline CSS Example
+&lt;/h1&gt;</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <h1 style="color:#00ffff;background:#111;padding:10px;">Inline CSS Example</h1>
+            </div>
+        </section>
+
+        <section id="when">
+            <h2>05. When to Use Each</h2>
+            <div class="explanation">
+                - <span style="color:#00ffff;">External CSS:</span> For full websites, clean, and modular design.  
+                - <span style="color:#ff00ff;">Internal CSS:</span> For a single-page project.  
+                - <span style="color:#ff1493;">Inline CSS:</span> For testing or small overrides.
+            </div>
+        </section>
+
+        <footer>
+            <h3>💻 Practice Time!</h3>
+            <p>Create your own personal page and try using all 3 types of CSS.</p>
+            <p>Save as <code>lesson3-add-css.html</code> in VS Code and open in your browser.</p>
+        </footer>
+    </div>
+</body>
+</html>

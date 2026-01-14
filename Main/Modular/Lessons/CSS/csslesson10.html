@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Display & Visibility – Cyberpunk Lesson 10</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+body{
+  font-family:'Orbitron',monospace;
+  background:#000;
+  color:#e0e0e0;
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+/* PIXEL GRID */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%,#ff00ff20 0%,transparent 40%),
+    radial-gradient(circle at 80% 80%,#00ffff20 0%,transparent 40%),
+    linear-gradient(90deg,transparent 49%,#ff00ff08 50%,transparent 52%),
+    linear-gradient(0deg,transparent 49%,#00ffff08 50%,transparent 52%);
+  background-size:50px 50px,50px 50px,25px 25px,25px 25px;
+  animation:cyber 25s linear infinite;
+  z-index:-2;
+}
+@keyframes cyber{
+  0%{background-position:0 0;}
+ 100%{background-position:50px 50px;}
+}
+.container{
+  max-width:1300px;margin:25px auto;
+  background:rgba(8,8,25,.97);
+  border:3px solid transparent;
+  border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
+  border-radius:25px;
+  box-shadow:0 0 60px rgba(255,0,255,.5),0 0 120px rgba(0,255,255,.4),inset 0 0 40px rgba(255,0,255,.08);
+  backdrop-filter:blur(20px);
+  position:relative;overflow:hidden;
+}
+header{
+  padding:60px 40px;text-align:center;
+  background:linear-gradient(135deg,#ff00ff90,#00ffff90,#ff149390);
+  background-clip:text;-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  border-bottom:5px solid transparent;
+  border-image:linear-gradient(90deg,#ff00ff,#00ffff)1;
+}
+h1{
+  font-size:4em;font-weight:900;
+  text-shadow:0 0 30px #ff00ff,0 0 60px #00ffff;
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+ 50%{transform:scale(1.03);}
+}
+.subtitle{
+  font-size:1.5em;color:#00ffff;text-shadow:0 0 25px #00ffff;
+}
+section{padding:60px 50px;border-bottom:2px solid rgba(255,0,255,.3);}
+h2{
+  font-size:2.6em;
+  background:linear-gradient(135deg,#ff00ff,#00ffff,#ff1493);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:25px;
+}
+.explanation{
+  font-family:'Roboto Mono',monospace;
+  font-size:1.2em;line-height:1.9;
+  background:rgba(255,0,255,.05);
+  border-left:6px solid #ff00ff;
+  border-radius:15px;
+  color:#d0d0ff;padding:25px;margin-bottom:30px;
+}
+.code-block{
+  background:rgba(10,15,50,.95);
+  border:2px solid transparent;
+  border-image:linear-gradient(45deg,#00ffff,#ff00ff)1;
+  border-radius:20px;
+  padding:30px;margin:25px 0;
+  font-family:'Roboto Mono',monospace;
+  color:#00ffff;
+}
+.demo-output{
+  position:relative;
+  background:rgba(0,20,60,.9);
+  border:2px solid #00ffff;
+  border-radius:15px;
+  padding:30px;margin-top:25px;
+  box-shadow:0 0 35px rgba(0,255,255,.4);
+}
+.demo-output::before{
+  content:'BROWSER OUTPUT';
+  position:absolute;top:-15px;left:25px;
+  background:rgba(0,20,60,.9);
+  border:2px solid #00ffff;color:#00ffff;
+  padding:5px 20px;border-radius:20px;
+  font-size:13px;
+}
+footer{
+  background:rgba(15,15,55,.95);
+  color:#00ffff;text-align:center;
+  padding:50px;border-top:3px solid #ff00ff;
+  text-shadow:0 0 20px #00ffff;
+}
+
+/* DEMO blocks */
+.demo-box{
+  border:2px solid #ff00ff;
+  color:#ff00ff;
+  background:rgba(0,0,40,.9);
+  padding:15px;
+  margin:10px;
+}
+.inline-demo{
+  display:inline;
+  border:2px solid #00ffff;
+  color:#00ffff;
+  padding:5px 10px;
+}
+.inline-block-demo{
+  display:inline-block;
+  width:120px;
+  padding:10px;
+  border:2px solid #ff1493;
+  color:#ff1493;
+  text-align:center;
+}
+.hidden-demo{
+  display:none;
+}
+.visibility-demo{
+  visibility:hidden;
+}
+
+@media(max-width:768px){
+  h1{font-size:2.8em;}
+  h2{font-size:2em;}
+  section{padding:40px 25px;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<header>
+  <h1>Display & Visibility</h1>
+  <p class="subtitle">Lesson 10 – Block, Inline, Inline‑Block, None, Visibility</p>
+</header>
+
+<section id="display-intro">
+  <h2>01. What Is Display?</h2>
+  <div class="explanation">
+    Every element has a <span style="color:#00ffff;">display type</span> that controls how it behaves in the page’s flow.  
+    The display property determines whether elements stack (block) or sit side by side (inline).
+  </div>
+</section>
+
+<section id="block">
+  <h2>02. Block Elements</h2>
+  <div class="explanation">
+    <span style="color:#ff00ff;">Block‑level elements</span> take the **full width** available and start on a new line.  
+    They can have width, height, margins, and padding applied.
+  </div>
+  <div class="code-block">
+<pre><code>div {
+  display: block;
+  width: 300px;
+  background: #111144;
+}</code></pre>
+  </div>
+  <div class="demo-output">
+    <div class="demo-box">This is a block element (full width break line)</div>
+    <div class="demo-box">Another block below it</div>
+  </div>
+</section>
+
+<section id="inline">
+  <h2>03. Inline Elements</h2>
+  <div class="explanation">
+    <span style="color:#00ffff;">Inline</span> elements do **not break lines**; they only take up as much width as needed.  
+    Padding works horizontally, but width/height usually doesn’t.
+  </div>
+  <div class="code-block">
+<pre><code>span {
+  display: inline;
+}</code></pre>
+  </div>
+  <div class="demo-output">
+    <p>This is <span class="inline-demo">inline</span> text <span class="inline-demo">elements</span> all in one line.</p>
+  </div>
+</section>
+
+<section id="inlineblock">
+  <h2>04. Inline‑Block Elements</h2>
+  <div class="explanation">
+    <span style="color:#ff1493;">Inline‑block</span> keeps elements side‑by‑side **like inline**,  
+    but allows you to set **width, height, and padding** like blocks — best of both worlds!
+  </div>
+  <div class="code-block">
+<pre><code>div {
+  display: inline-block;
+  width: 120px;
+}</code></pre>
+  </div>
+  <div class="demo-output">
+    <div class="inline-block-demo">Box A</div>
+    <div class="inline-block-demo">Box B</div>
+    <div class="inline-block-demo">Box C</div>
+  </div>
+</section>
+
+<section id="none">
+  <h2>05. Display: none</h2>
+  <div class="explanation">
+    <span style="color:#ff00ff;">display:none</span> completely removes an element from the page layout  
+    — it won’t take up space or be visible.
+  </div>
+  <div class="code-block">
+<pre><code>#secret {
+  display: none;
+}</code></pre>
+  </div>
+  <div class="demo-output">
+    <div class="demo-box">Visible Box</div>
+    <div class="demo-box hidden-demo">Hidden Box</div>
+    <div class="demo-box">Visible Again</div>
+    <p style="color:#ff1493;">The middle box is removed — notice the gap disappears.</p>
+  </div>
+</section>
+
+<section id="visibility">
+  <h2>06. Visibility Property</h2>
+  <div class="explanation">
+    <span style="color:#00ffff;">visibility:hidden</span> hides the element but **keeps its space** in the layout.  
+    Compare it with <code>display:none</code> which removes the element entirely.
+  </div>
+  <div class="code-block">
+<pre><code>.invisible {
+  visibility: hidden;
+}</code></pre>
+  </div>
+  <div class="demo-output">
+    <div class="demo-box">Visible One</div>
+    <div class="demo-box visibility-demo">Invisible (but space left!)</div>
+    <div class="demo-box">Visible Two</div>
+  </div>
+</section>
+
+<section id="summary">
+  <h2>07. Quick Comparison Table</h2>
+  <div class="explanation">
+    <table style="width:100%;border-collapse:collapse;font-family:'Roboto Mono',monospace;color:#e0e0ff;">
+      <tr style="color:#00ffff;">
+        <th align="left">Property</th><th align="left">Effect</th><th align="left">Takes Space?</th>
+      </tr>
+      <tr><td>block</td><td>Starts on new line, full width</td><td>✅</td></tr>
+      <tr><td>inline</td><td>No line break, text‑like</td><td>✅</td></tr>
+      <tr><td>inline‑block</td><td>Side‑by‑side with set size</td><td>✅</td></tr>
+      <tr><td>display:none</td><td>Hidden & removed</td><td>❌</td></tr>
+      <tr><td>visibility:hidden</td><td>Hidden but keeps layout</td><td>✅</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="challenge">
+  <h2>08. YOUR CHALLENGE!</h2>
+  <div class="explanation">
+    💡 Build a glowing navigation bar!  
+    Use <code>display:inline‑block</code> for each button and try hiding one button using  
+    <code>display:none</code> then <code>visibility:hidden</code> to compare spacing.
+  </div>
+  <div class="code-block">
+<pre><code>&lt;nav&gt;
+  &lt;a style="display:inline-block;padding:10px 20px;
+  border:2px solid #00ffff;margin:5px;color:#00ffff;
+  text-decoration:none;border-radius:10px;"&gt;Home&lt;/a&gt;
+  &lt;a style="display:inline-block;padding:10px 20px;
+  border:2px solid #ff00ff;margin:5px;color:#ff00ff;
+  text-decoration:none;border-radius:10px;display:none;"&gt;Hidden&lt;/a&gt;
+  &lt;a style="display:inline-block;padding:10px 20px;
+  border:2px solid #00ffff;margin:5px;color:#00ffff;
+  text-decoration:none;border-radius:10px;"&gt;Contact&lt;/a&gt;
+&lt;/nav&gt;</code></pre>
+  </div>
+</section>
+
+<footer>
+  <h3>🔮 Layout Visibility Mastered</h3>
+  <p>Save as <code>lesson10-display-visibility.html</code> → open in browser → toggle display & visibility!</p>
+  <p>Next: learn <strong>Positioning (relative, absolute, fixed, sticky)</strong> for even deeper control ⚙️</p>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Selectors - Cyberpunk Lesson 3</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 0 0 60px rgba(255, 0, 255, 0.5), 0 0 120px rgba(0, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        h2 {
+            font-size: 2.7em;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+        }
+
+        section {
+            padding: 60px 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        .explanation {
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff00ff;
+            border-radius: 15px;
+            font-family: 'Roboto Mono', monospace;
+            line-height: 1.8;
+            color: #d0d0ff;
+            font-size: 1.2em;
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 20px;
+            font-family: 'Roboto Mono', monospace;
+            color: #00ffff;
+            position: relative;
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 40px;
+            border-top: 3px solid #ff00ff;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        /* Mini demo styling */
+        .demo-output h1 {
+            color: #ff00ff;
+        }
+        .demo-output p {
+            color: #00ffff;
+        }
+        .special {
+            color: #ff1493;
+            font-weight: bold;
+        }
+        #unique {
+            background: rgba(0, 255, 255, 0.15);
+            border: 2px solid #00ffff;
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.1em; }
+            section { padding: 40px 25px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>CSS Selectors</h1>
+            <p class="subtitle">Lesson 3 - Targeting Elements Efficiently</p>
+        </header>
+
+        <section id="intro">
+            <h2>01. What Are CSS Selectors?</h2>
+            <div class="explanation">
+                A <span class="highlight">CSS selector</span> tells the browser which HTML elements to style.
+                It’s how we “target” parts of a web page — like paragraphs, buttons, or titles —
+                and apply specific designs to them.
+            </div>
+        </section>
+
+        <section id="element-selector">
+            <h2>02. Element Selector</h2>
+            <div class="explanation">
+                Targets elements directly by name — for example <code>p</code>, <code>h1</code>, or <code>div</code>.
+                All matching elements will share the same style.
+            </div>
+
+            <div class="code-block">
+<pre><code>/* Applies style to ALL paragraphs */
+p {
+    color: cyan;
+    font-size: 18px;
+}</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <h1>Page Title</h1>
+                <p>This paragraph styles every &lt;p&gt; element the same way.</p>
+                <p>All paragraphs share this cyan color and font size.</p>
+            </div>
+        </section>
+
+        <section id="class-selector">
+            <h2>03. Class Selector (.)</h2>
+            <div class="explanation">
+                Classes are used when you want to style multiple elements in the same way.
+                They start with a period (<code>.</code>).
+                Apply them in HTML using <code>class="name"</code>.
+            </div>
+
+            <div class="code-block">
+<pre><code>/* CSS */
+.special {
+    color: hotpink;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+/* HTML */
+&lt;p class="special"&gt;This text uses the "special" class.&lt;/p&gt;</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <p class="special">This text uses the “special” class!</p>
+            </div>
+        </section>
+
+        <section id="id-selector">
+            <h2>04. ID Selector (#)</h2>
+            <div class="explanation">
+                IDs are unique identifiers — used for **one element only**.
+                They start with a hash symbol (<code>#</code>).
+                Apply them in HTML using <code>id="name"</code>.
+            </div>
+
+            <div class="code-block">
+<pre><code>/* CSS */
+#unique {
+    background-color: rgba(0,255,255,0.15);
+    border: 2px solid cyan;
+    padding: 15px;
+}
+
+/* HTML */
+&lt;div id="unique"&gt;I have a unique ID!&lt;/div&gt;</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <div id="unique">I have a unique ID!</div>
+            </div>
+        </section>
+
+        <section id="difference">
+            <h2>05. Element vs Class vs ID</h2>
+            <div class="explanation">
+                - <span class="highlight">Element selector</span>: Styles all tags of that type.<br>
+                - <span class="highlight">Class selector</span>: Styles a group of elements sharing the same class.<br>
+                - <span class="highlight">ID selector</span>: Styles one specific element only.
+            </div>
+
+            <div class="code-block">
+<pre><code>/* Example CSS */
+h2 { color: cyan; }
+.special { color: hotpink; }
+#unique { color: yellow; }</code></pre>
+            </div>
+
+            <div class="demo-output">
+                <h2>This is an Element Selector (h2)</h2>
+                <p class="special">This is a Class Selector (.special)</p>
+                <p id="unique">This is an ID Selector (#unique)</p>
+            </div>
+        </section>
+
+        <section id="challenge">
+            <h2>06. YOUR CHALLENGE!</h2>
+            <div class="explanation">
+                Create a mini personal webpage that uses:
+                <ul>
+                    <li>At least one <span class="highlight">element selector</span>.</li>
+                    <li>Two different <span class="highlight">classes</span>.</li>
+                    <li>One <span class="highlight">unique ID</span>.</li>
+                </ul>
+                Style them with neon colors and glowing text like this lesson!
+            </div>
+
+            <div class="code-block">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    h1 { color: cyan; }
+    .highlight-me { color: magenta; font-weight: bold; }
+    #my-info { border: 2px solid cyan; padding: 10px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;My Neon Profile&lt;/h1&gt;
+  &lt;p class="highlight-me"&gt;I love learning CSS!&lt;/p&gt;
+  &lt;p id="my-info"&gt;Student at Central Mindanao University&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>⚡ Save and Run!</h3>
+            <p>Copy this code into Visual Studio Code → Save as <code>lesson3-selectors.html</code> → Open in your browser!</p>
+            <p>Enjoy the glowing <strong>neon cyberpunk style</strong> while mastering CSS selectors!</p>
+        </footer>
+    </div>
+</body>
+</html>

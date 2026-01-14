@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Colors & Backgrounds - Cyberpunk Lesson 4</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: gridShift 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes gridShift {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 0 0 60px rgba(255, 0, 255, 0.4), 0 0 100px rgba(0,255,255,0.3);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 4em;
+            text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .subtitle {
+            color: #00ffff;
+            font-size: 1.6em;
+            font-weight: bold;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        section {
+            padding: 60px 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.7em;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .explanation {
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-left: 5px solid #ff00ff;
+            border-radius: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.15em;
+            color: #d0d0ff;
+            line-height: 1.9;
+            margin-bottom: 30px;
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            padding: 30px;
+            border-radius: 20px;
+            color: #00ffff;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            margin: 30px 0;
+        }
+
+        .demo-output {
+            position: relative;
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 25px;
+            box-shadow: 0 0 30px rgba(0,255,255,0.4);
+        }
+
+        .demo-output::before {
+            content: 'BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 25px;
+            background: rgba(0,20,60,0.9);
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            padding: 5px 20px;
+        }
+
+        footer {
+            text-align: center;
+            background: rgba(15,15,55,0.95);
+            padding: 40px;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            border-top: 3px solid #ff00ff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2em; }
+            section { padding: 40px 25px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1>CSS Colors & Backgrounds</h1>
+        <p class="subtitle">Lesson 4 - Mastering Visual Design</p>
+    </header>
+
+    <section id="intro">
+        <h2>01. Why Are Colors and Backgrounds Important?</h2>
+        <div class="explanation">
+            CSS colors and backgrounds define the <span style="color:#ff00ff;">look and feel</span> of your webpage.
+            They help create visual contrast, highlight sections, and enhance user experience.
+            You can color text, fill elements with backgrounds, and even use images or gradients.
+        </div>
+    </section>
+
+    <section id="color">
+        <h2>02. The <span style="color:#ff00ff;">color</span> Property</h2>
+        <div class="explanation">
+            The <span class="highlight">color</span> property changes the text color of an element.
+            You can use:
+            <ul>
+                <li>Color names (<code>red</code>, <code>blue</code>)</li>
+                <li>Hex codes (<code>#ff00ff</code>)</li>
+                <li>RGB/RGBA (<code>rgb(255,0,255)</code> or <code>rgba(255,0,255,0.8)</code>)</li>
+            </ul>
+        </div>
+        <div class="code-block">
+<pre><code>h1 {
+    color: #ff00ff;  /* magenta heading */
+}
+p {
+    color: rgba(0, 255, 255, 0.9);  /* neon cyan text */
+}</code></pre>
+        </div>
+
+        <div class="demo-output">
+            <h1 style="color:#ff00ff;">This heading uses magenta color</h1>
+            <p style="color:rgba(0,255,255,0.9);">This paragraph is in neon cyan!</p>
+        </div>
+    </section>
+
+    <section id="background-color">
+        <h2>03. The <span style="color:#00ffff;">background-color</span> Property</h2>
+        <div class="explanation">
+            The <span class="highlight">background-color</span> property fills the background of an element with color.
+            You can apply it to any element, such as <code>div</code>, <code>body</code>, or <code>button</code>.
+        </div>
+        <div class="code-block">
+<pre><code>div {
+    background-color: #111133;
+    color: #00ffff;
+    padding: 20px;
+    border-radius: 10px;
+}</code></pre>
+        </div>
+
+        <div class="demo-output">
+            <div style="background-color:#111133;color:#00ffff;padding:15px;border-radius:10px;">
+                This box has a dark background with cyan text.
+            </div>
+        </div>
+    </section>
+
+    <section id="background-image">
+        <h2>04. The <span style="color:#ff1493;">background-image</span> Property</h2>
+        <div class="explanation">
+            The <span class="highlight">background-image</span> property sets an image as a background.
+            It can be an external file or a gradient.
+        </div>
+        <div class="code-block">
+<pre><code>body {
+    background-image: url('neon-grid.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}</code></pre>
+        </div>
+
+        <div class="demo-output" style="background-image: linear-gradient(135deg, #ff00ff50, #00ffff50); background-size: cover;">
+            <p style="color:#fff;">This section uses a gradient background instead of a solid color!</p>
+        </div>
+    </section>
+
+    <section id="background-size">
+        <h2>05. The <span style="color:#00ffff;">background-size</span> Property</h2>
+        <div class="explanation">
+            The <span class="highlight">background-size</span> property controls how the image fits the element’s area.
+            Common values include:
+            <ul>
+                <li><strong>cover</strong> – scales the image to fill the entire area</li>
+                <li><strong>contain</strong> – fits the image inside without cropping</li>
+                <li><strong>auto</strong> – keeps the image’s original size</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+<pre><code>div {
+    background-image: url('pattern.png');
+    background-size: cover; /* fills the box fully */
+}
+</code></pre>
+        </div>
+
+        <div class="demo-output" style="background-image: linear-gradient(to right, #00ffff44, #ff00ff44); background-size: cover; height:100px;">
+            <p style="color:#fff;">Background-size: cover stretches this gradient across the whole box.</p>
+        </div>
+    </section>
+
+    <section id="challenge">
+        <h2>06. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            Create your own “Neon Profile Card” using at least one:
+            <ul>
+                <li><strong>color</strong> property for your text,</li>
+                <li><strong>background-color</strong> for the card,</li>
+                <li><strong>background-image</strong> for design flair,</li>
+                <li><strong>background-size</strong> to control the background behavior.</li>
+            </ul>
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    body {
+      background-color: #000;
+      color: #00ffff;
+    }
+    .card {
+      background-image: linear-gradient(135deg, #ff00ff, #00ffff);
+      background-size: cover;
+      color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 250px;
+      text-align: center;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="card"&gt;
+    &lt;h2&gt;Neon Coder&lt;/h2&gt;
+    &lt;p&gt;Loves CSS gradients and cyber themes!&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>⚡ Neon Mastery Achieved!</h3>
+        <p>Save your file as <code>lesson4-colors-backgrounds.html</code> → Open in browser → Experiment with your color and background styles!</p>
+        <p>Keep glowing in the dark 💾</p>
+    </footer>
+</div>
+</body>
+</html>

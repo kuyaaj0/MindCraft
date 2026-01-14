@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Text & Fonts - Cyberpunk Lesson 5</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;600&family=Poppins:wght@300;500;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated neon grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: gridShift 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes gridShift {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 25px auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(255,0,255,0.5), 0 0 100px rgba(0,255,255,0.4);
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 0 0 30px #ff00ff, 0 0 50px #00ffff;
+            animation: neonPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle { 
+            color: #00ffff;
+            font-size: 1.5em; 
+            font-weight: 700;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        section {
+            padding: 60px 50px;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        h2 {
+            font-size: 2.7em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            background: rgba(255,0,255,0.05);
+            border-left: 5px solid #ff00ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            line-height: 1.9;
+            color: #d0d0ff;
+        }
+
+        .code-block {
+            background: rgba(10,15,50,0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 25px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            color: #00ffff;
+            position: relative;
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 25px;
+            color: #fff;
+            box-shadow: 0 0 25px rgba(0,255,255,0.5);
+            line-height: 1.7;
+        }
+
+        .demo-output::before {
+            content: 'BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 13px;
+        }
+
+        footer {
+            background: rgba(15,15,55,0.95);
+            text-align: center;
+            color: #00ffff;
+            padding: 50px;
+            text-shadow: 0 0 20px #00ffff;
+            border-top: 4px solid #ff00ff;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.6em; }
+            h2 { font-size: 2em; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <h1>CSS Text & Fonts</h1>
+        <p class="subtitle">Lesson 5 - Dark Neon Typography Matrix</p>
+    </header>
+
+    <section id="font-family">
+        <h2>01. font-family</h2>
+        <div class="explanation">
+            The <span style="color:#ff00ff;">font-family</span> property changes the typeface (style of letters) used for text.
+            Always list backup fonts in case one isn’t available.
+        </div>
+
+        <div class="code-block">
+<pre><code>body {
+    font-family: 'Poppins', Arial, sans-serif;
+}</code></pre>
+        </div>
+
+        <div class="demo-output" style="font-family:'Poppins', sans-serif;">
+            <p>This text uses the “Poppins” Google Font for a clean futuristic look!</p>
+        </div>
+    </section>
+
+    <section id="font-size">
+        <h2>02. font-size</h2>
+        <div class="explanation">
+            <span style="color:#00ffff;">font-size</span> controls how large or small your text appears.
+            You can use <code>px</code> (pixels), <code>em</code> (relative size), or <code>rem</code> for responsive scaling.
+        </div>
+
+        <div class="code-block">
+<pre><code>h1 { font-size: 48px; }
+p { font-size: 1.2em; }</code></pre>
+        </div>
+
+        <div class="demo-output">
+            <h1 style="font-size:48px;">Large Heading Example</h1>
+            <p style="font-size:1.2em;">This is a paragraph with slightly larger text.</p>
+        </div>
+    </section>
+
+    <section id="line-height">
+        <h2>03. line-height</h2>
+        <div class="explanation">
+            <span style="color:#ff1493;">line-height</span> controls the space between lines of text.
+            A higher value makes text easier to read, especially for long paragraphs.
+        </div>
+
+        <div class="code-block">
+<pre><code>p {
+    line-height: 1.8;
+}</code></pre>
+        </div>
+
+        <div class="demo-output" style="line-height:1.8;">
+            <p>This paragraph has extra spacing between lines, making it more comfortable to read under neon light!</p>
+        </div>
+    </section>
+
+    <section id="text-align">
+        <h2>04. text-align</h2>
+        <div class="explanation">
+            The <span style="color:#00ffff;">text-align</span> property sets how inline text is aligned inside its container:
+            <ul>
+                <li><strong>left</strong> – default alignment</li>
+                <li><strong>center</strong> – places text in the middle</li>
+                <li><strong>right</strong> – aligns text to the right edge</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+<pre><code>h2 { text-align: center; }</code></pre>
+        </div>
+
+        <div class="demo-output" style="text-align:center;">
+            <h2>Centered Cyber Heading</h2>
+            <p>All text inside this box is centered beautifully.</p>
+        </div>
+    </section>
+
+    <section id="text-decoration">
+        <h2>05. text-decoration</h2>
+        <div class="explanation">
+            <span style="color:#ff00ff;">text-decoration</span> adds visual styles like underlines or strikethroughs.
+            Use it for links or emphasis.
+        </div>
+
+        <div class="code-block">
+<pre><code>a {
+    text-decoration: underline;
+}
+del {
+    text-decoration: line-through;
+}</code></pre>
+        </div>
+
+        <div class="demo-output">
+            <a href="#" style="color:#00ffff;text-decoration:underline;">This link is underlined</a><br>
+            <del style="color:#ff1493;">This text shows a line-through effect</del>
+        </div>
+    </section>
+
+    <section id="font-weight">
+        <h2>06. font-weight</h2>
+        <div class="explanation">
+            The <span style="color:#00ffff;">font-weight</span> property makes text bolder or lighter.
+            Numeric values range from 100 (thin) to 900 (extra bold).
+        </div>
+
+        <div class="code-block">
+<pre><code>h1 { font-weight: 900; }
+p { font-weight: 300; }</code></pre>
+        </div>
+
+        <div class="demo-output">
+            <h1 style="font-weight:900;">Bold Title (900)</h1>
+            <p style="font-weight:300;">Lighter paragraph (300)</p>
+        </div>
+    </section>
+
+    <section id="google-fonts">
+        <h2>07. Google Fonts Integration</h2>
+        <div class="explanation">
+            You can import Google Fonts to make your designs stand out.
+            Simply visit <a href="https://fonts.google.com" target="_blank" style="color:#00ffff;">fonts.google.com</a>, 
+            choose a font, and copy its <code>@import</code> or <code>&lt;link&gt;</code>.
+        </div>
+
+        <div class="code-block">
+<pre><code>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}</code></pre>
+        </div>
+
+        <div class="demo-output" style="font-family:'Poppins',sans-serif;">
+            <p>This sentence uses a Google Font for a clean and modern neon interface look.</p>
+        </div>
+    </section>
+
+    <section id="challenge">
+        <h2>08. YOUR CHALLENGE!</h2>
+        <div class="explanation">
+            ⭐ Create your own Neon Text Showcase using all font properties:
+            <ul>
+                <li><strong>font-family</strong> (choose a Google Font)</li>
+                <li><strong>font-size</strong> and <strong>font-weight</strong></li>
+                <li><strong>line-height</strong> and <strong>text-align</strong></li>
+                <li><strong>text-decoration</strong> for creativity!</li>
+            </ul>
+        </div>
+        <div class="code-block">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        body { background:#000; color:#00ffff; font-family:'Orbitron',sans-serif; }
+        h1 { font-size:3em; text-align:center; font-weight:900; }
+        p { line-height:1.8; text-align:center; text-decoration:underline dotted magenta; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Cyber Student&lt;/h1&gt;
+    &lt;p&gt;I love playing with Neon Fonts and futuristic text effects!&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+    </section>
+
+    <footer>
+        <h3>🚀 Typography Unlocked!</h3>
+        <p>Save as <code>lesson5-text-fonts.html</code> → Open in your browser → <br>Experiment with fonts, colors, and glowing text for your next neon masterpiece!</p>
+    </footer>
+</div>
+</body>
+</html>

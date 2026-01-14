@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Margin & Padding Patterns – Cyberpunk Lesson 9</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', monospace;
+  background: #000;
+  color: #e0e0e0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Pixel Cyber Grid */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+    linear-gradient(90deg, transparent 49%, #ff00ff08 50%, transparent 51%, #ff00ff08 52%, transparent 53%),
+    linear-gradient(0deg, transparent 49%, #00ffff08 50%, transparent 51%, #00ffff08 52%, transparent 53%);
+  background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+  animation: cyberGrid 25s linear infinite;
+  z-index: -2;
+}
+
+@keyframes cyberGrid {
+  0% { background-position: 0 0; }
+  100% { background-position: 50px 50px; }
+}
+
+.container {
+  max-width: 1300px;
+  margin: 25px auto;
+  background: rgba(8, 8, 25, 0.97);
+  border: 3px solid transparent;
+  border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
+  border-radius: 25px;
+  box-shadow:
+    0 0 60px rgba(255, 0, 255, 0.5),
+    0 0 120px rgba(0, 255, 255, 0.4),
+    inset 0 0 40px rgba(255, 0, 255, 0.08);
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 5px solid;
+  border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+}
+
+h1 {
+  font-size: 4em;
+  font-weight: 900;
+  text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+  animation: pulse 3s infinite ease-in-out;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.subtitle {
+  font-size: 1.5em;
+  color: #00ffff;
+  text-shadow: 0 0 20px #00ffff;
+}
+
+section {
+  padding: 60px 50px;
+  border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+}
+
+h2 {
+  font-size: 2.6em;
+  background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
+}
+
+.explanation {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.2em;
+  color: #d0d0ff;
+  line-height: 1.9;
+  background: rgba(255, 0, 255, 0.05);
+  border-left: 6px solid #ff00ff;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.code-block {
+  background: rgba(10,15,50,0.95);
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 25px 0;
+  font-family: 'Roboto Mono', monospace;
+  color: #00ffff;
+}
+
+.demo-output {
+  position: relative;
+  background: rgba(0,20,60,0.9);
+  border: 2px solid #00ffff;
+  border-radius: 15px;
+  padding: 30px;
+  margin-top: 25px;
+  box-shadow: 0 0 35px rgba(0,255,255,0.4);
+}
+.demo-output::before {
+  content: 'BROWSER OUTPUT';
+  position: absolute;
+  top: -15px;
+  left: 25px;
+  background: rgba(0,20,60,0.9);
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  padding: 5px 20px;
+  font-size: 13px;
+  border-radius: 20px;
+}
+
+footer {
+  background: rgba(15,15,55,0.95);
+  color: #00ffff;
+  text-align: center;
+  padding: 50px;
+  border-top: 3px solid #ff00ff;
+  text-shadow: 0 0 20px #00ffff;
+}
+
+/* Demo boxes */
+.box {
+  background: rgba(10,10,50,0.9);
+  border: 2px solid #ff00ff;
+  font-family: 'Roboto Mono', monospace;
+  color: #ff00ff;
+  padding: 25px;
+  text-align: center;
+}
+.center {
+  width: 300px;
+  margin: 20px auto;
+}
+.stack {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.8em; }
+  h2 { font-size: 2em; }
+  section { padding: 40px 25px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <header>
+    <h1>Margin & Padding Patterns</h1>
+    <p class="subtitle">Lesson 9 - Centering Blocks & Stacking Sections</p>
+  </header>
+
+  <section id="intro">
+    <h2>01. Margin vs Padding</h2>
+    <div class="explanation">
+      Both <span style="color:#00ffff;">margin</span> and <span style="color:#ff00ff;">padding</span> control spacing —
+      but in different ways:
+      <ul>
+        <li><strong>Margin</strong> = space <em>outside</em> the element (creates gaps between elements)</li>
+        <li><strong>Padding</strong> = space <em>inside</em> the element (pushes content away from borders)</li>
+      </ul>
+    </div>
+
+    <div class="code-block">
+<pre><code>div {
+  margin: 30px;
+  padding: 20px;
+}</code></pre>
+    </div>
+
+    <div class="demo-output">
+      <div style="margin:20px;padding:20px;border:2px solid #00ffff;color:#00ffff;">
+        Margin adds space <em>outside</em> the box. Padding adds space <em>inside</em>.
+      </div>
+    </div>
+  </section>
+
+  <section id="centering">
+    <h2>02. Centering Blocks</h2>
+    <div class="explanation">
+      To center a block element horizontally, set its left and right margins to <code>auto</code>.  
+      You’ll also need to define a <strong>width</strong> so the element knows how wide it should be.
+    </div>
+    <div class="code-block">
+<pre><code>.center {
+  width: 300px;
+  margin: auto;
+}</code></pre>
+    </div>
+    <div class="demo-output">
+      <div class="box center">Centered Block (using margin: auto)</div>
+    </div>
+  </section>
+
+  <section id="stacking">
+    <h2>03. Stacking Sections</h2>
+    <div class="explanation">
+      Use consistent top and bottom <span style="color:#ff00ff;">margins or padding</span> between sections  
+      to create a pleasant visual flow.  
+      This makes the layout breathable and easier to read.
+    </div>
+
+    <div class="code-block">
+<pre><code>section {
+  margin-bottom: 40px;
+  padding: 30px 20px;
+}</code></pre>
+    </div>
+
+    <div class="demo-output">
+      <div class="box stack">Section 1</div>
+      <div class="box stack" style="border-color:#00ffff;color:#00ffff;">Section 2</div>
+      <div class="box stack" style="border-color:#ff1493;color:#ff1493;">Section 3</div>
+    </div>
+  </section>
+
+  <section id="patterns">
+    <h2>04. Common Layout Patterns</h2>
+    <div class="explanation">
+      Margin and padding are essential for these layout techniques:
+      <ul>
+        <li><strong>Centered Card:</strong> margin: auto + width</li>
+        <li><strong>Stacked Sections:</strong> margin-bottom for spacing</li>
+        <li><strong>Even Padding:</strong> padding adds comfort inside elements</li>
+      </ul>
+    </div>
+
+    <div class="demo-output" style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
+      <div style="width:200px;margin:auto;padding:20px;border:2px solid #ff00ff;border-radius:10px;text-align:center;color:#ff00ff;">
+        Center Card
+      </div>
+      <div style="padding:30px;border:2px solid #00ffff;width:200px;text-align:center;color:#00ffff;">
+        Padded Card
+      </div>
+    </div>
+  </section>
+
+  <section id="challenge">
+    <h2>05. YOUR CHALLENGE!</h2>
+    <div class="explanation">
+      🌐 Create a personal “About Me” section with:
+      <ul>
+        <li>Centered container (margin: auto, width: 80%)</li>
+        <li>Even padding for text readability</li>
+        <li>Stack 3 sections using margin-bottom</li>
+      </ul>
+    </div>
+
+    <div class="code-block">
+<pre><code>&lt;div style="width:80%;margin:auto;padding:30px;background:rgba(0,0,60,0.8);
+border:2px solid #ff00ff;color:#fff;border-radius:15px;"&gt;
+  &lt;h2&gt;About Me&lt;/h2&gt;
+  &lt;p&gt;I love coding futuristic designs!&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+  </section>
+
+  <footer>
+    <h3>💡 Lesson Complete: Layout Flow Mastery!</h3>
+    <p>Save as <code>lesson9-margin-padding.html</code> → Open in browser → Try adjusting margin & padding values!</p>
+    <p>Next challenge: create balanced spacing for a full page design 🌐</p>
+  </footer>
+</div>
+</body>
+</html>
