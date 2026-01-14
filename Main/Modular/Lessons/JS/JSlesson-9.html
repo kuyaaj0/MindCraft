@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions - Lesson 9 | Cyberpunk Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff1493, #ff00ff);
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .exit-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff1493);
+            border-color: #00ffff;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.9),
+                0 0 60px rgba(255, 0, 255, 0.7);
+        }
+
+        header {
+            padding: 80px 40px 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4.2em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 0 40px #ff00ff,
+                0 0 80px #00ffff,
+                0 0 120px #ff00ff,
+                2px 2px 0px #000;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.8);
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                filter: hue-rotate(0deg) brightness(1); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: hue-rotate(180deg) brightness(1.2); 
+            }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 
+                0 0 25px #00ffff,
+                2px 2px 0px #000;
+            letter-spacing: 2px;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type { border-bottom: none; }
+        section:nth-child(even) { background: rgba(15, 10, 45, 0.7); }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+            text-shadow:
+                0 0 20px #ff00ff, 
+                0 0 40px #00ffff,
+                1px 1px 0px #000;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100px; height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.7),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff69b4);
+            border-color: #00ffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            border-color: #00ff00;
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+        
+        <header>
+            <h1>Functions Matrix</h1>
+            <p class="subtitle">LESSON 9 - Cyberpunk Function Core</p>
+        </header>
+
+        <section id="function-basics">
+            <h2>01. Function Declaration</h2>
+            <div class="explanation">
+                <span class="highlight">function</span> keyword creates reusable code blocks.<br>
+                Call by name + <code>()</code> → Execute anywhere, anytime!
+            </div>
+            <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>function greetHacker() {
+    console.log("🚀 Welcome to Cyberpunk Matrix!");
+}
+
+greetHacker(); // Call function
+// Output: 🚀 Welcome to Cyberpunk Matrix!</code></pre>
+            </div>
+            <div class="demo-output" style="color:#00ff00;font-size:1.2em;">
+                🚀 Welcome to Cyberpunk Matrix!
+            </div>
+        </section>
+
+        <section id="parameters">
+            <h2>02. Parameters & Arguments</h2>
+            <div class="explanation">
+                <span class="highlight">Parameters</span> = variables in function definition.<br>
+                <span class="highlight">Arguments</span> = actual values when calling function.
+            </div>
+            <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>function checkGear(gearName, weight) {
+    console.log(`✅ ${gearName} - ${weight}kg`);
+}
+
+checkGear("🎒 Backpack", 2.5);
+checkGear("🥾 Boots", 1.8);
+// Output:
+// ✅ Backpack - 2.5kg
+// ✅ Boots - 1.8kg</code></pre>
+            </div>
+            <div class="demo-output">
+                <span style="color:#00ffff;">✅ Backpack - 2.5kg</span><br>
+                <span style="color:#00ffff;">✅ Boots - 1.8kg</span>
+            </div>
+        </section>
+
+        <section id="return-values">
+            <h2>03. Return Values</h2>
+            <div class="explanation">
+                <span class="highlight">return</span> sends data BACK to caller.<br>
+                Store result in variable or use directly!
+            </div>
+            <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>function calcPower(energy, multiplier) {
+    return energy * multiplier;
+}
+
+let totalPower = calcPower(50, 2);
+console.log(`⚡ Total Power: ${totalPower}W`);
+// Output: ⚡ Total Power: 100W</code></pre>
+            </div>
+            <div class="demo-output" style="color:#ff00ff;font-size:1.3em;">
+                ⚡ Total Power: 100W
+            </div>
+        </section>
+
+        <section id="function-expressions">
+            <h2>04. Function Expressions</h2>
+            <div class="explanation">
+                Assign functions to <span class="highlight">variables</span> like normal values.<br>
+                Anonymous functions = no name required!
+            </div>
+            <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>const encryptMessage = function(message) {
+    return `🔒 ${message.toUpperCase()}`;
+};
+
+console.log(encryptMessage("secret data"));
+// Output: 🔒 SECRET DATA</code></pre>
+            </div>
+            <div class="demo-output" style="color:#00ffff;">
+                🔒 SECRET DATA
+            </div>
+        </section>
+
+        <section id="arrow-functions">
+            <h2>05. Arrow Functions ➡️</h2>
+            <div class="explanation">
+                <span class="highlight">Arrow functions</span> = shorter syntax (ES6).<br>
+                Perfect for quick operations and modern code!
+            </div>
+            <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>const checkAltitude = (height) => {
+    return height > 3000 ? "🏔️ Summit Zone" : "🥾 Base Camp";
+};
+
+console.log(checkAltitude(3500));
+console.log(checkAltitude(2000));
+// Output:
+// 🏔️ Summit Zone
+// 🥾 Base Camp</code></pre>
+            </div>
+            <div class="demo-output">
+                <span style="color:#ff1493;">🏔️ Summit Zone</span><br>
+                <span style="color:#00ff00;">🥾 Base Camp</span>
+            </div>
+        </section>
+
+        <section id="challenge">
+            <h2>06. YOUR CHALLENGE! 🧠</h2>
+            <div class="explanation">
+                Build a <span class="highlight">Mountaineering Gear Analyzer</span>!<br>
+                Create function with parameters → return total weight → bonus arrow function!
+            </div>
+            <div class="code-block final-challenge">
+                <button class="copy-btn">📋 Copy Challenge</button>
+                <pre><code>// 🗻 GEAR WEIGHT CALCULATOR CHALLENGE
+function analyzeGear(gearArray) {
+    let totalWeight = 0;
+    
+    for (let i = 0; i < gearArray.length; i++) {
+        totalWeight += gearArray[i].weight;
+    }
+    
+    return `📦 Total Pack Weight: ${totalWeight.toFixed(1)}kg`;
+}
+
+const myGear = [
+    { name: "🎒 Backpack", weight: 2.5 },
+    { name: "🥾 Boots", weight: 1.8 },
+    { name: "🏕️ Tent", weight: 1.2 }
+];
+
+console.log(analyzeGear(myGear));
+
+// YOUR TURN: 
+// 1️⃣ Add more gear items
+// 2️⃣ Create arrow function version 
+// 3️⃣ Add weight limit warning (if > 10kg)
+// 🚀 Make it cyberpunk mountaineering ready!</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>🚀 FUNCTION CORE ACTIVATED!</h3>
+            <p><strong>Copy ALL code</strong> → <strong>VS Code</strong> → <strong>Save</strong> <code>functions-lesson9.html</code></p>
+            <p><strong>Open browser</strong> → <strong>Test all functions</strong> → <strong>Complete GEAR ANALYZER CHALLENGE!</strong></p>
+            <p><strong>Dark neon cyberpunk theme</strong> - Perfect for CMU IT + Mountaineering Coders! 🗻🖥️✨</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy buttons functionality
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const codeBlock = this.parentElement;
+                    const codeText = codeBlock.querySelector('pre').innerText;
+                    
+                    navigator.clipboard.writeText(codeText).then(function() {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✅ COPIED!';
+                        btn.classList.add('copied');
+                        
+                        setTimeout(function() {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

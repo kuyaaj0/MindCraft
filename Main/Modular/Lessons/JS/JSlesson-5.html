@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Data Types & Operators - Cyberpunk Lesson 5</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Pixelated cyber grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
+                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
+                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
+            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+            animation: cyberGrid 25s linear infinite;
+            z-index: -2;
+        }
+
+        @keyframes cyberGrid {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(8, 8, 25, 0.97);
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
+            border-radius: 25px;
+            box-shadow: 
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            margin: 25px;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+        }
+
+        h1 {
+            font-size: 4em;
+            font-weight: 900;
+            text-shadow: 
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
+            margin-bottom: 20px;
+            animation: neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+        }
+
+        .subtitle {
+            font-size: 1.6em;
+            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
+            background-size: 200% 200%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            animation: gradientFlow 4s ease infinite;
+            text-shadow: 0 0 25px #00ffff;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        section {
+            padding: 60px 50px;
+            position: relative;
+            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            position: relative;
+            animation: h2Glow 3s ease infinite;
+        }
+
+        @keyframes h2Glow {
+            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
+            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 6px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
+            animation: underlineShift 2.5s ease-in-out infinite;
+        }
+
+        @keyframes underlineShift {
+            0%, 100% { width: 100px; left: 0; }
+            50% { width: 200px; left: 50px; }
+        }
+
+        .explanation {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.2em;
+            line-height: 1.9;
+            margin-bottom: 40px;
+            color: #d0d0ff;
+            background: rgba(255, 0, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff00ff;
+            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+
+        .code-block {
+            background: rgba(10, 15, 50, 0.95);
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
+            border-radius: 20px;
+            padding: 35px;
+            margin: 35px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.8;
+            overflow-x: auto;
+            position: relative;
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.8),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
+            animation: highlightBeat 2s ease-in-out infinite;
+            font-weight: bold;
+        }
+
+        @keyframes highlightBeat {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .demo-output {
+            background: rgba(0, 20, 60, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        ul.examples {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.examples li {
+            background: rgba(0, 255, 255, 0.08);
+            border-left: 6px solid #00ffff;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        ul.examples li::before {
+            content: ' LIVE EXAMPLE';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        ul.examples li:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-left-color: #ff00ff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            transform: translateX(15px) scale(1.02);
+        }
+
+        .warning {
+            background: rgba(255, 20, 147, 0.15);
+            border-left-color: #ff1493 !important;
+        }
+
+        .warning::before {
+            content: ' WARNING';
+            color: #ff1493 !important;
+            text-shadow: 0 0 15px #ff1493;
+        }
+
+        footer {
+            background: rgba(15, 15, 55, 0.95);
+            color: #00ffff;
+            text-align: center;
+            padding: 50px;
+            font-family: 'Roboto Mono', monospace;
+            border-top: 4px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .final-challenge {
+            background: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ff00ff;
+            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>JavaScript Data Types & Operators</h1>
+            <p class="subtitle">LESSON 5 - Numbers, Strings, Booleans Matrix</p>
+        </header>
+
+        <section id="numbers">
+            <h2>01. Numbers - Math Power!</h2>
+            <div class="explanation">
+                <span class="highlight">Numbers</span> = math data (whole, decimals). No quotes! JavaScript handles integers + decimals automatically.
+            </div>
+            <div class="code-block">
+                <pre><code>let age = 20;              // Integer (whole number)
+let score = 95.5;          // Decimal (float)
+let pi = 3.14159;          // Math constant
+
+console.log(10 + 5);       // 15 (Addition)
+console.log(10 - 5);       // 5  (Subtraction) 
+console.log(10 * 5);       // 50 (Multiplication)
+console.log(10 / 5);       // 2  (Division)</code></pre>
+            </div>
+            <div class="demo-output">
+                <div style="color:#00ff88;font-family:monospace;font-size:18px;">
+                    20<br>95.5<br>3.14159<br>
+                    <span style="color:#ff00ff;">15, 5, 50, 2</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="strings">
+            <h2>02. Strings - Text Power!</h2>
+            <div class="explanation">
+                <span class="highlight">Strings</span> = text data. Always use <span class="highlight">""</span> or <span class="highlight">''</span> quotes!
+            </div>
+            <div class="code-block">
+                <pre><code>let name = "Jhack";        // Double quotes ""
+let course = 'BSIT';       // Single quotes ''
+let message = `Hello ${name}`; // Template literals `` (backticks)
+
+console.log(name + " " + course);  // Concatenation
+console.log(`Score: ${95}`);      // Template literal</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="color:#ff1493;font-size:20px;">Jhack BSIT</p>
+                <p style="color:#00ffff;">Score: 95</p>
+            </div>
+        </section>
+
+        <section id="booleans">
+            <h2>03. Booleans - TRUE/FALSE Power!</h2>
+            <div class="explanation">
+                <span class="highlight">Booleans</span> = true/false logic. Used for conditions, flags, decisions.
+            </div>
+            <div class="code-block">
+                <pre><code>let isActive = true;       // TRUE = on
+let isGraduated = false;   // FALSE = off
+
+let score = 95;
+let passed = score >= 75;  // Comparison → Boolean
+
+console.log(passed);       // true</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="color:#00ff88;font-size:22px;">true</p>
+            </div>
+        </section>
+
+        <section id="special">
+            <h2>04. Special Types - null & undefined</h2>
+            <div class="explanation">
+                <span class="highlight">null</span> = "empty on purpose". <span class="highlight">undefined</span> = "never set".
+            </div>
+            <ul class="examples">
+                <li>
+                    <code>let user = null;           // Empty user (deleted)</code><br>
+                    <code>let score;                 // undefined (never assigned)</code>
+                </li>
+            </ul>
+            <div class="code-block">
+                <pre><code>let futureStudent = null;      // No student assigned yet
+let missingScore;              // Never set = undefined
+
+console.log(futureStudent);    // null
+console.log(missingScore);     // undefined</code></pre>
+            </div>
+        </section>
+
+        <section id="operators">
+            <h2>05. Assignment & Math Operators</h2>
+            <div class="explanation">
+                <span class="highlight">=</span> assigns values. Math operators <span class="highlight">+-*/</span> do calculations.
+            </div>
+            <div class="code-block">
+                <pre><code>// ARITHMETIC OPERATORS
+let score = 85;        // =
+score = score + 10;    // 95
+score += 5;            // 100 (shorthand)
+score++;               // 101 (+1)
+score--;               // 100 (-1)
+
+// COMPARISON OPERATORS
+let passed = score >= 75;  // true
+let elite = score === 100; // exact match</code></pre>
+            </div>
+            <div class="demo-output">
+                <p style="color:#00ffff;">100 → true → false</p>
+            </div>
+        </section>
+
+        <section id="challenge">
+            <h2>06. YOUR MISSION: Cyberpunk Calculator!</h2>
+            <div class="explanation">
+                Copy to Console (F12). Build YOUR grade calculator with all data types!
+            </div>
+            <div class="code-block final-challenge">
+                <pre><code>/* CYBERPUNK GRADE SYSTEM v5.0 */
+
+// Copy to Console F12:
+
+let studentName = "Jhack";     // STRING
+let prelimGrade = 88;          // NUMBER  
+let midtermGrade = 92;         // NUMBER
+let isPerfectAttendance = true; // BOOLEAN
+
+// MATH OPERATORS
+let finalGrade = (prelimGrade + midtermGrade) / 2;  
+finalGrade += 5;  // Attendance bonus
+
+// COMPARISON
+let passed = finalGrade >= 75;
+let deanList = finalGrade >= 90;
+
+console.log(`${studentName} Final: ${finalGrade}`);
+console.log(`Status: ${passed ? "🎖️ PASS" : "❌ FAIL"}`);
+console.log(`Dean List: ${deanList}`);</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <h3>🚀 READY TO HACK DATA?</h3>
+            <p><strong>Copy ALL code</strong> → <strong>VS Code</strong> → <strong>Save as</strong> <code>js-datatypes-lesson5.html</code></p>
+            <p><strong>Live Server</strong> → <strong>F12 Console</strong> → <strong>Test YOUR calculator!</strong></p>
+            <p><strong>Dark neon cyberpunk theme</strong> - Perfect for CMU Programming students! 🔥⚡️</p>
+        </footer>
+    </div>
+</body>
+</html>
