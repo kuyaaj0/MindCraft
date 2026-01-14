@@ -191,15 +191,33 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
             console.log("🔄 Old student account fields updated in Firebase.");
         }
 
-        // ==== Store all relevant data locally for Student.html ====
+        // 🔧 Keep higher XP/Level between local and Firestore
+        const localXP = parseInt(localStorage.getItem("xp") || "0");
+        const localLevel = parseInt(localStorage.getItem("level") || "1");
+
+        let finalXP = data.xp ?? 0;
+        let finalLevel = data.level ?? 1;
+
+        if (localLevel > finalLevel || (localLevel === finalLevel && localXP > finalXP)) {
+            finalXP = localXP;
+            finalLevel = localLevel;
+        }
+
+        // Save unified data locally
         localStorage.setItem("cachedName", data.name || "Student");
         localStorage.setItem("currentRole", "student");
-        localStorage.setItem("level", data.level);
-        localStorage.setItem("xp", data.xp);
-        localStorage.setItem("xpMax", data.xpMax);
-        localStorage.setItem("totalXP", data.totalXP);
-        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons));
-        localStorage.setItem("completedQuizzes", JSON.stringify(data.completedQuizzes));
+        localStorage.setItem("level", finalLevel);
+        localStorage.setItem("xp", finalXP);
+        localStorage.setItem("xpMax", data.xpMax ?? 100);
+        localStorage.setItem("totalXP", data.totalXP ?? finalXP);
+        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
+        localStorage.setItem("completedQuizzes", JSON.stringify(data.completedQuizzes || []));
+
+        // ✅ Sync Firestore if local is higher (prevents rollback)
+        if (finalXP > data.xp || finalLevel > data.level) {
+            await setDoc(userRef, { xp: finalXP, level: finalLevel }, { merge: true });
+            console.log("⬆ Synced higher XP/Level back to Firestore");
+        }
 
         msg.style.color = "#1DB954";
         msg.textContent = "✅ Sign in successful! Redirecting...";
@@ -234,8 +252,6 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
         }
 
         let data = snap.data();
-
-        // Optional: Auto-update teacher fields here if needed in future
 
         localStorage.setItem("cachedName", data.name || "Teacher");
         localStorage.setItem("currentRole", "teacher");
