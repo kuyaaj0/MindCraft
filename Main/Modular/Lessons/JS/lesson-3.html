@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Comments - Cyberpunk Lesson 3</title>
+    <title>JavaScript Comments - Lesson 3 | Cyberpunk Matrix</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
         
@@ -26,11 +26,8 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
                 radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
                 radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
                 linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
@@ -52,7 +49,7 @@
             border: 3px solid transparent;
             border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
             border-radius: 25px;
-            box-shadow: 
+            box-shadow:
                 0 0 60px rgba(255, 0, 255, 0.5),
                 0 0 120px rgba(0, 255, 255, 0.4),
                 inset 0 0 40px rgba(255, 0, 255, 0.08);
@@ -65,11 +62,8 @@
         .container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
                 conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
             animation: rotateAura 10s linear infinite;
             z-index: -1;
@@ -80,12 +74,38 @@
             100% { transform: rotate(360deg); }
         }
 
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff1493, #ff00ff);
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .exit-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff1493);
+            border-color: #00ffff;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.9),
+                0 0 60px rgba(255, 0, 255, 0.7);
+        }
+
         header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 60px 40px;
+            padding: 80px 40px 60px 40px;
             text-align: center;
             position: relative;
             border-bottom: 5px solid transparent;
@@ -93,19 +113,34 @@
         }
 
         h1 {
-            font-size: 4em;
+            font-size: 4.2em;
             font-weight: 900;
-            text-shadow: 
-                0 0 30px #ff00ff,
-                0 0 60px #00ffff,
-                0 0 90px #ff00ff;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 0 40px #ff00ff,
+                0 0 80px #00ffff,
+                0 0 120px #ff00ff,
+                2px 2px 0px #000;
             margin-bottom: 20px;
             animation: neonPulse 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.8);
         }
 
         @keyframes neonPulse {
-            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+            0%, 100% { 
+                transform: scale(1); 
+                filter: hue-rotate(0deg) brightness(1); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: hue-rotate(180deg) brightness(1.2); 
+            }
         }
 
         .subtitle {
@@ -117,7 +152,10 @@
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             animation: gradientFlow 4s ease infinite;
-            text-shadow: 0 0 25px #00ffff;
+            text-shadow: 
+                0 0 25px #00ffff,
+                2px 2px 0px #000;
+            letter-spacing: 2px;
         }
 
         @keyframes gradientFlow {
@@ -132,13 +170,8 @@
             border-bottom: 2px solid rgba(255, 0, 255, 0.3);
         }
 
-        section:last-of-type {
-            border-bottom: none;
-        }
-
-        section:nth-child(even) {
-            background: rgba(15, 10, 45, 0.7);
-        }
+        section:last-of-type { border-bottom: none; }
+        section:nth-child(even) { background: rgba(15, 10, 45, 0.7); }
 
         h2 {
             font-size: 2.8em;
@@ -152,6 +185,10 @@
             padding-bottom: 25px;
             position: relative;
             animation: h2Glow 3s ease infinite;
+            text-shadow:
+                0 0 20px #ff00ff, 
+                0 0 40px #00ffff,
+                1px 1px 0px #000;
         }
 
         @keyframes h2Glow {
@@ -162,10 +199,8 @@
         h2::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100px;
-            height: 6px;
+            bottom: 0; left: 0;
+            width: 100px; height: 6px;
             background: linear-gradient(90deg, #ff00ff, #00ffff);
             border-radius: 3px;
             box-shadow: 0 0 20px rgba(255, 0, 255, 1);
@@ -202,15 +237,15 @@
             line-height: 1.8;
             overflow-x: auto;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 0 0 40px rgba(0, 255, 255, 0.5),
                 inset 0 0 25px rgba(255, 0, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .code-block:hover {
-            box-shadow: 
-                0 0 60px rgba(0, 255, 255, 0.8),
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.7),
                 0 0 100px rgba(255, 0, 255, 0.6),
                 inset 0 0 30px rgba(255, 0, 255, 0.2);
             transform: translateY(-8px) scale(1.02);
@@ -229,6 +264,37 @@
             border: 2px solid #00ffff;
             border-radius: 25px;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff69b4);
+            border-color: #00ffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            border-color: #00ff00;
         }
 
         .highlight {
@@ -258,6 +324,7 @@
             margin: 25px 0;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            font-family: 'Roboto Mono', monospace;
         }
 
         .demo-output::before {
@@ -270,6 +337,28 @@
             padding: 5px 20px;
             font-size: 13px;
             border: 2px solid #00ffff;
+            border-radius: 20px;
+        }
+
+        .comment-demo {
+            background: rgba(60, 20, 80, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .comment-demo::before {
+            content: ' COMMENTS DISABLED';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(60, 20, 80, 0.9);
+            color: #ff00ff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #ff00ff;
             border-radius: 20px;
         }
 
@@ -314,36 +403,16 @@
         }
 
         .warning {
-            background: rgba(255, 20, 147, 0.15);
-            border-left-color: #ff1493 !important;
+            background: rgba(255, 20, 147, 0.15) !important;
+            border-left: 6px solid #ff1493 !important;
         }
 
         .warning::before {
-            content: ' WARNING';
+            content: ' ⚠️ TRAP!' !important;
             color: #ff1493 !important;
-            text-shadow: 0 0 15px #ff1493;
-        }
-
-        .comment-demo {
-            background: rgba(60, 20, 80, 0.9);
-            border: 2px solid #ff00ff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .comment-demo::before {
-            content: ' COMMENTS DISABLED';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(60, 20, 80, 0.9);
-            color: #ff00ff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #ff00ff;
-            border-radius: 20px;
+            left: 20px !important;
+            top: -15px !important;
+            background: rgba(255, 20, 147, 0.9) !important;
         }
 
         footer {
@@ -369,11 +438,14 @@
             h2 { font-size: 2.2em; }
             section { padding: 40px 25px; }
             .code-block { font-size: 14px; padding: 25px; }
+            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+        
         <header>
             <h1>JavaScript Comments</h1>
             <p class="subtitle">LESSON 3 - Cyberpunk Code Documentation Matrix</p>
@@ -386,6 +458,7 @@
                 Perfect for quick notes, explanations, TODOs. Use for each important line!
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>// ✅ SINGLE-LINE COMMENTS
 let studentName = "Jhack";     // Store student name
 let grade = 95;                // Current grade (0-100)
@@ -411,6 +484,7 @@ console.log(studentName);      // Display name in console
                 Use for function descriptions, long explanations, temporarily disabled code.
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>/* ========================================
    CYBERPUNK STUDENT GRADE CALCULATOR v2.0
    Created by: Jhack @ CMU
@@ -461,6 +535,7 @@ function calculateGrade(score) {
                 Used by VS Code for auto-completion and documentation.
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>/**
  * Calculate student final grade
  * @param {number} score - Current grade (0-100)
@@ -488,6 +563,7 @@ function getFinalGrade(score, attendedAll) {
                 Team members read your comments to understand your logic!
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>/*==========================================
     STUDENT PORTAL SYSTEM v1.2 - CMU IT DEPT
     Last Updated: Jan 2026 by Jhack
@@ -514,6 +590,7 @@ function addStudent(name, grade) {
                 <strong>purpose, logic, TODOs</strong>. Make it professional!
             </div>
             <div class="code-block final-challenge">
+                <button class="copy-btn">📋 Copy Challenge</button>
                 <pre><code>/* YOUR MISSION: ADD COMMENTS! */
 
 // Copy to Console F12 and improve:
@@ -540,5 +617,28 @@ console.log(finalGrade);</code></pre>
             <p><strong>Dark neon cyberpunk theme</strong> - Perfect for CMU Programming students! 🔥⚡️</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy buttons functionality
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const codeBlock = this.parentElement;
+                    const codeText = codeBlock.querySelector('pre').innerText;
+                    
+                    navigator.clipboard.writeText(codeText).then(function() {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✅ COPIED!';
+                        btn.classList.add('copied');
+                        
+                        setTimeout(function() {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
