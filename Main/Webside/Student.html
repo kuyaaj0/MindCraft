@@ -14,120 +14,118 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-  /* ---------- Shared resets ---------- */
-  * { box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'Press Start 2P', cursive; }
+/* ---------- Shared resets ---------- */
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'Press Start 2P', cursive; }
 
-  /* ---------- PAGE LAYOUT ---------- */
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(#87e4ff, #c8f7b0);
-    min-height: 100vh;
-  }
+/* ---------- PAGE LAYOUT ---------- */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(#87e4ff, #c8f7b0);
+  min-height: 100vh;
+}
 
-  /* Container that holds landing scene */
-  .scene {
-    position: relative;
-    width: 100%;
-    max-width: 1200px;
-    height: 92vh;
-    background: linear-gradient(#8fe9ff 55%, #7dd37d);
-    border-radius: 24px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.45);
-    overflow: hidden;
-  }
+/* Container that holds landing scene */
+.scene {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: 92vh;
+  background: linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+  overflow: hidden;
+}
 
-  /* ---------- LANDING SCENE STYLES ---------- */
-  .cloud { position: absolute; background: #fff; border-radius: 50px; opacity: 0.95; animation: cloudMove linear infinite; }
-  .cloud::before,.cloud::after{ content:""; position:absolute; background:#fff; border-radius:50%; }
-  .cloud::before { width:40px;height:40px; top:-20px; left:15px; }
-  .cloud::after  { width:55px;height:55px; top:-30px; right:15px; }
-  @keyframes cloudMove { from{transform:translateX(-300px);} to{transform:translateX(1400px);} }
+/* ---------- LANDING SCENE STYLES ---------- */
+.cloud { position: absolute; background: #fff; border-radius: 50px; opacity: 0.95; animation: cloudMove linear infinite; }
+.cloud::before,.cloud::after{ content:""; position:absolute; background:#fff; border-radius:50%; }
+.cloud::before { width:40px;height:40px; top:-20px; left:15px; }
+.cloud::after  { width:55px;height:55px; top:-30px; right:15px; }
+@keyframes cloudMove { from{transform:translateX(-300px);} to{transform:translateX(1400px);} }
 
-  .mountain { position:absolute; bottom:120px; width:400px; height:250px; background:linear-gradient(to top,#5fa1d6,#8ec9e3); border-radius:50% 50% 0 0 / 60% 60% 0 0; transform:rotate(-6deg); z-index: 1; }
-  .mountain.back { background: linear-gradient(to top,#7bbfe3,#b3e0f2); bottom:140px; width:500px; height:280px; transform:rotate(-3deg); z-index:0; }
-  .mountain.one { left:-120px; } .mountain.two { left: 180px; } .mountain.three { right:100px; }
+.mountain { position:absolute; bottom:120px; width:400px; height:250px; background:linear-gradient(to top,#5fa1d6,#8ec9e3); border-radius:50% 50% 0 0 / 60% 60% 0 0; transform:rotate(-6deg); z-index: 1; }
+.mountain.back { background: linear-gradient(to top,#7bbfe3,#b3e0f2); bottom:140px; width:500px; height:280px; transform:rotate(-3deg); z-index:0; }
+.mountain.one { left:-120px; } .mountain.two { left: 180px; } .mountain.three { right:100px; }
 
-  .title { position:absolute; top:30px; left:50%; transform:translateX(-50%); padding:20px 50px; background:#8b5a2b; color:#fff; font-size:2rem; border-radius:20px; box-shadow: inset -6px -6px 0 rgba(0,0,0,0.3), 0 8px 0 #5c3a1a; text-shadow:3px 3px 0 #000; z-index:6; }
+.title { position:absolute; top:30px; left:50%; transform:translateX(-50%); padding:20px 50px; background:#8b5a2b; color:#fff; font-size:2rem; border-radius:20px; box-shadow: inset -6px -6px 0 rgba(0,0,0,0.3), 0 8px 0 #5c3a1a; text-shadow:3px 3px 0 #000; z-index:6; }
 
-  .tree { position:absolute; bottom:120px; font-size:3rem; z-index:4; }
-  .tree.small { font-size:2.4rem; } .tree.large { font-size:3.6rem; }
-  .tree.t1 { left:60px; } .tree.t2 { left:150px; } .tree.t3 { left:260px; }
-  .tree.t4 { right:420px; } .tree.t5 { right:300px; } .tree.t6 { right:180px; }
+.tree { position:absolute; bottom:120px; font-size:3rem; z-index:4; }
+.tree.small { font-size:2.4rem; } .tree.large { font-size:3.6rem; }
+.tree.t1 { left:60px; } .tree.t2 { left:150px; } .tree.t3 { left:260px; }
+.tree.t4 { right:420px; } .tree.t5 { right:300px; } .tree.t6 { right:180px; }
 
-  .character { position:absolute; left:90px; bottom:150px; font-size:5.5rem; animation:bounce 2s ease-in-out infinite; z-index:5; }
-  @keyframes bounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-18px); } }
+.character { position:absolute; left:90px; bottom:150px; font-size:5.5rem; animation:bounce 2s ease-in-out infinite; z-index:5; }
+@keyframes bounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-18px); } }
 
-  .menu { position:absolute; right:70px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:20px; z-index:6; }
-  .menu button { background:#8b5a2b; color:#fff; font-size:0.75rem; padding:18px 34px; border:none; border-radius:14px; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.3), 0 7px 0 #5c3a1a; cursor:pointer; }
-  .menu button:hover { transform: translateY(-4px); }
+.menu { position:absolute; right:70px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:20px; z-index:6; }
+.menu button { background:#8b5a2b; color:#fff; font-size:0.75rem; padding:18px 34px; border:none; border-radius:14px; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.3), 0 7px 0 #5c3a1a; cursor:pointer; }
+.menu button:hover { transform: translateY(-4px); }
 
-  .ground { position:absolute; bottom:0; width:100%; height:120px; background:linear-gradient(#4caf50,#3e9143); z-index:5; }
-  .landing-footer { position:absolute; bottom:10px; width:100%; text-align:center; font-size:0.55rem; color:#fff; text-shadow:1px 1px 0 #000; z-index:6; }
+.ground { position:absolute; bottom:0; width:100%; height:120px; background:linear-gradient(#4caf50,#3e9143); z-index:5; }
+.landing-footer { position:absolute; bottom:10px; width:100%; text-align:center; font-size:0.55rem; color:#fff; text-shadow:1px 1px 0 #000; z-index:6; }
 
-  /* ---------- LESSONS / APP UI ---------- */
-  .lessons-container {
-    position: absolute;
-    inset: 0;
-    display: none; /* hidden initially */
-    z-index: 50;
-    background: rgba(0,0,0,0.15);
-    backdrop-filter: blur(4px);
-    color: #fff;
-    overflow: auto;
-  }
+/* ---------- LESSONS / APP UI ---------- */
+.lessons-container {
+  position: absolute;
+  inset: 0;
+  display: none;
+  z-index: 50;
+  background: rgba(0,0,0,0.15);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  overflow: auto;
+}
 
-  header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px 0;
-    background: rgba(0,0,0,0.6);
-    border-bottom: 2px solid #1DB954;
-    z-index: 60;
-  }
+header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0;
+  background: rgba(0,0,0,0.6);
+  border-bottom: 2px solid #1DB954;
+  z-index: 60;
+}
 
-  .xp-group { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:900px; padding: 0 16px; margin-bottom:6px; }
-  .xp-status { display:flex; align-items:center; gap:8px; }
-  .xp-bar-container { display:flex; align-items:center; gap:6px; }
-  #xpBar { width:140px; height:12px; }
+.xp-group { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:900px; padding: 0 16px; margin-bottom:6px; }
+.xp-status { display:flex; align-items:center; gap:8px; }
+.xp-bar-container { display:flex; align-items:center; gap:6px; }
+#xpBar { width:140px; height:12px; }
 
-  .user-actions { display:flex; gap:10px; margin-top:6px; justify-content:center; flex-wrap:wrap; width:100%; max-width:900px; padding:0 16px; }
-  .user-actions button { font-family:'Press Start 2P', cursive; background:#1DB954; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:0.6rem; transition:all .2s; }
-  #rankDisplay { background:none; border:2px solid #fff; color:#fff; padding:6px 10px; border-radius:6px; font-size:0.6rem; min-width:80px; cursor:default; }
-  .rank-top { animation: glowPulse 1.7s infinite alternate; }
-  @keyframes glowPulse { 0%{ box-shadow:0 0 5px #fff;} 50%{ box-shadow:0 0 12px #fff;} 100%{ box-shadow:0 0 5px #fff;} }
+.user-actions { display:flex; gap:10px; margin-top:6px; justify-content:center; flex-wrap:wrap; width:100%; max-width:900px; padding:0 16px; }
+.user-actions button { font-family:'Press Start 2P', cursive; background:#1DB954; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:0.6rem; transition:all .2s; }
+#rankDisplay { background:none; border:2px solid #fff; color:#fff; padding:6px 10px; border-radius:6px; font-size:0.6rem; min-width:80px; cursor:default; }
+.rank-top { animation: glowPulse 1.7s infinite alternate; }
+@keyframes glowPulse { 0%{ box-shadow:0 0 5px #fff;} 50%{ box-shadow:0 0 12px #fff;} 100%{ box-shadow:0 0 5px #fff;} }
 
-  main.language-select { padding: 20px 10px; text-align:center; }
-  .language-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:980px; margin: 12px auto; }
-  .language-card { width:100%; max-width:280px; padding:12px; border-radius:10px; background: rgba(0,0,0,0.45); box-shadow: 0 0 12px #1DB954; transition: transform .2s; }
-  .language-card:hover { transform: scale(1.03); }
-  .language-card img { width:56px; height:56px; }
-  .language-card select { margin-top:8px; font-size:0.6rem; font-family:'Press Start 2P'; padding:6px; border-radius:6px; background:#1DB954; color:#fff; border:none; width:100%; }
+main.language-select { padding: 20px 10px; text-align:center; }
+.language-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:980px; margin: 12px auto; }
+.language-card { width:100%; max-width:280px; padding:12px; border-radius:10px; background: rgba(0,0,0,0.45); box-shadow: 0 0 12px #1DB954; transition: transform .2s; }
+.language-card:hover { transform: scale(1.03); }
+.language-card img { width:56px; height:56px; }
+.language-card select { margin-top:8px; font-size:0.6rem; font-family:'Press Start 2P'; padding:6px; border-radius:6px; background:#1DB954; color:#fff; border:none; width:100%; }
 
-  footer.lessons-footer { background: rgba(0,0,0,0.45); text-align:center; font-size:0.6rem; padding:8px 0; color:#fff; width:100%; border-top:1px solid rgba(29,185,84,0.4); margin-top: 12px; position: sticky; bottom: 0; }
+footer.lessons-footer { background: rgba(0,0,0,0.45); text-align:center; font-size:0.6rem; padding:8px 0; color:#fff; width:100%; border-top:1px solid rgba(29,185,84,0.4); margin-top: 12px; position: sticky; bottom: 0; }
 
-  /* Welcome overlay */
-  #welcomeOverlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.85); color:#1DB954; font-size: clamp(0.8rem,2vw,1.2rem); display:flex; justify-content:center; align-items:center; flex-direction:column; opacity:0; z-index:999; animation: fadeInOut 3s ease forwards; }
-  @keyframes fadeInOut { 0%{opacity:0; transform:scale(.9);} 10%,80%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(1.05);} }
+#welcomeOverlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.85); color:#1DB954; font-size: clamp(0.8rem,2vw,1.2rem); display:flex; justify-content:center; align-items:center; flex-direction:column; opacity:0; z-index:999; animation: fadeInOut 3s ease forwards; }
+@keyframes fadeInOut { 0%{opacity:0; transform:scale(.9);} 10%,80%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(1.05);} }
 
-  /* Show/hide transitions */
-  .fade-hidden { animation: fadeOut .35s forwards; }
-  .fade-visible { animation: fadeIn .35s forwards; display:block; }
-  @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform:none;} }
-  @keyframes fadeOut { from{opacity:1;} to{opacity:0; display:none;} }
+.fade-hidden { animation: fadeOut .35s forwards; }
+.fade-visible { animation: fadeIn .35s forwards; display:block; }
+@keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform:none;} }
+@keyframes fadeOut { from{opacity:1;} to{opacity:0; display:none;} }
 
-  @media (max-width: 860px) {
-    .menu { right: 20px; }
-    .title { padding: 12px 20px; font-size:1rem; }
-    .character { left: 30px; }
-  }
+@media (max-width: 860px) {
+  .menu { right: 20px; }
+  .title { padding: 12px 20px; font-size:1rem; }
+  .character { left: 30px; }
+}
 </style>
 </head>
 <body>
@@ -192,8 +190,6 @@
   <main class="language-select">
     <h1>CHOOSE A CODING LANGUAGE</h1>
     <div class="language-grid">
-
-      <!-- HTML Card -->
       <div class="language-card">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
@@ -201,7 +197,6 @@
           <option value="">📖 Select Lesson</option>
           <option value="../Modular/HTML/lesson-1.html">Lesson 1</option>
           <option value="../Modular/HTML/lesson-2.html">Lesson 2</option>
-          <option value="../Modular/HTML/lesson-3.html">Lesson 3</option>
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
@@ -211,7 +206,6 @@
         </select>
       </div>
 
-      <!-- CSS Card -->
       <div class="language-card">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
@@ -219,7 +213,6 @@
           <option value="">📖 Select Lesson</option>
           <option value="../Modular/CSS/lesson-1.html">Lesson 1</option>
           <option value="../Modular/CSS/lesson-2.html">Lesson 2</option>
-          <option value="../Modular/CSS/lesson-3.html">Lesson 3</option>
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
@@ -229,7 +222,6 @@
         </select>
       </div>
 
-      <!-- JS Card -->
       <div class="language-card">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
@@ -237,7 +229,6 @@
           <option value="">📖 Select Lesson</option>
           <option value="../Modular/JS/lesson-1.html">Lesson 1</option>
           <option value="../Modular/JS/lesson-2.html">Lesson 2</option>
-          <option value="../Modular/JS/lesson-3.html">Lesson 3</option>
         </select>
         <select onchange="if(this.value) window.location.href=this.value">
           <option value="">📝 Select Quiz</option>
@@ -246,7 +237,6 @@
           <option value="../Levels/Quiz/JS/level-3.html">Level 3</option>
         </select>
       </div>
-
     </div>
   </main>
 
@@ -255,37 +245,54 @@
   </footer>
 </div>
 
-<!-- ======= Scripts ======= -->
+<!-- ======= SCRIPTS ======= -->
 <script src="../Design/theme.js"></script>
 <script src="../Exp/levels.js"></script>
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
 <script>
-  // Show lessons overlay
-  function showLessons() {
-    const landing = document.getElementById('landingScene');
-    const lessons = document.getElementById('lessonsContainer');
+function showLessons() {
+  const landing = document.getElementById('landingScene');
+  const lessons = document.getElementById('lessonsContainer');
+  landing.classList.add('fade-hidden');
+  setTimeout(() => { landing.style.display = 'none'; }, 350);
+  lessons.style.display = 'block';
+  lessons.classList.add('fade-visible');
+  lessons.setAttribute('aria-hidden', 'false');
+}
 
-    landing.classList.add('fade-hidden');
-    setTimeout(() => { landing.style.display = 'none'; }, 350);
-
-    lessons.style.display = 'block';
-    lessons.classList.add('fade-visible');
-    lessons.setAttribute('aria-hidden', 'false');
-  }
-
-  // Back to landing
-  function backToLanding() {
-    const landing = document.getElementById('landingScene');
-    const lessons = document.getElementById('lessonsContainer');
-
-    lessons.classList.remove('fade-visible');
-    lessons.style.display = 'none';
-    lessons.setAttribute('aria-hidden', 'true');
-
-    landing.style.display = 'block';
-    landing.classList.remove('fade-hidden');
-    landing.classList.add('fade-visible');
-    setTimeout(() => landing.classList.remove('fade-visible'), 400);
-  }
+function backToLanding() {
+  const landing = document.getElementById('landingScene');
+  const lessons = document.getElementById('lessonsContainer');
+  lessons.classList.remove('fade-visible');
+  lessons.style.display = 'none';
+  lessons.setAttribute('aria-hidden', 'true');
+  landing.style.display = 'block';
+  landing.classList.remove('fade-hidden');
+  landing.classList.add('fade-visible');
+  setTimeout(() => landing.classList.remove('fade-visible'), 400);
+}
 </script>
+
+<!-- ======= Firebase + Auth + XP + Rank Module ======= -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.appspot.com",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (typeof window.applyTheme === "function") {
+    const currentTheme = localStorage.get
