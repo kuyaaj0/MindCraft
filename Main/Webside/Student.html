@@ -1,280 +1,347 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MindCraft — Landing & Lessons</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCraft | Coding Lessons</title>
 
-<!-- Font -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-<!-- External CSS -->
 <link rel="stylesheet" href="../Design/Position.css">
 <link rel="stylesheet" href="../Design/level.css">
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-/* ---------- Shared resets ---------- */
 * { box-sizing: border-box; }
-html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'Press Start 2P', cursive; }
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
-/* ---------- PAGE LAYOUT ---------- */
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(#87e4ff, #c8f7b0);
-  min-height: 100vh;
-}
-
-/* Container that holds landing scene */
-.scene {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  height: 92vh;
-  background: linear-gradient(#8fe9ff 55%, #7dd37d);
-  border-radius: 24px;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.45);
-  overflow: hidden;
-}
-
-/* ---------- LANDING SCENE STYLES ---------- */
-.cloud { position: absolute; background: #fff; border-radius: 50px; opacity: 0.95; animation: cloudMove linear infinite; }
-.cloud::before,.cloud::after{ content:""; position:absolute; background:#fff; border-radius:50%; }
-.cloud::before { width:40px;height:40px; top:-20px; left:15px; }
-.cloud::after  { width:55px;height:55px; top:-30px; right:15px; }
-@keyframes cloudMove { from{transform:translateX(-300px);} to{transform:translateX(1400px);} }
-
-.mountain { position:absolute; bottom:120px; width:400px; height:250px; background:linear-gradient(to top,#5fa1d6,#8ec9e3); border-radius:50% 50% 0 0 / 60% 60% 0 0; transform:rotate(-6deg); z-index: 1; }
-.mountain.back { background: linear-gradient(to top,#7bbfe3,#b3e0f2); bottom:140px; width:500px; height:280px; transform:rotate(-3deg); z-index:0; }
-.mountain.one { left:-120px; } .mountain.two { left: 180px; } .mountain.three { right:100px; }
-
-.title { position:absolute; top:30px; left:50%; transform:translateX(-50%); padding:20px 50px; background:#8b5a2b; color:#fff; font-size:2rem; border-radius:20px; box-shadow: inset -6px -6px 0 rgba(0,0,0,0.3), 0 8px 0 #5c3a1a; text-shadow:3px 3px 0 #000; z-index:6; }
-
-.tree { position:absolute; bottom:120px; font-size:3rem; z-index:4; }
-.tree.small { font-size:2.4rem; } .tree.large { font-size:3.6rem; }
-.tree.t1 { left:60px; } .tree.t2 { left:150px; } .tree.t3 { left:260px; }
-.tree.t4 { right:420px; } .tree.t5 { right:300px; } .tree.t6 { right:180px; }
-
-.character { position:absolute; left:90px; bottom:150px; font-size:5.5rem; animation:bounce 2s ease-in-out infinite; z-index:5; }
-@keyframes bounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-18px); } }
-
-.menu { position:absolute; right:70px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:20px; z-index:6; }
-.menu button { background:#8b5a2b; color:#fff; font-size:0.75rem; padding:18px 34px; border:none; border-radius:14px; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.3), 0 7px 0 #5c3a1a; cursor:pointer; }
-.menu button:hover { transform: translateY(-4px); }
-
-.ground { position:absolute; bottom:0; width:100%; height:120px; background:linear-gradient(#4caf50,#3e9143); z-index:5; }
-.landing-footer { position:absolute; bottom:10px; width:100%; text-align:center; font-size:0.55rem; color:#fff; text-shadow:1px 1px 0 #000; z-index:6; }
-
-/* ---------- LESSONS / APP UI ---------- */
-.lessons-container {
-  position: absolute;
-  inset: 0;
-  display: none;
-  z-index: 50;
-  background: rgba(0,0,0,0.15);
-  backdrop-filter: blur(4px);
+  font-family: 'Press Start 2P', cursive;
   color: #fff;
-  overflow: auto;
+  transition: background 1s, color 1s;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+/* ===== Header ===== */
 header {
-  position: sticky;
-  top: 0;
-  width: 100%;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.5);
   border-bottom: 2px solid #1DB954;
-  z-index: 60;
 }
 
-.xp-group { display:flex; justify-content:space-between; align-items:center; width:100%; max-width:900px; padding: 0 16px; margin-bottom:6px; }
-.xp-status { display:flex; align-items:center; gap:8px; }
-.xp-bar-container { display:flex; align-items:center; gap:6px; }
-#xpBar { width:140px; height:12px; }
+.xp-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 5px;
+  padding: 0 10px;
+}
 
-.user-actions { display:flex; gap:10px; margin-top:6px; justify-content:center; flex-wrap:wrap; width:100%; max-width:900px; padding:0 16px; }
-.user-actions button { font-family:'Press Start 2P', cursive; background:#1DB954; color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:0.6rem; transition:all .2s; }
-#rankDisplay { background:none; border:2px solid #fff; color:#fff; padding:6px 10px; border-radius:6px; font-size:0.6rem; min-width:80px; cursor:default; }
-.rank-top { animation: glowPulse 1.7s infinite alternate; }
-@keyframes glowPulse { 0%{ box-shadow:0 0 5px #fff;} 50%{ box-shadow:0 0 12px #fff;} 100%{ box-shadow:0 0 5px #fff;} }
+.xp-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-main.language-select { padding: 20px 10px; text-align:center; }
-.language-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; max-width:980px; margin: 12px auto; }
-.language-card { width:100%; max-width:280px; padding:12px; border-radius:10px; background: rgba(0,0,0,0.45); box-shadow: 0 0 12px #1DB954; transition: transform .2s; }
-.language-card:hover { transform: scale(1.03); }
-.language-card img { width:56px; height:56px; }
-.language-card select { margin-top:8px; font-size:0.6rem; font-family:'Press Start 2P'; padding:6px; border-radius:6px; background:#1DB954; color:#fff; border:none; width:100%; }
+.xp-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-footer.lessons-footer { background: rgba(0,0,0,0.45); text-align:center; font-size:0.6rem; padding:8px 0; color:#fff; width:100%; border-top:1px solid rgba(29,185,84,0.4); margin-top: 12px; position: sticky; bottom: 0; }
+#xpBar {
+  width: 80px;
+  height: 10px;
+}
 
-#welcomeOverlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.85); color:#1DB954; font-size: clamp(0.8rem,2vw,1.2rem); display:flex; justify-content:center; align-items:center; flex-direction:column; opacity:0; z-index:999; animation: fadeInOut 3s ease forwards; }
-@keyframes fadeInOut { 0%{opacity:0; transform:scale(.9);} 10%,80%{opacity:1; transform:scale(1);} 100%{opacity:0; transform:scale(1.05);} }
+.level-display {
+  font-size: 0.6rem;
+  text-align: center;
+}
 
-.fade-hidden { animation: fadeOut .35s forwards; }
-.fade-visible { animation: fadeIn .35s forwards; display:block; }
-@keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform:none;} }
-@keyframes fadeOut { from{opacity:1;} to{opacity:0; display:none;} }
+.user-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
 
-@media (max-width: 860px) {
-  .menu { right: 20px; }
-  .title { padding: 12px 20px; font-size:1rem; }
-  .character { left: 30px; }
+button {
+  font-family: 'Press Start 2P', cursive;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.5rem;
+  transition: all 0.3s ease;
+}
+button:hover { background: #1ed760; transform: scale(1.05); }
+
+/* === Rank Display Button Glow === */
+#rankDisplay {
+  font-family: 'Press Start 2P', cursive;
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: default;
+  font-size: 0.5rem;
+  text-align: center;
+  min-width: 60px;
+}
+.rank-top {
+  animation: glowPulse 1.7s infinite alternate;
+}
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 5px #fff; }
+  50% { box-shadow: 0 0 12px #fff; }
+  100% { box-shadow: 0 0 5px #fff; }
+}
+
+/* === Main Content === */
+main {
+  text-align: center;
+  padding: 30px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === Lesson Container === */
+.lesson-container {
+  max-width: 1100px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(29,185,84,0.4);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(29,185,84,0.2);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* === Scrollable Grid === */
+.language-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 25px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 15px;
+}
+
+.language-grid::-webkit-scrollbar {
+  height: 8px;
+}
+.language-grid::-webkit-scrollbar-thumb {
+  background: #1DB954;
+  border-radius: 5px;
+}
+
+/* === Language Card === */
+.language-card {
+  flex: 0 0 auto;
+  width: 280px;
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 12px #1DB954;
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+.language-card:hover { transform: scale(1.05); }
+
+.language-card img {
+  width: 60px;
+  height: 60px;
+}
+
+.language-card p {
+  margin-top: 10px;
+  font-size: 0.6rem;
+}
+
+/* === Scrollable Dropdowns === */
+.language-card select {
+  margin-top: 10px;
+  font-size: 0.5rem;
+  font-family: 'Press Start 2P', cursive;
+  padding: 5px;
+  border-radius: 5px;
+  background: #1DB954;
+  color: #fff;
+  border: none;
+  width: 100%;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.language-card select option {
+  font-size: 0.5rem;
+}
+
+/* === Footer === */
+footer {
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-size: 0.6rem;
+  padding: 6px 0;
+  color: #fff;
+  width: 100vw;
+  border-top: 1px solid rgba(29,185,84,0.4);
+  margin-top: auto;
+}
+
+/* === Welcome Popup === */
+#welcomeOverlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  color: #1DB954;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  font-family: 'Press Start 2P', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  z-index: 999;
+  animation: fadeInOut 3s ease forwards;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: scale(0.9); }
+  10%, 80% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.05); }
 }
 </style>
 </head>
 <body>
 
-<!-- ======= LANDING SCENE ======= -->
-<div class="scene" id="landingScene">
-  <div class="cloud" style="top:70px;width:140px;height:45px;animation-duration:30s;"></div>
-  <div class="cloud" style="top:130px;width:180px;height:55px;animation-duration:40s;animation-delay:8s;"></div>
-
-  <div class="mountain back one"></div>
-  <div class="mountain back two"></div>
-  <div class="mountain three"></div>
-
-  <div class="title">🧠 MindCraft</div>
-
-  <div class="tree large t1">🌳</div>
-  <div class="tree small t2">🌲</div>
-  <div class="tree t3">🌳</div>
-  <div class="tree small t4">🌲</div>
-  <div class="tree t5">🌳</div>
-  <div class="tree large t6">🌲</div>
-
-  <div class="character">👾</div>
-
-  <div class="menu">
-    <button onclick="showLessons()">PLAY 🎮</button>
-  </div>
-
-  <div class="ground"></div>
-  <div class="landing-footer">© 2025 MindCraft | Created by Kuya AJ & Team</div>
+<!-- ✅ Welcome Popup -->
+<div id="welcomeOverlay" style="display:none;">
+  <p>🎉 Welcome, <span id="studentName">Student</span>!</p>
 </div>
 
-<!-- ======= LESSONS / APP UI ======= -->
-<div class="lessons-container" id="lessonsContainer" aria-hidden="true">
-  <div id="welcomeOverlay" style="display:none;">
-    <p>🎉 Welcome, <span id="studentName">Student</span>!</p>
+<header>
+  <div class="xp-group">
+    <div class="xp-status">
+      <span>XP:</span>
+      <div class="xp-bar-container">
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
+      </div>
+    </div>
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
   </div>
 
-  <header>
-    <div class="xp-group">
-      <div class="xp-status">
-        <span>XP:</span>
-        <div class="xp-bar-container">
-          <progress id="xpBar" value="0" max="100"></progress>
-          <span id="xpValue">0</span>
-        </div>
-      </div>
-      <div class="level-display">
-        Level <span id="levelValue">1</span>
-      </div>
-    </div>
+  <div class="user-actions">
+    <button onclick="location.href='../Account/account.html'">👤 Account</button>
+    <button id="leaderboardBtn">🏆 Leaderboard</button>
+    <button id="rankDisplay">Rank: #--</button>
+    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  </div>
+</header>
 
-    <div class="user-actions">
-      <button onclick="location.href='../Account/account.html'">👤 Account</button>
-      <button id="leaderboardBtn">🏆 Leaderboard</button>
-      <button id="rankDisplay">Rank: #--</button>
-      <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-      <button onclick="backToLanding()" style="background:#8b5a2b;">← Back</button>
-    </div>
-  </header>
+<main>
+  <h1>CHOOSE A CODING LANGUAGE</h1>
 
-  <main class="language-select">
-    <h1>CHOOSE A CODING LANGUAGE</h1>
+  <!-- Container for scrolling lessons -->
+  <div class="lesson-container">
     <div class="language-grid">
-      <div class="language-card">
+
+      <!-- HTML Card -->
+      <div class="language-card" id="htmlCard">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="../Modular/HTML/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/HTML/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/HTML/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/HTML/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/HTML/level-3.html">Level 3</option>
-        </select>
+        <select id="htmlLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="htmlQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
-      <div class="language-card">
+      <!-- CSS Card -->
+      <div class="language-card" id="cssCard">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="../Modular/CSS/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/CSS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/CSS/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/CSS/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/CSS/level-3.html">Level 3</option>
-        </select>
+        <select id="cssLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="cssQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
-      <div class="language-card">
+      <!-- JavaScript Card -->
+      <div class="language-card" id="jsCard">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📖 Select Lesson</option>
-          <option value="../Modular/JS/lesson-1.html">Lesson 1</option>
-          <option value="../Modular/JS/lesson-2.html">Lesson 2</option>
-        </select>
-        <select onchange="if(this.value) window.location.href=this.value">
-          <option value="">📝 Select Quiz</option>
-          <option value="../Levels/Quiz/JS/level-1.html">Level 1</option>
-          <option value="../Levels/Quiz/JS/level-2.html">Level 2</option>
-          <option value="../Levels/Quiz/JS/level-3.html">Level 3</option>
-        </select>
+        <select id="jsLessons" onchange="if(this.value) window.location.href=this.value"></select>
+        <select id="jsQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
+
     </div>
-  </main>
+  </div>
+</main>
 
-  <footer class="lessons-footer">
-    <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
-  </footer>
-</div>
+<footer>
+  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
+</footer>
 
-<!-- ======= SCRIPTS ======= -->
 <script src="../Design/theme.js"></script>
 <script src="../Exp/levels.js"></script>
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
+<!-- ✅ Auto-generate lessons and quizzes -->
 <script>
-function showLessons() {
-  const landing = document.getElementById('landingScene');
-  const lessons = document.getElementById('lessonsContainer');
-  landing.classList.add('fade-hidden');
-  setTimeout(() => { landing.style.display = 'none'; }, 350);
-  lessons.style.display = 'block';
-  lessons.classList.add('fade-visible');
-  lessons.setAttribute('aria-hidden', 'false');
+function populateOptions(prefix, count, type, folder) {
+  const select = document.getElementById(`${prefix}${type}`);
+  const isLesson = type === "Lessons";
+  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+  const subfolder = isLesson ? "Lessons" : "Quiz";
+  const basePath = isLesson
+    ? `../Modular/${subfolder}/${folder}/lesson-`
+    : `../Levels/${subfolder}/${folder}/level-`;
+
+  const opt = document.createElement("option");
+  opt.textContent = label;
+  opt.value = "";
+  select.appendChild(opt);
+
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = `${basePath}${i}.html`;
+    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+    select.appendChild(option);
+  }
 }
 
-function backToLanding() {
-  const landing = document.getElementById('landingScene');
-  const lessons = document.getElementById('lessonsContainer');
-  lessons.classList.remove('fade-visible');
-  lessons.style.display = 'none';
-  lessons.setAttribute('aria-hidden', 'true');
-  landing.style.display = 'block';
-  landing.classList.remove('fade-hidden');
-  landing.classList.add('fade-visible');
-  setTimeout(() => landing.classList.remove('fade-visible'), 400);
-}
+populateOptions("html", 20, "Lessons", "HTML");
+populateOptions("html", 20, "Quizzes", "HTML");
+populateOptions("css", 20, "Lessons", "CSS");
+populateOptions("css", 20, "Quizzes", "CSS");
+populateOptions("js", 20, "Lessons", "JS");
+populateOptions("js", 20, "Quizzes", "JS");
 </script>
 
-<script type="module">
 <!-- ✅ Firebase Auth / XP / Rank -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -344,6 +411,7 @@ onAuthStateChanged(auth, async (user) => {
     else rankDisplay.classList.remove("rank-top");
   });
 });
+//backup code
 </script>
 </body>
 </html>
