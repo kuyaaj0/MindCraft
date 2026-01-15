@@ -274,12 +274,12 @@ function backToLanding() {
 }
 </script>
 
-<!-- ======= Firebase + Auth + XP + Rank Module ======= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -289,73 +289,92 @@ const firebaseConfig = {
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Apply theme instantly
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof window.applyTheme === "function") {
-    const currentTheme = localStorage.getItem("theme") || "light";
-    window.applyTheme(currentTheme);
+    const currentTheme = localStorage.getItem("theme") || "dark";
+    window.applyTheme(currentTheme, false);
   }
 });
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const studentNameEl = document.getElementById("studentName");
-    studentNameEl.textContent = user.displayName || "Student";
+  if (!user) {
+    alert("You must sign in first!");
+    window.location.href = "../Account/signin.html";
+    return;
+  }
 
-    const xpBar = document.getElementById("xpBar");
-    const xpValue = document.getElementById("xpValue");
-    const levelValue = document.getElementById("levelValue");
-    const rankDisplay = document.getElementById("rankDisplay");
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
 
-    // Get XP & Level
-    const userDocRef = doc(db, "students", user.uid);
-    const userSnap = await getDoc(userDocRef);
-    if (userSnap.exists()) {
-      const data = userSnap.data();
-      let xp = data.xp || 0;
-      let level = data.level || 1;
-      xpBar.value = xp % 100;
-      xpValue.textContent = xp;
-      levelValue.textContent = level;
-    }
+  if (!snap.exists()) {
+    alert("User data not found!");
+    window.location.href = "../Account/signin.html";
+    return;
+  }
 
-    // Leaderboard & Rank
-    const studentsCol = collection(db, "students");
-    const q = query(studentsCol, orderBy("xp", "desc"));
-    onSnapshot(q, (snapshot) => {
-      let rank = 1;
-      snapshot.forEach((docSnap) => {
-        if (docSnap.id === user.uid) {
-          rankDisplay.textContent = `Rank: #${rank}`;
-          if(rank === 1) rankDisplay.classList.add("rank-top");
-          else rankDisplay.classList.remove("rank-top");
-        }
-        rank++;
-      });
+  const data = snap.data();
+
+  if (data.role !== "student") {
+    window.location.href = "../Webside/Teacher.html";
+    return;
+  }
+
+  // === XP + Level Display ===
+  const xp = data.xp ?? 0;
+  const level = data.level ?? 1;
+  const xpMax = data.xpMax ?? 100;
+
+  document.getElementById("xpValue").textContent = xp;
+  document.getElementById("xpBar").value = xp % xpMax;
+  document.getElementById("xpBar").max = xpMax;
+  document.getElementById("levelValue").textContent = level;
+
+  // Welcome overlay once per session
+  const name = data.name || user.displayName || user.email.split("@")[0];
+  const welcomeOverlay = document.getElementById("welcomeOverlay");
+  document.getElementById("studentName").textContent = name;
+
+  if (!sessionStorage.getItem("welcomeShown")) {
+    sessionStorage.setItem("welcomeShown", "true");
+    welcomeOverlay.style.display = "flex";
+    setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
+  }
+
+  // === LIVE RANK FIXED ===
+  const rankDisplay = document.getElementById("rankDisplay");
+  const usersRef = collection(db, "users");
+  const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    let rank = 1;
+    let foundRank = null;
+
+    snapshot.forEach((docSnap) => {
+      if (docSnap.id === user.uid) {
+        foundRank = rank;
+      }
+      rank++;
     });
 
-    // Welcome overlay animation
-    const welcomeOverlay = document.getElementById("welcomeOverlay");
-    welcomeOverlay.style.display = "flex";
-    setTimeout(() => {
-      welcomeOverlay.style.opacity = "0";
-      setTimeout(() => welcomeOverlay.style.display = "none", 800);
-    }, 2500);
-
-  } else {
-    // Not logged in → redirect to login
-    window.location.href = "../Account/login.html";
-  }
-});
-
-// Leaderboard button (example)
-document.getElementById("leaderboardBtn").addEventListener("click", () => {
-  alert("Leaderboard coming soon!"); // Replace with actual leaderboard UI if ready
+    if (foundRank !== null) {
+      rankDisplay.innerText = `Rank: #${foundRank}`;
+      if (foundRank <= 3) rankDisplay.classList.add("rank-top");
+      else rankDisplay.classList.remove("rank-top");
+    } else {
+      rankDisplay.innerText = "Rank: #--";
+      rankDisplay.classList.remove("rank-top");
+    }
+  }, (error) => {
+    console.error("Error fetching ranks:", error);
+    rankDisplay.innerText = "Rank: #--";
+  });
 });
 </script>
-
 </body>
 </html>
