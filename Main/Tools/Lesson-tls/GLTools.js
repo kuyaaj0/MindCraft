@@ -23,13 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// === COPY BUTTON STYLE (Cyberpunk look) ===
+// === COPY BUTTON STYLE (Cyberpunk look + sticky position) ===
 const copyStyle = document.createElement("style");
 copyStyle.textContent = `
   .code-btn {
-    position: absolute;
+    position: sticky;
     top: 10px;
-    right: 10px;
+    float: right;
+    right: 0;
     font-size: 0.8rem;
     color: #fff;
     background: #ff69b4;
@@ -40,12 +41,18 @@ copyStyle.textContent = `
     font-family: 'Orbitron', sans-serif;
     box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff00ff;
     transition: all 0.2s ease;
-    z-index: 10;
+    z-index: 50;
   }
   .code-btn:hover {
     background: #ff85c1;
     box-shadow: 0 0 20px #ff85c1, 0 0 40px #ff00ff;
     transform: scale(1.05);
+  }
+  .code-block {
+    position: relative;
+  }
+  .code-block pre {
+    margin-right: 60px; /* leaves space so button doesn’t overlap text */
   }
 `;
 document.head.appendChild(copyStyle);
@@ -79,7 +86,7 @@ exitStyle.textContent = `
   .exit-btn {
     position: fixed;
     top: 15px;
-    left: 15px; /* ← Moved to LEFT side */
+    left: 15px; /* ← Stays on LEFT side */
     font-size: 1rem;
     padding: 8px 15px;
     border: none;
