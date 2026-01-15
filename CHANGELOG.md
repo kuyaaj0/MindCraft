@@ -1,5 +1,5 @@
 # January 16
--- Fixed html Lesson 1 to 20 but not all html lessons are fixed
+-- Fixed html Lesson 1 to 20 but not all html lessons are fixed <br>
 -- A bit less optimized for mobile devices
 -- Add GLTools for helping hand for all html lessons
 -- Few bugs needs to fix soon like lesson 12 and 18
