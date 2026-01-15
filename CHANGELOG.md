@@ -1,3 +1,11 @@
+# January 16
+-- Fixed html Lesson 1 to 20 but not all html lessons are fixed
+-- A bit less optimized for mobile devices
+-- Add GLTools for helping hand for all html lessons
+-- Few bugs needs to fix soon like lesson 12 and 18
+-- a little improvements soon
+-- 1.0.0.7-Beta version
+
 # January 15
 -- Fixed Mobile Xp progress
 -- Fixed Lesson 1 to 2
