@@ -62,32 +62,6 @@
       text-shadow: 0 0 15px #00ffff;
     }
 
-    /* EXIT Button (top-left for cleaner look) */
-    .exit-btn {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      color: #fff;
-      background: #ff1493;
-      border: 2px solid #ff69b4;
-      border-radius: 8px;
-      padding: 6px 14px;
-      text-decoration: none;
-      text-shadow: 0 0 8px rgba(255, 105, 180, 0.7);
-      box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-
-    .exit-btn:hover {
-      background: #ff69b4;
-      color: #0a0a0a;
-      transform: scale(1.05);
-    }
-
     section {
       padding: 40px;
       position: relative;
@@ -106,7 +80,7 @@
       padding-bottom: 15px;
     }
 
-    .code-example {
+    .code-block {
       background: rgba(10, 15, 30, 0.9);
       border: 2px solid #ff69b4;
       border-radius: 12px;
@@ -122,8 +96,8 @@
         inset 0 0 10px rgba(0, 191, 255, 0.1);
     }
 
-    .code-example::before {
-      content: 'CODE EXAMPLE';
+    .code-block::before {
+      content: 'CODE BOX';
       position: absolute;
       top: -12px;
       left: 20px;
@@ -169,17 +143,13 @@
     }
 
     @media (max-width: 768px) {
-      .exit-btn { top: 10px; left: 10px; font-size: 0.8rem; padding: 4px 10px; }
       h1 { font-size: 2.2em; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!--REAL EXIT BUTTON LOCATION-->
     <header>
-     
-      <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
       <h1>HTML Structure & Elements</h1>
       <p class="subtitle">Neon Cyberpunk Edition - Complete Beginner Lesson</p>
     </header>
@@ -187,7 +157,7 @@
     <section id="doctype">
       <h2>1. DOCTYPE Declaration</h2>
       <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the very first line. It tells browsers this is HTML5.</p>
-      <div class="code-example">
+      <div class="code-block">
         <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
       </div>
       <div class="code-output">
@@ -198,7 +168,7 @@
     <section id="html-tag">
       <h2>2. &lt;html&gt; Root Element</h2>
       <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content.</p>
-      <div class="code-example">
+      <div class="code-block">
         <pre><code>&lt;html lang="en"&gt;
   &lt;!-- All content here --&gt;
 &lt;/html&gt;</code></pre>
@@ -211,7 +181,7 @@
     <section id="head">
       <h2>3. &lt;head&gt; Element</h2>
       <p><code>&lt;head&gt;</code> holds metadata only: title, charset, viewport, CSS/JS links.</p>
-      <div class="code-example">
+      <div class="code-block">
         <pre><code>&lt;head&gt;
   &lt;title&gt;My Page&lt;/title&gt;
   &lt;meta charset="UTF-8"&gt;
@@ -226,7 +196,7 @@
     <section id="body">
       <h2>4. &lt;body&gt; Element</h2>
       <p><code>&lt;body&gt;</code> contains all visible content: text, images, links, etc.</p>
-      <div class="code-example">
+      <div class="code-block">
         <pre><code>&lt;body&gt;
   &lt;h1&gt;Hello World&lt;/h1&gt;
   &lt;p&gt;Welcome to my first webpage!&lt;/p&gt;
@@ -241,7 +211,7 @@
     <section id="tags">
       <h2>5. HTML Tags & Elements</h2>
       <p>Tags create elements with an opening tag, content, and closing tag.</p>
-      <div class="code-example">
+      <div class="code-block">
         <pre><code>&lt;p&gt;Hello World!&lt;/p&gt;</code></pre>
       </div>
       <div class="code-output">
@@ -254,32 +224,7 @@
     </footer>
   </div>
 
-  <script>
-  // 📋 Copy Code Features
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".code-example").forEach((box) => {
-      const btn = document.createElement("button");
-      btn.textContent = "📋 Copy";
-      btn.style.cssText = `
-        position: absolute; top: 8px; right: 10px;
-        font-size: 0.8rem; color: #fff;
-        background: #ff69b4; border: none;
-        border-radius: 5px; padding: 5px 10px;
-        cursor: pointer; font-family: 'Orbitron', sans-serif;
-      `;
-      btn.onclick = () => {
-        const codeText = box.querySelector("pre").innerText;
-        navigator.clipboard.writeText(codeText);
-        btn.textContent = "✅ Copied!";
-        setTimeout(() => btn.textContent = "📋 Copy", 1500);
-      };
-      box.appendChild(btn);
-    });
-  });
-  </script>
+  <!-- Global Lesson Tools -->
+  <script src="../../../Tools/Lesson-tls/GLTools.js"></script>
 </body>
 </html>
-
-
-
-
