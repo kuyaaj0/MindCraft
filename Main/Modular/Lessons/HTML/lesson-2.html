@@ -111,7 +111,11 @@ h1 {
     100% { background-position:0% 50%; } 
 }
 
-section { padding: 60px 50px; position: relative; border-bottom: 2px solid rgba(255,0,255,0.3); }
+section { 
+    padding: 60px 50px; 
+    position: relative; 
+    border-bottom: 2px solid rgba(255,0,255,0.3); 
+}
 section:last-of-type { border-bottom:none; }
 section:nth-child(even) { background: rgba(15,10,45,0.7); }
 
@@ -209,37 +213,6 @@ h2::after {
     box-shadow: 0 0 20px rgba(0,255,255,0.5);
 }
 
-/* Buttons */
-.code-btn {
-    position:absolute;
-    top:8px;
-    right:10px;
-    font-size:0.8rem;
-    color:#fff;
-    background:#ff69b4;
-    border:none;
-    border-radius:5px;
-    padding:5px 10px;
-    cursor:pointer;
-    font-family:'Orbitron',sans-serif;
-}
-
-.exit-btn {
-    position:fixed;
-    top:20px;
-    left:20px;
-    font-size:1rem;
-    padding:8px 15px;
-    border:none;
-    border-radius:5px;
-    background:#ff1493;
-    color:#fff;
-    cursor:pointer;
-    z-index:9999;
-}
-
-.exit-btn:hover { background:#ff66cc; }
-
 @media(max-width:768px){
     h1{font-size:2.8em;}
     h2{font-size:2.2em;}
@@ -249,7 +222,6 @@ h2::after {
 </style>
 </head>
 <body>
-<button class="exit-btn" onclick="window.location.href='../../../Webside/Student.html'">⬅ Exit</button>
 
 <div class="container">
     <header>
@@ -272,7 +244,14 @@ h2::after {
 &lt;h5&gt;Fine detail&lt;/h5&gt;
 &lt;h6&gt;Tiniest&lt;/h6&gt;</code></pre>
         </div>
-        <div class="output-container" id="output1"></div>
+        <div class="output-container">
+            <h1>Main Page Title</h1>
+            <h2>Section Title</h2>
+            <h3>Subsection</h3>
+            <h4>Detail</h4>
+            <h5>Fine detail</h5>
+            <h6>Tiniest</h6>
+        </div>
     </section>
 
     <!-- Section 2 -->
@@ -285,7 +264,10 @@ h2::after {
 <pre><code>&lt;p&gt;This is a paragraph.&lt;/p&gt;
 &lt;p&gt;Another paragraph.&lt;/p&gt;</code></pre>
         </div>
-        <div class="output-container" id="output2"></div>
+        <div class="output-container">
+            <p>This is a paragraph.</p>
+            <p>Another paragraph.</p>
+        </div>
     </section>
 
     <!-- Section 3 -->
@@ -297,7 +279,9 @@ h2::after {
         <div class="code-block">
 <pre><code>&lt;p&gt;Line 1&lt;br&gt;Line 2&lt;br&gt;Line 3&lt;/p&gt;</code></pre>
         </div>
-        <div class="output-container" id="output3"></div>
+        <div class="output-container">
+            <p>Line 1<br>Line 2<br>Line 3</p>
+        </div>
     </section>
 
     <!-- Section 4 -->
@@ -311,7 +295,11 @@ h2::after {
 &lt;h2&gt;About Me&lt;/h2&gt;
 &lt;p&gt;I study coding and love neon cyberpunk designs.&lt;/p&gt;</code></pre>
         </div>
-        <div class="output-container" id="output4"></div>
+        <div class="output-container">
+            <h1>🚀 Your Portfolio</h1>
+            <h2>About Me</h2>
+            <p>I study coding and love neon cyberpunk designs.</p>
+        </div>
     </section>
 
     <footer>
@@ -320,28 +308,7 @@ h2::after {
     </footer>
 </div>
 
-<script>
-// 📋 Copy + Output Preview
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".code-block").forEach((block, index) => {
-        const btn = document.createElement("button");
-        btn.className = "code-btn";
-        btn.textContent = "📋 Copy";
-        btn.onclick = () => {
-            navigator.clipboard.writeText(block.querySelector("pre").innerText);
-            btn.textContent = "✅ Copied!";
-            setTimeout(() => btn.textContent = "📋 Copy", 1500);
-        };
-        block.appendChild(btn);
-
-        // Live output preview
-        const outputDiv = document.getElementById(`output${index+1}`);
-        if (outputDiv) {
-            const htmlCode = block.querySelector("pre").innerText;
-            outputDiv.innerHTML = htmlCode;
-        }
-    });
-});
-</script>
+<!-- Link global lesson tools -->
+<script src="../../../Tools/Lesson-tls/GLTools.js"></script>
 </body>
 </html>
