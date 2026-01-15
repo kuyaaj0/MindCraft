@@ -52,7 +52,7 @@ document.head.appendChild(copyStyle);
 
 
 // ===============================
-// ❌ EXIT BUTTON FUNCTIONALITY (with fade-out)
+// ❌ EXIT BUTTON FUNCTIONALITY (Left side + fade-out)
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector(".exit-btn")) return;
@@ -79,7 +79,7 @@ exitStyle.textContent = `
   .exit-btn {
     position: fixed;
     top: 15px;
-    right: 15px;
+    left: 15px; /* ← Moved to LEFT side */
     font-size: 1rem;
     padding: 8px 15px;
     border: none;
