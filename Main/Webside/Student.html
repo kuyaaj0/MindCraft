@@ -275,32 +275,24 @@ function backToLanding() {
 </script>
 
 <script type="module">
+<!-- ✅ Firebase Auth / XP / Rank -->
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
   projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.appspot.com",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
   messagingSenderId: "483019456762",
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// Apply theme instantly
-window.addEventListener("DOMContentLoaded", () => {
-  if (typeof window.applyTheme === "function") {
-    const currentTheme = localStorage.getItem("theme") || "dark";
-    window.applyTheme(currentTheme, false);
-  }
-});
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -311,68 +303,45 @@ onAuthStateChanged(auth, async (user) => {
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
-
   if (!snap.exists()) {
-    alert("User data not found!");
+    alert("No user data found.");
     window.location.href = "../Account/signin.html";
     return;
   }
 
   const data = snap.data();
-
   if (data.role !== "student") {
-    window.location.href = "../Webside/Teacher.html";
+    window.location.href = "Teacher.html";
     return;
   }
 
-  // === XP + Level Display ===
-  const xp = data.xp ?? 0;
-  const level = data.level ?? 1;
-  const xpMax = data.xpMax ?? 100;
+  document.getElementById("xpValue").innerText = data.xp ?? 0;
+  document.getElementById("xpBar").value = (data.xp ?? 0) % (data.xpMax ?? 100);
+  document.getElementById("xpBar").max = data.xpMax ?? 100;
+  document.getElementById("levelValue").innerText = data.level ?? 1;
 
-  document.getElementById("xpValue").textContent = xp;
-  document.getElementById("xpBar").value = xp % xpMax;
-  document.getElementById("xpBar").max = xpMax;
-  document.getElementById("levelValue").textContent = level;
-
-  // Welcome overlay once per session
-  const name = data.name || user.displayName || user.email.split("@")[0];
-  const welcomeOverlay = document.getElementById("welcomeOverlay");
+  const name = user.displayName || data.name || user.email.split("@")[0];
   document.getElementById("studentName").textContent = name;
-
+  const welcomeOverlay = document.getElementById("welcomeOverlay");
   if (!sessionStorage.getItem("welcomeShown")) {
     sessionStorage.setItem("welcomeShown", "true");
     welcomeOverlay.style.display = "flex";
     setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
   }
 
-  // === LIVE RANK FIXED ===
   const rankDisplay = document.getElementById("rankDisplay");
   const usersRef = collection(db, "users");
   const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
 
   onSnapshot(q, (snapshot) => {
-    let rank = 1;
-    let foundRank = null;
-
-    snapshot.forEach((docSnap) => {
-      if (docSnap.id === user.uid) {
-        foundRank = rank;
-      }
-      rank++;
+    let rank = 1, found = false;
+    snapshot.forEach(docSnap => {
+      if (docSnap.id === user.uid && !found) { found = true; return; }
+      if (!found) rank++;
     });
-
-    if (foundRank !== null) {
-      rankDisplay.innerText = `Rank: #${foundRank}`;
-      if (foundRank <= 3) rankDisplay.classList.add("rank-top");
-      else rankDisplay.classList.remove("rank-top");
-    } else {
-      rankDisplay.innerText = "Rank: #--";
-      rankDisplay.classList.remove("rank-top");
-    }
-  }, (error) => {
-    console.error("Error fetching ranks:", error);
-    rankDisplay.innerText = "Rank: #--";
+    rankDisplay.innerText = `Rank: #${rank}`;
+    if (rank <= 3) rankDisplay.classList.add("rank-top");
+    else rankDisplay.classList.remove("rank-top");
   });
 });
 </script>
