@@ -19,6 +19,11 @@
 -- 2 Members Collaborators on this platform
 --
 
+# January 12
+-- Removed Interactive characters due for bugs <br>
+-- etc...
+--
+
 # January 9
 --firebase added <br>
 --some additional fixes <br>
