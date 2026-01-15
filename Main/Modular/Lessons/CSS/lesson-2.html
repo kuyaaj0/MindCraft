@@ -22,6 +22,7 @@
             position: relative;
         }
 
+        /* Pixelated cyber grid */
         body::before {
             content: '';
             position: fixed;
@@ -50,33 +51,89 @@
             border-radius: 25px;
             backdrop-filter: blur(20px);
             overflow: hidden;
-            box-shadow: 0 0 60px rgba(255, 0, 255, 0.5), 0 0 120px rgba(0, 255, 255, 0.4);
+            box-shadow:
+                0 0 60px rgba(255, 0, 255, 0.5),
+                0 0 120px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 0, 255, 0.08);
             position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
+            animation: rotateAura 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateAura {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff1493, #ff00ff);
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            box-shadow:
+                0 0 20px rgba(255, 0, 255, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .exit-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff1493);
+            border-color: #00ffff;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.9),
+                0 0 60px rgba(255, 0, 255, 0.7);
         }
 
         header {
             text-align: center;
-            padding: 60px 40px;
+            padding: 80px 40px 60px 40px;
             background: linear-gradient(135deg, #ff00ff90, #00ffff90);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            border-bottom: 5px solid transparent;
+            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
         }
 
         h1 {
-            font-size: 4em;
-            text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+            font-size: 4.2em;
+            text-shadow:
+                0 0 30px #ff00ff,
+                0 0 60px #00ffff,
+                0 0 90px #ff00ff;
             animation: neonPulse 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
         @keyframes neonPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+            50% { transform: scale(1.03); }
         }
 
         .subtitle {
             color: #00ffff;
-            font-size: 1.5em;
+            font-size: 1.6em;
             animation: gradientFlow 4s ease infinite;
+            letter-spacing: 2px;
         }
 
         @keyframes gradientFlow {
@@ -88,6 +145,14 @@
         section {
             padding: 60px 50px;
             border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        section:nth-child(even) {
+            background: rgba(15, 10, 45, 0.7);
         }
 
         h2 {
@@ -106,6 +171,8 @@
             border-radius: 10px;
             font-size: 1.2em;
             color: #d0d0ff;
+            font-family: 'Roboto Mono', monospace;
+            line-height: 1.9;
         }
 
         .code-block {
@@ -117,6 +184,68 @@
             margin: 25px 0;
             font-family: 'Roboto Mono', monospace;
             color: #00ffff;
+            font-size: 16px;
+            line-height: 1.8;
+            position: relative;
+            overflow-x: auto;
+            box-shadow:
+                0 0 40px rgba(0, 255, 255, 0.5),
+                inset 0 0 25px rgba(255, 0, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .code-block:hover {
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.7),
+                0 0 100px rgba(255, 0, 255, 0.6),
+                inset 0 0 30px rgba(255, 0, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .code-block::before {
+            content: ' CODE MATRIX';
+            position: absolute;
+            top: -18px;
+            left: 30px;
+            background: rgba(10, 15, 50, 0.95);
+            color: #00ffff;
+            padding: 8px 25px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #00ffff;
+            border-radius: 25px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff69b4);
+            border-color: #00ffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            border-color: #00ff00;
         }
 
         .demo-output {
@@ -126,6 +255,21 @@
             padding: 25px;
             color: #fff;
             margin-top: 20px;
+            font-family: 'Roboto Mono', monospace;
+            position: relative;
+        }
+
+        .demo-output::before {
+            content: ' BROWSER OUTPUT';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: rgba(0, 20, 60, 0.9);
+            color: #00ffff;
+            padding: 5px 20px;
+            font-size: 13px;
+            border: 2px solid #00ffff;
+            border-radius: 20px;
         }
 
         footer {
@@ -135,12 +279,22 @@
             padding: 50px;
             border-top: 4px solid #ff00ff;
             font-family: 'Roboto Mono', monospace;
+            text-shadow: 0 0 20px #00ffff;
         }
 
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2.2em; }
+            section { padding: 40px 25px; }
+            .code-block { font-size: 14px; padding: 25px; }
+            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+
         <header>
             <h1>Adding CSS to HTML</h1>
             <p class="subtitle">Lesson 2 - External, Internal & Inline Styles</p>
@@ -156,10 +310,11 @@
         <section id="external">
             <h2>02. External CSS</h2>
             <div class="explanation">
-                External CSS is written in a <span style="color:#ff00ff;">.css</span> file and linked to your HTML using the <code>&lt;link&gt;</code> tag inside the <code>&lt;head&gt;</code>.  
+                External CSS is written in a <span style="color:#ff00ff;">.css</span> file and linked to your HTML using the <code>&lt;link&gt;</code> tag inside the <code>&lt;head&gt;</code>.<br>
                 It’s best for large websites to keep the design consistent across pages.
             </div>
             <div class="code-block">
+                <button class="copy-btn">Copy</button>
 <pre><code>&lt;!-- HTML file (index.html) --&gt;
 &lt;head&gt;
   &lt;link rel="stylesheet" href="style.css"&gt;
@@ -178,13 +333,14 @@ body {
         </section>
 
         <section id="internal">
-            <h2>02. Internal CSS</h2>
+            <h2>03. Internal CSS</h2>
             <div class="explanation">
-                Internal CSS is placed inside a <code>&lt;style&gt;</code> tag in the <code>&lt;head&gt;</code> section.  
+                Internal CSS is placed inside a <code>&lt;style&gt;</code> tag in the <code>&lt;head&gt;</code> section.<br>
                 It’s good for single-page custom designs when you don’t need external files.
             </div>
 
             <div class="code-block">
+                <button class="copy-btn">Copy</button>
 <pre><code>&lt;head&gt;
   &lt;style&gt;
     body {
@@ -206,11 +362,12 @@ body {
         <section id="inline">
             <h2>04. Inline CSS</h2>
             <div class="explanation">
-                Inline CSS goes directly into an HTML tag using the <code>style</code> attribute.  
+                Inline CSS goes directly into an HTML tag using the <code>style</code> attribute.<br>
                 It’s best used for quick tests or unique one-time edits — not for full websites.
             </div>
 
             <div class="code-block">
+                <button class="copy-btn">Copy</button>
 <pre><code>&lt;h1 style="color:#00ffff;background:#111;padding:10px;"&gt;
   Inline CSS Example
 &lt;/h1&gt;</code></pre>
@@ -224,8 +381,8 @@ body {
         <section id="when">
             <h2>05. When to Use Each</h2>
             <div class="explanation">
-                - <span style="color:#00ffff;">External CSS:</span> For full websites, clean, and modular design.  
-                - <span style="color:#ff00ff;">Internal CSS:</span> For a single-page project.  
+                - <span style="color:#00ffff;">External CSS:</span> For full websites, clean, and modular design.<br>
+                - <span style="color:#ff00ff;">Internal CSS:</span> For a single-page project.<br>
                 - <span style="color:#ff1493;">Inline CSS:</span> For testing or small overrides.
             </div>
         </section>
@@ -236,5 +393,27 @@ body {
             <p>Save as <code>lesson3-add-css.html</code> in VS Code and open in your browser.</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const codeBlock = this.parentElement;
+                    const codeText = codeBlock.querySelector('pre').innerText;
+
+                    navigator.clipboard.writeText(codeText).then(function() {
+                        const originalText = btn.textContent;
+                        btn.textContent = 'COPIED!';
+                        btn.classList.add('copied');
+
+                        setTimeout(function() {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
