@@ -6,7 +6,7 @@
     <title>CSS Basics & Syntax - Cyberpunk Lesson 1</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
@@ -80,12 +80,38 @@
             100% { transform: rotate(360deg); }
         }
 
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff1493, #ff00ff);
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .exit-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff1493);
+            border-color: #00ffff;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.9),
+                0 0 60px rgba(255, 0, 255, 0.7);
+        }
+
         header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 60px 40px;
+            padding: 80px 40px 60px 40px;
             text-align: center;
             position: relative;
             border-bottom: 5px solid transparent;
@@ -93,19 +119,34 @@
         }
 
         h1 {
-            font-size: 4em;
+            font-size: 4.2em;
             font-weight: 900;
-            text-shadow: 
-                0 0 30px #ff00ff,
-                0 0 60px #00ffff,
-                0 0 90px #ff00ff;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 0 40px #ff00ff,
+                0 0 80px #00ffff,
+                0 0 120px #ff00ff,
+                2px 2px 0px #000;
             margin-bottom: 20px;
             animation: neonPulse 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.8);
         }
 
         @keyframes neonPulse {
-            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+            0%, 100% { 
+                transform: scale(1); 
+                filter: hue-rotate(0deg) brightness(1); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: hue-rotate(180deg) brightness(1.2); 
+            }
         }
 
         .subtitle {
@@ -117,7 +158,10 @@
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             animation: gradientFlow 4s ease infinite;
-            text-shadow: 0 0 25px #00ffff;
+            text-shadow: 
+                0 0 25px #00ffff,
+                2px 2px 0px #000;
+            letter-spacing: 2px;
         }
 
         @keyframes gradientFlow {
@@ -152,6 +196,10 @@
             padding-bottom: 25px;
             position: relative;
             animation: h2Glow 3s ease infinite;
+            text-shadow:
+                0 0 20px #ff00ff, 
+                0 0 40px #00ffff,
+                1px 1px 0px #000;
         }
 
         @keyframes h2Glow {
@@ -210,7 +258,7 @@
 
         .code-block:hover {
             box-shadow: 
-                0 0 60px rgba(0, 255, 255, 0.6),
+                0 0 60px rgba(0, 255, 255, 0.7),
                 0 0 100px rgba(255, 0, 255, 0.6),
                 inset 0 0 30px rgba(255, 0, 255, 0.2);
             transform: translateY(-8px) scale(1.02);
@@ -258,6 +306,7 @@
             margin: 25px 0;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            font-family: 'Roboto Mono', monospace;
         }
 
         .demo-output::before {
@@ -367,11 +416,14 @@
             h2 { font-size: 2.2em; }
             section { padding: 40px 25px; }
             .code-block { font-size: 14px; padding: 25px; }
+            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+
         <header>
             <h1>CSS Basics & Syntax</h1>
             <p class="subtitle">LESSON 1 - Cyberpunk Style Matrix</p>
