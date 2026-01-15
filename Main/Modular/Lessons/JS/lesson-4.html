@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Variables - Cyberpunk Lesson 4</title>
+    <title>JavaScript Variables - Lesson 4 | Cyberpunk Matrix</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
         
@@ -26,11 +26,8 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
+            top: 0; left: 0; width: 100%; height: 100%;
+            background:
                 radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
                 radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
                 linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
@@ -52,7 +49,7 @@
             border: 3px solid transparent;
             border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
             border-radius: 25px;
-            box-shadow: 
+            box-shadow:
                 0 0 60px rgba(255, 0, 255, 0.5),
                 0 0 120px rgba(0, 255, 255, 0.4),
                 inset 0 0 40px rgba(255, 0, 255, 0.08);
@@ -65,11 +62,8 @@
         .container::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
                 conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
             animation: rotateAura 10s linear infinite;
             z-index: -1;
@@ -80,12 +74,38 @@
             100% { transform: rotate(360deg); }
         }
 
+        .exit-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff1493, #ff00ff);
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            padding: 12px 20px;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 255, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .exit-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff1493);
+            border-color: #00ffff;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.9),
+                0 0 60px rgba(255, 0, 255, 0.7);
+        }
+
         header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 60px 40px;
+            padding: 80px 40px 60px 40px;
             text-align: center;
             position: relative;
             border-bottom: 5px solid transparent;
@@ -93,19 +113,34 @@
         }
 
         h1 {
-            font-size: 4em;
+            font-size: 4.2em;
             font-weight: 900;
-            text-shadow: 
-                0 0 30px #ff00ff,
-                0 0 60px #00ffff,
-                0 0 90px #ff00ff;
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow:
+                0 0 40px #ff00ff,
+                0 0 80px #00ffff,
+                0 0 120px #ff00ff,
+                2px 2px 0px #000;
             margin-bottom: 20px;
             animation: neonPulse 3s ease-in-out infinite;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-text-stroke: 1px rgba(0,0,0,0.8);
         }
 
         @keyframes neonPulse {
-            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
+            0%, 100% { 
+                transform: scale(1); 
+                filter: hue-rotate(0deg) brightness(1); 
+            }
+            50% { 
+                transform: scale(1.03); 
+                filter: hue-rotate(180deg) brightness(1.2); 
+            }
         }
 
         .subtitle {
@@ -117,7 +152,10 @@
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             animation: gradientFlow 4s ease infinite;
-            text-shadow: 0 0 25px #00ffff;
+            text-shadow: 
+                0 0 25px #00ffff,
+                2px 2px 0px #000;
+            letter-spacing: 2px;
         }
 
         @keyframes gradientFlow {
@@ -132,13 +170,8 @@
             border-bottom: 2px solid rgba(255, 0, 255, 0.3);
         }
 
-        section:last-of-type {
-            border-bottom: none;
-        }
-
-        section:nth-child(even) {
-            background: rgba(15, 10, 45, 0.7);
-        }
+        section:last-of-type { border-bottom: none; }
+        section:nth-child(even) { background: rgba(15, 10, 45, 0.7); }
 
         h2 {
             font-size: 2.8em;
@@ -152,6 +185,10 @@
             padding-bottom: 25px;
             position: relative;
             animation: h2Glow 3s ease infinite;
+            text-shadow:
+                0 0 20px #ff00ff, 
+                0 0 40px #00ffff,
+                1px 1px 0px #000;
         }
 
         @keyframes h2Glow {
@@ -162,10 +199,8 @@
         h2::after {
             content: '';
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100px;
-            height: 6px;
+            bottom: 0; left: 0;
+            width: 100px; height: 6px;
             background: linear-gradient(90deg, #ff00ff, #00ffff);
             border-radius: 3px;
             box-shadow: 0 0 20px rgba(255, 0, 255, 1);
@@ -202,15 +237,15 @@
             line-height: 1.8;
             overflow-x: auto;
             position: relative;
-            box-shadow: 
+            box-shadow:
                 0 0 40px rgba(0, 255, 255, 0.5),
                 inset 0 0 25px rgba(255, 0, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .code-block:hover {
-            box-shadow: 
-                0 0 60px rgba(0, 255, 255, 0.8),
+            box-shadow:
+                0 0 60px rgba(0, 255, 255, 0.7),
                 0 0 100px rgba(255, 0, 255, 0.6),
                 inset 0 0 30px rgba(255, 0, 255, 0.2);
             transform: translateY(-8px) scale(1.02);
@@ -229,6 +264,37 @@
             border: 2px solid #00ffff;
             border-radius: 25px;
             box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: #fff;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            border: 2px solid #ff00ff;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 700;
+            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(45deg, #00ffff, #ff69b4);
+            border-color: #00ffff;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            border-color: #00ff00;
         }
 
         .highlight {
@@ -258,6 +324,7 @@
             margin: 25px 0;
             position: relative;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            font-family: 'Roboto Mono', monospace;
         }
 
         .demo-output::before {
@@ -314,14 +381,16 @@
         }
 
         .warning {
-            background: rgba(255, 20, 147, 0.15);
-            border-left-color: #ff1493 !important;
+            background: rgba(255, 20, 147, 0.15) !important;
+            border-left: 6px solid #ff1493 !important;
         }
 
         .warning::before {
-            content: ' WARNING';
+            content: ' ⚠️ TRAP!' !important;
             color: #ff1493 !important;
-            text-shadow: 0 0 15px #ff1493;
+            left: 20px !important;
+            top: -15px !important;
+            background: rgba(255, 20, 147, 0.9) !important;
         }
 
         footer {
@@ -347,11 +416,14 @@
             h2 { font-size: 2.2em; }
             section { padding: 40px 25px; }
             .code-block { font-size: 14px; padding: 25px; }
+            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+        
         <header>
             <h1>JavaScript Variables</h1>
             <p class="subtitle">LESSON 4 - let, const & Scope Matrix</p>
@@ -364,6 +436,7 @@
                 You can put data inside, change it, use it anywhere. <strong>Every program needs variables!</strong>
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>// Variables = labeled boxes for data
 let studentName = "Jhack";     // Box labeled "studentName" contains "Jhack"
 let age = 20;                  // Box labeled "age" contains 20
@@ -382,7 +455,8 @@ console.log(studentName);      // Use the box contents</code></pre>
                 <span class="highlight">let</span> = variables you can <strong>CHANGE</strong> later. Perfect for counters, scores, temporary data.
             </div>
             <div class="code-block">
-                <pre><code>let score = 85;           // Start with 85
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>let score = 85;            // Start with 85
 console.log(score);         // 85
 
 score = 95;                 // CHANGE it!
@@ -404,12 +478,13 @@ console.log(score);         // 100 ✅ PERFECT</code></pre>
                 <span class="highlight">const</span> = variables you <strong>CANNOT CHANGE</strong>. Perfect for fixed values like PI, MAX_SCORE, student ID.
             </div>
             <div class="code-block">
-                <pre><code>const MAX_SCORE = 100;    // Fixed maximum
-const PI = 3.14159;       // Math constant
+                <button class="copy-btn">📋 Copy</button>
+                <pre><code>const MAX_SCORE = 100;     // Fixed maximum
+const PI = 3.14159;        // Math constant
 const STUDENT_ID = "CMU001"; // Permanent ID
 
-console.log(MAX_SCORE);   // 100 ✅ WORKS
-MAX_SCORE = 200;          // ❌ ERROR! Cannot change const</code></pre>
+console.log(MAX_SCORE);    // 100 ✅ WORKS
+MAX_SCORE = 200;           // ❌ ERROR! Cannot change const</code></pre>
             </div>
             <ul class="examples">
                 <li><span class="highlight">Use const</span> for data that NEVER changes</li>
@@ -434,6 +509,7 @@ MAX_SCORE = 200;          // ❌ ERROR! Cannot change const</code></pre>
                 </li>
             </ul>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>// CYBERPUNK NAMING ✅
 let studentName = "Jhack";
 let currentScore = 95;
@@ -448,6 +524,7 @@ let bonusPoints = 5;</code></pre>
                 <span class="highlight">Scope</span> = where variable exists. <strong>Global</strong> = everywhere, <strong>Local</strong> = only inside blocks.
             </div>
             <div class="code-block">
+                <button class="copy-btn">📋 Copy</button>
                 <pre><code>// GLOBAL SCOPE (everywhere)
 let globalScore = 90;
 
@@ -470,15 +547,14 @@ function calculateGrade() {
                 Copy to Console (F12). Create YOUR grade calculator using <strong>let + const</strong>!
             </div>
             <div class="code-block final-challenge">
+                <button class="copy-btn">📋 Copy Challenge</button>
                 <pre><code>/* CYBERPUNK GRADE CALCULATOR - YOUR MISSION! */
 
-// Copy to Console F12:
+const MAX_GRADE = 100;         // Fixed maximum
+const PASSING_GRADE = 75;      // Fixed passing
 
-const MAX_GRADE = 100;        // Fixed maximum
-const PASSING_GRADE = 75;     // Fixed passing
-
-let yourName = "Jhack";       // Change this!
-let yourScore = 88;           // Change this!
+let yourName = "Jhack";        // Change this!
+let yourScore = 88;            // Change this!
 
 let bonus = 0;
 if (yourScore >= 90) bonus = 10;
@@ -500,5 +576,28 @@ if (finalGrade >= PASSING_GRADE) {
             <p><strong>Dark neon cyberpunk theme</strong> - Perfect for CMU Programming students! 🔥⚡️</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Copy buttons functionality
+            document.querySelectorAll('.copy-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const codeBlock = this.parentElement;
+                    const codeText = codeBlock.querySelector('pre').innerText;
+                    
+                    navigator.clipboard.writeText(codeText).then(function() {
+                        const originalText = btn.textContent;
+                        btn.textContent = '✅ COPIED!';
+                        btn.classList.add('copied');
+                        
+                        setTimeout(function() {
+                            btn.textContent = originalText;
+                            btn.classList.remove('copied');
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
