@@ -96,12 +96,12 @@
             font-size: 4em;
             font-weight: 900;
             text-shadow: 
-                0 0 5px #ff00ff,
-                0 0 5px #00ffff,
-                0 0 5px #ff00ff;
+                0 0 0px #ff00ff,
+                0 0 0px #00ffff,
+                0 0 0px #ff00ff;
             margin-bottom: 20px;
             animation: neonPulse 3s ease-in-out infinite;
-        }
+        } /*remove the blur part cause it will cause lag problems on mobile devices*/
 
         @keyframes neonPulse {
             0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
@@ -491,5 +491,6 @@
     <script src="../../../Tools/Lesson-tls/GLTools.js"></script>
 </body>
 </html>
+
 
 
