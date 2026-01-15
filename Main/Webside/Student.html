@@ -295,4 +295,67 @@ const db = getFirestore(app);
 
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof window.applyTheme === "function") {
-    const currentTheme = localStorage.get
+    const currentTheme = localStorage.getItem("theme") || "light";
+    window.applyTheme(currentTheme);
+  }
+});
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const studentNameEl = document.getElementById("studentName");
+    studentNameEl.textContent = user.displayName || "Student";
+
+    const xpBar = document.getElementById("xpBar");
+    const xpValue = document.getElementById("xpValue");
+    const levelValue = document.getElementById("levelValue");
+    const rankDisplay = document.getElementById("rankDisplay");
+
+    // Get XP & Level
+    const userDocRef = doc(db, "students", user.uid);
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      let xp = data.xp || 0;
+      let level = data.level || 1;
+      xpBar.value = xp % 100;
+      xpValue.textContent = xp;
+      levelValue.textContent = level;
+    }
+
+    // Leaderboard & Rank
+    const studentsCol = collection(db, "students");
+    const q = query(studentsCol, orderBy("xp", "desc"));
+    onSnapshot(q, (snapshot) => {
+      let rank = 1;
+      snapshot.forEach((docSnap) => {
+        if (docSnap.id === user.uid) {
+          rankDisplay.textContent = `Rank: #${rank}`;
+          if(rank === 1) rankDisplay.classList.add("rank-top");
+          else rankDisplay.classList.remove("rank-top");
+        }
+        rank++;
+      });
+    });
+
+    // Welcome overlay animation
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    welcomeOverlay.style.display = "flex";
+    setTimeout(() => {
+      welcomeOverlay.style.opacity = "0";
+      setTimeout(() => welcomeOverlay.style.display = "none", 800);
+    }, 2500);
+
+  } else {
+    // Not logged in → redirect to login
+    window.location.href = "../Account/login.html";
+  }
+});
+
+// Leaderboard button (example)
+document.getElementById("leaderboardBtn").addEventListener("click", () => {
+  alert("Leaderboard coming soon!"); // Replace with actual leaderboard UI if ready
+});
+</script>
+
+</body>
+</html>
