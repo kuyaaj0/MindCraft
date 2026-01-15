@@ -5,6 +5,7 @@
 -- Few bugs needs to fix soon like lesson 12 and 18
 -- a little improvements soon
 -- 1.0.0.7-Beta version
+--
 
 # January 15
 -- Fixed Mobile Xp progress
