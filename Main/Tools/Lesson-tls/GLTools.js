@@ -23,14 +23,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// === COPY BUTTON STYLE (Cyberpunk look + sticky position) ===
+// === COPY BUTTON STYLE (Cyberpunk look + fixed top-right) ===
 const copyStyle = document.createElement("style");
 copyStyle.textContent = `
+  .code-block {
+    position: relative;
+    overflow-x: auto;
+  }
+
   .code-btn {
-    position: sticky;
+    position: absolute;
     top: 10px;
-    float: right;
-    right: 0;
+    right: 10px;
     font-size: 0.8rem;
     color: #fff;
     background: #ff69b4;
@@ -41,18 +45,31 @@ copyStyle.textContent = `
     font-family: 'Orbitron', sans-serif;
     box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff00ff;
     transition: all 0.2s ease;
-    z-index: 50;
+    z-index: 5;
   }
+
   .code-btn:hover {
     background: #ff85c1;
     box-shadow: 0 0 20px #ff85c1, 0 0 40px #ff00ff;
     transform: scale(1.05);
   }
+
+  /* Keep the button visible on horizontal scroll (PC + Mobile) */
   .code-block {
-    position: relative;
+    scroll-padding-right: 70px;
   }
   .code-block pre {
-    margin-right: 60px; /* leaves space so button doesn’t overlap text */
+    margin-right: 70px;
+  }
+
+  /* Optional: make button slightly larger on mobile for easier tap */
+  @media (max-width: 768px) {
+    .code-btn {
+      font-size: 1rem;
+      padding: 8px 14px;
+      right: 8px;
+      top: 8px;
+    }
   }
 `;
 document.head.appendChild(copyStyle);
