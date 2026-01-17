@@ -116,89 +116,112 @@ footer {
 <footer>© 2025 MindCraft | Created by Kuya AJ & Team</footer>
 
 <script type="module">
-import { auth, db } from "../System/Database/firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStudentLevelData } from "../Exp/student-LV.js";
-import { getTeacherLevelData } from "../Exp/teacher-LV.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// === UI Elements ===
-const usernameEl = document.getElementById("username");
-const levelEl = document.getElementById("level");
-const xpEl = document.getElementById("xp");
-const xpBarFill = document.querySelector("#xpBar > div");
-const rankEl = document.getElementById("rank");
-const homeBtn = document.getElementById("homeBtn");
-const logoutBtn = document.getElementById("logoutBtn");
+// === Firebase Config ===
+const firebaseConfig = {
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+};
 
-// === Home button (redirect by role) ===
-homeBtn.addEventListener("click", async () => {
-  const user = auth.currentUser;
+// === Initialize Firebase ===
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// === Helper: Smooth XP bar animation ===
+function animateXPBar(bar, startValue, endValue, duration = 600) {
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = startValue + (endValue - startValue) * progress;
+    bar.value = currentValue;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+// === Track last XP and level ===
+let lastXP = 0;
+let lastLevel = 0;
+
+// === Real-time Firestore listener ===
+onAuthStateChanged(auth, (user) => {
   if (!user) {
-    window.location.href = "signin.html";
-    return;
-  }
-
-  try {
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists()) {
-      const role = snap.data().role || "student";
-      if (role === "teacher") {
-        window.location.href = "../Webside/Teacher.html";
-      } else {
-        window.location.href = "../Webside/Student.html";
-      }
-    } else {
-      alert("⚠️ User data not found in Firestore");
-    }
-  } catch (err) {
-    console.error("Home redirect error:", err);
-  }
-});
-
-// === Logout ===
-logoutBtn.addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    localStorage.removeItem("cachedName");
-    localStorage.removeItem("currentRole");
-    window.location.href = "signin.html";
-  } catch (err) {
-    console.error("Logout error:", err);
-  }
-});
-
-// === Firebase: Load User Data ===
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "signin.html";
+    alert("You must sign in first!");
+    window.location.href = "../Account/signin.html";
     return;
   }
 
   const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-  const data = snap.exists() ? snap.data() : {};
+  onSnapshot(userRef, (snap) => {
+    if (!snap.exists()) {
+      alert("No user data found.");
+      window.location.href = "../Account/signin.html";
+      return;
+    }
 
-  // Determine name (Google or manual)
-  const displayName =
-    data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
+    const data = snap.data();
+    if (data.role !== "student") {
+      window.location.href = "Teacher.html";
+      return;
+    }
 
-  // Update UI
-  const role = data.role || "student";
-  const xp = data.xp || 0;
-  const level = data.level || 1;
-  const xpMax = data.xpMax || 100;
+    // === XP / Level data ===
+    const xp = data.xp ?? 0;
+    const xpMax = data.xpMax ?? 100;
+    const level = data.level ?? 1;
 
-  const rankTitle =
-    role === "teacher"
-      ? getTeacherLevelData(xp).title
-      : getStudentLevelData(xp).title;
+    // === XP Bar + Values ===
+    const xpBar = document.getElementById("xpBar");
+    const targetXP = xp % xpMax;
+    document.getElementById("xpValue").innerText = xp;
+    document.getElementById("levelValue").innerText = level;
+    animateXPBar(xpBar, lastXP, targetXP);
+    xpBar.max = xpMax;
+    lastXP = targetXP;
 
-  usernameEl.textContent = displayName;
-  levelEl.textContent = level;
-  xpEl.textContent = `${xp}/${xpMax}`;
-  xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
-  rankEl.textContent = `🏅 Rank: ${rankTitle}`;
+    // === Subtle Glow when Level increases ===
+    const levelDisplay = document.getElementById("levelValue");
+    if (level > lastLevel) {
+      levelDisplay.classList.add("level-up-glow");
+      setTimeout(() => levelDisplay.classList.remove("level-up-glow"), 1000);
+    }
+    lastLevel = level;
+
+    // === Welcome popup ===
+    const name = user.displayName || data.name || user.email.split("@")[0];
+    document.getElementById("studentName").textContent = name;
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    if (!sessionStorage.getItem("welcomeShown")) {
+      sessionStorage.setItem("welcomeShown", "true");
+      welcomeOverlay.style.display = "flex";
+      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
+    }
+
+    // === Rank update ===
+    const rankDisplay = document.getElementById("rankDisplay");
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      let rank = 1, found = false;
+      snapshot.forEach((docSnap) => {
+        if (docSnap.id === user.uid && !found) { found = true; return; }
+        if (!found) rank++;
+      });
+      rankDisplay.innerText = `Rank: #${rank}`;
+      if (rank <= 3) rankDisplay.classList.add("rank-top");
+      else rankDisplay.classList.remove("rank-top");
+    });
+  });
 });
 </script>
 
