@@ -419,12 +419,13 @@ onAuthStateChanged(auth, (user) => {
 
     // === Update UI ===
     const xpBar = document.getElementById("xpBar");
-    const targetXP = xp % xpMax;
-    document.getElementById("xpValue").innerText = xp;
-    document.getElementById("levelValue").innerText = level;
-    animateXPBar(xpBar, lastXP, targetXP);
+    // ✅ Use Firestore values directly (no modulo)
+  document.getElementById("xpValue").innerText = `${xp}/${xpMax}`;
+  document.getElementById("levelValue").innerText = level;
+    // Smooth transition for XP bar width
+    animateXPBar(xpBar, lastXP, xp);
     xpBar.max = xpMax;
-    lastXP = targetXP;
+    lastXP = xp;
 
     // === Subtle Level-Up Glow Animation ===
     const levelDisplay = document.getElementById("levelValue");
