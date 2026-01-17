@@ -1,16 +1,17 @@
 // ===============================
-// 💾 MindCraft Global Lesson Tools (v2.2)
+// 💾 MindCraft Global Lesson Tools
 // ===============================
 
 // === COPY BUTTON FUNCTIONALITY ===
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".code-block").forEach(block => {
-    if (block.querySelector(".code-btn")) return; // prevent duplicates
+  document.querySelectorAll(".code-block").forEach((block) => {
+    if (block.querySelector(".code-btn")) return; // Prevent duplicates
 
     const btn = document.createElement("button");
     btn.className = "code-btn";
     btn.textContent = "📋 Copy";
 
+    // Sticky positioning inside scroll container
     btn.onclick = () => {
       const code = block.querySelector("pre").innerText;
       navigator.clipboard.writeText(code).then(() => {
@@ -19,64 +20,54 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
 
+    // make sure parent is positioned for absolute child
+    block.style.position = "relative";
     block.appendChild(btn);
   });
 });
 
-// === COPY BUTTON STYLE (Cyberpunk look + smart placement) ===
+// === COPY BUTTON STYLE (Stays on Top-Right Even During Scroll) ===
 const copyStyle = document.createElement("style");
 copyStyle.textContent = `
-  .code-block {
-    position: relative;
-    overflow-x: auto;
-    scroll-padding-right: 70px;
-  }
-
   .code-btn {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+    position: sticky;
+    top: 8px;
+    float: right;
+    right: 8px;
     font-size: 0.8rem;
     color: #fff;
     background: #ff69b4;
     border: none;
     border-radius: 6px;
-    padding: 6px 14px;
+    padding: 6px 12px;
     cursor: pointer;
     font-family: 'Orbitron', sans-serif;
     box-shadow: 0 0 10px #ff69b4, 0 0 20px #ff00ff;
-    transition: all 0.25s ease;
-    opacity: 0.8;
-    z-index: 5;
-  }
-
-  /* Slight offset for lessons with ::before (like CODE MATRIX) */
-  .code-block::before + .code-btn {
-    margin-top: 20px;
-  }
-
-  .code-block:hover .code-btn {
-    opacity: 1;
-    transform: scale(1.05);
+    transition: all 0.2s ease;
+    z-index: 20;
   }
 
   .code-btn:hover {
     background: #ff85c1;
-    box-shadow: 0 0 25px #ff85c1, 0 0 40px #ff00ff;
+    box-shadow: 0 0 20px #ff85c1, 0 0 40px #ff00ff;
+    transform: scale(1.05);
   }
 
-  /* Leave space for the button to not overlap text */
-  .code-block pre {
-    margin-right: 70px;
+  /* make sure pre/code boxes scroll smoothly */
+  .code-block {
+    position: relative;
+    overflow-x: auto;
+    padding-top: 35px;
   }
 
+  /* mobile: prevent button cutoff */
   @media (max-width: 768px) {
     .code-btn {
-      font-size: 1rem;
-      padding: 8px 16px;
-      right: 8px;
-      top: 10px;
-      opacity: 1; /* keep visible for touch devices */
+      position: sticky;
+      top: 6px;
+      right: 6px;
+      font-size: 0.75rem;
+      padding: 5px 10px;
     }
   }
 `;
@@ -84,7 +75,7 @@ document.head.appendChild(copyStyle);
 
 
 // ===============================
-// ❌ EXIT BUTTON FUNCTIONALITY (Left side + fade-out)
+// ❌ EXIT BUTTON FUNCTIONALITY
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector(".exit-btn")) return;
@@ -93,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   exitBtn.className = "exit-btn";
   exitBtn.textContent = "❌ Exit";
 
+  // Fade out animation + redirect
   exitBtn.onclick = () => {
     document.body.classList.add("fade-out");
     setTimeout(() => {
@@ -103,24 +95,24 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(exitBtn);
 });
 
-// === EXIT BUTTON + FADE STYLE (Adjusted for large headers) ===
+// === EXIT BUTTON STYLE (Left side) ===
 const exitStyle = document.createElement("style");
 exitStyle.textContent = `
   .exit-btn {
     position: fixed;
-    top: 25px; /* slightly lower to clear large headers */
-    left: 20px;
-    font-size: 1rem;
-    padding: 10px 18px;
+    top: 15px;
+    left: 15px;
+    font-size: 0.9rem;
+    padding: 6px 14px;
     border: none;
     border-radius: 6px;
     background: #ff1493;
     color: #fff;
     cursor: pointer;
-    z-index: 9999;
-    box-shadow: 0 0 10px #ff00ff, 0 0 25px #ff00ff;
-    font-family: 'Orbitron', monospace;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: 0 0 10px #ff00ff, 0 0 25px #00ffff;
     transition: all 0.25s ease;
+    z-index: 9999;
   }
 
   .exit-btn:hover {
@@ -133,16 +125,9 @@ exitStyle.textContent = `
     from { opacity: 1; filter: blur(0px); }
     to { opacity: 0; filter: blur(8px); }
   }
+
   body.fade-out {
     animation: fadeOutScreen 0.6s ease forwards;
-  }
-
-  @media (max-width: 768px) {
-    .exit-btn {
-      top: 15px;
-      left: 15px;
-      padding: 8px 14px;
-    }
   }
 `;
 document.head.appendChild(exitStyle);
