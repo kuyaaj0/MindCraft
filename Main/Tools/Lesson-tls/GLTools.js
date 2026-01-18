@@ -1,19 +1,20 @@
 // ===============================
-// 💾 MindCraft Global Lesson Tools (Final Fixed Version)
+// 💾 MindCraft Global Lesson Tools (Stable Copy + Exit Version)
 // ===============================
 
-// === COPY BUTTON FUNCTIONALITY (Fully Sticky on Scroll) ===
+// === COPY BUTTON FUNCTIONALITY ===
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".code-block").forEach((block) => {
-    // Prevent duplicates
     if (block.querySelector(".code-btn")) return;
 
-    // Create copy button
+    // Create the Copy button
     const btn = document.createElement("button");
     btn.className = "code-btn";
     btn.textContent = "📋 Copy";
 
-    btn.onclick = () => {
+    // Copy text action
+    btn.onclick = (e) => {
+      e.stopPropagation(); // Prevent event interference with scroll
       const code = block.querySelector("pre").innerText;
       navigator.clipboard.writeText(code).then(() => {
         btn.textContent = "✅ Copied!";
@@ -21,44 +22,24 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    // === Wrapper that floats over the scrollable area ===
-    const overlay = document.createElement("div");
-    overlay.className = "code-btn-overlay";
-    overlay.appendChild(btn);
+    // Ensure code-block is positioned
+    if (getComputedStyle(block).position === "static") {
+      block.style.position = "relative";
+    }
 
-    // Attach overlay to block’s parent (not the block itself)
-    block.parentElement.insertBefore(overlay, block.nextSibling);
-
-    // Store reference for layout syncing
-    const syncPosition = () => {
-      const rect = block.getBoundingClientRect();
-      overlay.style.width = `${rect.width}px`;
-      overlay.style.left = `${rect.left + window.scrollX}px`;
-      overlay.style.top = `${rect.top + window.scrollY + 8}px`;
-    };
-
-    syncPosition();
-    window.addEventListener("scroll", syncPosition);
-    window.addEventListener("resize", syncPosition);
+    // Append button directly inside the code block
+    block.appendChild(btn);
   });
 });
 
-// === COPY BUTTON STYLE (Always Visible + Neon Glow) ===
+// === COPY BUTTON STYLE (Top-Right Sticky Inside Each Code Box) ===
 const copyStyle = document.createElement("style");
 copyStyle.textContent = `
-  /* Overlay wrapper (keeps button outside the scroll zone) */
-  .code-btn-overlay {
-    position: absolute;
-    pointer-events: none;
-    z-index: 999;
-  }
-
-  /* Copy Button */
   .code-btn {
     all: unset;
-    pointer-events: auto;
-    float: right;
-    margin-right: 15px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     font-size: 0.9rem !important;
     color: #fff !important;
     background: #ff69b4 !important;
@@ -68,6 +49,7 @@ copyStyle.textContent = `
     font-family: 'Orbitron', sans-serif !important;
     box-shadow: 0 0 12px #ff69b4, 0 0 25px #ff00ff !important;
     transition: all 0.25s ease !important;
+    z-index: 20;
   }
 
   .code-btn:hover {
@@ -76,17 +58,25 @@ copyStyle.textContent = `
     transform: scale(1.05);
   }
 
-  /* Add top padding so button doesn't overlap label */
   .code-block {
-    padding-top: 45px !important;
-    position: relative;
+    overflow-x: auto !important;
+    position: relative !important;
+    padding-top: 45px !important; /* space for button */
+  }
+
+  /* Keep touch scroll smooth */
+  .code-block pre {
+    white-space: pre !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   @media (max-width: 768px) {
     .code-btn {
       font-size: 0.8rem !important;
       padding: 6px 12px !important;
-      margin-right: 10px;
+      top: 8px;
+      right: 8px;
     }
   }
 `;
@@ -94,7 +84,7 @@ document.head.appendChild(copyStyle);
 
 
 // ===============================
-// ❌ EXIT BUTTON FUNCTIONALITY (Protected + Neon)
+// ❌ EXIT BUTTON FUNCTIONALITY (Protected + Neon Left)
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector(".exit-btn")) return;
@@ -113,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(exitBtn);
 });
 
-// === EXIT BUTTON STYLE ===
+// === EXIT BUTTON STYLE (Top-Left + Cyber Glow) ===
 const exitStyle = document.createElement("style");
 exitStyle.textContent = `
   .exit-btn {
