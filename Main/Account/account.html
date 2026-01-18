@@ -132,28 +132,33 @@ const homeBtn = document.getElementById("homeBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
 // === Home button (redirect by role) ===
-homeBtn.addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (!user) {
-    window.location.href = "signin.html";
-    return;
-  }
-
-  try {
-    const snap = await getDoc(doc(db, "users", user.uid));
-    if (snap.exists()) {
-      const role = snap.data().role || "student";
-      if (role === "teacher") {
-        window.location.href = "../Webside/Teacher.html";
-      } else {
-        window.location.href = "../Webside/Student.html";
-      }
-    } else {
-      alert("⚠️ User data not found in Firestore");
+homeBtn.addEventListener("click", () => {
+  // Use onAuthStateChanged to ensure user is ready
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      window.location.href = "signin.html";
+      return;
     }
-  } catch (err) {
-    console.error("Home redirect error:", err);
-  }
+
+    try {
+      const snap = await getDoc(doc(db, "users", user.uid));
+      if (snap.exists()) {
+        const role = snap.data().role || "student";
+        const redirect = role === "teacher"
+          ? "../Webside/Teacher.html"
+          : "../Webside/Student.html";
+
+        // Use small delay to avoid Firebase race condition
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 150);
+      } else {
+        alert("⚠️ User data not found in Firestore");
+      }
+    } catch (err) {
+      console.error("Home redirect error:", err);
+    }
+  });
 });
 
 // === Logout ===
