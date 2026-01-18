@@ -1,16 +1,14 @@
 // ===============================
-// 💾 MindCraft Global Lesson Tools
+// 💾 MindCraft Global Lesson Tools (Final Fixed Version)
 // ===============================
 
-// === COPY BUTTON FUNCTIONALITY ===
+// === COPY BUTTON FUNCTIONALITY (Fully Sticky on Scroll) ===
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".code-block").forEach((block) => {
-    if (block.querySelector(".code-btn")) return; // Prevent duplicates
+    // Prevent duplicates
+    if (block.querySelector(".code-btn")) return;
 
-    // Create a wrapper so button can float above <pre>
-    const wrapper = document.createElement("div");
-    wrapper.className = "code-btn-wrapper";
-
+    // Create copy button
     const btn = document.createElement("button");
     btn.className = "code-btn";
     btn.textContent = "📋 Copy";
@@ -23,26 +21,44 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
 
-    wrapper.appendChild(btn);
-    block.appendChild(wrapper);
+    // === Wrapper that floats over the scrollable area ===
+    const overlay = document.createElement("div");
+    overlay.className = "code-btn-overlay";
+    overlay.appendChild(btn);
+
+    // Attach overlay to block’s parent (not the block itself)
+    block.parentElement.insertBefore(overlay, block.nextSibling);
+
+    // Store reference for layout syncing
+    const syncPosition = () => {
+      const rect = block.getBoundingClientRect();
+      overlay.style.width = `${rect.width}px`;
+      overlay.style.left = `${rect.left + window.scrollX}px`;
+      overlay.style.top = `${rect.top + window.scrollY + 8}px`;
+    };
+
+    syncPosition();
+    window.addEventListener("scroll", syncPosition);
+    window.addEventListener("resize", syncPosition);
   });
 });
 
-// === COPY BUTTON STYLE (Fixed Top-Right + Large) ===
+// === COPY BUTTON STYLE (Always Visible + Neon Glow) ===
 const copyStyle = document.createElement("style");
 copyStyle.textContent = `
-  /* Position wrapper above scroll content */
-  .code-btn-wrapper {
+  /* Overlay wrapper (keeps button outside the scroll zone) */
+  .code-btn-overlay {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 50;
-    pointer-events: none; /* allows scrolling */
+    pointer-events: none;
+    z-index: 999;
   }
 
+  /* Copy Button */
   .code-btn {
     all: unset;
     pointer-events: auto;
+    float: right;
+    margin-right: 15px;
     font-size: 0.9rem !important;
     color: #fff !important;
     background: #ff69b4 !important;
@@ -60,21 +76,17 @@ copyStyle.textContent = `
     transform: scale(1.05);
   }
 
-  /* code-block visuals */
+  /* Add top padding so button doesn't overlap label */
   .code-block {
+    padding-top: 45px !important;
     position: relative;
-    overflow-x: auto;
-    padding-top: 50px; /* ensure button space */
   }
 
   @media (max-width: 768px) {
     .code-btn {
       font-size: 0.8rem !important;
       padding: 6px 12px !important;
-    }
-    .code-btn-wrapper {
-      top: 8px;
-      right: 8px;
+      margin-right: 10px;
     }
   }
 `;
@@ -82,7 +94,7 @@ document.head.appendChild(copyStyle);
 
 
 // ===============================
-// ❌ EXIT BUTTON FUNCTIONALITY (Protected)
+// ❌ EXIT BUTTON FUNCTIONALITY (Protected + Neon)
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector(".exit-btn")) return;
@@ -101,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(exitBtn);
 });
 
-// === EXIT BUTTON STYLE (Left side + Large Cyber Look) ===
+// === EXIT BUTTON STYLE ===
 const exitStyle = document.createElement("style");
 exitStyle.textContent = `
   .exit-btn {
