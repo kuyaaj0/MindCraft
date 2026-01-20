@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Lesson 5 Quiz (Step-by-Step) - Data Types</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+
+        *{margin:0;padding:0;box-sizing:border-box;}
+
+        body{
+            font-family:'Orbitron',monospace;
+            background:#000;
+            color:#e0e0e0;
+            min-height:100vh;
+            padding:30px;
+        }
+
+        .container{
+            max-width:850px;
+            margin:0 auto;
+            background:rgba(8,8,25,0.97);
+            border-radius:20px;
+            border:3px solid transparent;
+            border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
+            box-shadow:0 0 50px rgba(255,0,255,0.5);
+            padding:35px 30px 30px;
+        }
+
+        h1{
+            text-align:center;
+            font-size:2.4em;
+            margin-bottom:5px;
+            background:linear-gradient(135deg,#ff00ff,#00ffff,#ff1493);
+            background-clip:text;
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:#00ffff;
+            margin-bottom:20px;
+        }
+
+        #progress{
+            text-align:center;
+            margin-bottom:20px;
+            font-family:'Roboto Mono',monospace;
+            color:#00ff88;
+            font-size:1.1em;
+        }
+
+        .question-box{
+            background:rgba(0,255,255,0.05);
+            border-left:4px solid #00ffff;
+            border-radius:14px;
+            padding:20px 22px 18px;
+            margin-bottom:18px;
+            font-family:'Roboto Mono',monospace;
+        }
+
+        .question-text{
+            margin-bottom:12px;
+            line-height:1.5;
+        }
+
+        .options label{
+            display:block;
+            margin:5px 0;
+            cursor:pointer;
+            padding:3px 0;
+        }
+
+        .options input{
+            margin-right:8px;
+            transform:scale(1.1);
+        }
+
+        .fill-input{
+            width:100%;
+            max-width:350px;
+            padding:10px 12px;
+            border-radius:8px;
+            border:2px solid #00ffff;
+            background:#050515;
+            color:#00ffff;
+            font-family:'Roboto Mono',monospace;
+            font-size:1rem;
+        }
+
+        .nav-row{
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            margin-top:12px;
+        }
+
+        button{
+            font-family:'Orbitron',monospace;
+            font-weight:700;
+            padding:12px 24px;
+            border-radius:14px;
+            border:none;
+            cursor:pointer;
+            font-size:1rem;
+            transition:all 0.3s ease;
+        }
+
+        #prevBtn{
+            background:#111;
+            color:#00ffff;
+            border:2px solid #00ffff;
+        }
+
+        #prevBtn:hover{background:#00ffff1a;}
+
+        #nextBtn{
+            background:linear-gradient(45deg,#ff00ff,#00ffff);
+            color:#000;
+            box-shadow:0 0 20px rgba(255,0,255,0.7);
+        }
+
+        #nextBtn:hover{box-shadow:0 0 30px rgba(255,0,255,0.9);}
+
+        #finishBtn{
+            background:#ff1493;
+            color:#000;
+            box-shadow:0 0 20px rgba(255,20,147,0.7);
+            display:none;
+        }
+
+        #finishBtn:hover{box-shadow:0 0 30px rgba(255,20,147,0.9);}
+
+        #resultBox{
+            margin-top:20px;
+            padding:18px;
+            border-radius:14px;
+            background:rgba(0,0,0,0.7);
+            border:2px solid #00ffff;
+            font-family:'Roboto Mono',monospace;
+            color:#00ff88;
+            text-align:center;
+        }
+
+        #resetBtn{
+            margin-top:12px;
+            background:#111;
+            color:#ff00ff;
+            border:2px solid #ff00ff;
+            display:none;
+            width:100%;
+        }
+
+        @media(max-width:600px){
+            .container{padding:25px 20px;}
+            h1{font-size:2em;}
+            .nav-row{flex-direction:column;}
+            .nav-row button{width:100%;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>JS Lesson 5 Quiz</h1>
+    <p class="subtitle">Data Types • Numbers • Strings • Booleans • Operators</p>
+    <p id="progress">Question 1 / 15</p>
+
+    <div id="questionContainer" class="question-box">
+        <!-- question content injected by JS -->
+    </div>
+
+    <div class="nav-row">
+        <button id="prevBtn">⟵ Previous</button>
+        <button id="nextBtn">Next ⟶</button>
+        <button id="finishBtn">🚀 Finish & Score</button>
+    </div>
+
+    <div id="resultBox">
+        Score: 0 / 15<br>
+        <small>Answer each question → Finish for cyber results!</small>
+    </div>
+    <button id="resetBtn">🔄 Reset Matrix</button>
+</div>
+
+<script>
+    // Lesson 5: DATA TYPES & OPERATORS quiz questions
+    const questions = [
+        // 10 Multiple Choice
+        {
+            type: "mc",
+            text: "1. Which data type stores numbers (whole or decimal)?",
+            options: ["String","Number","Boolean","Object"],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "2. How do you write a string (text) in JavaScript?",
+            options: ["Without quotes","With \"\" or '' quotes","With ()","With {}"],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "3. Which is a valid number in JavaScript?",
+            options: ["'20'","20","\"age\"","true"],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "4. What does this code output? console.log(10 + 5);",
+            options: ["'105'","15","55","'15'"],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "5. Which operator is for subtraction?",
+            options: ["+","*","/","-"],
+            correct: 3
+        },
+        {
+            type: "mc",
+            text: "6. What is the result of 'Jhack' + ' BSIT'?",
+            options: ["JhackBSIT","Error","'Jhack BSIT'","Jhack + BSIT"],
+            correct: 2
+        },
+        {
+            type: "mc",
+            text: "7. Which data type has only true or false values?",
+            options: ["Number","String","Boolean","null"],
+            correct: 2
+        },
+        {
+            type: "mc",
+            text: "8. What does score >= 75 return?",
+            options: ["Number","String","Boolean","Array"],
+            correct: 2
+        },
+        {
+            type: "mc",
+            text: "9. What does 'null' mean in JavaScript?",
+            options: ["Error","Empty on purpose","Random value","String"],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "10. What does score += 5 do?",
+            options: ["score = score - 5","score = score + 5","score = 5","score++"],
+            correct: 1
+        },
+
+        // 5 Fill in the Blanks
+        {
+            type: "fill",
+            text: "11. Numbers use the math operators +, -, ________, /.",
+            correctText: "*"
+        },
+        {
+            type: "fill",
+            text: "12. Text data must be in quotes: \"\" or ________.",
+            correctText: "'"
+        },
+        {
+            type: "fill",
+            text: "13. Template literals use ________ (backticks).",
+            correctText: "`"
+        },
+        {
+            type: "fill",
+            text: "14. ________ means 'never set' or 'missing value'.",
+            correctText: "undefined"
+        },
+        {
+            type: "fill",
+            text: "15. score++ means add ________ to score.",
+            correctText: "1"
+        }
+    ];
+
+    let currentIndex = 0;
+    const userAnswers = new Array(questions.length).fill(null);
+
+    // DOM elements
+    const questionContainer = document.getElementById("questionContainer");
+    const progress = document.getElementById("progress");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+    const resultBox = document.getElementById("resultBox");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function loadQuestion(index) {
+        const q = questions[index];
+        progress.textContent = `Question ${index + 1} / ${questions.length}`;
+        questionContainer.innerHTML = "";
+
+        // Question text
+        const p = document.createElement("p");
+        p.className = "question-text";
+        p.textContent = q.text;
+        questionContainer.appendChild(p);
+
+        if (q.type === "mc") {
+            // Multiple choice
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach((opt, i) => {
+                const label = document.createElement("label");
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "mc";
+                radio.value = i;
+                if (userAnswers[index] === i) radio.checked = true;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(` ${opt}`));
+                optionsDiv.appendChild(label);
+            });
+            questionContainer.appendChild(optionsDiv);
+        } else {
+            // Fill in the blank
+            const input = document.createElement("input");
+            input.type = "text";
+            input.id = "fillInput";
+            input.className = "fill-input";
+            input.placeholder = "Type your answer here...";
+            if (userAnswers[index] !== null) {
+                input.value = userAnswers[index];
+            }
+            questionContainer.appendChild(input);
+        }
+
+        // Navigation buttons
+        prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
+        if (index === questions.length - 1) {
+            nextBtn.style.display = "none";
+            finishBtn.style.display = "inline-block";
+        } else {
+            nextBtn.style.display = "inline-block";
+            finishBtn.style.display = "none";
+        }
+    }
+
+    function saveCurrentAnswer() {
+        const q = questions[currentIndex];
+        if (q.type === "mc") {
+            const checked = document.querySelector('input[name="mc"]:checked');
+            userAnswers[currentIndex] = checked ? parseInt(checked.value) : null;
+        } else {
+            const input = document.getElementById("fillInput");
+            userAnswers[currentIndex] = input ? input.value : "";
+        }
+    }
+
+    function calculateScore() {
+        let score = 0;
+        questions.forEach((q, i) => {
+            if (q.type === "mc") {
+                if (userAnswers[i] === q.correct) score++;
+            } else {
+                const user = (userAnswers[i] || "").trim().toLowerCase();
+                const correct = q.correctText.toLowerCase();
+                if (user === correct) score++;
+            }
+        });
+        return score;
+    }
+
+    // Event listeners
+    prevBtn.addEventListener("click", () => {
+        saveCurrentAnswer();
+        if (currentIndex > 0) {
+            currentIndex--;
+            loadQuestion(currentIndex);
+        }
+    });
+
+    nextBtn.addEventListener("click", () => {
+        saveCurrentAnswer();
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            loadQuestion(currentIndex);
+        }
+    });
+
+    finishBtn.addEventListener("click", () => {
+        saveCurrentAnswer();
+        const total = questions.length;
+        const score = calculateScore();
+        const percentage = Math.round((score / total) * 100);
+        
+        resultBox.innerHTML = `
+            <strong>Score: ${score} / ${total} (${percentage}%)</strong><br>
+            <span style="color:#ff00ff;">F12 Console: Data types mastery logged!</span>
+        `;
+        
+        alert(`🎉 Quiz Complete!\nScore: ${score}/${total} (${percentage}%)`);
+        console.log("🧪 JS Lesson 5 Data Types Quiz:", score, "/", total, "(", percentage, "%)");
+        resetBtn.style.display = "block";
+    });
+
+    resetBtn.addEventListener("click", () => {
+        userAnswers.fill(null);
+        currentIndex = 0;
+        resultBox.innerHTML = "Score: 0 / 15<br><small>Answer each question → Finish for cyber results!</small>";
+        resetBtn.style.display = "none";
+        loadQuestion(currentIndex);
+    });
+
+    // Initialize
+    loadQuestion(currentIndex);
+    console.log("🌌 JS Lesson 5 Data Types & Operators Quiz MATRIX LOADED!");
+</script>
+</body>
+</html>
