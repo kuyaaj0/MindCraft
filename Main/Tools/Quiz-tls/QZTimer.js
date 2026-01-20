@@ -1,33 +1,39 @@
 // ============================================
-// ⏱️ MindCraft Quiz Timer System
+// ⏱️ MindCraft Quiz Timer System (Dynamic)
 // File: Tools/Quiz-tls/QZTimer.js
 // ============================================
 
-// === CONFIGURATION ===
-const QZTimer = {
-  duration: 300, // ⏰ seconds (default 5 minutes)
-  redirectURL: "../../../Webside/Student.html", // Redirect or result page after timeout
-  warningAt: 60, // Warn when only 60 seconds left
-};
-
-// === CREATE TIMER UI ===
 document.addEventListener("DOMContentLoaded", () => {
-  // Avoid duplicate timers
+  // Prevent duplicate timer
   if (document.querySelector(".quiz-timer")) return;
 
+  // === Detect Questions ===
+  const radioQuestions = document.querySelectorAll('input[type="radio"]').length;
+  const textQuestions = document.querySelectorAll('input[type="text"]').length;
+
+  // Time settings per question type
+  const timePerRadio = 20; // seconds
+  const timePerText = 35;  // seconds
+
+  // Total time
+  const totalSeconds = Math.max(
+    (radioQuestions * timePerRadio) + (textQuestions * timePerText),
+    120 // minimum of 2 minutes
+  );
+
+  // === Create Timer UI ===
   const timerContainer = document.createElement("div");
   timerContainer.className = "quiz-timer";
-
   timerContainer.innerHTML = `
     <div class="timer-bar"></div>
-    <div class="timer-text">🕒 05:00</div>
+    <div class="timer-text">🕒 Loading...</div>
   `;
-
   document.body.appendChild(timerContainer);
-  startQuizTimer(QZTimer.duration);
+
+  // === Start Countdown ===
+  startQuizTimer(totalSeconds);
 });
 
-// === TIMER FUNCTION ===
 function startQuizTimer(duration) {
   let remaining = duration;
   const bar = document.querySelector(".timer-bar");
@@ -37,35 +43,33 @@ function startQuizTimer(duration) {
   const interval = setInterval(() => {
     remaining--;
 
-    // Calculate minutes + seconds
     const min = Math.floor(remaining / 60);
     const sec = remaining % 60;
     text.textContent = `🕒 ${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 
-    // Update progress bar width
     const progress = (remaining / duration) * totalWidth;
     bar.style.width = `${progress}%`;
 
-    // Flash warning color
-    if (remaining <= QZTimer.warningAt) {
+    // Warning under 1 minute
+    if (remaining <= 60) {
       bar.classList.add("warning");
     }
 
-    // Time finished
     if (remaining <= 0) {
       clearInterval(interval);
       text.textContent = "⏰ Time’s Up!";
       document.body.classList.add("timeout");
 
-      // Smooth fade-out + redirect
+      // You can change redirect if needed
       setTimeout(() => {
-        window.location.href = QZTimer.redirectURL;
+        alert("Your time is up! Redirecting to Student page.");
+        window.location.href = "../../../Webside/Student.html";
       }, 2000);
     }
   }, 1000);
 }
 
-// === STYLES ===
+// === Styles ===
 const style = document.createElement("style");
 style.textContent = `
   .quiz-timer {
