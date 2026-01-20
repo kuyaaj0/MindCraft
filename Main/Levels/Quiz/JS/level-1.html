@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS Lesson 1 Quiz (Step-by-Step)</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&family=Press+Start+2P&display=swap');
 
         *{margin:0;padding:0;box-sizing:border-box;}
 
@@ -26,6 +26,7 @@
             border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
             box-shadow:0 0 50px rgba(255,0,255,0.5);
             padding:35px 30px 30px;
+            position: relative;
         }
 
         h1{
@@ -87,7 +88,7 @@
 
         .nav-row{
             display:flex;
-            justify-content:space-between;
+            justify-content:center;
             gap:10px;
             margin-top:10px;
         }
@@ -95,17 +96,11 @@
         button{
             font-family:'Orbitron',monospace;
             font-weight:700;
-            padding:10px 20px;
+            padding:12px 25px;
             border-radius:14px;
             border:none;
             cursor:pointer;
-            font-size:0.95rem;
-        }
-
-        #prevBtn{
-            background:#111;
-            color:#00ffff;
-            border:2px solid #00ffff;
+            font-size:1rem;
         }
 
         #nextBtn{
@@ -123,20 +118,55 @@
 
         #resultBox{
             margin-top:18px;
-            padding:15px;
+            padding:25px;
             border-radius:12px;
             background:rgba(0,0,0,0.7);
             border:2px solid #00ffff;
             font-family:'Roboto Mono',monospace;
             color:#00ff88;
+            display:none;
+            text-align:center;
         }
 
-        #resetBtn{
+        .score-header{
+            font-size:1.5em;
+            color:#00ff88;
+            margin-bottom:20px;
+        }
+
+        .score-details{
+            background:rgba(0,255,136,0.15);
+            padding:20px;
+            border-radius:10px;
+            margin:20px 0;
+            border-left:4px solid #00ff88;
+        }
+
+        #scoreStatus{
+            font-size:1.2em;
             margin-top:10px;
-            background:#111;
-            color:#ff00ff;
-            border:2px solid #ff00ff;
-            display:none;
+            font-weight:700;
+        }
+
+        .exit-btn{
+            position: fixed;
+            top: 480px;
+            left: 202px;
+            background: #ff4d4d;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Press Start 2P';
+            padding: 6px 10px;
+            border-radius: 8px;
+            box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+            z-index: 1000;
+            font-size: 9px;
+            transition: transform 0.1s;
+            display: none;
+        }
+
+        .exit-btn:hover{
+            transform: translateY(-2px);
         }
 
         @media(max-width:600px){
@@ -144,34 +174,42 @@
             h1{font-size:2em;}
             .nav-row{flex-direction:column;}
             .nav-row button{width:100%;}
+            .exit-btn{top: 450px; left: 50px;}
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>JS Lesson 1 Quiz</h1>
-    <p class="subtitle">One Question at a Time • Cyberpunk Matrix</p>
-    <p id="progress">Question 1 / 15</p>
+    <a href="../../../Webside/Student.html" class="exit-btn" id="exitBtn">BACK</a>
 
-    <div id="questionContainer" class="question-box">
-        <!-- question content injected by JS -->
-    </div>
+    <div class="container">
+        <h1>JS Lesson 1 Quiz</h1>
+        <p class="subtitle">One Question at a Time • Cyberpunk Matrix</p>
+        <p id="progress">Question 1 / 15</p>
 
-    <div class="nav-row">
-        <button id="prevBtn">⟵ Previous</button>
-        <button id="nextBtn">Next ⟶</button>
-        <button id="finishBtn">🚀 Finish Quiz</button>
-    </div>
+        <div id="questionContainer" class="question-box">
+            <!-- question content injected by JS -->
+        </div>
 
-    <div id="resultBox">
-        Score: 0 / 15<br>
-        Status: Answer each question then click Finish.
+        <div class="nav-row">
+            <button id="nextBtn">Next ⟶</button>
+            <button id="finishBtn">🚀 Finish Quiz</button>
+        </div>
+
+        <div id="resultBox">
+            <div class="score-header">🎯 Quiz Complete!</div>
+            <div class="score-details">
+                <div style="font-size:1.4em;"><strong>Final Score:</strong> <span id="finalScore">0</span> / 15</div>
+                <div style="font-size:1.2em; margin-top:8px;"><strong>Percentage:</strong> <span id="percentage">0%</span></div>
+                <div id="scoreStatus"></div>
+            </div>
+            <div style="color:#00ffff; font-size:0.95em; margin-top:15px;">
+                Press F12 → Console for cyberpunk results log. 🔍
+            </div>
+        </div>
     </div>
-    <button id="resetBtn">Reset Quiz</button>
-</div>
 
 <script>
-    // QUESTIONS (10 MC + 5 FIB)
+    // ALL 15 QUESTIONS - FULLY FIXED ✓
     const questions = [
         {
             type: "mc",
@@ -182,7 +220,7 @@
                 "Interactivity and behavior",
                 "Server hardware control"
             ],
-            correct: 2 // index in options
+            correct: 2
         },
         {
             type: "mc",
@@ -203,7 +241,7 @@
         },
         {
             type: "mc",
-            text: "4. According to the lesson, which location is often the “BEST” place for script tags for performance?",
+            text: "4. According to the lesson, which location is often the \"BEST\" place for script tags for performance?",
             options: [
                 "At the very top of <head> (without defer)",
                 "Immediately after <html>",
@@ -214,7 +252,7 @@
         },
         {
             type: "mc",
-            text: "5. Which JavaScript function prints messages to the browser’s console?",
+            text: "5. Which JavaScript function prints messages to the browser's console?",
             options: ["alert()","console.write()","console.log()","document.print()"],
             correct: 2
         },
@@ -253,7 +291,7 @@
                 "The URL of the page",
                 "The HTML content inside an element",
                 "Only the text color",
-                "The browser’s title bar"
+                "The browser's title bar"
             ],
             correct: 1
         },
@@ -268,7 +306,6 @@
             ],
             correct: 1
         },
-        // Fill in the blanks
         {
             type: "fill",
             text: "11. JavaScript is often described as the ________ of the website because it controls behavior and logic.",
@@ -301,11 +338,13 @@
 
     const questionContainer = document.getElementById("questionContainer");
     const progress = document.getElementById("progress");
-    const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const finishBtn = document.getElementById("finishBtn");
     const resultBox = document.getElementById("resultBox");
-    const resetBtn = document.getElementById("resetBtn");
+    const finalScoreEl = document.getElementById("finalScore");
+    const percentageEl = document.getElementById("percentage");
+    const scoreStatusEl = document.getElementById("scoreStatus");
+    const exitBtn = document.getElementById("exitBtn");
 
     function loadQuestion(index){
         const q = questions[index];
@@ -346,8 +385,6 @@
             questionContainer.appendChild(input);
         }
 
-        // buttons visibility
-        prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
         if(index === questions.length - 1){
             nextBtn.style.display = "none";
             finishBtn.style.display = "inline-block";
@@ -382,13 +419,33 @@
         return score;
     }
 
-    prevBtn.addEventListener("click",()=>{
-        saveCurrentAnswer();
-        if(currentIndex > 0){
-            currentIndex--;
-            loadQuestion(currentIndex);
-        }
-    });
+    function showResults(){
+        const total = questions.length;
+        const score = calculateScore();
+        const percentage = Math.round((score / total) * 100);
+        
+        finalScoreEl.textContent = `${score} / ${total}`;
+        percentageEl.textContent = `${percentage}%`;
+        
+        let status = "";
+        if(percentage >= 90) status = "🚀 Cyber Elite!";
+        else if(percentage >= 80) status = "🌟 Matrix Master";
+        else if(percentage >= 70) status = "⚡ Code Warrior";
+        else if(percentage >= 60) status = "💻 Solid Progress";
+        else if(percentage >= 50) status = "🔄 Keep Coding!";
+        else status = "🔥 Review & Retry!";
+        
+        scoreStatusEl.innerHTML = `<div style="font-size:1.1em; margin-top:8px;">${status}</div>`;
+        
+        progress.style.display = "none";
+        questionContainer.style.display = "none";
+        nextBtn.style.display = "none";
+        finishBtn.style.display = "none";
+        resultBox.style.display = "block";
+        exitBtn.style.display = "inline-block";  // SHOW EXIT BUTTON
+        
+        console.log("🧪 JS Lesson 1 Quiz Score:", score + " / " + total, "(" + percentage + "%)");
+    }
 
     nextBtn.addEventListener("click",()=>{
         saveCurrentAnswer();
@@ -400,26 +457,11 @@
 
     finishBtn.addEventListener("click",()=>{
         saveCurrentAnswer();
-        const total = questions.length;
-        const score = calculateScore();
-        resultBox.innerHTML =
-            `Score: ${score} / ${total}<br>` +
-            `F12 Console: Cyber result logged.`;
-        alert("Quiz finished! Your score: " + score + " / " + total);
-        console.log("🧪 JS Lesson 1 Quiz Score:", score + " / " + total);
-        resetBtn.style.display = "inline-block";
-    });
-
-    resetBtn.addEventListener("click",()=>{
-        for(let i=0;i<userAnswers.length;i++){ userAnswers[i]=null; }
-        currentIndex = 0;
-        resultBox.innerHTML = "Score: 0 / 15<br>Status: Answer each question then click Finish.";
-        resetBtn.style.display = "none";
-        loadQuestion(currentIndex);
+        showResults();
     });
 
     loadQuestion(currentIndex);
-    console.log("🌌 Step-by-step JS Quiz LOADED!");
+    console.log("🌌 Forward-Only JS Quiz with EXIT LOADED! ✅");
 </script>
 </body>
 </html>
