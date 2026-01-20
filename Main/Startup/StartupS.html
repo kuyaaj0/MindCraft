@@ -31,7 +31,7 @@ html,body{width:100%;height:100%;font-family:"Press Start 2P";overflow:hidden;tr
   overflow:hidden;
 }
 
-/* ================= SUN ================= */
+/* ☀️ SUN */
 .sun{position:absolute;top:50px;left:60px;width:180px;height:180px;animation:sunFloat 6s ease-in-out infinite;z-index:3;}
 .sun-core{width:100%;height:100%;border-radius:50%;
   background:radial-gradient(circle,#fff7b0 35%,#ffd34d 65%);
@@ -56,7 +56,7 @@ html,body{width:100%;height:100%;font-family:"Press Start 2P";overflow:hidden;tr
 @keyframes sunFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 body.dark .sun{opacity:0}
 
-/* ================= MOON ================= */
+/* 🌙 MOON */
 .moon{
   position:absolute;
   top:60px; right:80px;
@@ -95,7 +95,7 @@ body.dark .moon{opacity:1}
   box-shadow:0 0 40px rgba(207,216,255,0.3);
 }
 
-/* ================= STARS ================= */
+/* ⭐ STARS */
 .star{
   position:absolute;
   border-radius:50%;
@@ -111,7 +111,7 @@ body.dark .moon{opacity:1}
   100%{opacity:0.3}
 }
 
-/* ================= SHOOTING STAR ================= */
+/* 🌠 SHOOTING STAR */
 .shooting-star{
   position:absolute;
   width:2px;height:2px;
@@ -128,7 +128,7 @@ body.dark .shooting-star{opacity:1;}
   100%{transform:translateX(1000px) translateY(500px) rotate(45deg);opacity:0;}
 }
 
-/* Ground */
+/* 🌳 GROUND */
 .ground{
   position:absolute;
   bottom:0;width:100%;height:220px;
@@ -136,7 +136,7 @@ body.dark .shooting-star{opacity:1;}
   z-index:5;
 }
 
-/* UI */
+/* 🎮 UI */
 .title{position:absolute;top:20px;left:50%;transform:translateX(-50%);
 background:linear-gradient(var(--ui),var(--ui-dark));color:#fff;padding:18px 40px;border-radius:16px;box-shadow:0 8px 0 #000;z-index:10;}
 .menu{position:absolute;right:40px;top:50%;transform:translateY(-50%);
@@ -144,7 +144,7 @@ display:flex;flex-direction:column;gap:16px;z-index:10;}
 .menu button{background:linear-gradient(var(--ui),var(--ui-dark));color:#fff;border:none;padding:14px 30px;border-radius:14px;cursor:pointer;box-shadow:0 6px 0 #000;}
 .menu button:active{transform:translateY(4px);box-shadow:0 2px 0 #000}
 
-/* SETTINGS POPUP */
+/* ⚙️ SETTINGS POPUP */
 .popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;}
 .popup-box{background:#222;padding:30px;border-radius:18px;text-align:center;color:#fff;}
 .popup-box button{margin:10px;padding:12px 24px;border:none;border-radius:12px;font-family:"Press Start 2P";cursor:pointer;}
@@ -154,7 +154,6 @@ display:flex;flex-direction:column;gap:16px;z-index:10;}
 <body>
 
 <div class="scene" id="scene">
-  <!-- Sun -->
   <div class="sun">
     <div class="sun-rays">
       <span></span><span></span><span></span><span></span>
@@ -164,7 +163,6 @@ display:flex;flex-direction:column;gap:16px;z-index:10;}
     <div class="sun-core"></div>
   </div>
 
-  <!-- Moon -->
   <div class="moon">
     <div class="crater crater1"></div>
     <div class="crater crater2"></div>
@@ -176,20 +174,19 @@ display:flex;flex-direction:column;gap:16px;z-index:10;}
     <div class="crater crater8"></div>
   </div>
 
-  <!-- Shooting Star -->
   <div class="shooting-star"></div>
 
   <div class="title">🧠 MindCraft</div>
   <nav class="menu">
     <button onclick="startGame()">PLAY 🎮</button>
     <button onclick="openSettings()">SETTINGS ⚙️</button>
-    <button>LEADERBOARD 🏆</button>
+    <button id="leaderboardBtn">LEADERBOARD 🏆</button>
   </nav>
 
   <div class="ground"></div>
 </div>
 
-<!-- SETTINGS -->
+<!-- ⚙️ SETTINGS -->
 <div class="popup" id="settings">
   <div class="popup-box">
     <h3>MODE</h3><br>
@@ -199,40 +196,35 @@ display:flex;flex-direction:column;gap:16px;z-index:10;}
   </div>
 </div>
 
+<!-- 🧩 Connect the existing leaderboard.js file -->
+<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
+
 <script>
 const settings = document.getElementById("settings");
 const scene = document.getElementById("scene");
 
-// 🎮 PLAY → fade-out + go to Student.html
+// 🎮 PLAY → go to Student.html
 function startGame(){
-  document.body.style.transition = "opacity 1s";
-  document.body.style.opacity = "0";
-
-  // ✅ Correct path for your folder system:
-  // (from /Main/Startup/ → go up → /Main/Webside/)
-  setTimeout(() => {
-    window.location.href = "../Webside/Student.html";
-  }, 1000);
+  fadeOutTo("../Webside/Student.html");
 }
 
 // ⚙️ SETTINGS POPUP
 function openSettings(){ settings.style.display="flex"; }
 function closeSettings(){ settings.style.display="none"; }
 
-// ☀️ / 🌙 MODE — now saves to localStorage and syncs globally
+// ☀️ / 🌙 MODE — saved globally
 function setLight(){
   document.body.classList.remove("dark");
   removeStars();
-  localStorage.setItem('theme', 'light'); // ✅ store preference
+  localStorage.setItem('theme', 'light');
 }
-
 function setDark(){
   document.body.classList.add("dark");
   createStars();
-  localStorage.setItem('theme', 'dark'); // ✅ store preference
+  localStorage.setItem('theme', 'dark');
 }
 
-// ⭐ STAR MANAGEMENT — keep stars in sky only
+// ⭐ STAR MANAGEMENT (sky only)
 function createStars(){
   removeStars();
   for(let i=0;i<180;i++){
@@ -241,7 +233,7 @@ function createStars(){
     const size=Math.random()*2+1;
     star.style.width=size+'px';
     star.style.height=size+'px';
-    star.style.top=Math.random()*70+'%'; // top 70% = sky area
+    star.style.top=Math.random()*70+'%';
     star.style.left=Math.random()*100+'%';
     star.style.animationDuration=(Math.random()*2+2)+'s';
     scene.insertBefore(star, document.querySelector('.ground'));
@@ -251,7 +243,14 @@ function removeStars(){
   document.querySelectorAll('.star').forEach(star=>star.remove());
 }
 
-// 🌗 Load previous theme (connected to Settings.html & Student.html)
+// 🔄 Fade transition
+function fadeOutTo(url){
+  document.body.style.transition="opacity 1s";
+  document.body.style.opacity="0";
+  setTimeout(()=>window.location.href=url,1000);
+}
+
+// 🌗 Load saved theme
 const savedTheme = localStorage.getItem('theme') || 'dark';
 if(savedTheme === 'dark'){
   document.body.classList.add("dark");
@@ -262,4 +261,4 @@ if(savedTheme === 'dark'){
 }
 </script>
 </body>
-  </html>
+</html>
