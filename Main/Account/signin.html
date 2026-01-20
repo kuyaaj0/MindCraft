@@ -6,38 +6,39 @@
 <title>Sign In - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
+
 <style>
 body { 
-    font-family: 'Press Start 2P', cursive; 
-    text-align: center; 
-    background: #203a43; 
-    color: white; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  font-family: 'Press Start 2P', cursive; 
+  text-align: center; 
+  background: #203a43; 
+  color: white; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 input { 
-    padding: 10px; 
-    width: 70%; 
-    margin: 10px; 
-    border-radius: 8px; 
-    border: none; 
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.6rem;
+  padding: 10px; 
+  width: 70%; 
+  margin: 10px; 
+  border-radius: 8px; 
+  border: none; 
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
 }
 button { 
-    padding: 10px 20px; 
-    border: none; 
-    border-radius: 8px; 
-    background: #1DB954; 
-    color: white; 
-    cursor: pointer; 
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.6rem;
-    margin: 5px;
-    transition: background 0.3s;
+  padding: 10px 20px; 
+  border: none; 
+  border-radius: 8px; 
+  background: #1DB954; 
+  color: white; 
+  cursor: pointer; 
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  margin: 5px;
+  transition: background 0.3s;
 }
 button:hover { background: #1ed760; }
 .message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
@@ -46,18 +47,30 @@ button:hover { background: #1ed760; }
 
 /* Back Buttons */
 .back-buttons {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .back-buttons button {
-    width: 160px;
-    background: #666;
+  width: 160px;
+  background: #666;
 }
 .back-buttons button:hover { background: #888; }
+
+.resend-btn {
+  background: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.6rem;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.resend-btn:hover { background: #ff85c1; }
 </style>
 </head>
 <body>
@@ -70,39 +83,41 @@ button:hover { background: #1ed760; }
 
 <!-- Role Selection -->
 <div class="choice-section" id="choiceSection">
-    <h2>🧠 MindCraft - Sign In</h2>
-    <p>Choose your role:</p>
-    <button id="studentBtn">Student</button>
-    <button id="teacherBtn">Teacher</button>
+  <h2>🧠 MindCraft - Sign In</h2>
+  <p>Choose your role:</p>
+  <button id="studentBtn">Student</button>
+  <button id="teacherBtn">Teacher</button>
 </div>
 
 <!-- Student Form -->
 <div class="student-form" id="studentForm">
-    <h2>Student Sign In</h2>
-    <form id="studentSigninForm">
-        <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
-        <input type="password" id="studentPassword" placeholder="Enter password" required><br>
-        <button type="submit">Sign In</button>
-    </form>
-    <p class="message" id="studentMessage"></p>
-    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+  <h2>Student Sign In</h2>
+  <form id="studentSigninForm">
+    <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
+    <input type="password" id="studentPassword" placeholder="Enter password" required><br>
+    <button type="submit">Sign In</button>
+  </form>
+  <p class="message" id="studentMessage"></p>
+  <button id="resendStudent" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
+  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 </div>
 
 <!-- Teacher Form -->
 <div class="teacher-form" id="teacherForm">
-    <h2>Teacher Sign In</h2>
-    <form id="teacherSigninForm">
-        <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
-        <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
-        <button type="submit">Sign In</button>
-    </form>
-    <p class="message" id="teacherMessage"></p>
-    <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+  <h2>Teacher Sign In</h2>
+  <form id="teacherSigninForm">
+    <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
+    <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
+    <button type="submit">Sign In</button>
+  </form>
+  <p class="message" id="teacherMessage"></p>
+  <button id="resendTeacher" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
+  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
 </div>
 
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== Navigation Buttons =====
@@ -110,31 +125,31 @@ document.getElementById("homeBtn").addEventListener("click", () => {
   window.location.href = "../../index.html";
 });
 
-// ===== UI Toggle Functions =====
+// ===== UI Toggle =====
 function showStudentForm() {
-    document.getElementById('choiceSection').style.display = 'none';
-    document.getElementById('studentForm').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'block';
-    document.getElementById('homeBtn').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('studentForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
 }
 
 function showTeacherForm() {
-    document.getElementById('choiceSection').style.display = 'none';
-    document.getElementById('teacherForm').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'block';
-    document.getElementById('homeBtn').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
 }
 
 function backToChoice() {
-    document.getElementById('studentForm').style.display = 'none';
-    document.getElementById('teacherForm').style.display = 'none';
-    document.getElementById('choiceSection').style.display = 'block';
-    document.getElementById('formBackBtn').style.display = 'none';
-    document.getElementById('homeBtn').style.display = 'block';
-    document.getElementById('studentSigninForm').reset();
-    document.getElementById('teacherSigninForm').reset();
-    document.getElementById('studentMessage').textContent = '';
-    document.getElementById('teacherMessage').textContent = '';
+  document.getElementById('studentForm').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'none';
+  document.getElementById('homeBtn').style.display = 'block';
+  document.getElementById('studentSigninForm').reset();
+  document.getElementById('teacherSigninForm').reset();
+  document.getElementById('studentMessage').textContent = '';
+  document.getElementById('teacherMessage').textContent = '';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -143,123 +158,141 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// ==== Default fields for new features ====
+// ==== Default Fields ====
 const defaultStudentFields = {
-    level: 1,
-    xp: 0,
-    xpMax: 100,
-    totalXP: 0,
-    completedLessons: [],
-    completedQuizzes: []
+  level: 1, xp: 0, xpMax: 100, totalXP: 0,
+  completedLessons: [], completedQuizzes: []
 };
 
-// ==== Sign In Logic (Student) ====
+// ==== Sign In (Student) ====
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('studentEmail').value.trim();
-    const password = document.getElementById('studentPassword').value;
-    const msg = document.getElementById('studentMessage');
+  e.preventDefault();
+  const email = document.getElementById('studentEmail').value.trim();
+  const password = document.getElementById('studentPassword').value;
+  const msg = document.getElementById('studentMessage');
+  const resendBtn = document.getElementById('resendStudent');
 
-    if (!email || !password) {
-        msg.textContent = "❌ Please fill in all fields.";
-        return;
+  msg.textContent = "";
+  resendBtn.style.display = "none";
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    // ✅ EMAIL VERIFICATION CHECK
+    if (!user.emailVerified) {
+      msg.textContent = "⚠️ Please verify your email before signing in.";
+      resendBtn.style.display = "inline-block";
+      await signOut(auth);
+      return;
     }
 
-    try {
-        const userCred = await signInWithEmailAndPassword(auth, email, password);
-        const userRef = doc(db, "users", userCred.user.uid);
-        const snap = await getDoc(userRef);
-
-        if (!snap.exists() || snap.data().role !== "student") {
-            msg.textContent = "❌ This account is not a student.";
-            return;
-        }
-
-        let data = snap.data();
-
-        // ✅ Auto-update missing fields for old accounts
-        let needsUpdate = false;
-        for (const key in defaultStudentFields) {
-            if (!(key in data)) {
-                data[key] = defaultStudentFields[key];
-                needsUpdate = true;
-            }
-        }
-
-        if (needsUpdate) {
-            await setDoc(userRef, data, { merge: true });
-            console.log("🔄 Old student account fields updated in Firebase.");
-        }
-
-        // ✅ Always trust Firestore as the source of truth
-        const finalXP = data.xp ?? 0;
-        const finalLevel = data.level ?? 1;
-
-        // ✅ Clear old XP data before writing new
-        Object.keys(localStorage).forEach(k => {
-            if (k.includes("_xp") || k.includes("_level")) {
-                localStorage.removeItem(k);
-            }
-        });
-
-        // ✅ Save clean, synced data
-        localStorage.setItem("currentUser", userCred.user.uid);
-        localStorage.setItem("cachedName", data.name || "Student");
-        localStorage.setItem("currentRole", "student");
-        localStorage.setItem(`${userCred.user.uid}_level`, finalLevel);
-        localStorage.setItem(`${userCred.user.uid}_xp`, finalXP);
-        localStorage.setItem(`${userCred.user.uid}_xpMax`, data.xpMax ?? 100);
-        localStorage.setItem("totalXP", data.totalXP ?? finalXP);
-        localStorage.setItem("completedLessons", JSON.stringify(data.completedLessons || []));
-        localStorage.setItem("completedQuizzes", JSON.stringify(data.completedQuizzes || []));
-
-        msg.style.color = "#1DB954";
-        msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "../Webside/Student.html", 800);
-
-    } catch(err) {
-        console.error("Sign-in error:", err);
-        msg.textContent = `❌ ${err.message}`;
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists() || snap.data().role !== "student") {
+      msg.textContent = "❌ This account is not a student.";
+      await signOut(auth);
+      return;
     }
+
+    let data = snap.data();
+    for (const key in defaultStudentFields) {
+      if (!(key in data)) data[key] = defaultStudentFields[key];
+    }
+
+    await setDoc(userRef, data, { merge: true });
+
+    localStorage.setItem("currentUser", user.uid);
+    localStorage.setItem("cachedName", data.name || "Student");
+    localStorage.setItem("currentRole", "student");
+
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Sign in successful! Redirecting...";
+    setTimeout(() => window.location.href = "../Webside/Student.html", 800);
+
+  } catch (err) {
+    console.error("Sign-in error:", err);
+    msg.textContent = `❌ ${err.message}`;
+  }
 });
 
-// ==== Sign In Logic (Teacher) ====
+// ==== Sign In (Teacher) ====
 document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('teacherEmail').value.trim();
-    const password = document.getElementById('teacherPassword').value;
-    const msg = document.getElementById('teacherMessage');
+  e.preventDefault();
+  const email = document.getElementById('teacherEmail').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+  const msg = document.getElementById('teacherMessage');
+  const resendBtn = document.getElementById('resendTeacher');
 
-    if (!email || !password) {
-        msg.textContent = "❌ Please fill in all fields.";
-        return;
+  msg.textContent = "";
+  resendBtn.style.display = "none";
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    // ✅ EMAIL VERIFICATION CHECK
+    if (!user.emailVerified) {
+      msg.textContent = "⚠️ Please verify your email before signing in.";
+      resendBtn.style.display = "inline-block";
+      await signOut(auth);
+      return;
     }
 
-    try {
-        const userCred = await signInWithEmailAndPassword(auth, email, password);
-        const userRef = doc(db, "users", userCred.user.uid);
-        const snap = await getDoc(userRef);
-
-        if (!snap.exists() || snap.data().role !== "teacher") {
-            msg.textContent = "❌ This account is not a teacher.";
-            return;
-        }
-
-        let data = snap.data();
-
-        localStorage.setItem("cachedName", data.name || "Teacher");
-        localStorage.setItem("currentRole", "teacher");
-
-        msg.style.color = "#1DB954";
-        msg.textContent = "✅ Sign in successful! Redirecting...";
-        setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
-
-    } catch(err) {
-        console.error("Sign-in error:", err);
-        msg.textContent = `❌ ${err.message}`;
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists() || snap.data().role !== "teacher") {
+      msg.textContent = "❌ This account is not a teacher.";
+      await signOut(auth);
+      return;
     }
+
+    const data = snap.data();
+    localStorage.setItem("cachedName", data.name || "Teacher");
+    localStorage.setItem("currentRole", "teacher");
+
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Sign in successful! Redirecting...";
+    setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
+
+  } catch (err) {
+    console.error("Sign-in error:", err);
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+
+// ==== RESEND VERIFICATION EMAIL ====
+document.getElementById("resendStudent").addEventListener("click", async () => {
+  const email = document.getElementById("studentEmail").value.trim();
+  const password = document.getElementById("studentPassword").value;
+  const msg = document.getElementById("studentMessage");
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(userCred.user);
+    msg.style.color = "#1DB954";
+    msg.textContent = "📧 Verification email re-sent! Check your inbox.";
+    await signOut(auth);
+  } catch (err) {
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+
+document.getElementById("resendTeacher").addEventListener("click", async () => {
+  const email = document.getElementById("teacherEmail").value.trim();
+  const password = document.getElementById("teacherPassword").value;
+  const msg = document.getElementById("teacherMessage");
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    await sendEmailVerification(userCred.user);
+    msg.style.color = "#1DB954";
+    msg.textContent = "📧 Verification email re-sent! Check your inbox.";
+    await signOut(auth);
+  } catch (err) {
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
 });
 </script>
-
 </body>
 </html>
