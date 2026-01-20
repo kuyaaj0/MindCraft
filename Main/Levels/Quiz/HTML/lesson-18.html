@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCraft CSS Quiz - Lesson 18</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Press Start 2P', cursive;
+  background: radial-gradient(circle at top, #f3fcff, #bfeaff, #67c2ff);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 20px;
+}
+
+.scene {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 92vh;
+  background: linear-gradient(120deg, #eafcff, #c6f0ff, #a4e2c1, #74cfa0);
+  background-size: 300% 300%;
+  animation: bgShift 12s ease infinite;
+  border-radius: 28px;
+  box-shadow: 0 50px 100px rgba(0,0,0,.35);
+  overflow: hidden;
+  padding: 20px 40px;
+}
+
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: .25;
+}
+
+.title {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 18px 48px;
+  background: linear-gradient(#c97a36, #8b4d1a);
+  color: white;
+  font-size: 1.4rem;
+  border-radius: 20px;
+  text-shadow: 4px 4px 0 black;
+  z-index: 5;
+  text-align: center;
+}
+
+.menu {
+  position: relative;
+  margin-top: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 5;
+}
+
+.menu .question {
+  background: rgba(255,255,255,.15);
+  backdrop-filter: blur(10px);
+  padding: 18px 24px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu .question label {
+  background: linear-gradient(#ffe08a, #f2a933);
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.menu input[type="text"] {
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  font-family: inherit;
+}
+
+button.next {
+  align-self: center;
+  background: linear-gradient(#46b46b, #2e7d4a);
+  color: white;
+  font-size: .7rem;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(#46b46b, #2e7d4a);
+}
+</style>
+</head>
+
+<body>
+<div class="scene">
+<div class="grid"></div>
+
+<div class="title">Lesson 18: CSS Positioning</div>
+
+<div class="menu">
+
+<div class="question">
+<strong>1. Which CSS property sets the position of an element?</strong>
+<label><input type="radio" name="q1"> A. display</label>
+<label><input type="radio" name="q1"> B. position</label>
+<label><input type="radio" name="q1"> C. float</label>
+<label><input type="radio" name="q1"> D. margin</label>
+</div>
+
+<div class="question">
+<strong>2. Which value makes an element stay in the normal flow?</strong>
+<label><input type="radio" name="q2"> A. relative</label>
+<label><input type="radio" name="q2"> B. static</label>
+<label><input type="radio" name="q2"> C. absolute</label>
+<label><input type="radio" name="q2"> D. fixed</label>
+</div>
+
+<div class="question">
+<strong>3. Which positioning value places an element relative to its nearest positioned ancestor?</strong>
+<label><input type="radio" name="q3"> A. relative</label>
+<label><input type="radio" name="q3"> B. absolute</label>
+<label><input type="radio" name="q3"> C. fixed</label>
+<label><input type="radio" name="q3"> D. sticky</label>
+</div>
+
+<div class="question">
+<strong>4. Which value makes an element stick to the viewport while scrolling?</strong>
+<label><input type="radio" name="q4"> A. relative</label>
+<label><input type="radio" name="q4"> B. absolute</label>
+<label><input type="radio" name="q4"> C. fixed</label>
+<label><input type="radio" name="q4"> D. static</label>
+</div>
+
+<div class="question">
+<strong>5. Property used to move an element from the top?</strong>
+<input type="text">
+</div>
+
+<div class="question">
+<strong>6. Property used to move an element from the left?</strong>
+<input type="text">
+</div>
+
+<div class="question">
+<strong>7. Identify the position value that moves relative to normal position.</strong>
+<input type="text">
+</div>
+
+<div class="question">
+<strong>8. Identify the position value fixed to viewport.</strong>
+<input type="text">
+</div>
+
+<div class="question">
+<strong>9. Which value keeps an element in flow but allows scrolling offset?</strong>
+<input type="text">
+</div>
+
+<div class="question">
+<strong>10. Which CSS property controls layering order?</strong>
+<input type="text">
+</div>
+
+<button class="next" onclick="location.href='lesson-19.html'">Next Lesson</button>
+
+</div>
+</div>
+
+<div class="ground"></div>
+</body>
+</html>
