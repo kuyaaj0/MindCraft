@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS Lesson 2 Quiz (Step-by-Step)</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&family=Press+Start+2P&display=swap');
 
         *{margin:0;padding:0;box-sizing:border-box;}
 
@@ -26,6 +26,7 @@
             border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
             box-shadow:0 0 50px rgba(255,0,255,0.5);
             padding:35px 30px 30px;
+            position: relative;
         }
 
         h1{
@@ -42,6 +43,24 @@
             text-align:center;
             color:#00ffff;
             margin-bottom:20px;
+        }
+
+        .timer-container{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        #timer{
+            font-family:'Roboto Mono',monospace;
+            font-size:2em;
+            color:#ff4757;
+            font-weight:700;
+            text-shadow:0 0 10px rgba(255,71,87,0.8);
+            display:inline-block;
+            background:rgba(255,71,87,0.1);
+            padding:10px 20px;
+            border-radius:12px;
+            border:2px solid #ff4757;
         }
 
         #progress{
@@ -87,7 +106,7 @@
 
         .nav-row{
             display:flex;
-            justify-content:space-between;
+            justify-content:center;
             gap:10px;
             margin-top:10px;
         }
@@ -95,17 +114,11 @@
         button{
             font-family:'Orbitron',monospace;
             font-weight:700;
-            padding:10px 20px;
+            padding:12px 25px;
             border-radius:14px;
             border:none;
             cursor:pointer;
-            font-size:0.95rem;
-        }
-
-        #prevBtn{
-            background:#111;
-            color:#00ffff;
-            border:2px solid #00ffff;
+            font-size:1rem;
         }
 
         #nextBtn{
@@ -123,20 +136,55 @@
 
         #resultBox{
             margin-top:18px;
-            padding:15px;
+            padding:25px;
             border-radius:12px;
             background:rgba(0,0,0,0.7);
             border:2px solid #00ffff;
             font-family:'Roboto Mono',monospace;
             color:#00ff88;
+            display:none;
+            text-align:center;
         }
 
-        #resetBtn{
+        .score-header{
+            font-size:1.5em;
+            color:#00ff88;
+            margin-bottom:20px;
+        }
+
+        .score-details{
+            background:rgba(0,255,136,0.15);
+            padding:20px;
+            border-radius:10px;
+            margin:20px 0;
+            border-left:4px solid #00ff88;
+        }
+
+        #scoreStatus{
+            font-size:1.2em;
             margin-top:10px;
-            background:#111;
-            color:#ff00ff;
-            border:2px solid #ff00ff;
-            display:none;
+            font-weight:700;
+        }
+
+        .exit-btn{
+            position: fixed;
+            top: 480px;
+            left: 202px;
+            background: #ff4d4d;
+            color: #fff;
+            text-decoration: none;
+            font-family: 'Press Start 2P';
+            padding: 6px 10px;
+            border-radius: 8px;
+            box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+            z-index: 1000;
+            font-size: 9px;
+            transition: transform 0.1s;
+            display: none;
+        }
+
+        .exit-btn:hover{
+            transform: translateY(-2px);
         }
 
         @media(max-width:600px){
@@ -144,168 +192,129 @@
             h1{font-size:2em;}
             .nav-row{flex-direction:column;}
             .nav-row button{width:100%;}
+            .exit-btn{top: 450px; left: 50px;}
+            #timer{font-size:1.5em;}
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>JS Lesson 2 Quiz</h1>
-    <p class="subtitle">Syntax, Statements, Blocks, Identifiers, Case</p>
-    <p id="progress">Question 1 / 15</p>
+    <a href="../../../Webside/Student.html" class="exit-btn" id="exitBtn">BACK</a>
 
-    <div id="questionContainer" class="question-box">
-        <!-- question content injected by JS -->
-    </div>
+    <div class="container">
+        <h1>JS Lesson 2 Quiz</h1>
+        <p class="subtitle">Syntax, Statements, Blocks, Identifiers, Case</p>
+        
+        <div class="timer-container">
+            <div id="timer">10:00</div>
+        </div>
 
-    <div class="nav-row">
-        <button id="prevBtn">⟵ Previous</button>
-        <button id="nextBtn">Next ⟶</button>
-        <button id="finishBtn">🚀 Finish Quiz</button>
-    </div>
+        <p id="progress">Question 1 / 15</p>
 
-    <div id="resultBox">
-        Score: 0 / 15<br>
-        Status: Answer each question then click Finish.
+        <div id="questionContainer" class="question-box">
+            <!-- question content injected by JS -->
+        </div>
+
+        <div class="nav-row">
+            <button id="nextBtn">Next ⟶</button>
+            <button id="finishBtn">🚀 Finish Quiz</button>
+        </div>
+
+        <div id="resultBox">
+            <div class="score-header">🎯 Quiz Complete!</div>
+            <div class="score-details">
+                <div style="font-size:1.4em;"><strong>Score:</strong> <span id="finalScore">0</span></div>
+                <div style="font-size:1.2em; margin-top:8px;">of 15 • <span id="percentage">0%</span></div>
+                <div id="scoreStatus"></div>
+            </div>
+            <div style="color:#00ffff; font-size:0.95em; margin-top:15px;">
+                Press F12 → Console for cyberpunk results log. 🔍
+            </div>
+        </div>
     </div>
-    <button id="resetBtn">Reset Quiz</button>
-</div>
 
 <script>
-    // 10 multiple choice + 5 fill-in-the-blank
-    const questions = [
-        {
-            type: "mc",
-            text: "1. In JavaScript, a statement is similar to a ________ in English.",
-            options: ["Word","Paragraph","Sentence","Letter"],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "2. Which symbol is commonly used to mark the end of a JavaScript statement?",
-            options: [":",";","/","."],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "3. According to the lesson, the semicolon can be seen as:",
-            options: [
-                "A comment marker",
-                "A line break",
-                "An error code",
-                "A period that says 'command finished'"
-            ],
-            correct: 3
-        },
-        {
-            type: "mc",
-            text: "4. What do curly braces { } create in JavaScript?",
-            options: ["A comment","A string","A block of code","A semicolon"],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "5. Which of these usually uses code blocks with { }?",
-            options: [
-                "Comments and strings",
-                "Functions, if statements, and loops",
-                "URLs and links",
-                "Images and videos"
-            ],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "6. Which identifier name is VALID in JavaScript?",
-            options: [
-                "1stPlace",
-                "my-name",
-                "class",
-                "$total"
-            ],
-            correct: 3
-        },
-        {
-            type: "mc",
-            text: "7. Why is “class” a bad identifier name?",
-            options: [
-                "It is too short",
-                "It is a reserved keyword in JavaScript",
-                "Browsers cannot read it",
-                "Only CSS can use it"
-            ],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "8. JavaScript is case sensitive. What does this mean?",
-            options: [
-                "It ignores all capital letters",
-                "UPPER and lower case are treated the same",
-                "UPPER and lower case are treated as different",
-                "Variable names must be uppercase"
-            ],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "9. If you declare 'let score = 95;' but use 'console.log(Score);', what happens?",
-            options: [
-                "It prints 95",
-                "It prints 0",
-                "It prints undefined or error",
-                "It changes score to 0"
-            ],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "10. In the example student system, what combines to form a complete program?",
-            options: [
-                "Comments + images",
-                "Statements + blocks + identifiers",
-                "Only HTML tags",
-                "Only console.log() calls"
-            ],
-            correct: 1
-        },
-        // Fill in the blanks
-        {
-            type: "fill",
-            text: "11. In the lesson, each JavaScript command is called a ________.",
-            correctText: "statement"
-        },
-        {
-            type: "fill",
-            text: "12. Curly braces { } group statements together into a code ________.",
-            correctText: "block"
-        },
-        {
-            type: "fill",
-            text: "13. Names you give to variables and functions are called ________.",
-            correctText: "identifiers"
-        },
-        {
-            type: "fill",
-            text: "14. JavaScript keywords, variables, and function names are ________ sensitive.",
-            correctText: "case"
-        },
-        {
-            type: "fill",
-            text: "15. A good JavaScript naming style that uses small letters and capitals inside (like studentName) is called ________ case.",
-            correctText: "camel"
-        }
-    ];
-
+    // PERSISTENT STATE - LESSON 2 SPECIFIC STORAGE KEYS
+    let timeLeft = 600;
+    let timerInterval;
     let currentIndex = 0;
-    const userAnswers = new Array(questions.length).fill(null);
+    const userAnswers = new Array(15).fill(null);
+    const timerEl = document.getElementById('timer');
+
+    // RESTORE STATE FROM PREVIOUS SESSION (Lesson 2 keys)
+    const savedTime = sessionStorage.getItem('quizTimeLeft2');
+    const savedIndex = sessionStorage.getItem('quizCurrentIndex2');
+    const savedAnswers = sessionStorage.getItem('quizUserAnswers2');
+    
+    if (savedTime !== null) timeLeft = parseInt(savedTime);
+    if (savedIndex !== null) currentIndex = parseInt(savedIndex);
+    if (savedAnswers !== null) userAnswers.splice(0, userAnswers.length, ...JSON.parse(savedAnswers));
+
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 60) {
+            timerEl.style.color = '#ff0000';
+            timerEl.style.textShadow = '0 0 15px #ff0000';
+        } else {
+            timerEl.style.color = '#ff4757';
+        }
+    }
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimer();
+            sessionStorage.setItem('quizTimeLeft2', timeLeft);
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                saveCurrentAnswer();
+                showResults();
+            }
+        }, 1000);
+    }
+
+    // Pause when switching tabs
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && timerInterval) {
+            clearInterval(timerInterval);
+        } else if (!document.hidden && timeLeft > 0 && !timerInterval) {
+            startTimer();
+        }
+    });
+
+    // LESSON 2 QUESTIONS - YOUR EXACT QUESTIONS
+    const questions = [
+        {type: "mc", text: "1. In JavaScript, a statement is similar to a ________ in English.", options: ["Word","Paragraph","Sentence","Letter"], correct: 2},
+        {type: "mc", text: "2. Which symbol is commonly used to mark the end of a JavaScript statement?", options: [":",";","/","."], correct: 1},
+        {type: "mc", text: "3. According to the lesson, the semicolon can be seen as:", options: ["A comment marker","A line break","An error code","A period that says 'command finished'"], correct: 3},
+        {type: "mc", text: "4. What do curly braces { } create in JavaScript?", options: ["A comment","A string","A block of code","A semicolon"], correct: 2},
+        {type: "mc", text: "5. Which of these usually uses code blocks with { }?", options: ["Comments and strings","Functions, if statements, and loops","URLs and links","Images and videos"], correct: 1},
+        {type: "mc", text: "6. Which identifier name is VALID in JavaScript?", options: ["1stPlace","my-name","class","$total"], correct: 3},
+        {type: "mc", text: "7. Why is “class” a bad identifier name?", options: ["It is too short","It is a reserved keyword in JavaScript","Browsers cannot read it","Only CSS can use it"], correct: 1},
+        {type: "mc", text: "8. JavaScript is case sensitive. What does this mean?", options: ["It ignores all capital letters","UPPER and lower case are treated the same","UPPER and lower case are treated as different","Variable names must be uppercase"], correct: 2},
+        {type: "mc", text: "9. If you declare 'let score = 95;' but use 'console.log(Score);', what happens?", options: ["It prints 95","It prints 0","It prints undefined or error","It changes score to 0"], correct: 2},
+        {type: "mc", text: "10. In the example student system, what combines to form a complete program?", options: ["Comments + images","Statements + blocks + identifiers","Only HTML tags","Only console.log() calls"], correct: 1},
+        {type: "fill", text: "11. In the lesson, each JavaScript command is called a ________.", correctText: "statement"},
+        {type: "fill", text: "12. Curly braces { } group statements together into a code ________.", correctText: "block"},
+        {type: "fill", text: "13. Names you give to variables and functions are called ________.", correctText: "identifiers"},
+        {type: "fill", text: "14. JavaScript keywords, variables, and function names are ________ sensitive.", correctText: "case"},
+        {type: "fill", text: "15. A good JavaScript naming style that uses small letters and capitals inside (like studentName) is called ________ case.", correctText: "camel"}
+    ];
 
     const questionContainer = document.getElementById("questionContainer");
     const progress = document.getElementById("progress");
-    const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
     const finishBtn = document.getElementById("finishBtn");
     const resultBox = document.getElementById("resultBox");
-    const resetBtn = document.getElementById("resetBtn");
+    const finalScoreEl = document.getElementById("finalScore");
+    const percentageEl = document.getElementById("percentage");
+    const scoreStatusEl = document.getElementById("scoreStatus");
+    const exitBtn = document.getElementById("exitBtn");
 
     function loadQuestion(index){
         const q = questions[index];
@@ -320,7 +329,6 @@
         if(q.type === "mc"){
             const optionsDiv = document.createElement("div");
             optionsDiv.className = "options";
-
             q.options.forEach((opt,i)=>{
                 const label = document.createElement("label");
                 const radio = document.createElement("input");
@@ -332,7 +340,6 @@
                 label.appendChild(document.createTextNode(opt));
                 optionsDiv.appendChild(label);
             });
-
             questionContainer.appendChild(optionsDiv);
         }else{
             const input = document.createElement("input");
@@ -340,21 +347,18 @@
             input.id = "fillInput";
             input.className = "fill-input";
             input.placeholder = "Type your answer here";
-            if(userAnswers[index] !== null){
-                input.value = userAnswers[index];
-            }
+            if(userAnswers[index] !== null) input.value = userAnswers[index];
             questionContainer.appendChild(input);
         }
 
-        prevBtn.style.visibility = index === 0 ? "hidden" : "visible";
         if(index === questions.length - 1){
             nextBtn.style.display = "none";
             finishBtn.style.display = "inline-block";
         }else{
             nextBtn.style.display = "inline-block";
-            finishBtn.style.display = "inline-block";
             finishBtn.style.display = "none";
         }
+        sessionStorage.setItem('quizCurrentIndex2', currentIndex);
     }
 
     function saveCurrentAnswer(){
@@ -366,6 +370,7 @@
             const input = document.getElementById("fillInput");
             userAnswers[currentIndex] = input.value;
         }
+        sessionStorage.setItem('quizUserAnswers2', JSON.stringify(userAnswers));
     }
 
     function calculateScore(){
@@ -382,13 +387,35 @@
         return score;
     }
 
-    prevBtn.addEventListener("click",()=>{
-        saveCurrentAnswer();
-        if(currentIndex > 0){
-            currentIndex--;
-            loadQuestion(currentIndex);
-        }
-    });
+    function showResults(){
+        clearInterval(timerInterval);
+        sessionStorage.setItem('quizTimeLeft2', timeLeft);
+        const total = questions.length;
+        const score = calculateScore();
+        const percentage = Math.round((score / total) * 100);
+        
+        finalScoreEl.textContent = score;
+        percentageEl.textContent = `${percentage}%`;
+        
+        let status = "";
+        if(percentage >= 90) status = "🚀 Cyber Elite!";
+        else if(percentage >= 80) status = "🌟 Matrix Master";
+        else if(percentage >= 70) status = "⚡ Code Warrior";
+        else if(percentage >= 60) status = "💻 Solid Progress";
+        else if(percentage >= 50) status = "🔄 Keep Coding!";
+        else status = "🔥 Review & Retry!";
+        
+        scoreStatusEl.innerHTML = `<div style="font-size:1.1em; margin-top:8px;">${status}</div>`;
+        
+        progress.style.display = "none";
+        questionContainer.style.display = "none";
+        nextBtn.style.display = "none";
+        finishBtn.style.display = "none";
+        resultBox.style.display = "block";
+        exitBtn.style.display = "inline-block";
+
+        console.log("🧪 JS Lesson 2 Quiz Score:", score + " / " + total, "(" + percentage + "%)");
+    }
 
     nextBtn.addEventListener("click",()=>{
         saveCurrentAnswer();
@@ -400,26 +427,14 @@
 
     finishBtn.addEventListener("click",()=>{
         saveCurrentAnswer();
-        const total = questions.length;
-        const score = calculateScore();
-        resultBox.innerHTML =
-            `Score: ${score} / ${total}<br>` +
-            `F12 Console: Syntax mastery logged.`;
-        alert("Quiz finished! Your score: " + score + " / " + total);
-        console.log("🧪 JS Lesson 2 Quiz Score:", score + " / " + total);
-        resetBtn.style.display = "inline-block";
+        showResults();
     });
 
-    resetBtn.addEventListener("click",()=>{
-        for(let i=0;i<userAnswers.length;i++){ userAnswers[i]=null; }
-        currentIndex = 0;
-        resultBox.innerHTML = "Score: 0 / 15<br>Status: Answer each question then click Finish.";
-        resetBtn.style.display = "none";
-        loadQuestion(currentIndex);
-    });
-
+    // START QUIZ WITH PERSISTED STATE
+    updateTimer();
+    if (timeLeft > 0) startTimer();
     loadQuestion(currentIndex);
-    console.log("🌌 Step-by-step JS Lesson 2 Quiz LOADED!");
+    console.log("🌌 JS Lesson 2 PERSISTENT QUIZ LOADED! Timer + Question saved on refresh! ✅");
 </script>
 </body>
 </html>
