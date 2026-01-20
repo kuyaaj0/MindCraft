@@ -45,6 +45,24 @@
             margin-bottom:20px;
         }
 
+        .timer-container{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        #timer{
+            font-family:'Roboto Mono',monospace;
+            font-size:2em;
+            color:#ff4757;
+            font-weight:700;
+            text-shadow:0 0 10px rgba(255,71,87,0.8);
+            display:inline-block;
+            background:rgba(255,71,87,0.1);
+            padding:10px 20px;
+            border-radius:12px;
+            border:2px solid #ff4757;
+        }
+
         #progress{
             text-align:center;
             margin-bottom:20px;
@@ -175,6 +193,7 @@
             .nav-row{flex-direction:column;}
             .nav-row button{width:100%;}
             .exit-btn{top: 450px; left: 50px;}
+            #timer{font-size:1.5em;}
         }
     </style>
 </head>
@@ -184,6 +203,11 @@
     <div class="container">
         <h1>JS Lesson 1 Quiz</h1>
         <p class="subtitle">One Question at a Time • Cyberpunk Matrix</p>
+        
+        <div class="timer-container">
+            <div id="timer">10:00</div>
+        </div>
+
         <p id="progress">Question 1 / 15</p>
 
         <div id="questionContainer" class="question-box">
@@ -209,6 +233,36 @@
     </div>
 
 <script>
+    // 10 MINUTE TIMER (600 seconds)
+    let timeLeft = 600;
+    let timerInterval;
+    const timerEl = document.getElementById('timer');
+
+    function updateTimer() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 60) {
+            timerEl.style.color = '#ff0000';
+            timerEl.style.animation = 'pulse 1s infinite';
+        }
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimer();
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                // Auto-submit when time runs out
+                saveCurrentAnswer();
+                showResults();
+            }
+        }, 1000);
+    }
+
     // ALL 15 QUESTIONS - FULLY FIXED ✓
     const questions = [
         {
@@ -420,6 +474,7 @@
     }
 
     function showResults(){
+        clearInterval(timerInterval);
         const total = questions.length;
         const score = calculateScore();
         const percentage = Math.round((score / total) * 100);
@@ -442,7 +497,7 @@
         nextBtn.style.display = "none";
         finishBtn.style.display = "none";
         resultBox.style.display = "block";
-        exitBtn.style.display = "inline-block";  // SHOW EXIT BUTTON
+        exitBtn.style.display = "inline-block";
         
         console.log("🧪 JS Lesson 1 Quiz Score:", score + " / " + total, "(" + percentage + "%)");
     }
@@ -460,8 +515,11 @@
         showResults();
     });
 
+    // START QUIZ WITH TIMER
+    updateTimer();
+    startTimer();
     loadQuestion(currentIndex);
-    console.log("🌌 Forward-Only JS Quiz with EXIT LOADED! ✅");
+    console.log("🌌 10-MINUTE TIMED JS Quiz LOADED! ✅");
 </script>
 </body>
 </html>
