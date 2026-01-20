@@ -1,0 +1,277 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 17 - Tables & Forms Styling | MindCraft</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-container {
+  max-width: 700px;
+  margin: 50px auto;
+  padding: 25px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 15px #1DB954;
+}
+
+.choice {
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  width: 80%;
+  max-width: 400px;
+  border-radius: 10px;
+  background: #1DB954;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+}
+.choice:disabled {
+  cursor: not-allowed;
+  background: #555;
+}
+
+/* Correct/wrong colors */
+.choice.correct { background: #00c853 !important; } /* green */
+.choice.wrong { background: #d50000 !important; } /* red */
+
+input[type="text"] {
+  width: 70%;
+  max-width: 350px;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  border: none;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#submitBtn, #nextBtn, #finishBtn {
+  display: none;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #1DB954;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+}
+
+#popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-container">
+  <h2>Lesson 17: Tables & Forms Styling</h2>
+  <h4 id="progress"></h4>
+  <h4 id="timer">Time Left: 15:00</h4>
+
+  <div id="questionContainer"></div>
+  <div id="result"></div>
+
+  <button id="submitBtn">Submit Answer</button>
+  <button id="nextBtn">Next Question</button>
+  <button id="finishBtn">Finish Level</button>
+</div>
+
+<div id="popupOverlay">
+  <h2>Level Complete</h2>
+  <p id="xpGain"></p>
+</div>
+
+<script>
+function initQuiz() {
+  let current = 0;
+  let xp = 0;
+  const XP_PER = 5;
+
+  /* ===== TIMER ===== */
+  let totalTime = 15 * 60;
+  const timerEl = document.getElementById("timer");
+
+  const timer = setInterval(() => {
+    totalTime--;
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
+
+    if (totalTime <= 0) {
+      clearInterval(timer);
+      showPopup();
+    }
+  }, 1000);
+
+  const quiz = [
+    { type:"mc", q:"Which property collapses table borders?",
+      choices:["border","collapse","border-collapse","table-layout"], a:2 },
+
+    { type:"mc", q:"Which element creates a table row?",
+      choices:["td","th","tr","table"], a:2 },
+
+    { type:"mc", q:"Which improves form spacing?",
+      choices:["margin","padding","both","none"], a:2 },
+
+    { type:"mc", q:"Which property styles input borders?",
+      choices:["outline","border","color","background"], a:1 },
+
+    { type:"fill", q:"__________ improves readability of tables.",
+      a:"padding" },
+
+    { type:"fill", q:"Labels improve form ________.",
+      a:"accessibility" },
+
+    { type:"fill", q:"input:focus styles the ________ state.",
+      a:"focus" },
+
+    { type:"id", q:"Property that merges table borders",
+      a:"border-collapse" },
+
+    { type:"id", q:"Element used for user input",
+      a:"input" },
+
+    { type:"id", q:"Element that describes form fields",
+      a:"label" }
+  ];
+
+  const qc = document.getElementById("questionContainer");
+  const res = document.getElementById("result");
+  const prog = document.getElementById("progress");
+  const submit = document.getElementById("submitBtn");
+  const next = document.getElementById("nextBtn");
+  const finish = document.getElementById("finishBtn");
+
+  /* ===== GLOBAL ENTER KEY SHORTCUT ===== */
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+
+    if (submit.style.display === "inline-block" && !submit.disabled) {
+      submit.click();
+    } else if (next.style.display === "inline-block") {
+      next.click();
+    } else if (finish.style.display === "inline-block") {
+      finish.click();
+    }
+  });
+
+  function loadQ() {
+    qc.innerHTML = "";
+    res.textContent = "";
+    submit.style.display = next.style.display = finish.style.display = "none";
+    submit.disabled = false;
+
+    const q = quiz[current];
+    prog.textContent = `Question ${current + 1} of ${quiz.length}`;
+
+    const h3 = document.createElement("h3");
+    h3.textContent = q.q;
+    qc.appendChild(h3);
+
+    if (q.type === "mc") {
+      q.choices.forEach((c,i)=>{
+        const btn = document.createElement("button");
+        btn.textContent = c;
+        btn.className = "choice";
+        btn.onclick = () => checkMC(i);
+        qc.appendChild(btn);
+      });
+    } else {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.id = "answerInput";
+      input.placeholder = "Type your answer";
+      qc.appendChild(input);
+      submit.style.display = "inline-block";
+      input.focus();
+    }
+  }
+
+  function checkMC(selectedIndex) {
+    const buttons = document.querySelectorAll(".choice");
+    const correctIndex = quiz[current].a;
+
+    buttons.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === correctIndex) btn.classList.add("correct");
+      if (i === selectedIndex && i !== correctIndex) btn.classList.add("wrong");
+    });
+
+    if (selectedIndex === correctIndex) {
+      xp += XP_PER;
+      res.textContent = "Correct!";
+    } else {
+      res.textContent = "Wrong! The correct answer is highlighted.";
+    }
+    showNav();
+  }
+
+  submit.onclick = () => {
+    const input = document.getElementById("answerInput");
+    const user = input.value.trim().toLowerCase();
+    const correct = quiz[current].a.toLowerCase();
+
+    input.disabled = true;
+    submit.disabled = true;
+
+    if (user === correct) {
+      xp += XP_PER;
+      res.textContent = "Correct!";
+    } else {
+      res.textContent = `Wrong! Correct answer: ${quiz[current].a}`;
+    }
+    showNav();
+  };
+
+  function showNav() {
+    if (current < quiz.length - 1) {
+      next.style.display = "inline-block";
+    } else {
+      finish.style.display = "inline-block";
+    }
+  }
+
+  next.onclick = () => {
+    current++;
+    loadQ();
+  };
+
+  finish.onclick = () => {
+    clearInterval(timer);
+    showPopup();
+  };
+
+  function showPopup() {
+    document.getElementById("popupOverlay").style.display = "flex";
+    document.getElementById("xpGain").textContent = `+${xp} XP Gained`;
+  }
+
+  loadQ();
+}
+
+initQuiz();
+</script>
+
+</body>
+</html>
