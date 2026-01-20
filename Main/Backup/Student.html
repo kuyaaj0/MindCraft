@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindCraft | Coding Lessons</title>
+<title>MindCraft | Code Lessons</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
@@ -236,6 +236,16 @@ footer {
   10%, 80% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.05); }
 }
+  /* === Level-Up Subtle Glow Animation === */
+@keyframes levelUpPulse {
+  0%   { text-shadow: 0 0 2px #1DB954, 0 0 6px #1DB954, 0 0 10px #1DB954; transform: scale(1); }
+  50%  { text-shadow: 0 0 8px #00ff99, 0 0 16px #00ff99, 0 0 25px #00ff99; transform: scale(1.2); color: #adffb0; }
+  100% { text-shadow: none; transform: scale(1); color: #fff; }
+}
+
+.level-up-glow {
+  animation: levelUpPulse 1s ease-in-out;
+  }
 </style>
 </head>
 <body>
@@ -268,7 +278,7 @@ footer {
 </header>
 
 <main>
-  <h1>CHOOSE A CODING LANGUAGE</h1>
+  <h1>CHOOSE A CODE LANGUAGE</h1>
 
   <!-- Container for scrolling lessons -->
   <div class="lesson-container">
@@ -311,6 +321,7 @@ footer {
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
 <!-- ✅ Auto-generate lessons and quizzes -->
+<!-- ✅ Auto-generate lessons and quizzes -->
 <script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
@@ -342,12 +353,13 @@ populateOptions("js", 20, "Lessons", "JS");
 populateOptions("js", 20, "Quizzes", "JS");
 </script>
 
-<!-- ✅ Firebase Auth / XP / Rank -->
+<!-- ✅ Firebase Auth / XP / Rank / Glow Upgrade -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// === Firebase Config ===
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -357,11 +369,29 @@ const firebaseConfig = {
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
+// === Initialize Firebase ===
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, async (user) => {
+// === Helper: Smooth XP bar animation ===
+function animateXPBar(bar, startValue, endValue, duration = 600) {
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = startValue + (endValue - startValue) * progress;
+    bar.value = currentValue;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+let lastXP = 0;
+let lastLevel = 0;
+
+// === Firebase Authentication & Real-time XP Listener ===
+onAuthStateChanged(auth, (user) => {
   if (!user) {
     alert("You must sign in first!");
     window.location.href = "../Account/signin.html";
@@ -369,49 +399,69 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-  if (!snap.exists()) {
-    alert("No user data found.");
-    window.location.href = "../Account/signin.html";
-    return;
-  }
+  onSnapshot(userRef, (snap) => {
+    if (!snap.exists()) {
+      alert("No user data found.");
+      window.location.href = "../Account/signin.html";
+      return;
+    }
 
-  const data = snap.data();
-  if (data.role !== "student") {
-    window.location.href = "Teacher.html";
-    return;
-  }
+    const data = snap.data();
+    if (data.role !== "student") {
+      window.location.href = "Teacher.html";
+      return;
+    }
 
-  document.getElementById("xpValue").innerText = data.xp ?? 0;
-  document.getElementById("xpBar").value = (data.xp ?? 0) % (data.xpMax ?? 100);
-  document.getElementById("xpBar").max = data.xpMax ?? 100;
-  document.getElementById("levelValue").innerText = data.level ?? 1;
+    // === XP and Level Data ===
+    const xp = data.xp ?? 0;
+    const xpMax = data.xpMax ?? 100;
+    const level = data.level ?? 1;
 
-  const name = user.displayName || data.name || user.email.split("@")[0];
-  document.getElementById("studentName").textContent = name;
-  const welcomeOverlay = document.getElementById("welcomeOverlay");
-  if (!sessionStorage.getItem("welcomeShown")) {
-    sessionStorage.setItem("welcomeShown", "true");
-    welcomeOverlay.style.display = "flex";
-    setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
-  }
+    // === Update UI ===
+    const xpBar = document.getElementById("xpBar");
+    // ✅ Use Firestore values directly (no modulo)
+  document.getElementById("xpValue").innerText = `${xp}/${xpMax}`;
+  document.getElementById("levelValue").innerText = level;
+    // Smooth transition for XP bar width
+    animateXPBar(xpBar, lastXP, xp);
+    xpBar.max = xpMax;
+    lastXP = xp;
 
-  const rankDisplay = document.getElementById("rankDisplay");
-  const usersRef = collection(db, "users");
-  const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+    // === Subtle Level-Up Glow Animation ===
+    const levelDisplay = document.getElementById("levelValue");
+    if (level > lastLevel) {
+      levelDisplay.classList.add("level-up-glow");
+      setTimeout(() => levelDisplay.classList.remove("level-up-glow"), 1000);
+    }
+    lastLevel = level;
 
-  onSnapshot(q, (snapshot) => {
-    let rank = 1, found = false;
-    snapshot.forEach(docSnap => {
-      if (docSnap.id === user.uid && !found) { found = true; return; }
-      if (!found) rank++;
+    // === Welcome Overlay ===
+    const name = user.displayName || data.name || user.email.split("@")[0];
+    document.getElementById("studentName").textContent = name;
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    if (!sessionStorage.getItem("welcomeShown")) {
+      sessionStorage.setItem("welcomeShown", "true");
+      welcomeOverlay.style.display = "flex";
+      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
+    }
+
+    // === Real-time Rank Display ===
+    const rankDisplay = document.getElementById("rankDisplay");
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+
+    onSnapshot(q, (snapshot) => {
+      let rank = 1, found = false;
+      snapshot.forEach((docSnap) => {
+        if (docSnap.id === user.uid && !found) { found = true; return; }
+        if (!found) rank++;
+      });
+      rankDisplay.innerText = `Rank: #${rank}`;
+      if (rank <= 3) rankDisplay.classList.add("rank-top");
+      else rankDisplay.classList.remove("rank-top");
     });
-    rankDisplay.innerText = `Rank: #${rank}`;
-    if (rank <= 3) rankDisplay.classList.add("rank-top");
-    else rankDisplay.classList.remove("rank-top");
   });
 });
-//backup code
 </script>
 </body>
 </html>
