@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 11 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 65%;
+}
+button {
+  padding: 10px 20px;
+  background: #673AB7;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #512DA8;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 11: Strings & String Methods</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which property returns the length of a string?<br>
+<input type="radio" name="q1" value="size"> A. size<br>
+<input type="radio" name="q1" value="length"> B. length<br>
+<input type="radio" name="q1" value="count"> C. count<br>
+<input type="radio" name="q1" value="total"> D. total
+</div>
+
+<div class="question">
+2. Which method extracts part of a string?<br>
+<input type="radio" name="q2" value="replace()"> A. replace()<br>
+<input type="radio" name="q2" value="split()"> B. split()<br>
+<input type="radio" name="q2" value="slice()"> C. slice()<br>
+<input type="radio" name="q2" value="join()"> D. join()
+</div>
+
+<div class="question">
+3. What does split() return?<br>
+<input type="radio" name="q3" value="String"> A. String<br>
+<input type="radio" name="q3" value="Object"> B. Object<br>
+<input type="radio" name="q3" value="Array"> C. Array<br>
+<input type="radio" name="q3" value="Number"> D. Number
+</div>
+
+<div class="question">
+4. Template literals use which symbol?<br>
+<input type="radio" name="q4" value="' '"> A. ' '<br>
+<input type="radio" name="q4" value='" "'> B. " "<br>
+<input type="radio" name="q4" value="`"> C. `<br>
+<input type="radio" name="q4" value="~~"> D. ~~
+</div>
+
+<div class="question">
+5. The method used to replace text in a string is __.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. ${} is used inside __.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. substring() does not accept __ indexes.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. A sequence of characters enclosed in quotes.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. Method that divides a string into an array.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. ES6 feature that allows embedded expressions in strings.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "length",
+    q2: "slice()",
+    q3: "Array",
+    q4: "`",
+    q5: "replace()",
+    q6: "template literals",
+    q7: "negative",
+    q8: "String",
+    q9: "split()",
+    q10: "Template literals"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson11Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson11Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

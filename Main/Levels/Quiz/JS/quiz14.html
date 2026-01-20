@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 14 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f3;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #43a047;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 14: Objects</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Objects store data as:<br>
+<input type="radio" name="q1" value="indexes"> A. indexes<br>
+<input type="radio" name="q1" value="arrays"> B. arrays<br>
+<input type="radio" name="q1" value="key-value pairs"> C. key-value pairs<br>
+<input type="radio" name="q1" value="strings"> D. strings
+</div>
+
+<div class="question">
+2. How do you access a property?<br>
+<input type="radio" name="q2" value="obj[property]"> A. obj[property]<br>
+<input type="radio" name="q2" value="obj.property"> B. obj.property<br>
+<input type="radio" name="q2" value="Both"> C. Both A and B<br>
+<input type="radio" name="q2" value="None"> D. None
+</div>
+
+<div class="question">
+3. Nested objects mean:<br>
+<input type="radio" name="q3" value="Objects inside arrays"> A. Objects inside arrays<br>
+<input type="radio" name="q3" value="Arrays inside objects"> B. Arrays inside objects<br>
+<input type="radio" name="q3" value="Objects inside objects"> C. Objects inside objects<br>
+<input type="radio" name="q3" value="Functions inside objects"> D. Functions inside objects
+</div>
+
+<div class="question">
+4. Which symbol defines an object?<br>
+<input type="radio" name="q4" value="[]"> A. []<br>
+<input type="radio" name="q4" value="()"> B. ()<br>
+<input type="radio" name="q4" value="{}"> C. {}<br>
+<input type="radio" name="q4" value="<>"> D. <>
+</div>
+
+<div class="question">
+5. Object properties are separated by __.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. The value in a key-value pair can be any __.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. this refers to the __ object.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. A data structure storing related properties.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. A property whose value is a function.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. Object creation method using {}.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "key-value pairs",
+    q2: "Both",
+    q3: "Objects inside objects",
+    q4: "{}",
+    q5: "commas",
+    q6: "data type",
+    q7: "current",
+    q8: "Object",
+    q9: "Method",
+    q10: "Object literal"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson14Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson14Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 13 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 65%;
+}
+button {
+  padding: 10px 20px;
+  background: #009688;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #00796B;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 13: Arrays & Array Methods</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which method adds an element at the end?<br>
+<input type="radio" name="q1" value="pop()"> A. pop()<br>
+<input type="radio" name="q1" value="shift()"> B. shift()<br>
+<input type="radio" name="q1" value="push()"> C. push()<br>
+<input type="radio" name="q1" value="unshift()"> D. unshift()
+</div>
+
+<div class="question">
+2. Which method removes the first element?<br>
+<input type="radio" name="q2" value="pop()"> A. pop()<br>
+<input type="radio" name="q2" value="shift()"> B. shift()<br>
+<input type="radio" name="q2" value="splice()"> C. splice()<br>
+<input type="radio" name="q2" value="map()"> D. map()
+</div>
+
+<div class="question">
+3. Which method creates a new array?<br>
+<input type="radio" name="q3" value="forEach()"> A. forEach()<br>
+<input type="radio" name="q3" value="map()"> B. map()<br>
+<input type="radio" name="q3" value="push()"> C. push()<br>
+<input type="radio" name="q3" value="sort()"> D. sort()
+</div>
+
+<div class="question">
+4. Which method finds the first match?<br>
+<input type="radio" name="q4" value="filter()"> A. filter()<br>
+<input type="radio" name="q4" value="find()"> B. find()<br>
+<input type="radio" name="q4" value="map()"> C. map()<br>
+<input type="radio" name="q4" value="reduce()"> D. reduce()
+</div>
+
+<div class="question">
+5. Arrays store data in __ order.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. sort() arranges elements in __ order by default.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. filter() returns elements that meet a __.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. A collection of values stored in one variable.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. Method used to loop through array elements.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. Method that removes the last element.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "push()",
+    q2: "shift()",
+    q3: "map()",
+    q4: "find()",
+    q5: "indexed",
+    q6: "alphabetical",
+    q7: "condition",
+    q8: "Array",
+    q9: "forEach()",
+    q10: "pop()"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson13Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson13Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

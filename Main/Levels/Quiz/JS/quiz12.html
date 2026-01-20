@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 12 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f3;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #1976D2;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 12: Numbers, Math, Dates</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which converts a string to a number?<br>
+<input type="radio" name="q1" value="parseInt()"> A. parseInt()<br>
+<input type="radio" name="q1" value="toString()"> B. toString()<br>
+<input type="radio" name="q1" value="join()"> C. join()<br>
+<input type="radio" name="q1" value="split()"> D. split()
+</div>
+
+<div class="question">
+2. Which Math method rounds down?<br>
+<input type="radio" name="q2" value="round()"> A. round()<br>
+<input type="radio" name="q2" value="ceil()"> B. ceil()<br>
+<input type="radio" name="q2" value="floor()"> C. floor()<br>
+<input type="radio" name="q2" value="trunc()"> D. trunc()
+</div>
+
+<div class="question">
+3. Math.random() returns a number between:<br>
+<input type="radio" name="q3" value="0-10"> A. 0 and 10<br>
+<input type="radio" name="q3" value="1-10"> B. 1 and 10<br>
+<input type="radio" name="q3" value="0-1"> C. 0 and 1<br>
+<input type="radio" name="q3" value="1-100"> D. 1 and 100
+</div>
+
+<div class="question">
+4. Which object handles dates?<br>
+<input type="radio" name="q4" value="Time"> A. Time<br>
+<input type="radio" name="q4" value="Calendar"> B. Calendar<br>
+<input type="radio" name="q4" value="Date"> C. Date<br>
+<input type="radio" name="q4" value="Clock"> D. Clock
+</div>
+
+<div class="question">
+5. Math.max() returns the __.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. new Date() creates a __ object.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. toFixed() formats a number to __ decimal places.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. Built-in object for mathematical operations.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. Method that returns the current timestamp.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. JavaScript data type for numeric values.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "parseInt()",
+    q2: "floor()",
+    q3: "0-1",
+    q4: "Date",
+    q5: "maximum value",
+    q6: "date",
+    q7: "fixed",
+    q8: "Math",
+    q9: "Date.now()",
+    q10: "Number"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson12Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson12Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

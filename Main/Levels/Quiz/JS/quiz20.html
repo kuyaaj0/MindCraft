@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 20 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #e3f2fd;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 65%;
+}
+button {
+  padding: 10px 20px;
+  background: #03A9F4;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #0288D1;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 20: Local Storage & Simple App</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which tool is used to save data in the browser so it stays after refreshing the page?<br>
+<input type="radio" name="q1" value="sessionStorage"> A. sessionStorage<br>
+<input type="radio" name="q1" value="cookies"> B. cookies<br>
+<input type="radio" name="q1" value="localStorage"> C. localStorage<br>
+<input type="radio" name="q1" value="cache"> D. cache
+</div>
+
+<div class="question">
+2. Which method is used to store data in localStorage?<br>
+<input type="radio" name="q2" value="localStorage.getItem()"> A. localStorage.getItem()<br>
+<input type="radio" name="q2" value="localStorage.setItem()"> B. localStorage.setItem()<br>
+<input type="radio" name="q2" value="localStorage.remove()"> C. localStorage.remove()<br>
+<input type="radio" name="q2" value="localStorage.clear()"> D. localStorage.clear()
+</div>
+
+<div class="question">
+3. Which method is used to read data from localStorage?<br>
+<input type="radio" name="q3" value="localStorage.setItem()"> A. localStorage.setItem()<br>
+<input type="radio" name="q3" value="localStorage.getItem()"> B. localStorage.getItem()<br>
+<input type="radio" name="q3" value="localStorage.removeItem()"> C. localStorage.removeItem()<br>
+<input type="radio" name="q3" value="localStorage.clear()"> D. localStorage.clear()
+</div>
+
+<div class="question">
+4. What is an example of a small interactive page that uses localStorage?<br>
+<input type="radio" name="q4" value="A photo gallery"> A. A photo gallery<br>
+<input type="radio" name="q4" value="A calculator"> B. A calculator<br>
+<input type="radio" name="q4" value="Todo list / Notes app"> C. Todo list / Notes app<br>
+<input type="radio" name="q4" value="A video player"> D. A video player
+</div>
+
+<div class="question">
+5. The ________ method saves data in the browser.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. The ________ method retrieves data from localStorage.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. A simple app that stores tasks or notes in the browser is called a ________.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. It is used to keep data in the browser even after closing or refreshing the page.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. It is the method used to remove a specific item from localStorage.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. It is a small program that uses HTML, CSS, JavaScript, and localStorage to interact with users.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "localStorage",
+    q2: "localStorage.setItem()",
+    q3: "localStorage.getItem()",
+    q4: "Todo list / Notes app",
+    q5: "setItem",
+    q6: "getItem",
+    q7: "Todo list / Notes app",
+    q8: "localStorage",
+    q9: "removeItem",
+    q10: "Simple interactive app"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson20Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson20Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 19 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fff3e0;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #FF9800;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #F57C00;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 19: Errors & Debugging</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which JavaScript statement is used to handle errors?<br>
+<input type="radio" name="q1" value="try...catch"> A. try...catch<br>
+<input type="radio" name="q1" value="if...else"> B. if...else<br>
+<input type="radio" name="q1" value="switch"> C. switch<br>
+<input type="radio" name="q1" value="for loop"> D. for loop
+</div>
+
+<div class="question">
+2. Which tool is used to see messages and errors in the browser?<br>
+<input type="radio" name="q2" value="alert"> A. alert<br>
+<input type="radio" name="q2" value="console"> B. console<br>
+<input type="radio" name="q2" value="prompt"> C. prompt<br>
+<input type="radio" name="q2" value="debug()"> D. debug()
+</div>
+
+<div class="question">
+3. What happens when there is a mistake in your code?<br>
+<input type="radio" name="q3" value="The code runs normally"> A. The code runs normally<br>
+<input type="radio" name="q3" value="An error occurs"> B. An error occurs<br>
+<input type="radio" name="q3" value="The page disappears"> C. The page disappears<br>
+<input type="radio" name="q3" value="Nothing happens"> D. Nothing happens
+</div>
+
+<div class="question">
+4. Which is a good practice when writing JavaScript?<br>
+<input type="radio" name="q4" value="Never test your code"> A. Never test your code<br>
+<input type="radio" name="q4" value="Ignore errors"> B. Ignore errors<br>
+<input type="radio" name="q4" value="Use console and check for mistakes"> C. Use console and check for mistakes<br>
+<input type="radio" name="q4" value="Write all code in one line"> D. Write all code in one line
+</div>
+
+<div class="question">
+5. The try block contains the code that might cause an ________.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. The ________ block runs code if an error happens.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. The browser ________ is used to print messages or check errors.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. It is the process of finding and fixing mistakes in your code.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. It is used to show messages, errors, and values in the browser for testing.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. It is a common mistake like forgetting a semicolon or wrong spelling of a variable.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "try...catch",
+    q2: "console",
+    q3: "An error occurs",
+    q4: "Use console and check for mistakes",
+    q5: "error",
+    q6: "catch",
+    q7: "console",
+    q8: "Debugging",
+    q9: "Console",
+    q10: "Syntax error"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson19Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson19Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

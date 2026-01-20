@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 17 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f3;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #1976D2;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 17: Events</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which event happens when a user clicks a button?<br>
+<input type="radio" name="q1" value="onclick"> A. onclick<br>
+<input type="radio" name="q1" value="onload"> B. onload<br>
+<input type="radio" name="q1" value="onhover"> C. onhover<br>
+<input type="radio" name="q1" value="onchange"> D. onchange
+</div>
+
+<div class="question">
+2. Which method is used to add an event to an element?<br>
+<input type="radio" name="q2" value="onclick()"> A. onclick()<br>
+<input type="radio" name="q2" value="addEventListener()"> B. addEventListener()<br>
+<input type="radio" name="q2" value="handleEvent()"> C. handleEvent()<br>
+<input type="radio" name="q2" value="triggerEvent()"> D. triggerEvent()
+</div>
+
+<div class="question">
+3. Which event happens when a user types on the keyboard?<br>
+<input type="radio" name="q3" value="onclick"> A. onclick<br>
+<input type="radio" name="q3" value="onsubmit"> B. onsubmit<br>
+<input type="radio" name="q3" value="onkeypress"> C. onkeypress<br>
+<input type="radio" name="q3" value="onhover"> D. onhover
+</div>
+
+<div class="question">
+4. Which event happens when a user submits a form?<br>
+<input type="radio" name="q4" value="onkeypress"> A. onkeypress<br>
+<input type="radio" name="q4" value="onsubmit"> B. onsubmit<br>
+<input type="radio" name="q4" value="onclick"> C. onclick<br>
+<input type="radio" name="q4" value="onhover"> D. onhover
+</div>
+
+<div class="question">
+5. The ________ event happens when a button is clicked.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. The ________ method is used to attach many events to an element.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. The ________ event occurs when a user presses a key on the keyboard.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. It is the action that happens on a web page, like clicking or typing.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. It is used to run a function when a specific event occurs.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. It is used to run code when a form is sent.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "onclick",
+    q2: "addEventListener()",
+    q3: "onkeypress",
+    q4: "onsubmit",
+    q5: "onclick",
+    q6: "addEventListener",
+    q7: "onkeypress",
+    q8: "Event",
+    q9: "Event listener",
+    q10: "onsubmit"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson17Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson17Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

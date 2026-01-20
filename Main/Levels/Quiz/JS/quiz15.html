@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 15 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #eef2f3;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #ffffff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #2196F3;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #1976D2;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 15: Maps & Sets, Type Conversion</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which allows duplicate values?<br>
+<input type="radio" name="q1" value="Set"> A. Set<br>
+<input type="radio" name="q1" value="Map"> B. Map<br>
+<input type="radio" name="q1" value="Array"> C. Array<br>
+<input type="radio" name="q1" value="Object"> D. Object
+</div>
+
+<div class="question">
+2. Which stores key-value pairs?<br>
+<input type="radio" name="q2" value="Set"> A. Set<br>
+<input type="radio" name="q2" value="Map"> B. Map<br>
+<input type="radio" name="q2" value="Array"> C. Array<br>
+<input type="radio" name="q2" value="String"> D. String
+</div>
+
+<div class="question">
+3. type of null returns:<br>
+<input type="radio" name="q3" value="null"> A. null<br>
+<input type="radio" name="q3" value="undefined"> B. undefined<br>
+<input type="radio" name="q3" value="object"> C. object<br>
+<input type="radio" name="q3" value="number"> D. number
+</div>
+
+<div class="question">
+4. Which converts to string?<br>
+<input type="radio" name="q4" value="parseInt()"> A. parseInt()<br>
+<input type="radio" name="q4" value="Number()"> B. Number()<br>
+<input type="radio" name="q4" value="toString()"> C. toString()<br>
+<input type="radio" name="q4" value="Boolean()"> D. Boolean()
+</div>
+
+<div class="question">
+5. A Set stores only __ values.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. Number() converts data to __.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. Boolean(0) returns __.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. ES6 collection for unique values.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. Operator used to check data type.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. Process of changing one data type to another.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "Array",
+    q2: "Map",
+    q3: "object",
+    q4: "toString()",
+    q5: "unique",
+    q6: "number",
+    q7: "false",
+    q8: "Set",
+    q9: "typeof",
+    q10: "Type conversion"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson15Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson15Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>

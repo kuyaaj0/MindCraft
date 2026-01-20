@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 18 Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f4f8;
+  padding: 20px;
+}
+.container {
+  max-width: 800px;
+  background: #fff;
+  padding: 20px;
+  margin: auto;
+  border-radius: 8px;
+}
+h2 {
+  text-align: center;
+}
+.question {
+  margin-bottom: 15px;
+}
+input[type="text"] {
+  padding: 5px;
+  width: 60%;
+}
+button {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+button:hover {
+  background: #388E3C;
+}
+.result {
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>LESSON 18: DOM Manipulation</h2>
+
+<form id="quizForm">
+
+<div class="question">
+1. Which method is used to create a new HTML element?<br>
+<input type="radio" name="q1" value="createElement()"> A. createElement()<br>
+<input type="radio" name="q1" value="removeElement()"> B. removeElement()<br>
+<input type="radio" name="q1" value="addElement()"> C. addElement()<br>
+<input type="radio" name="q1" value="newElement()"> D. newElement()
+</div>
+
+<div class="question">
+2. Which method is used to remove an HTML element from the page?<br>
+<input type="radio" name="q2" value="createElement()"> A. createElement()<br>
+<input type="radio" name="q2" value="remove()"> B. remove()<br>
+<input type="radio" name="q2" value="deleteElement()"> C. deleteElement()<br>
+<input type="radio" name="q2" value="erase()"> D. erase()
+</div>
+
+<div class="question">
+3. Which property is used to change the style of an element?<br>
+<input type="radio" name="q3" value="innerText"> A. innerText<br>
+<input type="radio" name="q3" value="style"> B. style<br>
+<input type="radio" name="q3" value="value"> C. value<br>
+<input type="radio" name="q3" value="className"> D. className
+</div>
+
+<div class="question">
+4. Which property is used to add or change the CSS class of an element?<br>
+<input type="radio" name="q4" value="id"> A. id<br>
+<input type="radio" name="q4" value="text"> B. text<br>
+<input type="radio" name="q4" value="className"> C. className<br>
+<input type="radio" name="q4" value="src"> D. src
+</div>
+
+<div class="question">
+5. The ________ method is used to make a new HTML element in JavaScript.<br>
+<input type="text" name="q5">
+</div>
+
+<div class="question">
+6. To remove an element from the page, we use the ________ method.<br>
+<input type="text" name="q6">
+</div>
+
+<div class="question">
+7. To change the color of an element, we can use element.__________.<br>
+<input type="text" name="q7">
+</div>
+
+<div class="question">
+8. It is used to add, remove, or change elements on a webpage dynamically.<br>
+<input type="text" name="q8">
+</div>
+
+<div class="question">
+9. It is a name given to one or more CSS styles attached to an element.<br>
+<input type="text" name="q9">
+</div>
+
+<div class="question">
+10. It is used to remove an element from the HTML page completely.<br>
+<input type="text" name="q10">
+</div>
+
+<button type="button" onclick="checkQuiz()">Submit Quiz</button>
+</form>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function checkQuiz() {
+  let score = 0;
+
+  const answers = {
+    q1: "createElement()",
+    q2: "remove()",
+    q3: "style",
+    q4: "className",
+    q5: "createElement",
+    q6: "remove",
+    q7: "style",
+    q8: "DOM Manipulation",
+    q9: "class",
+    q10: "remove()"
+  };
+
+  Object.keys(answers).forEach(q => {
+    const radios = document.querySelectorAll(`input[name="${q}"]`);
+    if (radios.length > 1) {
+      const checked = document.querySelector(`input[name="${q}"]:checked`);
+      if (checked && checked.value === answers[q]) score++;
+    } else {
+      const input = document.querySelector(`[name="${q}"]`);
+      if (input.value.trim().toLowerCase() === answers[q].toLowerCase()) score++;
+    }
+  });
+
+  localStorage.setItem("lesson18Score", score);
+  document.getElementById("result").textContent =
+    `Your Score: ${score} / 10 (Saved in localStorage)`;
+}
+
+const saved = localStorage.getItem("lesson18Score");
+if (saved) {
+  document.getElementById("result").textContent =
+    `Last Saved Score: ${saved} / 10`;
+}
+</script>
+
+</body>
+</html>
