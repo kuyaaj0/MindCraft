@@ -219,14 +219,17 @@ function startGame(){
 function openSettings(){ settings.style.display="flex"; }
 function closeSettings(){ settings.style.display="none"; }
 
-// ☀️ / 🌙 MODE
+// ☀️ / 🌙 MODE — now saves to localStorage and syncs globally
 function setLight(){
   document.body.classList.remove("dark");
   removeStars();
+  localStorage.setItem('theme', 'light'); // ✅ store preference
 }
+
 function setDark(){
   document.body.classList.add("dark");
   createStars();
+  localStorage.setItem('theme', 'dark'); // ✅ store preference
 }
 
 // ⭐ STAR MANAGEMENT — keep stars in sky only
@@ -248,8 +251,15 @@ function removeStars(){
   document.querySelectorAll('.star').forEach(star=>star.remove());
 }
 
-// Initialize stars if dark mode active
-if(document.body.classList.contains("dark")) createStars();
+// 🌗 Load previous theme (connected to Settings.html & Student.html)
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if(savedTheme === 'dark'){
+  document.body.classList.add("dark");
+  createStars();
+}else{
+  document.body.classList.remove("dark");
+  removeStars();
+}
 </script>
 </body>
   </html>
