@@ -180,7 +180,7 @@
             z-index: 1000;
             font-size: 9px;
             transition: transform 0.1s;
-            display: none;
+            display: none;  /* HIDDEN UNTIL SUBMIT */
         }
 
         .exit-btn:hover{
@@ -222,8 +222,8 @@
         <div id="resultBox">
             <div class="score-header">🎯 Quiz Complete!</div>
             <div class="score-details">
-                <div style="font-size:1.4em;"><strong>Final Score:</strong> <span id="finalScore">0</span> / 15</div>
-                <div style="font-size:1.2em; margin-top:8px;"><strong>Percentage:</strong> <span id="percentage">0%</span></div>
+                <div style="font-size:1.4em;"><strong>Score:</strong> <span id="finalScore">0</span></div>
+                <div style="font-size:1.2em; margin-top:8px;">of 15 • <span id="percentage">0%</span></div>
                 <div id="scoreStatus"></div>
             </div>
             <div style="color:#00ffff; font-size:0.95em; margin-top:15px;">
@@ -233,10 +233,21 @@
     </div>
 
 <script>
-    // 10 MINUTE TIMER (600 seconds)
+    // PERSISTENT STATE - REMEMBERS TIMER + QUESTION ON REFRESH
     let timeLeft = 600;
     let timerInterval;
+    let currentIndex = 0;
+    const userAnswers = new Array(15).fill(null);
     const timerEl = document.getElementById('timer');
+
+    // RESTORE STATE FROM PREVIOUS SESSION
+    const savedTime = sessionStorage.getItem('quizTimeLeft');
+    const savedIndex = sessionStorage.getItem('quizCurrentIndex');
+    const savedAnswers = sessionStorage.getItem('quizUserAnswers');
+    
+    if (savedTime !== null) timeLeft = parseInt(savedTime);
+    if (savedIndex !== null) currentIndex = parseInt(savedIndex);
+    if (savedAnswers !== null) userAnswers.splice(0, userAnswers.length, ...JSON.parse(savedAnswers));
 
     function updateTimer() {
         const minutes = Math.floor(timeLeft / 60);
@@ -245,150 +256,55 @@
         
         if (timeLeft <= 60) {
             timerEl.style.color = '#ff0000';
-            timerEl.style.animation = 'pulse 1s infinite';
+            timerEl.style.textShadow = '0 0 15px #ff0000';
+        } else {
+            timerEl.style.color = '#ff4757';
         }
     }
 
     function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        
         timerInterval = setInterval(() => {
             timeLeft--;
             updateTimer();
+            sessionStorage.setItem('quizTimeLeft', timeLeft);
             
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                // Auto-submit when time runs out
                 saveCurrentAnswer();
                 showResults();
             }
         }, 1000);
     }
 
-    // ALL 15 QUESTIONS - FULLY FIXED ✓
-    const questions = [
-        {
-            type: "mc",
-            text: "1. What does JavaScript mainly add to a web page?",
-            options: [
-                "Structure and basic content",
-                "Styling and colors",
-                "Interactivity and behavior",
-                "Server hardware control"
-            ],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "2. In the lesson, JavaScript is compared to which part of a website?",
-            options: ["Skeleton","Skin","Brain","Heart"],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "3. Which statement correctly describes the <script> tag?",
-            options: [
-                "It is only allowed inside <body>",
-                "It is used to write or link JavaScript code",
-                "It is used to link CSS files only",
-                "It is used to display images"
-            ],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "4. According to the lesson, which location is often the \"BEST\" place for script tags for performance?",
-            options: [
-                "At the very top of <head> (without defer)",
-                "Immediately after <html>",
-                "At the end of the <body>",
-                "Before the <!DOCTYPE> line"
-            ],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "5. Which JavaScript function prints messages to the browser's console?",
-            options: ["alert()","console.write()","console.log()","document.print()"],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "6. Which browser shortcut opens Developer Tools (Console)?",
-            options: ["Ctrl + S","F12","Ctrl + P","Alt + Tab"],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "7. What does alert() do in JavaScript?",
-            options: [
-                "Writes text into the HTML file",
-                "Shows a popup message box",
-                "Changes the background color",
-                "Closes the browser"
-            ],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "8. Which method is used to select an element by its id?",
-            options: [
-                "document.getElementByClass()",
-                "document.querySelectorAll()",
-                "document.getElementById()",
-                "window.selectById()"
-            ],
-            correct: 2
-        },
-        {
-            type: "mc",
-            text: "9. What does the innerHTML property change?",
-            options: [
-                "The URL of the page",
-                "The HTML content inside an element",
-                "Only the text color",
-                "The browser's title bar"
-            ],
-            correct: 1
-        },
-        {
-            type: "mc",
-            text: "10. Why is using an external .js file recommended in larger projects?",
-            options: [
-                "It makes HTML invalid",
-                "It keeps JavaScript code organized and reusable",
-                "It automatically styles the page",
-                "It disables the console"
-            ],
-            correct: 1
-        },
-        {
-            type: "fill",
-            text: "11. JavaScript is often described as the ________ of the website because it controls behavior and logic.",
-            correctText: "brain"
-        },
-        {
-            type: "fill",
-            text: "12. The function used to show popup messages in the browser is ________().",
-            correctText: "alert"
-        },
-        {
-            type: "fill",
-            text: "13. The function used to send messages to the Console is ________.log().",
-            correctText: "console"
-        },
-        {
-            type: "fill",
-            text: "14. To select an element with id matrixDisplay, you use document.________(\"matrixDisplay\").",
-            correctText: "getElementById"
-        },
-        {
-            type: "fill",
-            text: "15. To change the HTML content inside an element, you use the property ________.",
-            correctText: "innerHTML"
+    // Pause when switching tabs
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden && timerInterval) {
+            clearInterval(timerInterval);
+        } else if (!document.hidden && timeLeft > 0 && !timerInterval) {
+            startTimer();
         }
-    ];
+    });
 
-    let currentIndex = 0;
-    const userAnswers = new Array(questions.length).fill(null);
+    // ALL 15 QUESTIONS
+    const questions = [
+        {type: "mc", text: "1. What does JavaScript mainly add to a web page?", options: ["Structure and basic content","Styling and colors","Interactivity and behavior","Server hardware control"], correct: 2},
+        {type: "mc", text: "2. In the lesson, JavaScript is compared to which part of a website?", options: ["Skeleton","Skin","Brain","Heart"], correct: 2},
+        {type: "mc", text: "3. Which statement correctly describes the <script> tag?", options: ["It is only allowed inside <body>","It is used to write or link JavaScript code","It is used to link CSS files only","It is used to display images"], correct: 1},
+        {type: "mc", text: "4. According to the lesson, which location is often the \"BEST\" place for script tags for performance?", options: ["At the very top of <head> (without defer)","Immediately after <html>","At the end of the <body>","Before the <!DOCTYPE> line"], correct: 2},
+        {type: "mc", text: "5. Which JavaScript function prints messages to the browser's console?", options: ["alert()","console.write()","console.log()","document.print()"], correct: 2},
+        {type: "mc", text: "6. Which browser shortcut opens Developer Tools (Console)?", options: ["Ctrl + S","F12","Ctrl + P","Alt + Tab"], correct: 1},
+        {type: "mc", text: "7. What does alert() do in JavaScript?", options: ["Writes text into the HTML file","Shows a popup message box","Changes the background color","Closes the browser"], correct: 1},
+        {type: "mc", text: "8. Which method is used to select an element by its id?", options: ["document.getElementByClass()","document.querySelectorAll()","document.getElementById()","window.selectById()"], correct: 2},
+        {type: "mc", text: "9. What does the innerHTML property change?", options: ["The URL of the page","The HTML content inside an element","Only the text color","The browser's title bar"], correct: 1},
+        {type: "mc", text: "10. Why is using an external .js file recommended in larger projects?", options: ["It makes HTML invalid","It keeps JavaScript code organized and reusable","It automatically styles the page","It disables the console"], correct: 1},
+        {type: "fill", text: "11. JavaScript is often described as the ________ of the website because it controls behavior and logic.", correctText: "brain"},
+        {type: "fill", text: "12. The function used to show popup messages in the browser is ________().", correctText: "alert"},
+        {type: "fill", text: "13. The function used to send messages to the Console is ________.log().", correctText: "console"},
+        {type: "fill", text: "14. To select an element with id matrixDisplay, you use document.________(\"matrixDisplay\").", correctText: "getElementById"},
+        {type: "fill", text: "15. To change the HTML content inside an element, you use the property ________.", correctText: "innerHTML"}
+    ];
 
     const questionContainer = document.getElementById("questionContainer");
     const progress = document.getElementById("progress");
@@ -413,7 +329,6 @@
         if(q.type === "mc"){
             const optionsDiv = document.createElement("div");
             optionsDiv.className = "options";
-
             q.options.forEach((opt,i)=>{
                 const label = document.createElement("label");
                 const radio = document.createElement("input");
@@ -425,7 +340,6 @@
                 label.appendChild(document.createTextNode(opt));
                 optionsDiv.appendChild(label);
             });
-
             questionContainer.appendChild(optionsDiv);
         }else{
             const input = document.createElement("input");
@@ -433,9 +347,7 @@
             input.id = "fillInput";
             input.className = "fill-input";
             input.placeholder = "Type your answer here";
-            if(userAnswers[index] !== null){
-                input.value = userAnswers[index];
-            }
+            if(userAnswers[index] !== null) input.value = userAnswers[index];
             questionContainer.appendChild(input);
         }
 
@@ -446,6 +358,7 @@
             nextBtn.style.display = "inline-block";
             finishBtn.style.display = "none";
         }
+        sessionStorage.setItem('quizCurrentIndex', currentIndex);
     }
 
     function saveCurrentAnswer(){
@@ -457,6 +370,7 @@
             const input = document.getElementById("fillInput");
             userAnswers[currentIndex] = input.value;
         }
+        sessionStorage.setItem('quizUserAnswers', JSON.stringify(userAnswers));
     }
 
     function calculateScore(){
@@ -475,11 +389,12 @@
 
     function showResults(){
         clearInterval(timerInterval);
+        sessionStorage.setItem('quizTimeLeft', timeLeft);
         const total = questions.length;
         const score = calculateScore();
         const percentage = Math.round((score / total) * 100);
         
-        finalScoreEl.textContent = `${score} / ${total}`;
+        finalScoreEl.textContent = score;  // FIXED - No extra 15!
         percentageEl.textContent = `${percentage}%`;
         
         let status = "";
@@ -497,7 +412,7 @@
         nextBtn.style.display = "none";
         finishBtn.style.display = "none";
         resultBox.style.display = "block";
-        exitBtn.style.display = "inline-block";
+        exitBtn.style.display = "inline-block";  // BACK BUTTON ONLY AFTER SUBMIT
         
         console.log("🧪 JS Lesson 1 Quiz Score:", score + " / " + total, "(" + percentage + "%)");
     }
@@ -515,11 +430,11 @@
         showResults();
     });
 
-    // START QUIZ WITH TIMER
+    // START QUIZ WITH PERSISTED STATE
     updateTimer();
-    startTimer();
+    if (timeLeft > 0) startTimer();
     loadQuestion(currentIndex);
-    console.log("🌌 10-MINUTE TIMED JS Quiz LOADED! ✅");
+    console.log("🌌 PERSISTENT QUIZ LOADED! Timer + Question saved on refresh! ✅");
 </script>
 </body>
 </html>
