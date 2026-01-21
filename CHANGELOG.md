@@ -1,3 +1,9 @@
+# January 21
+-- Minor adjustments <br>
+-- few bugs fixed <br>
+-- and more
+-- 1.0.1-Beta version
+
 # January 16
 -- Fixed html Lesson 1 to 20 but not all html lessons are fixed <br>
 -- A bit less optimized for mobile devices <br>
