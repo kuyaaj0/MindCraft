@@ -354,6 +354,7 @@ populateOptions("js", 20, "Quizzes", "JS");
 </script>
 
 <!-- ✅ Firebase Auth / XP / Rank / Glow Upgrade -->
+<!-- 🌗 THEME SYNC + XP + FIREBASE SYSTEM -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -390,6 +391,24 @@ function animateXPBar(bar, startValue, endValue, duration = 600) {
 let lastXP = 0;
 let lastLevel = 0;
 
+// === THEME SYNC ON PAGE LOAD ===
+document.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  const overlay = document.getElementById("welcomeOverlay");
+
+  if (savedTheme === "light") {
+    document.body.style.background = "linear-gradient(to bottom, #eef9ff, #9fd3f6)";
+    document.body.style.color = "#000";
+    overlay.style.background = "rgba(255,255,255,0.8)";
+    overlay.style.color = "#1DB954";
+  } else {
+    document.body.style.background = "linear-gradient(to bottom, #0f2027, #203a43, #2c5364)";
+    document.body.style.color = "#fff";
+    overlay.style.background = "rgba(0, 0, 0, 0.85)";
+    overlay.style.color = "#1DB954";
+  }
+});
+
 // === Firebase Authentication & Real-time XP Listener ===
 onAuthStateChanged(auth, (user) => {
   if (!user) {
@@ -412,20 +431,25 @@ onAuthStateChanged(auth, (user) => {
       return;
     }
 
-    // === XP and Level Data ===
-    const xp = data.xp ?? 0;
-    const xpMax = data.xpMax ?? 100;
+    // === LEVEL & XP DATA (with auto XP scaling) ===
     const level = data.level ?? 1;
+    const xp = data.xp ?? 0;
+
+    // 🧮 Calculate XP requirement dynamically based on level
+    let xpMax = Math.floor(100 * Math.pow(1.1, level - 1));
+    if (xpMax > 1000000) xpMax = 1000000; // cap at 1 million XP max
+
+    // ✅ Prevent XP overflow visually
+    const displayedXP = Math.min(xp, xpMax);
 
     // === Update UI ===
     const xpBar = document.getElementById("xpBar");
-    // ✅ Use Firestore values directly (no modulo)
-  document.getElementById("xpValue").innerText = `${xp}/${xpMax}`;
-  document.getElementById("levelValue").innerText = level;
-    // Smooth transition for XP bar width
-    animateXPBar(xpBar, lastXP, xp);
+    document.getElementById("xpValue").innerText = `${displayedXP}/${xpMax}`;
+    document.getElementById("levelValue").innerText = level;
+
+    animateXPBar(xpBar, lastXP, displayedXP);
     xpBar.max = xpMax;
-    lastXP = xp;
+    lastXP = displayedXP;
 
     // === Subtle Level-Up Glow Animation ===
     const levelDisplay = document.getElementById("levelValue");
