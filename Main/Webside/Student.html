@@ -357,16 +357,16 @@ populateOptions("js", 20, "Quizzes", "JS");
 <!-- 🌗 THEME SYNC + XP + FIREBASE SYSTEM -->
 <script type="module">
 import { auth, db } from "../System/Database/firebase.js";
-import { 
-  onAuthStateChanged 
+import {
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { 
-  doc, 
-  onSnapshot, 
-  collection, 
-  query, 
-  orderBy, 
-  updateDoc 
+import {
+  doc,
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // === Smooth XP Bar Animation ===
@@ -389,7 +389,7 @@ let lastLevel = 0;
 function applyThemeToWelcomeOverlay() {
   const welcomeOverlay = document.getElementById("welcomeOverlay");
   if (!welcomeOverlay) return;
-  
+
   const theme = localStorage.getItem("theme") || "dark";
   if (theme === "light") {
     welcomeOverlay.style.background = "rgba(255,255,255,0.9)";
@@ -418,6 +418,8 @@ onAuthStateChanged(auth, (user) => {
 
     const data = snap.data();
 
+    console.log("🔥 Firestore snapshot received:", data);
+
     // === Verify Role ===
     if (data.role !== "student") {
       window.location.href = "Teacher.html";
@@ -435,7 +437,6 @@ onAuthStateChanged(auth, (user) => {
     if (!xpMax || Math.abs(xpMax - expectedXpMax) > 5) {
       xpMax = expectedXpMax;
       try {
-        // 🔄 Auto-update Firestore xpMax if outdated
         await updateDoc(userRef, { xpMax });
         console.log(`🔧 xpMax auto-updated in Firestore → ${xpMax}`);
       } catch (err) {
@@ -445,12 +446,20 @@ onAuthStateChanged(auth, (user) => {
 
     const displayedXP = Math.min(xp, xpMax);
 
-    // === Update XP Bar ===
-    const xpBar = document.getElementById("xpBar");
-    document.getElementById("xpValue").innerText = `${displayedXP}/${xpMax}`;
-    document.getElementById("levelValue").innerText = level;
-    animateXPBar(xpBar, lastXP, displayedXP);
-    xpBar.max = xpMax;
+    // ✅ Safe DOM Update (mobile friendly)
+    requestAnimationFrame(() => {
+      const xpBar = document.getElementById("xpBar");
+      const xpValue = document.getElementById("xpValue");
+      const levelValue = document.getElementById("levelValue");
+
+      if (xpBar && xpValue && levelValue) {
+        xpValue.innerText = `${displayedXP}/${xpMax}`;
+        levelValue.innerText = level;
+        xpBar.max = xpMax;
+        animateXPBar(xpBar, lastXP, displayedXP);
+      }
+    });
+
     lastXP = displayedXP;
 
     // === Subtle Level-Up Glow ===
