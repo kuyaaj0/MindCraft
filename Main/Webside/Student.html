@@ -356,13 +356,11 @@ populateOptions("js", 20, "Quizzes", "JS");
 <!-- ✅ Firebase Auth / XP / Rank / Glow Upgrade -->
 <!-- 🌗 THEME SYNC + XP + FIREBASE SYSTEM -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { auth, db } from "../System/Database/firebase.js";
 import { 
-  getAuth, 
   onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { 
-  getFirestore, 
   doc, 
   onSnapshot, 
   collection, 
@@ -370,21 +368,6 @@ import {
   orderBy, 
   updateDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// === Firebase Config ===
-const firebaseConfig = {
-  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-  authDomain: "mindcraft-83f81.firebaseapp.com",
-  projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.firebasestorage.app",
-  messagingSenderId: "483019456762",
-  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
-};
-
-// === Initialize Firebase ===
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 
 // === Smooth XP Bar Animation ===
 function animateXPBar(bar, startValue, endValue, duration = 600) {
