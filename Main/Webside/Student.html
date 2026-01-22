@@ -357,8 +357,19 @@ populateOptions("js", 20, "Quizzes", "JS");
 <!-- 🌗 THEME SYNC + XP + FIREBASE SYSTEM -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { 
+  getAuth, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { 
+  getFirestore, 
+  doc, 
+  onSnapshot, 
+  collection, 
+  query, 
+  orderBy, 
+  updateDoc 
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // === Firebase Config ===
 const firebaseConfig = {
@@ -375,7 +386,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// === Helper: Smooth XP bar animation ===
+// === Smooth XP Bar Animation ===
 function animateXPBar(bar, startValue, endValue, duration = 600) {
   const startTime = performance.now();
   function update(currentTime) {
@@ -391,25 +402,22 @@ function animateXPBar(bar, startValue, endValue, duration = 600) {
 let lastXP = 0;
 let lastLevel = 0;
 
-// === THEME SYNC ON PAGE LOAD ===
-document.addEventListener("DOMContentLoaded", () => {
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  const overlay = document.getElementById("welcomeOverlay");
-
-  if (savedTheme === "light") {
-    document.body.style.background = "linear-gradient(to bottom, #eef9ff, #9fd3f6)";
-    document.body.style.color = "#000";
-    overlay.style.background = "rgba(255,255,255,0.8)";
-    overlay.style.color = "#1DB954";
+// === Theme Fix for Welcome Overlay ===
+function applyThemeToWelcomeOverlay() {
+  const welcomeOverlay = document.getElementById("welcomeOverlay");
+  if (!welcomeOverlay) return;
+  
+  const theme = localStorage.getItem("theme") || "dark";
+  if (theme === "light") {
+    welcomeOverlay.style.background = "rgba(255,255,255,0.9)";
+    welcomeOverlay.style.color = "#000";
   } else {
-    document.body.style.background = "linear-gradient(to bottom, #0f2027, #203a43, #2c5364)";
-    document.body.style.color = "#fff";
-    overlay.style.background = "rgba(0, 0, 0, 0.85)";
-    overlay.style.color = "#1DB954";
+    welcomeOverlay.style.background = "rgba(0,0,0,0.85)";
+    welcomeOverlay.style.color = "#1DB954";
   }
-});
+}
 
-// === Firebase Authentication & Real-time XP Listener ===
+// === Firestore Auth & XP/Level/Rank Live Updates ===
 onAuthStateChanged(auth, (user) => {
   if (!user) {
     alert("You must sign in first!");
@@ -418,7 +426,7 @@ onAuthStateChanged(auth, (user) => {
   }
 
   const userRef = doc(db, "users", user.uid);
-  onSnapshot(userRef, (snap) => {
+  onSnapshot(userRef, async (snap) => {
     if (!snap.exists()) {
       alert("No user data found.");
       window.location.href = "../Account/signin.html";
@@ -426,32 +434,43 @@ onAuthStateChanged(auth, (user) => {
     }
 
     const data = snap.data();
+
+    // === Verify Role ===
     if (data.role !== "student") {
       window.location.href = "Teacher.html";
       return;
     }
 
-    // === LEVEL & XP DATA (with auto XP scaling) ===
+    // === LEVEL & XP DATA (Dynamic Scaling) ===
     const level = data.level ?? 1;
     const xp = data.xp ?? 0;
 
-    // 🧮 Calculate XP requirement dynamically based on level
-    let xpMax = Math.floor(100 * Math.pow(1.1, level - 1));
-    if (xpMax > 1000000) xpMax = 1000000; // cap at 1 million XP max
+    // ✅ Dynamically calculate xpMax based on level (1.1 multiplier)
+    let xpMax = data.xpMax;
+    const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
 
-    // ✅ Prevent XP overflow visually
+    if (!xpMax || Math.abs(xpMax - expectedXpMax) > 5) {
+      xpMax = expectedXpMax;
+      try {
+        // 🔄 Auto-update Firestore xpMax if outdated
+        await updateDoc(userRef, { xpMax });
+        console.log(`🔧 xpMax auto-updated in Firestore → ${xpMax}`);
+      } catch (err) {
+        console.warn("⚠️ Couldn't update xpMax:", err);
+      }
+    }
+
     const displayedXP = Math.min(xp, xpMax);
 
-    // === Update UI ===
+    // === Update XP Bar ===
     const xpBar = document.getElementById("xpBar");
     document.getElementById("xpValue").innerText = `${displayedXP}/${xpMax}`;
     document.getElementById("levelValue").innerText = level;
-
     animateXPBar(xpBar, lastXP, displayedXP);
     xpBar.max = xpMax;
     lastXP = displayedXP;
 
-    // === Subtle Level-Up Glow Animation ===
+    // === Subtle Level-Up Glow ===
     const levelDisplay = document.getElementById("levelValue");
     if (level > lastLevel) {
       levelDisplay.classList.add("level-up-glow");
@@ -463,13 +482,15 @@ onAuthStateChanged(auth, (user) => {
     const name = user.displayName || data.name || user.email.split("@")[0];
     document.getElementById("studentName").textContent = name;
     const welcomeOverlay = document.getElementById("welcomeOverlay");
+    applyThemeToWelcomeOverlay();
+
     if (!sessionStorage.getItem("welcomeShown")) {
       sessionStorage.setItem("welcomeShown", "true");
       welcomeOverlay.style.display = "flex";
       setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
     }
 
-    // === Real-time Rank Display ===
+    // === Rank Display (Live) ===
     const rankDisplay = document.getElementById("rankDisplay");
     const usersRef = collection(db, "users");
     const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
@@ -480,6 +501,7 @@ onAuthStateChanged(auth, (user) => {
         if (docSnap.id === user.uid && !found) { found = true; return; }
         if (!found) rank++;
       });
+
       rankDisplay.innerText = `Rank: #${rank}`;
       if (rank <= 3) rankDisplay.classList.add("rank-top");
       else rankDisplay.classList.remove("rank-top");
