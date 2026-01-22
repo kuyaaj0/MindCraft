@@ -369,7 +369,21 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// === Smooth XP Bar Animation ===
+// ===============================
+// 🕓 Wait for Firebase to be Ready (Fix for mobile)
+// ===============================
+async function waitForFirebaseReady() {
+  let tries = 0;
+  while ((!auth || !db) && tries < 20) {
+    await new Promise(res => setTimeout(res, 150));
+    tries++;
+  }
+  return !!auth && !!db;
+}
+
+// ===============================
+// 🧩 Smooth XP Bar Animation
+// ===============================
 function animateXPBar(bar, startValue, endValue, duration = 600) {
   const startTime = performance.now();
   function update(currentTime) {
@@ -385,118 +399,132 @@ function animateXPBar(bar, startValue, endValue, duration = 600) {
 let lastXP = 0;
 let lastLevel = 0;
 
-// === Theme Fix for Welcome Overlay ===
+// ===============================
+// 🎨 Theme Fix for Welcome Overlay
+// ===============================
 function applyThemeToWelcomeOverlay() {
   const overlay = document.getElementById("welcomeOverlay");
   if (!overlay) return;
   const theme = localStorage.getItem("theme") || "dark";
-  if (theme === "light") {
-    overlay.style.background = "rgba(255,255,255,0.9)";
-    overlay.style.color = "#000";
-  } else {
-    overlay.style.background = "rgba(0,0,0,0.85)";
-    overlay.style.color = "#1DB954";
-  }
+  overlay.style.background =
+    theme === "light" ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.85)";
+  overlay.style.color = theme === "light" ? "#000" : "#1DB954";
 }
 
-// === Firestore Auth & XP/Level/Rank Live Updates ===
-onAuthStateChanged(auth, async (user) => {
-  // 🔁 Wait for session restore (mobile)
-  if (!user) {
-    for (let i = 0; i < 10 && !auth.currentUser; i++) {
-      await new Promise(res => setTimeout(res, 300));
-    }
-  }
-  user = auth.currentUser;
-
-  if (!user) {
-    alert("⚠️ Session expired. Please sign in again.");
-    window.location.href = "../Account/signin.html";
+// ===============================
+// 🚀 Main Start Function
+// ===============================
+(async () => {
+  const ready = await waitForFirebaseReady();
+  if (!ready) {
+    alert("⚠️ Firebase failed to load. Please refresh.");
     return;
   }
 
-  const userRef = doc(db, "users", user.uid);
-  onSnapshot(userRef, async (snap) => {
-    if (!snap.exists()) {
-      alert("⚠️ User data missing. Please sign in again.");
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      for (let i = 0; i < 10 && !auth.currentUser; i++) {
+        await new Promise(res => setTimeout(res, 300));
+      }
+    }
+    user = auth.currentUser;
+
+    if (!user) {
+      alert("⚠️ Please sign in first.");
       window.location.href = "../Account/signin.html";
       return;
     }
 
-    const data = snap.data();
-    console.log("📡 Firestore snapshot:", data);
+    const userRef = doc(db, "users", user.uid);
 
-    if (data.role !== "student") {
-      window.location.href = "Teacher.html";
-      return;
-    }
-
-    const level = data.level ?? 1;
-    const xp = data.xp ?? 0;
-    let xpMax = data.xpMax ?? 100;
-    const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
-
-    if (Math.abs(xpMax - expectedXpMax) > 5) {
-      xpMax = expectedXpMax;
-      try {
-        await updateDoc(userRef, { xpMax });
-        console.log(`✅ Auto-updated xpMax → ${xpMax}`);
-      } catch (err) {
-        console.warn("⚠️ xpMax update failed:", err);
+    // ===========================
+    // 🔁 Firestore Realtime Listener
+    // ===========================
+    onSnapshot(userRef, async (snap) => {
+      if (!snap.exists()) {
+        alert("⚠️ User data not found in Firestore.");
+        window.location.href = "../Account/signin.html";
+        return;
       }
-    }
 
-    const displayedXP = Math.min(xp, xpMax);
+      const data = snap.data();
 
-    requestAnimationFrame(() => {
+      // --- Validate Role ---
+      if (data.role !== "student") {
+        alert("⚠️ Redirecting to teacher page...");
+        window.location.href = "Teacher.html";
+        return;
+      }
+
+      const level = data.level ?? 1;
+      const xp = data.xp ?? 0;
+      let xpMax = data.xpMax ?? 100;
+      const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
+
+      if (Math.abs(xpMax - expectedXpMax) > 5) {
+        xpMax = expectedXpMax;
+        try {
+          await updateDoc(userRef, { xpMax });
+          alert(`✅ xpMax auto-updated to ${xpMax}`);
+        } catch (err) {
+          alert("⚠️ xpMax update failed: " + err.message);
+        }
+      }
+
+      const displayedXP = Math.min(xp, xpMax);
       const xpBar = document.getElementById("xpBar");
       const xpValue = document.getElementById("xpValue");
       const levelValue = document.getElementById("levelValue");
+
       if (xpBar && xpValue && levelValue) {
         xpValue.innerText = `${displayedXP}/${xpMax}`;
         levelValue.innerText = level;
         xpBar.max = xpMax;
         animateXPBar(xpBar, lastXP, displayedXP);
       }
-    });
 
-    lastXP = displayedXP;
+      lastXP = displayedXP;
 
-    const levelDisplay = document.getElementById("levelValue");
-    if (level > lastLevel) {
-      levelDisplay.classList.add("level-up-glow");
-      setTimeout(() => levelDisplay.classList.remove("level-up-glow"), 1000);
-    }
-    lastLevel = level;
+      const levelDisplay = document.getElementById("levelValue");
+      if (level > lastLevel) {
+        levelDisplay.classList.add("level-up-glow");
+        setTimeout(() => levelDisplay.classList.remove("level-up-glow"), 1000);
+      }
+      lastLevel = level;
 
-    const name = user.displayName || data.name || user.email.split("@")[0];
-    document.getElementById("studentName").textContent = name;
+      const name = user.displayName || data.name || user.email.split("@")[0];
+      document.getElementById("studentName").textContent = name;
 
-    const welcomeOverlay = document.getElementById("welcomeOverlay");
-    applyThemeToWelcomeOverlay();
+      // --- Welcome Overlay ---
+      const welcomeOverlay = document.getElementById("welcomeOverlay");
+      applyThemeToWelcomeOverlay();
 
-    if (!sessionStorage.getItem("welcomeShown")) {
-      sessionStorage.setItem("welcomeShown", "true");
-      welcomeOverlay.style.display = "flex";
-      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
-    }
+      if (!sessionStorage.getItem("welcomeShown")) {
+        sessionStorage.setItem("welcomeShown", "true");
+        welcomeOverlay.style.display = "flex";
+        setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
+      }
 
-    const rankDisplay = document.getElementById("rankDisplay");
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-
-    onSnapshot(q, (snapshot) => {
-      let rank = 1, found = false;
-      snapshot.forEach((docSnap) => {
-        if (docSnap.id === user.uid && !found) { found = true; return; }
-        if (!found) rank++;
+      // --- Rank Display ---
+      const rankDisplay = document.getElementById("rankDisplay");
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+      onSnapshot(q, (snapshot) => {
+        let rank = 1, found = false;
+        snapshot.forEach((docSnap) => {
+          if (docSnap.id === user.uid && !found) { found = true; return; }
+          if (!found) rank++;
+        });
+        rankDisplay.innerText = `Rank: #${rank}`;
+        if (rank <= 3) rankDisplay.classList.add("rank-top");
+        else rankDisplay.classList.remove("rank-top");
       });
-      rankDisplay.innerText = `Rank: #${rank}`;
-      if (rank <= 3) rankDisplay.classList.add("rank-top");
-      else rankDisplay.classList.remove("rank-top");
+
+      // ✅ Everything loaded
+      alert(`✅ Welcome back, ${name}! Level ${level}, XP ${xp}/${xpMax}`);
     });
   });
-});
+})();
 </script>
 </body>
 </html>
