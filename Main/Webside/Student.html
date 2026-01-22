@@ -324,117 +324,185 @@ footer {
  <!-- leaderboard module (IMPORTANT: required so leaderboard button works) -->
   <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
-  <!-- main Firestore sync + UI updater -->
-  <script type="module">
-    import { auth, db } from "../System/Database/firebase.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { doc, onSnapshot, collection, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<!-- ===================== -->
+<!-- ✅ Auto-generate Lessons & Quizzes -->
+<!-- ===================== -->
+<script>
+function populateOptions(prefix, count, type, folder) {
+  const select = document.getElementById(`${prefix}${type}`);
+  const isLesson = type === "Lessons";
+  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+  const subfolder = isLesson ? "Lessons" : "Quiz";
+  const basePath = isLesson
+    ? `../Modular/${subfolder}/${folder}/lesson-`
+    : `../Levels/${subfolder}/${folder}/level-`;
 
-    function animateXPBar(bar, start, end, duration = 600) {
-      const startTime = performance.now();
-      function update(currentTime) {
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-        bar.value = start + (end - start) * progress;
-        if (progress < 1) requestAnimationFrame(update);
-      }
-      requestAnimationFrame(update);
+  const opt = document.createElement("option");
+  opt.textContent = label;
+  opt.value = "";
+  select.appendChild(opt);
+
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = `${basePath}${i}.html`;
+    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+    select.appendChild(option);
+  }
+}
+
+// Populate all lesson & quiz dropdowns
+populateOptions("html", 20, "Lessons", "HTML");
+populateOptions("html", 20, "Quizzes", "HTML");
+populateOptions("css", 20, "Lessons", "CSS");
+populateOptions("css", 20, "Quizzes", "CSS");
+populateOptions("js", 20, "Lessons", "JS");
+populateOptions("js", 20, "Quizzes", "JS");
+</script>
+
+<!-- ===================== -->
+<!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
+<!-- ===================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, onSnapshot, collection, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// === Firebase Config ===
+const firebaseConfig = {
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+};
+
+// === Initialize Firebase ===
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// === Smooth XP Bar Animation ===
+function animateXPBar(bar, startValue, endValue, duration = 600) {
+  if (!bar) return;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = startValue + (endValue - startValue) * progress;
+    bar.value = currentValue;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+let lastXP = 0;
+let lastLevel = 0;
+
+// === Apply Theme to Welcome Overlay ===
+function applyThemeToWelcomeOverlay() {
+  const overlay = document.getElementById("welcomeOverlay");
+  const theme = localStorage.getItem("theme") || "dark";
+  if (theme === "light") {
+    overlay.style.background = "rgba(255,255,255,0.9)";
+    overlay.style.color = "#000";
+  } else {
+    overlay.style.background = "rgba(0,0,0,0.85)";
+    overlay.style.color = "#1DB954";
+  }
+}
+
+// === Firebase Authentication & Real-time Listener ===
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    alert("⚠️ Please sign in first!");
+    window.location.href = "../Account/signin.html";
+    return;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+
+  // 🎯 Listen for live user updates
+  onSnapshot(userRef, async (snap) => {
+    if (!snap.exists()) {
+      alert("⚠️ No user data found.");
+      window.location.href = "../Account/signin.html";
+      return;
     }
 
-    let lastXP = 0;
-    let lastLevel = 0;
+    const data = snap.data();
 
-    function applyThemeToWelcomeOverlay() {
-      const overlay = document.getElementById("welcomeOverlay");
-      if (!overlay) return;
-      const theme = localStorage.getItem("theme") || "dark";
-      if (theme === "light") {
-        overlay.style.background = "rgba(255,255,255,0.9)";
-        overlay.style.color = "#000";
-      } else {
-        overlay.style.background = "rgba(0,0,0,0.85)";
-        overlay.style.color = "#1DB954";
-      }
+    // Role check
+    if (data.role !== "student") {
+      window.location.href = "Teacher.html";
+      return;
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        alert("⚠️ Please sign in first!");
-        window.location.href = "../Account/signin.html";
-        return;
-      }
+    // XP + Level values
+    const xp = data.xp ?? 0;
+    const level = data.level ?? 1;
+    let xpMax = data.xpMax ?? 100;
 
-      const userRef = doc(db, "users", user.uid);
+    const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
+    if (Math.abs(xpMax - expectedXpMax) > 5) {
+      xpMax = expectedXpMax;
+      try { await updateDoc(userRef, { xpMax }); }
+      catch { alert("⚠️ Unable to update xpMax."); }
+    }
 
-      // Listen to the user's doc for live updates
-      onSnapshot(userRef, async (snap) => {
-        if (!snap.exists()) {
-          alert("⚠️ No user data found.");
-          window.location.href = "../Account/signin.html";
-          return;
-        }
+    // === Update UI ===
+    const xpBar = document.getElementById("xpBar");
+    const xpValue = document.getElementById("xpValue");
+    const levelValue = document.getElementById("levelValue");
+    xpValue.textContent = `${xp}/${xpMax}`;
+    levelValue.textContent = level;
+    xpBar.max = xpMax;
+    animateXPBar(xpBar, lastXP, xp);
+    lastXP = xp;
 
-        const data = snap.data();
-        const level = data.level ?? 1;
-        const xp = data.xp ?? 0;
-        const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
-        let xpMax = data.xpMax ?? expectedXpMax;
+    // === Level-up glow ===
+    if (level > lastLevel) {
+      levelValue.classList.add("level-up-glow");
+      setTimeout(() => levelValue.classList.remove("level-up-glow"), 1000);
+    }
+    lastLevel = level;
 
-        // If Firestore xpMax differs significantly, normalize it
-        if (Math.abs(xpMax - expectedXpMax) > 5) {
-          xpMax = expectedXpMax;
-          try { await updateDoc(userRef, { xpMax }); } catch (err) { /* fail silently */ alert("⚠️ couldn't update xpMax"); }
-        }
+    // === Welcome overlay ===
+    const name = user.displayName || data.name || user.email.split("@")[0];
+    document.getElementById("studentName").textContent = name;
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    applyThemeToWelcomeOverlay();
+    if (!sessionStorage.getItem("welcomeShown")) {
+      sessionStorage.setItem("welcomeShown", "true");
+      welcomeOverlay.style.display = "flex";
+      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
+    }
 
-        const xpBar = document.getElementById("xpBar");
-        const xpValue = document.getElementById("xpValue");
-        const levelValue = document.getElementById("levelValue");
-
-        xpValue.textContent = `${xp}/${xpMax}`;
-        levelValue.textContent = level;
-        xpBar.max = xpMax;
-
-        animateXPBar(xpBar, lastXP, xp);
-        lastXP = xp;
-
-        // Level-up glow
-        if (level > lastLevel) {
-          levelValue.classList.add("level-up-glow");
-          setTimeout(() => levelValue.classList.remove("level-up-glow"), 1000);
-        }
-        lastLevel = level;
-
-        // Welcome overlay + theme
-        const name = user.displayName || data.name || user.email.split("@")[0];
-        document.getElementById("studentName").textContent = name;
-        applyThemeToWelcomeOverlay();
-        const welcomeOverlay = document.getElementById("welcomeOverlay");
-        if (!sessionStorage.getItem("welcomeShown")) {
-          sessionStorage.setItem("welcomeShown", "true");
-          welcomeOverlay.style.display = "flex";
-          setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
-        }
-
-        // Live rank: reuse a snapshot query
-        const rankDisplay = document.getElementById("rankDisplay");
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-        onSnapshot(q, (snapshot) => {
-          let rank = 1, found = false;
-          snapshot.forEach((docSnap) => {
-            if (docSnap.id === user.uid && !found) { found = true; return; }
-            if (!found) rank++;
-          });
-          rankDisplay.textContent = `Rank: #${rank}`;
-        });
-
-        // Update local cache
-        try {
-          localStorage.setItem(`${user.uid}_level`, level);
-          localStorage.setItem(`${user.uid}_xp`, xp);
-          localStorage.setItem(`${user.uid}_xpMax`, xpMax);
-        } catch (e) { /* localStorage may be limited on some phones */ }
+    // === Live Rank Display ===
+    const rankDisplay = document.getElementById("rankDisplay");
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+    onSnapshot(q, (snapshot) => {
+      let rank = 1, found = false;
+      snapshot.forEach((docSnap) => {
+        if (docSnap.id === user.uid && !found) { found = true; return; }
+        if (!found) rank++;
       });
+      rankDisplay.textContent = `Rank: #${rank}`;
+      if (rank <= 3) rankDisplay.classList.add("rank-top");
+      else rankDisplay.classList.remove("rank-top");
     });
-  </script>
+
+    // ✅ Save latest XP & Level locally (for offline XP)
+    try {
+      localStorage.setItem(`${user.uid}_xp`, xp);
+      localStorage.setItem(`${user.uid}_level`, level);
+      localStorage.setItem(`${user.uid}_xpMax`, xpMax);
+    } catch (err) {
+      alert("⚠️ Storage save failed (low space)");
+    }
+  });
+});
+</script>
 </body>
 </html>
