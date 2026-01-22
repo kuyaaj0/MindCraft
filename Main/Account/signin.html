@@ -179,7 +179,6 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     const userCred = await signInWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
 
-    // ✅ EMAIL VERIFICATION CHECK
     if (!user.emailVerified) {
       msg.textContent = "⚠️ Please verify your email before signing in.";
       resendBtn.style.display = "inline-block";
@@ -208,88 +207,19 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
 
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Sign in successful! Redirecting...";
-    setTimeout(() => window.location.href = "../Startup/StartupS.html", 800);
+
+    // ✅ Wait for Firebase session to stabilize before redirect
+    setTimeout(async () => {
+      let tries = 0;
+      while (!auth.currentUser && tries < 10) {
+        await new Promise(res => setTimeout(res, 300));
+        tries++;
+      }
+      window.location.href = "../Startup/StartupS.html";
+    }, 1200);
 
   } catch (err) {
     console.error("Sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// ==== Sign In (Teacher) ====
-document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('teacherEmail').value.trim();
-  const password = document.getElementById('teacherPassword').value;
-  const msg = document.getElementById('teacherMessage');
-  const resendBtn = document.getElementById('resendTeacher');
-
-  msg.textContent = "";
-  resendBtn.style.display = "none";
-
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-
-    // ✅ EMAIL VERIFICATION CHECK
-    if (!user.emailVerified) {
-      msg.textContent = "⚠️ Please verify your email before signing in.";
-      resendBtn.style.display = "inline-block";
-      await signOut(auth);
-      return;
-    }
-
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
-    if (!snap.exists() || snap.data().role !== "teacher") {
-      msg.textContent = "❌ This account is not a teacher.";
-      await signOut(auth);
-      return;
-    }
-
-    const data = snap.data();
-    localStorage.setItem("cachedName", data.name || "Teacher");
-    localStorage.setItem("currentRole", "teacher");
-
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Sign in successful! Redirecting...";
-    setTimeout(() => window.location.href = "../Webside/Teacher.html", 800);
-
-  } catch (err) {
-    console.error("Sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// ==== RESEND VERIFICATION EMAIL ====
-document.getElementById("resendStudent").addEventListener("click", async () => {
-  const email = document.getElementById("studentEmail").value.trim();
-  const password = document.getElementById("studentPassword").value;
-  const msg = document.getElementById("studentMessage");
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCred.user);
-    msg.style.color = "#1DB954";
-    msg.textContent = "📧 Verification email re-sent! Check your inbox.";
-    await signOut(auth);
-  } catch (err) {
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-document.getElementById("resendTeacher").addEventListener("click", async () => {
-  const email = document.getElementById("teacherEmail").value.trim();
-  const password = document.getElementById("teacherPassword").value;
-  const msg = document.getElementById("teacherMessage");
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCred.user);
-    msg.style.color = "#1DB954";
-    msg.textContent = "📧 Verification email re-sent! Check your inbox.";
-    await signOut(auth);
-  } catch (err) {
-    msg.style.color = "#ff5252";
     msg.textContent = `❌ ${err.message}`;
   }
 });
