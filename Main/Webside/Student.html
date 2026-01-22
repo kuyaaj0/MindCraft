@@ -514,11 +514,11 @@ onAuthStateChanged(auth, (user) => {
    📊 XP Number Formatter + Toggle System (MindCraft)
    ========================================================== */
 
-// === Helper: Shorten large numbers ===
+// === Helper: Shorten large numbers with suffix ===
 function formatNumberShort(value) {
-  if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(1).replace(/\.0$/, "") + "b";
-  if (value >= 1_000_000) return (value / 1_000_000).toFixed(1).replace(/\.0$/, "") + "m";
-  if (value >= 1_000) return (value / 1_000).toFixed(1).replace(/\.0$/, "") + "k";
+  if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(2).replace(/\.0+$/, "") + "b";
+  if (value >= 1_000_000) return (value / 1_000_000).toFixed(2).replace(/\.0+$/, "") + "m";
+  if (value >= 1_000) return (value / 1_000).toFixed(2).replace(/\.0+$/, "") + "k";
   return value.toString();
 }
 
@@ -527,43 +527,46 @@ function formatNumberFull(value) {
   return value.toLocaleString("en-US");
 }
 
-// === Toggle Handler ===
-let xpShortMode = true; // default short mode when numbers get big
+// === Toggle state ===
+let xpShortMode = false; // start with full format by default
 
+// === Update XP Display ===
 function updateXPDisplay(xp, xpMax) {
   const xpValue = document.getElementById("xpValue");
   if (!xpValue) return;
 
-  // Auto-shrink font for large numbers
+  // Detect if numbers are large to auto-reduce font size
   const textLength = `${xp}/${xpMax}`.length;
   xpValue.style.fontSize = textLength > 10 ? "0.45rem" : "0.55rem";
 
-  // If numbers are huge, show shortened version automatically
-  if (xpMax >= 10000 && xpShortMode) {
-    xpValue.textContent = `${formatNumberShort(xp)}/${formatNumberShort(xpMax)}`;
+  // Apply chosen mode
+  if (xpShortMode) {
+    xpValue.textContent = `${formatNumberShort(xp)} / ${formatNumberShort(xpMax)}`;
   } else {
-    xpValue.textContent = `${formatNumberFull(xp)}/${formatNumberFull(xpMax)}`;
+    xpValue.textContent = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
   }
 }
 
-// === Make XP bar and XP text clickable to toggle ===
+// === Click or tap toggles short/full format ===
 document.addEventListener("DOMContentLoaded", () => {
   const xpValue = document.getElementById("xpValue");
   const xpBar = document.getElementById("xpBar");
 
   function toggleXPFormat() {
     xpShortMode = !xpShortMode;
-    const currentXP = parseInt(xpBar.value || 0);
-    const maxXP = parseInt(xpBar.max || 100);
+
+    // Get latest values from bar
+    const currentXP = parseFloat(xpBar.value || 0);
+    const maxXP = parseFloat(xpBar.max || 100);
     updateXPDisplay(currentXP, maxXP);
   }
 
   if (xpValue) xpValue.addEventListener("click", toggleXPFormat);
   if (xpBar) xpBar.addEventListener("click", toggleXPFormat);
 
-  // Attach a global event for Student.html’s Firebase updates
+  // Allow Student.html Firebase updates to use this
   window.refreshXPDisplay = updateXPDisplay;
 });
-  </script>
+</script>
 </body>
 </html>
