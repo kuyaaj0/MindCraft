@@ -511,17 +511,29 @@ onAuthStateChanged(auth, (user) => {
 
   <script>
 /* ==========================================================
-   📊 MindCraft XP Display System (Smart Formatter + Toggle)
+   🧠 MindCraft XP Display System
+   (Smart Short Format + Long Press Tooltip + PC Hover)
    ========================================================== */
 
-// === Helper: Smart short format with suffix ===
+// === Helper: Super-Short Format (supports up to 1e33) ===
 function formatNumberSmart(value) {
   const abs = Math.abs(value);
-  if (abs >= 1e15) return (value / 1e15).toFixed(2).replace(/\.00$/, "") + "q"; // quadrillion
-  if (abs >= 1e12) return (value / 1e12).toFixed(2).replace(/\.00$/, "") + "t"; // trillion
-  if (abs >= 1e9)  return (value / 1e9).toFixed(2).replace(/\.00$/, "") + "b"; // billion
-  if (abs >= 1e6)  return (value / 1e6).toFixed(2).replace(/\.00$/, "") + "m"; // million
-  if (abs >= 1e3)  return (value / 1e3).toFixed(1).replace(/\.0$/, "") + "k";  // thousand
+  const units = [
+    { v: 1e33, s: "d" },  // decillion
+    { v: 1e30, s: "n" },  // nonillion
+    { v: 1e27, s: "o" },  // octillion
+    { v: 1e24, s: "s" },  // septillion
+    { v: 1e21, s: "Sx" }, // sextillion
+    { v: 1e18, s: "Qi" }, // quintillion
+    { v: 1e15, s: "Q" },  // quadrillion
+    { v: 1e12, s: "T" },  // trillion
+    { v: 1e9,  s: "B" },  // billion
+    { v: 1e6,  s: "M" },  // million
+    { v: 1e3,  s: "K" }   // thousand
+  ];
+  for (const u of units) {
+    if (abs >= u.v) return (value / u.v).toFixed(2).replace(/\.00$/, "") + u.s;
+  }
   return value.toString();
 }
 
@@ -530,41 +542,106 @@ function formatNumberFull(value) {
   return value.toLocaleString("en-US");
 }
 
-// === Global toggle state ===
-let xpShortMode = true; // start short if values are big
+// === Global toggle + tooltip state ===
+let xpShortMode = true;
+let tooltipTimeout = null;
 
-// === Update Display ===
+// === Update display text ===
 function updateXPDisplay(xp, xpMax) {
   const xpValue = document.getElementById("xpValue");
   if (!xpValue) return;
 
-  // Choose correct mode
   const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
   const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
   const displayText = xpShortMode ? shortForm : fullForm;
 
-  // Adjust font if very long
-  const len = displayText.length;
-  xpValue.style.fontSize = len > 12 ? "0.45rem" : "0.55rem";
-
   xpValue.textContent = displayText;
+
+  // Adjust font size dynamically
+  const len = displayText.length;
+  xpValue.style.fontSize = len > 14 ? "0.42rem" : "0.55rem";
+  xpValue.style.transition = "font-size 0.3s";
 }
 
-// === Click or tap toggles ===
+// === Tooltip (shows full XP while short mode is active) ===
+function showXPTooltip(fullXPText) {
+  let tooltip = document.getElementById("xpTooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.id = "xpTooltip";
+    tooltip.style.position = "fixed";
+    tooltip.style.padding = "6px 10px";
+    tooltip.style.borderRadius = "6px";
+    tooltip.style.background = "rgba(0,0,0,0.8)";
+    tooltip.style.color = "#1DB954";
+    tooltip.style.fontFamily = "'Press Start 2P', cursive";
+    tooltip.style.fontSize = "0.45rem";
+    tooltip.style.zIndex = "9999";
+    tooltip.style.pointerEvents = "none";
+    tooltip.style.transition = "opacity 0.2s ease";
+    tooltip.style.opacity = "0";
+    document.body.appendChild(tooltip);
+  }
+  tooltip.textContent = fullXPText;
+  tooltip.style.opacity = "1";
+
+  document.addEventListener("mousemove", e => {
+    tooltip.style.left = e.pageX + 10 + "px";
+    tooltip.style.top = e.pageY - 20 + "px";
+  });
+}
+
+function hideXPTooltip() {
+  const tooltip = document.getElementById("xpTooltip");
+  if (tooltip) tooltip.style.opacity = "0";
+}
+
+// === Toggle format ===
+function toggleXPFormat() {
+  xpShortMode = !xpShortMode;
+  const xpBar = document.getElementById("xpBar");
+  const xp = parseFloat(xpBar?.value || 0);
+  const xpMax = parseFloat(xpBar?.max || 100);
+  updateXPDisplay(xp, xpMax);
+}
+
+// === Event setup ===
 document.addEventListener("DOMContentLoaded", () => {
   const xpValue = document.getElementById("xpValue");
   const xpBar = document.getElementById("xpBar");
 
-  function toggleXPFormat() {
-    xpShortMode = !xpShortMode;
-    const currentXP = parseFloat(xpBar.value || 0);
-    const maxXP = parseFloat(xpBar.max || 100);
-    updateXPDisplay(currentXP, maxXP);
-  }
+  if (!xpValue || !xpBar) return;
 
-  if (xpValue) xpValue.addEventListener("click", toggleXPFormat);
-  if (xpBar) xpBar.addEventListener("click", toggleXPFormat);
+  // === Tap / click toggles ===
+  xpValue.addEventListener("click", toggleXPFormat);
+  xpBar.addEventListener("click", toggleXPFormat);
 
+  // === Long-press (mobile) ===
+  xpValue.addEventListener("touchstart", e => {
+    e.preventDefault();
+    tooltipTimeout = setTimeout(() => {
+      const xp = parseFloat(xpBar.value || 0);
+      const xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }, 400); // long press delay
+  });
+
+  xpValue.addEventListener("touchend", () => {
+    clearTimeout(tooltipTimeout);
+    hideXPTooltip();
+  });
+
+  // === Hover (PC) ===
+  xpValue.addEventListener("mouseenter", () => {
+    if (xpShortMode) {
+      const xp = parseFloat(xpBar.value || 0);
+      const xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }
+  });
+  xpValue.addEventListener("mouseleave", hideXPTooltip);
+
+  // Expose for Firebase updates
   window.refreshXPDisplay = updateXPDisplay;
 });
 </script>
