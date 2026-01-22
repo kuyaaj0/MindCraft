@@ -511,51 +511,52 @@ onAuthStateChanged(auth, (user) => {
 
   <script>
 /* ==========================================================
-   📊 XP Number Formatter + Toggle System (MindCraft)
+   📊 MindCraft XP Display System (Smart Formatter + Toggle)
    ========================================================== */
 
-// === Helper: Shorten large numbers with suffix ===
-function formatNumberShort(value) {
-  if (value >= 1_000_000_000) return (value / 1_000_000_000).toFixed(2).replace(/\.0+$/, "") + "b";
-  if (value >= 1_000_000) return (value / 1_000_000).toFixed(2).replace(/\.0+$/, "") + "m";
-  if (value >= 1_000) return (value / 1_000).toFixed(2).replace(/\.0+$/, "") + "k";
+// === Helper: Smart short format with suffix ===
+function formatNumberSmart(value) {
+  const abs = Math.abs(value);
+  if (abs >= 1e15) return (value / 1e15).toFixed(2).replace(/\.00$/, "") + "q"; // quadrillion
+  if (abs >= 1e12) return (value / 1e12).toFixed(2).replace(/\.00$/, "") + "t"; // trillion
+  if (abs >= 1e9)  return (value / 1e9).toFixed(2).replace(/\.00$/, "") + "b"; // billion
+  if (abs >= 1e6)  return (value / 1e6).toFixed(2).replace(/\.00$/, "") + "m"; // million
+  if (abs >= 1e3)  return (value / 1e3).toFixed(1).replace(/\.0$/, "") + "k";  // thousand
   return value.toString();
 }
 
-// === Helper: Add commas for full version ===
+// === Helper: Full comma format ===
 function formatNumberFull(value) {
   return value.toLocaleString("en-US");
 }
 
-// === Toggle state ===
-let xpShortMode = false; // start with full format by default
+// === Global toggle state ===
+let xpShortMode = true; // start short if values are big
 
-// === Update XP Display ===
+// === Update Display ===
 function updateXPDisplay(xp, xpMax) {
   const xpValue = document.getElementById("xpValue");
   if (!xpValue) return;
 
-  // Detect if numbers are large to auto-reduce font size
-  const textLength = `${xp}/${xpMax}`.length;
-  xpValue.style.fontSize = textLength > 10 ? "0.45rem" : "0.55rem";
+  // Choose correct mode
+  const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
+  const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
+  const displayText = xpShortMode ? shortForm : fullForm;
 
-  // Apply chosen mode
-  if (xpShortMode) {
-    xpValue.textContent = `${formatNumberShort(xp)} / ${formatNumberShort(xpMax)}`;
-  } else {
-    xpValue.textContent = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
-  }
+  // Adjust font if very long
+  const len = displayText.length;
+  xpValue.style.fontSize = len > 12 ? "0.45rem" : "0.55rem";
+
+  xpValue.textContent = displayText;
 }
 
-// === Click or tap toggles short/full format ===
+// === Click or tap toggles ===
 document.addEventListener("DOMContentLoaded", () => {
   const xpValue = document.getElementById("xpValue");
   const xpBar = document.getElementById("xpBar");
 
   function toggleXPFormat() {
     xpShortMode = !xpShortMode;
-
-    // Get latest values from bar
     const currentXP = parseFloat(xpBar.value || 0);
     const maxXP = parseFloat(xpBar.max || 100);
     updateXPDisplay(currentXP, maxXP);
@@ -564,7 +565,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (xpValue) xpValue.addEventListener("click", toggleXPFormat);
   if (xpBar) xpBar.addEventListener("click", toggleXPFormat);
 
-  // Allow Student.html Firebase updates to use this
   window.refreshXPDisplay = updateXPDisplay;
 });
 </script>
