@@ -330,6 +330,8 @@ footer {
 <script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
+  if (!select) return; // guard if not loaded yet
+
   const isLesson = type === "Lessons";
   const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
   const subfolder = isLesson ? "Lessons" : "Quiz";
@@ -350,13 +352,15 @@ function populateOptions(prefix, count, type, folder) {
   }
 }
 
-// Populate all lesson & quiz dropdowns
-populateOptions("html", 20, "Lessons", "HTML");
-populateOptions("html", 20, "Quizzes", "HTML");
-populateOptions("css", 20, "Lessons", "CSS");
-populateOptions("css", 20, "Quizzes", "CSS");
-populateOptions("js", 20, "Lessons", "JS");
-populateOptions("js", 20, "Quizzes", "JS");
+// ✅ Wait until the DOM is fully loaded before populating
+document.addEventListener("DOMContentLoaded", () => {
+  populateOptions("html", 20, "Lessons", "HTML");
+  populateOptions("html", 20, "Quizzes", "HTML");
+  populateOptions("css", 20, "Lessons", "CSS");
+  populateOptions("css", 20, "Quizzes", "CSS");
+  populateOptions("js", 20, "Lessons", "JS");
+  populateOptions("js", 20, "Quizzes", "JS");
+});
 </script>
 
 <!-- ===================== -->
