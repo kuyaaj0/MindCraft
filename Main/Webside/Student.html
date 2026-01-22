@@ -369,9 +369,7 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ===============================
-// 🕓 Wait for Firebase to be Ready (Fix for mobile)
-// ===============================
+// ✅ Wait for Firebase Ready
 async function waitForFirebaseReady() {
   let tries = 0;
   while ((!auth || !db) && tries < 20) {
@@ -381,9 +379,13 @@ async function waitForFirebaseReady() {
   return !!auth && !!db;
 }
 
-// ===============================
-// 🧩 Smooth XP Bar Animation
-// ===============================
+// ✅ Wait for DOM to be ready (important for Android)
+async function waitForDOMReady() {
+  if (document.readyState === "complete" || document.readyState === "interactive") return;
+  await new Promise(res => document.addEventListener("DOMContentLoaded", res));
+}
+
+// ✅ Smooth XP Animation
 function animateXPBar(bar, startValue, endValue, duration = 600) {
   const startTime = performance.now();
   function update(currentTime) {
@@ -399,9 +401,7 @@ function animateXPBar(bar, startValue, endValue, duration = 600) {
 let lastXP = 0;
 let lastLevel = 0;
 
-// ===============================
-// 🎨 Theme Fix for Welcome Overlay
-// ===============================
+// ✅ Theme for welcome overlay
 function applyThemeToWelcomeOverlay() {
   const overlay = document.getElementById("welcomeOverlay");
   if (!overlay) return;
@@ -411,10 +411,9 @@ function applyThemeToWelcomeOverlay() {
   overlay.style.color = theme === "light" ? "#000" : "#1DB954";
 }
 
-// ===============================
-// 🚀 Main Start Function
-// ===============================
+// ✅ MAIN FUNCTION
 (async () => {
+  await waitForDOMReady();
   const ready = await waitForFirebaseReady();
   if (!ready) {
     alert("⚠️ Firebase failed to load. Please refresh.");
@@ -437,19 +436,14 @@ function applyThemeToWelcomeOverlay() {
 
     const userRef = doc(db, "users", user.uid);
 
-    // ===========================
-    // 🔁 Firestore Realtime Listener
-    // ===========================
     onSnapshot(userRef, async (snap) => {
       if (!snap.exists()) {
-        alert("⚠️ User data not found in Firestore.");
+        alert("⚠️ User data not found.");
         window.location.href = "../Account/signin.html";
         return;
       }
 
       const data = snap.data();
-
-      // --- Validate Role ---
       if (data.role !== "student") {
         alert("⚠️ Redirecting to teacher page...");
         window.location.href = "Teacher.html";
@@ -476,12 +470,15 @@ function applyThemeToWelcomeOverlay() {
       const xpValue = document.getElementById("xpValue");
       const levelValue = document.getElementById("levelValue");
 
-      if (xpBar && xpValue && levelValue) {
-        xpValue.innerText = `${displayedXP}/${xpMax}`;
-        levelValue.innerText = level;
-        xpBar.max = xpMax;
-        animateXPBar(xpBar, lastXP, displayedXP);
-      }
+      // ✅ Force update after delay to ensure DOM update on Android
+      setTimeout(() => {
+        if (xpBar && xpValue && levelValue) {
+          xpValue.textContent = `${displayedXP}/${xpMax}`;
+          levelValue.textContent = level;
+          xpBar.max = xpMax;
+          animateXPBar(xpBar, lastXP, displayedXP);
+        }
+      }, 150);
 
       lastXP = displayedXP;
 
@@ -495,7 +492,7 @@ function applyThemeToWelcomeOverlay() {
       const name = user.displayName || data.name || user.email.split("@")[0];
       document.getElementById("studentName").textContent = name;
 
-      // --- Welcome Overlay ---
+      // Welcome overlay
       const welcomeOverlay = document.getElementById("welcomeOverlay");
       applyThemeToWelcomeOverlay();
 
@@ -505,7 +502,7 @@ function applyThemeToWelcomeOverlay() {
         setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
       }
 
-      // --- Rank Display ---
+      // Rank display
       const rankDisplay = document.getElementById("rankDisplay");
       const usersRef = collection(db, "users");
       const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
@@ -515,13 +512,12 @@ function applyThemeToWelcomeOverlay() {
           if (docSnap.id === user.uid && !found) { found = true; return; }
           if (!found) rank++;
         });
-        rankDisplay.innerText = `Rank: #${rank}`;
+        rankDisplay.textContent = `Rank: #${rank}`;
         if (rank <= 3) rankDisplay.classList.add("rank-top");
         else rankDisplay.classList.remove("rank-top");
       });
 
-      // ✅ Everything loaded
-      alert(`✅ Welcome back, ${name}! Level ${level}, XP ${xp}/${xpMax}`);
+      alert(`✅ Synced: Level ${level}, XP ${xp}/${xpMax}`);
     });
   });
 })();
