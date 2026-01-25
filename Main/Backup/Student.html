@@ -59,7 +59,52 @@ header {
 .xp-bar-container {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px; /* ✅ tighter spacing */
+  min-width: 120px;
+}
+
+#xpValue {
+  display: inline-block;
+  min-width: 60px;
+  text-align: right;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #fff;
+  transition: font-size 0.25s ease, transform 0.25s ease;
+  word-break: keep-all;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+/* Shrinks when big numbers appear */
+@media (max-width: 480px) {
+  #xpValue {
+    font-size: 0.45rem;
+    max-width: 100px;
+  }
+}
+
+/* Tooltip styling for hover/long-press display */
+#xpTooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.85);
+  color: #1DB954;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.45rem;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: scale(0.9);
+}
+
+#xpTooltip.show {
+  opacity: 1;
+  transform: scale(1);
 }
 
 #xpBar {
@@ -316,15 +361,22 @@ footer {
   <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
 </footer>
 
+<!-- Scripts -->
 <script src="../Design/theme.js"></script>
-<script src="../Exp/levels.js"></script>
-<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
+<script>window.useFirestoreXP = true;</script>
+  <!-- levels helper (keeps awardXP etc available) -->
+  <script src="../Exp/levels.js"></script>
+ <!-- leaderboard module (IMPORTANT: required so leaderboard button works) -->
+  <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
-<!-- ✅ Auto-generate lessons and quizzes -->
-<!-- ✅ Auto-generate lessons and quizzes -->
+<!-- ===================== -->
+<!-- ✅ Auto-generate Lessons & Quizzes -->
+<!-- ===================== -->
 <script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
+  if (!select) return; // guard if not loaded yet
+
   const isLesson = type === "Lessons";
   const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
   const subfolder = isLesson ? "Lessons" : "Quiz";
@@ -345,19 +397,24 @@ function populateOptions(prefix, count, type, folder) {
   }
 }
 
-populateOptions("html", 20, "Lessons", "HTML");
-populateOptions("html", 20, "Quizzes", "HTML");
-populateOptions("css", 20, "Lessons", "CSS");
-populateOptions("css", 20, "Quizzes", "CSS");
-populateOptions("js", 20, "Lessons", "JS");
-populateOptions("js", 20, "Quizzes", "JS");
+// ✅ Wait until the DOM is fully loaded before populating
+document.addEventListener("DOMContentLoaded", () => {
+  populateOptions("html", 20, "Lessons", "HTML");
+  populateOptions("html", 20, "Quizzes", "HTML");
+  populateOptions("css", 20, "Lessons", "CSS");
+  populateOptions("css", 20, "Quizzes", "CSS");
+  populateOptions("js", 20, "Lessons", "JS");
+  populateOptions("js", 20, "Quizzes", "JS");
+});
 </script>
 
-<!-- ✅ Firebase Auth / XP / Rank / Glow Upgrade -->
+<!-- ===================== -->
+<!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
+<!-- ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, collection, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // === Firebase Config ===
 const firebaseConfig = {
@@ -374,8 +431,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// === Helper: Smooth XP bar animation ===
+// === Smooth XP Bar Animation ===
 function animateXPBar(bar, startValue, endValue, duration = 600) {
+  if (!bar) return;
   const startTime = performance.now();
   function update(currentTime) {
     const elapsed = currentTime - startTime;
@@ -390,18 +448,188 @@ function animateXPBar(bar, startValue, endValue, duration = 600) {
 let lastXP = 0;
 let lastLevel = 0;
 
-// === Firebase Authentication & Real-time XP Listener ===
+// === Theme on Welcome Overlay ===
+function applyThemeToWelcomeOverlay() {
+  const overlay = document.getElementById("welcomeOverlay");
+  const theme = localStorage.getItem("theme") || "dark";
+  overlay.style.background = theme === "light"
+    ? "rgba(255,255,255,0.9)"
+    : "rgba(0,0,0,0.85)";
+  overlay.style.color = theme === "light" ? "#000" : "#1DB954";
+}
+
+/* ==========================================================
+   🧠 MindCraft XP Display System
+   (Smart Short Format + Auto Font Adjust + Tooltip)
+   ========================================================== */
+
+// === Format Short (EXTENDED TO 1e99) ===
+function formatNumberSmart(value) {
+  const abs = Math.abs(value);
+  const units = [
+    { v: 1e99, s: "Ce" },
+    { v: 1e96, s: "NoCe" },
+    { v: 1e93, s: "OcCe" },
+    { v: 1e90, s: "SeCe" },
+    { v: 1e87, s: "SxCe" },
+    { v: 1e84, s: "QiCe" },
+    { v: 1e81, s: "QdCe" },
+    { v: 1e78, s: "TrCe" },
+    { v: 1e75, s: "DuCe" },
+    { v: 1e72, s: "UnCe" },
+    { v: 1e69, s: "Vi" },
+    { v: 1e66, s: "Nv" },
+    { v: 1e63, s: "Oc" },
+    { v: 1e60, s: "Spt" },
+    { v: 1e57, s: "Sxd" },
+    { v: 1e54, s: "Qid" },
+    { v: 1e51, s: "Qad" },
+    { v: 1e48, s: "Td" },
+    { v: 1e45, s: "Dd" },
+    { v: 1e42, s: "Und" },
+    { v: 1e39, s: "Dc" },
+    { v: 1e36, s: "Nn" },
+    { v: 1e33, s: "Oc" },
+    { v: 1e30, s: "Sp" },
+    { v: 1e27, s: "Sx" },
+    { v: 1e24, s: "Qi" },
+    { v: 1e21, s: "Qd" },
+    { v: 1e18, s: "T" },
+    { v: 1e15, s: "B" },
+    { v: 1e12, s: "M" },
+    { v: 1e9,  s: "K" }
+  ];
+  for (const u of units) {
+    if (abs >= u.v) {
+      const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
+      return shortened.replace(/\.00$|\.0$/, "") + u.s;
+    }
+  }
+  return value.toString();
+}
+
+// === Format Full ===
+function formatNumberFull(value) {
+  return value.toLocaleString("en-US");
+}
+
+// === Auto Font Adjust ===
+function adjustXPFont(xpValueElement, xpMax) {
+  if (!xpValueElement) return;
+  const len = xpMax.toString().length;
+  let newSize = 0.6; // default
+  if (len > 6 && len <= 9) newSize = 0.55;
+  else if (len > 9 && len <= 12) newSize = 0.5;
+  else if (len > 12 && len <= 18) newSize = 0.45;
+  else if (len > 18 && len <= 25) newSize = 0.42;
+  else if (len > 25 && len <= 35) newSize = 0.4;
+  else if (len > 35 && len <= 50) newSize = 0.38;
+  else if (len > 50 && len <= 65) newSize = 0.36;
+  else if (len > 65) newSize = 0.34;
+  xpValueElement.style.fontSize = `${newSize}rem`;
+  xpValueElement.style.transition = "font-size 0.3s ease";
+}
+
+// === Global Toggle State ===
+let xpShortMode = true;
+let tooltipTimeout = null;
+
+// === Update XP Display ===
+function updateXPDisplay(xp, xpMax) {
+  const xpValue = document.getElementById("xpValue");
+  if (!xpValue) return;
+  const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
+  const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
+  xpValue.textContent = xpShortMode ? shortForm : fullForm;
+  adjustXPFont(xpValue, xpMax);
+}
+
+// === Tooltip ===
+function showXPTooltip(fullXPText) {
+  let tooltip = document.getElementById("xpTooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.id = "xpTooltip";
+    Object.assign(tooltip.style, {
+      position: "fixed",
+      padding: "6px 10px",
+      borderRadius: "6px",
+      background: "rgba(0,0,0,0.8)",
+      color: "#1DB954",
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: "0.45rem",
+      zIndex: "9999",
+      pointerEvents: "none",
+      transition: "opacity 0.2s ease",
+      opacity: "0"
+    });
+    document.body.appendChild(tooltip);
+  }
+  tooltip.textContent = fullXPText;
+  tooltip.style.opacity = "1";
+  document.addEventListener("mousemove", e => {
+    tooltip.style.left = e.pageX + 10 + "px";
+    tooltip.style.top = e.pageY - 20 + "px";
+  });
+}
+function hideXPTooltip() {
+  const tooltip = document.getElementById("xpTooltip");
+  if (tooltip) tooltip.style.opacity = "0";
+}
+
+// === Toggle XP Format ===
+function toggleXPFormat() {
+  xpShortMode = !xpShortMode;
+  const xpBar = document.getElementById("xpBar");
+  const xp = parseFloat(xpBar?.value || 0);
+  const xpMax = parseFloat(xpBar?.max || 100);
+  updateXPDisplay(xp, xpMax);
+}
+
+// === Event Setup ===
+document.addEventListener("DOMContentLoaded", () => {
+  const xpValue = document.getElementById("xpValue");
+  const xpBar = document.getElementById("xpBar");
+  if (!xpValue || !xpBar) return;
+
+  xpValue.addEventListener("click", toggleXPFormat);
+  xpBar.addEventListener("click", toggleXPFormat);
+
+  xpValue.addEventListener("touchstart", e => {
+    e.preventDefault();
+    tooltipTimeout = setTimeout(() => {
+      const xp = parseFloat(xpBar.value || 0);
+      const xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }, 400);
+  });
+  xpValue.addEventListener("touchend", () => {
+    clearTimeout(tooltipTimeout);
+    hideXPTooltip();
+  });
+
+  xpValue.addEventListener("mouseenter", () => {
+    if (xpShortMode) {
+      const xp = parseFloat(xpBar.value || 0);
+      const xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }
+  });
+  xpValue.addEventListener("mouseleave", hideXPTooltip);
+});
+
+// === Firebase Authentication & Real-time Listener ===
 onAuthStateChanged(auth, (user) => {
   if (!user) {
-    alert("You must sign in first!");
+    alert("⚠️ Please sign in first!");
     window.location.href = "../Account/signin.html";
     return;
   }
 
   const userRef = doc(db, "users", user.uid);
-  onSnapshot(userRef, (snap) => {
+  onSnapshot(userRef, async (snap) => {
     if (!snap.exists()) {
-      alert("No user data found.");
+      alert("⚠️ No user data found.");
       window.location.href = "../Account/signin.html";
       return;
     }
@@ -412,51 +640,53 @@ onAuthStateChanged(auth, (user) => {
       return;
     }
 
-    // === XP and Level Data ===
     const xp = data.xp ?? 0;
-    const xpMax = data.xpMax ?? 100;
     const level = data.level ?? 1;
+    let xpMax = data.xpMax ?? 100;
 
-    // === Update UI ===
+    const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
+    if (Math.abs(xpMax - expectedXpMax) > 5) {
+      xpMax = expectedXpMax;
+      try { await updateDoc(userRef, { xpMax }); }
+      catch { alert("⚠️ Unable to update xpMax."); }
+    }
+
     const xpBar = document.getElementById("xpBar");
-    // ✅ Use Firestore values directly (no modulo)
-  document.getElementById("xpValue").innerText = `${xp}/${xpMax}`;
-  document.getElementById("levelValue").innerText = level;
-    // Smooth transition for XP bar width
-    animateXPBar(xpBar, lastXP, xp);
+    const xpValue = document.getElementById("xpValue");
+    const levelValue = document.getElementById("levelValue");
     xpBar.max = xpMax;
+    animateXPBar(xpBar, lastXP, xp);
     lastXP = xp;
 
-    // === Subtle Level-Up Glow Animation ===
-    const levelDisplay = document.getElementById("levelValue");
+    updateXPDisplay(xp, xpMax);
+    levelValue.textContent = level;
+
     if (level > lastLevel) {
-      levelDisplay.classList.add("level-up-glow");
-      setTimeout(() => levelDisplay.classList.remove("level-up-glow"), 1000);
+      levelValue.classList.add("level-up-glow");
+      setTimeout(() => levelValue.classList.remove("level-up-glow"), 1000);
     }
     lastLevel = level;
 
-    // === Welcome Overlay ===
     const name = user.displayName || data.name || user.email.split("@")[0];
     document.getElementById("studentName").textContent = name;
     const welcomeOverlay = document.getElementById("welcomeOverlay");
+    applyThemeToWelcomeOverlay();
     if (!sessionStorage.getItem("welcomeShown")) {
       sessionStorage.setItem("welcomeShown", "true");
       welcomeOverlay.style.display = "flex";
       setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
     }
 
-    // === Real-time Rank Display ===
     const rankDisplay = document.getElementById("rankDisplay");
     const usersRef = collection(db, "users");
     const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-
     onSnapshot(q, (snapshot) => {
       let rank = 1, found = false;
       snapshot.forEach((docSnap) => {
         if (docSnap.id === user.uid && !found) { found = true; return; }
         if (!found) rank++;
       });
-      rankDisplay.innerText = `Rank: #${rank}`;
+      rankDisplay.textContent = `Rank: #${rank}`;
       if (rank <= 3) rankDisplay.classList.add("rank-top");
       else rankDisplay.classList.remove("rank-top");
     });
