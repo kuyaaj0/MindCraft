@@ -59,20 +59,20 @@ header {
 .xp-bar-container {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px; /* ✅ tighter spacing */
+  min-width: 120px;
 }
 
-/* === XP Value Responsive Fix === */
 #xpValue {
   display: inline-block;
   min-width: 60px;
   text-align: right;
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   line-height: 1;
   color: #fff;
-  transition: font-size 0.3s ease, transform 0.3s ease;
+  transition: font-size 0.25s ease, transform 0.25s ease;
   word-break: keep-all;
-  max-width: 120px; /* prevent overflow beside XP bar */
+  max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
