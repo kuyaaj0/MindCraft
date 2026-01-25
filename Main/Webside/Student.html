@@ -819,108 +819,190 @@ onAuthStateChanged(auth, (user) => {
 </script>
   
   <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const languages = document.querySelectorAll(".language-card");
-  const prevBtn = document.getElementById("prevLang");
-  const nextBtn = document.getElementById("nextLang");
-  const backBtn = document.getElementById("backBtn");
-  const lessonQuizOptions = document.getElementById("lessonQuizOptions");
-  const quizList = document.getElementById("quizList");
+document.addEventListener('DOMContentLoaded', () => {
+  // collect language cards (make sure your HTML marks each language-card as in your file)
+  const cards = Array.from(document.querySelectorAll('.language-card'));
+  if (!cards.length) return;
 
-  let currentIndex = 0;
-  let touchStartX = 0;
+  // create left/right arrow buttons inside the lesson-container if not present
+  const lessonContainer = document.querySelector('.lesson-container');
+  if (!lessonContainer) return;
 
-  // Show selected card
-  function showLanguage(index) {
-    languages.forEach((card, i) => {
-      card.classList.remove("active");
-      card.style.display = i === index ? "flex" : "none";
-    });
+  // arrows (create once)
+  let left = lessonContainer.querySelector('.nav-arrow.left');
+  let right = lessonContainer.querySelector('.nav-arrow.right');
+  if (!left) {
+    left = document.createElement('button');
+    left.className = 'nav-arrow left';
+    left.innerHTML = '◀';
+    lessonContainer.appendChild(left);
   }
-  showLanguage(currentIndex);
+  if (!right) {
+    right = document.createElement('button');
+    right.className = 'nav-arrow right';
+    right.innerHTML = '▶';
+    lessonContainer.appendChild(right);
+  }
 
-  // Navigation arrows
-  prevBtn.addEventListener("click", () => {
-    currentIndex = (currentIndex - 1 + languages.length) % languages.length;
-    showLanguage(currentIndex);
-  });
-  nextBtn.addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % languages.length;
-    showLanguage(currentIndex);
+  // language view container (we rely on #languageView already in your HTML)
+  const languageView = document.getElementById('languageView') || (() => {
+    // fallback: create one and insert into lesson-container center
+    const lv = document.createElement('div'); lv.id = 'languageView';
+    lessonContainer.insertBefore(lv, lessonContainer.firstChild);
+    return lv;
+  })();
+
+  // fill languageView with cards (move nodes to languageView)
+  cards.forEach(c => languageView.appendChild(c));
+
+  // state
+  let idx = 0;
+  function setActive(index) {
+    idx = Math.max(0, Math.min(index, cards.length - 1));
+    cards.forEach((c, i) => {
+      c.classList.toggle('active', i === idx);
+      c.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+    });
+    // toggle arrow disabled visual
+    left.disabled = (idx === 0);
+    right.disabled = (idx === cards.length - 1);
+  }
+  setActive(0);
+
+  // arrows handlers
+  left.addEventListener('click', () => setActive(idx - 1));
+  right.addEventListener('click', () => setActive(idx + 1));
+
+  // keyboard support
+  document.addEventListener('keydown', (e) => {
+    if (document.body.classList.contains('page-blur')) return; // ignore while panel open
+    if (e.key === 'ArrowLeft') setActive(idx - 1);
+    if (e.key === 'ArrowRight') setActive(idx + 1);
   });
 
-  // Swipe (mobile)
-  const view = document.getElementById("languageView");
-  view.addEventListener("touchstart", e => {
-    touchStartX = e.touches[0].clientX;
-  });
-  view.addEventListener("touchend", e => {
-    const deltaX = e.changedTouches[0].clientX - touchStartX;
-    if (deltaX > 60) prevBtn.click(); // swipe right
-    else if (deltaX < -60) nextBtn.click(); // swipe left
-  });
+  // create language panel template (hidden initially)
+  let panel = null;
+  function openLanguagePanel(card) {
+    // create panel if not exist
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.className = 'language-panel';
+      panel.innerHTML = `
+        <div class="panel-title"></div>
+        <div class="panel-body">
+          <div class="panel-content centered" style="width:100%;">
+            <!-- options injected here -->
+          </div>
+        </div>
+        <div class="quiz-list hidden" role="menu"></div>
+        <button class="panel-back">⬇ Back</button>
+      `;
+      document.body.appendChild(panel);
 
-  // Keyboard arrows (PC)
-  document.addEventListener("keydown", e => {
-    if (e.key === "ArrowLeft") prevBtn.click();
-    if (e.key === "ArrowRight") nextBtn.click();
-  });
+      // back button close panel
+      panel.querySelector('.panel-back').addEventListener('click', closeLanguagePanel);
+    }
 
-  // Card click → show lesson/quiz menu
-  languages.forEach((card) => {
-    card.addEventListener("click", () => {
-      lessonQuizOptions.style.display = "flex";
-      backBtn.style.display = "block";
-      prevBtn.style.display = "none";
-      nextBtn.style.display = "none";
-      languages.forEach((c) => (c.style.display = "none"));
-      card.style.display = "flex";
-      card.style.transform = "scale(1.05)";
+    // set title and inject lesson + quiz buttons
+    const titleEl = panel.querySelector('.panel-title');
+    const pc = panel.querySelector('.panel-content');
+    titleEl.textContent = card.querySelector('p')?.textContent || 'Language';
+    pc.innerHTML = `
+      <div style="width:100%; display:flex; justify-content:center; gap:12px; align-items:center; flex-wrap:nowrap;">
+        <button class="lessons-btn">📖 Lessons</button>
+        <div class="quiz-dropdown">
+          <button class="quiz-btn">📝 Quiz ▾</button>
+        </div>
+      </div>
+    `;
+
+    // populate quiz list from your populateOptions selects (if available)
+    const quizListDiv = panel.querySelector('.quiz-list');
+    quizListDiv.innerHTML = '';
+    // find corresponding select (convention: id like htmlQuizzes)
+    const langKey = (card.id || '').replace('Card','').toLowerCase() || card.querySelector('p')?.textContent?.toLowerCase() || 'html';
+    const select = document.getElementById(`${langKey}Quizzes`);
+    if (select) {
+      // copy options (skipping first placeholder)
+      Array.from(select.options).slice(1).forEach(opt => {
+        const b = document.createElement('button');
+        b.textContent = opt.textContent;
+        b.addEventListener('click', () => {
+          // navigate to quiz level
+          if (opt.value) window.location.href = opt.value;
+        });
+        quizListDiv.appendChild(b);
+      });
+    } else {
+      const b = document.createElement('button');
+      b.textContent = 'No quizzes found';
+      quizListDiv.appendChild(b);
+    }
+
+    // toggle dropdown show
+    const quizBtn = panel.querySelector('.quiz-btn');
+    quizBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      quizListDiv.classList.toggle('hidden');
+      if (!quizListDiv.classList.contains('hidden')) quizListDiv.style.display = 'flex';
+      else quizListDiv.style.display = 'none';
+    });
+
+    // lessons button -> go to lesson 1 (or open lessons grid if you have)
+    panel.querySelector('.lessons-btn').addEventListener('click', () => {
+      // if you want to go to lesson-1 by default:
+      const lessonSelect = document.getElementById(`${langKey}Lessons`);
+      const first = lessonSelect && lessonSelect.options[1] && lessonSelect.options[1].value;
+      if (first) window.location.href = first;
+      else alert('No lessons available for this language.');
+    });
+
+    // show panel and blur backing page
+    panel.style.display = 'flex';
+    panel.querySelector('.quiz-list').style.display = 'none';
+    document.body.classList.add('page-blur');
+
+    // ensure panel focus for keyboard access
+    panel.setAttribute('tabindex','-1');
+    panel.focus();
+  }
+
+  function closeLanguagePanel() {
+    if (panel) panel.style.display = 'none';
+    document.body.classList.remove('page-blur');
+    // hide quiz list
+    if (panel) {
+      const q = panel.querySelector('.quiz-list');
+      if (q) { q.classList.add('hidden'); q.style.display = 'none'; }
+    }
+  }
+
+  // click a visible card to open panel
+  cards.forEach((c,i) => {
+    c.addEventListener('click', (e) => {
+      // ensure it's the active card (if not, make it active first)
+      if (!c.classList.contains('active')) {
+        setActive(i);
+        // small delay then open (gives the visual)
+        setTimeout(() => openLanguagePanel(c), 180);
+      } else {
+        openLanguagePanel(c);
+      }
+    });
+    // keyboard accessible
+    c.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openLanguagePanel(c); }
     });
   });
 
-  // Back button
-  backBtn.addEventListener("click", () => {
-    lessonQuizOptions.style.display = "none";
-    backBtn.style.display = "none";
-    prevBtn.style.display = "block";
-    nextBtn.style.display = "block";
-    showLanguage(currentIndex);
-  });
-
-  // Lesson button redirect
-  document.getElementById("lessonBtn").addEventListener("click", () => {
-    const lang = languages[currentIndex].dataset.lang.toLowerCase();
-    window.location.href = `../Modular/Lessons/${lang}/lesson-1.html`;
-  });
-
-  // Quiz dropdown builder
-  document.getElementById("quizBtn").addEventListener("click", () => {
-    if (quizList.style.display === "flex") {
-      quizList.style.display = "none";
-      return;
-    }
-
-    // Populate 20 quiz levels
-    quizList.innerHTML = "";
-    for (let i = 1; i <= 20; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = `Level ${i}`;
-      btn.addEventListener("click", () => {
-        const lang = languages[currentIndex].dataset.lang.toLowerCase();
-        window.location.href = `../Levels/Quiz/${lang}/level-${i}.html`;
-      });
-      quizList.appendChild(btn);
-    }
-    quizList.style.display = "flex";
-  });
-
-  // Click outside to close dropdown
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".quiz-dropdown")) {
-      quizList.style.display = "none";
+  // clicking outside panel closes it
+  document.addEventListener('click', (e) => {
+    if (!panel) return;
+    if (panel.style.display === 'flex' && !panel.contains(e.target) && !e.target.closest('.language-card')) {
+      closeLanguagePanel();
     }
   });
+
 });
 </script>
 </body>
