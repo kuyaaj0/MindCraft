@@ -463,26 +463,46 @@ function applyThemeToWelcomeOverlay() {
    (Smart Short Format + Auto Font Adjust + Tooltip)
    ========================================================== */
 
-// === Format Short ===
+// === Format Short (EXTENDED TO 1e99) ===
 function formatNumberSmart(value) {
   const abs = Math.abs(value);
   const units = [
-    { v: 1e33, s: "d" },
-    { v: 1e30, s: "n" },
-    { v: 1e27, s: "o" },
-    { v: 1e24, s: "s" },
-    { v: 1e21, s: "Sx" },
-    { v: 1e18, s: "Qi" },
-    { v: 1e15, s: "Q" },
-    { v: 1e12, s: "T" },
-    { v: 1e9,  s: "B" },
-    { v: 1e6,  s: "M" },
-    { v: 1e3,  s: "K" }
+    { v: 1e99, s: "Ce" },
+    { v: 1e96, s: "NoCe" },
+    { v: 1e93, s: "OcCe" },
+    { v: 1e90, s: "SeCe" },
+    { v: 1e87, s: "SxCe" },
+    { v: 1e84, s: "QiCe" },
+    { v: 1e81, s: "QdCe" },
+    { v: 1e78, s: "TrCe" },
+    { v: 1e75, s: "DuCe" },
+    { v: 1e72, s: "UnCe" },
+    { v: 1e69, s: "Vi" },
+    { v: 1e66, s: "Nv" },
+    { v: 1e63, s: "Oc" },
+    { v: 1e60, s: "Spt" },
+    { v: 1e57, s: "Sxd" },
+    { v: 1e54, s: "Qid" },
+    { v: 1e51, s: "Qad" },
+    { v: 1e48, s: "Td" },
+    { v: 1e45, s: "Dd" },
+    { v: 1e42, s: "Und" },
+    { v: 1e39, s: "Dc" },
+    { v: 1e36, s: "Nn" },
+    { v: 1e33, s: "Oc" },
+    { v: 1e30, s: "Sp" },
+    { v: 1e27, s: "Sx" },
+    { v: 1e24, s: "Qi" },
+    { v: 1e21, s: "Qd" },
+    { v: 1e18, s: "T" },
+    { v: 1e15, s: "B" },
+    { v: 1e12, s: "M" },
+    { v: 1e9,  s: "K" }
   ];
   for (const u of units) {
     if (abs >= u.v) {
-      const shortened = (value / u.v).toFixed(value >= 1e6 ? 1 : 2);
-      return shortened.replace(/\.0+$/, "") + u.s;
+      const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
+      return shortened.replace(/\.00$|\.0$/, "") + u.s;
     }
   }
   return value.toString();
@@ -500,9 +520,14 @@ function adjustXPFont(xpValueElement, xpMax) {
   let newSize = 0.6; // default
   if (len > 6 && len <= 9) newSize = 0.55;
   else if (len > 9 && len <= 12) newSize = 0.5;
-  else if (len > 12 && len <= 15) newSize = 0.45;
-  else if (len > 15) newSize = 0.4;
+  else if (len > 12 && len <= 18) newSize = 0.45;
+  else if (len > 18 && len <= 25) newSize = 0.42;
+  else if (len > 25 && len <= 35) newSize = 0.4;
+  else if (len > 35 && len <= 50) newSize = 0.38;
+  else if (len > 50 && len <= 65) newSize = 0.36;
+  else if (len > 65) newSize = 0.34;
   xpValueElement.style.fontSize = `${newSize}rem`;
+  xpValueElement.style.transition = "font-size 0.3s ease";
 }
 
 // === Global Toggle State ===
@@ -516,8 +541,6 @@ function updateXPDisplay(xp, xpMax) {
   const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
   const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
   xpValue.textContent = xpShortMode ? shortForm : fullForm;
-
-  // Dynamic font scaling (based on xpMax)
   adjustXPFont(xpValue, xpMax);
 }
 
@@ -572,7 +595,6 @@ document.addEventListener("DOMContentLoaded", () => {
   xpValue.addEventListener("click", toggleXPFormat);
   xpBar.addEventListener("click", toggleXPFormat);
 
-  // Long press (mobile)
   xpValue.addEventListener("touchstart", e => {
     e.preventDefault();
     tooltipTimeout = setTimeout(() => {
@@ -586,7 +608,6 @@ document.addEventListener("DOMContentLoaded", () => {
     hideXPTooltip();
   });
 
-  // Hover (PC)
   xpValue.addEventListener("mouseenter", () => {
     if (xpShortMode) {
       const xp = parseFloat(xpBar.value || 0);
@@ -637,7 +658,7 @@ onAuthStateChanged(auth, (user) => {
     animateXPBar(xpBar, lastXP, xp);
     lastXP = xp;
 
-    updateXPDisplay(xp, xpMax); // ✅ show properly formatted + scaled XP
+    updateXPDisplay(xp, xpMax);
     levelValue.textContent = level;
 
     if (level > lastLevel) {
@@ -656,7 +677,6 @@ onAuthStateChanged(auth, (user) => {
       setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
     }
 
-    // === Rank Display ===
     const rankDisplay = document.getElementById("rankDisplay");
     const usersRef = collection(db, "users");
     const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
