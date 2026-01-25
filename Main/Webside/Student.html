@@ -439,7 +439,7 @@ footer {
 <!-- ===================== -->
 <!-- ✅ Auto-generate Lessons & Quizzes -->
 <!-- ===================== -->
-<script>
+<!--<script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
   if (!select) return; // guard if not loaded yet
@@ -473,7 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateOptions("js", 20, "Lessons", "JS");
   populateOptions("js", 20, "Quizzes", "JS");
 });
-</script>
+</script>--> <!--keep it as backup plan-->
 
 <!-- ===================== -->
 <!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
@@ -760,5 +760,75 @@ onAuthStateChanged(auth, (user) => {
   });
 });
 </script>
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const languages = document.querySelectorAll(".language-card");
+  const prevBtn = document.getElementById("prevLang");
+  const nextBtn = document.getElementById("nextLang");
+  const backBtn = document.getElementById("backBtn");
+  const lessonQuizOptions = document.getElementById("lessonQuizOptions");
+
+  let currentIndex = 0;
+
+  function showLanguage(index) {
+    languages.forEach((card, i) => {
+      card.classList.remove("active");
+      card.style.display = "none";
+      if (i === index) {
+        card.classList.add("active");
+        card.style.display = "flex";
+      }
+    });
+  }
+
+  // initial
+  showLanguage(currentIndex);
+
+  // navigation arrows
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + languages.length) % languages.length;
+    showLanguage(currentIndex);
+  });
+
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % languages.length;
+    showLanguage(currentIndex);
+  });
+
+  // card click → enter lesson/quiz mode
+  languages.forEach((card, index) => {
+    card.addEventListener("click", () => {
+      lessonQuizOptions.style.display = "flex";
+      backBtn.style.display = "block";
+      prevBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      languages.forEach((c) => (c.style.display = "none"));
+      card.style.display = "flex";
+      card.style.transform = "scale(1.1)";
+    });
+  });
+
+  // back button
+  backBtn.addEventListener("click", () => {
+    lessonQuizOptions.style.display = "none";
+    backBtn.style.display = "none";
+    prevBtn.style.display = "block";
+    nextBtn.style.display = "block";
+    showLanguage(currentIndex);
+  });
+
+  // lesson button redirect
+  document.getElementById("lessonBtn").addEventListener("click", () => {
+    const lang = languages[currentIndex].dataset.lang.toLowerCase();
+    window.location.href = `../Modular/Lessons/${lang}/lesson-1.html`;
+  });
+
+  // quiz button redirect
+  document.getElementById("quizBtn").addEventListener("click", () => {
+    const lang = languages[currentIndex].dataset.lang.toLowerCase();
+    window.location.href = `../Levels/Quiz/${lang}/level-1.html`;
+  });
+});
+  </script>
 </body>
 </html>
