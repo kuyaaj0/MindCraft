@@ -817,6 +817,7 @@ onAuthStateChanged(auth, (user) => {
   });
 });
 </script>
+  
   <script>
 document.addEventListener("DOMContentLoaded", () => {
   const languages = document.querySelectorAll(".language-card");
@@ -824,36 +825,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextBtn = document.getElementById("nextLang");
   const backBtn = document.getElementById("backBtn");
   const lessonQuizOptions = document.getElementById("lessonQuizOptions");
+  const quizList = document.getElementById("quizList");
 
   let currentIndex = 0;
+  let touchStartX = 0;
 
+  // Show selected card
   function showLanguage(index) {
     languages.forEach((card, i) => {
       card.classList.remove("active");
-      card.style.display = "none";
-      if (i === index) {
-        card.classList.add("active");
-        card.style.display = "flex";
-      }
+      card.style.display = i === index ? "flex" : "none";
     });
   }
-
-  // initial
   showLanguage(currentIndex);
 
-  // navigation arrows
+  // Navigation arrows
   prevBtn.addEventListener("click", () => {
     currentIndex = (currentIndex - 1 + languages.length) % languages.length;
     showLanguage(currentIndex);
   });
-
   nextBtn.addEventListener("click", () => {
     currentIndex = (currentIndex + 1) % languages.length;
     showLanguage(currentIndex);
   });
 
-  // card click → enter lesson/quiz mode
-  languages.forEach((card, index) => {
+  // Swipe (mobile)
+  const view = document.getElementById("languageView");
+  view.addEventListener("touchstart", e => {
+    touchStartX = e.touches[0].clientX;
+  });
+  view.addEventListener("touchend", e => {
+    const deltaX = e.changedTouches[0].clientX - touchStartX;
+    if (deltaX > 60) prevBtn.click(); // swipe right
+    else if (deltaX < -60) nextBtn.click(); // swipe left
+  });
+
+  // Keyboard arrows (PC)
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "ArrowRight") nextBtn.click();
+  });
+
+  // Card click → show lesson/quiz menu
+  languages.forEach((card) => {
     card.addEventListener("click", () => {
       lessonQuizOptions.style.display = "flex";
       backBtn.style.display = "block";
@@ -861,11 +875,11 @@ document.addEventListener("DOMContentLoaded", () => {
       nextBtn.style.display = "none";
       languages.forEach((c) => (c.style.display = "none"));
       card.style.display = "flex";
-      card.style.transform = "scale(1.1)";
+      card.style.transform = "scale(1.05)";
     });
   });
 
-  // back button
+  // Back button
   backBtn.addEventListener("click", () => {
     lessonQuizOptions.style.display = "none";
     backBtn.style.display = "none";
@@ -874,18 +888,40 @@ document.addEventListener("DOMContentLoaded", () => {
     showLanguage(currentIndex);
   });
 
-  // lesson button redirect
+  // Lesson button redirect
   document.getElementById("lessonBtn").addEventListener("click", () => {
     const lang = languages[currentIndex].dataset.lang.toLowerCase();
     window.location.href = `../Modular/Lessons/${lang}/lesson-1.html`;
   });
 
-  // quiz button redirect
+  // Quiz dropdown builder
   document.getElementById("quizBtn").addEventListener("click", () => {
-    const lang = languages[currentIndex].dataset.lang.toLowerCase();
-    window.location.href = `../Levels/Quiz/${lang}/level-1.html`;
+    if (quizList.style.display === "flex") {
+      quizList.style.display = "none";
+      return;
+    }
+
+    // Populate 20 quiz levels
+    quizList.innerHTML = "";
+    for (let i = 1; i <= 20; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = `Level ${i}`;
+      btn.addEventListener("click", () => {
+        const lang = languages[currentIndex].dataset.lang.toLowerCase();
+        window.location.href = `../Levels/Quiz/${lang}/level-${i}.html`;
+      });
+      quizList.appendChild(btn);
+    }
+    quizList.style.display = "flex";
+  });
+
+  // Click outside to close dropdown
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".quiz-dropdown")) {
+      quizList.style.display = "none";
+    }
   });
 });
-  </script>
+</script>
 </body>
 </html>
