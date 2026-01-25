@@ -131,15 +131,75 @@ const rankEl = document.getElementById("rank");
 const homeBtn = document.getElementById("homeBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// === Home button (redirect by role) ===
+// === Ultra-extended number formatter (up to 1e99) ===
+function formatNumberSmart(value) {
+  const abs = Math.abs(value);
+  const units = [
+    { v: 1e99, s: "Ce" },   // Centillion
+    { v: 1e96, s: "NoCe" }, // Nonillion-Centillion
+    { v: 1e93, s: "OcCe" }, // Octo-Centillion
+    { v: 1e90, s: "SeCe" }, // Septen-Centillion
+    { v: 1e87, s: "SxCe" }, // Sexten-Centillion
+    { v: 1e84, s: "QiCe" }, // Quinten-Centillion
+    { v: 1e81, s: "QdCe" }, // Quadro-Centillion
+    { v: 1e78, s: "TrCe" }, // Tre-Centillion
+    { v: 1e75, s: "DuCe" }, // Duo-Centillion
+    { v: 1e72, s: "UnCe" }, // Un-Centillion
+    { v: 1e69, s: "Vi" },   // Vigintillion
+    { v: 1e66, s: "Nv" },   // Novemdecillion
+    { v: 1e63, s: "Oc" },   // Octodecillion
+    { v: 1e60, s: "Spt" },  // Septendecillion
+    { v: 1e57, s: "Sxd" },  // Sexdecillion
+    { v: 1e54, s: "Qid" },  // Quindecillion
+    { v: 1e51, s: "Qad" },  // Quattuordecillion
+    { v: 1e48, s: "Td" },   // Tredecillion
+    { v: 1e45, s: "Dd" },   // Duodecillion
+    { v: 1e42, s: "Und" },  // Undecillion
+    { v: 1e39, s: "Dc" },   // Decillion
+    { v: 1e36, s: "Nn" },   // Nonillion
+    { v: 1e33, s: "Oc" },   // Octillion
+    { v: 1e30, s: "Sp" },   // Septillion
+    { v: 1e27, s: "Sx" },   // Sextillion
+    { v: 1e24, s: "Qi" },   // Quintillion
+    { v: 1e21, s: "Qd" },   // Quadrillion
+    { v: 1e18, s: "T" },    // Trillion
+    { v: 1e15, s: "B" },    // Billion
+    { v: 1e12, s: "M" },    // Million
+    { v: 1e9,  s: "K" },    // Thousand (legacy compact)
+  ];
+  for (const u of units) {
+    if (abs >= u.v) {
+      const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
+      return shortened.replace(/\.00$|\.0$/, "") + u.s;
+    }
+  }
+  return value.toString();
+}
+
+// === Auto font scaling for XP ===
+function adjustXPFontSize(xpEl, xpMax) {
+  const len = xpMax.toString().length;
+  let newSize = 0.7; // default for small numbers
+  if (len > 6 && len <= 9) newSize = 0.65;
+  else if (len > 9 && len <= 12) newSize = 0.6;
+  else if (len > 12 && len <= 18) newSize = 0.55;
+  else if (len > 18 && len <= 25) newSize = 0.5;
+  else if (len > 25 && len <= 35) newSize = 0.45;
+  else if (len > 35 && len <= 50) newSize = 0.4;
+  else if (len > 50 && len <= 65) newSize = 0.38;
+  else if (len > 65 && len <= 80) newSize = 0.36;
+  else if (len > 80) newSize = 0.34; // ultra-tiny for extreme XP
+  xpEl.style.fontSize = `${newSize}rem`;
+  xpEl.style.transition = "font-size 0.3s ease";
+}
+
+// === Navigation Buttons ===
 homeBtn.addEventListener("click", () => {
-  // Use onAuthStateChanged to ensure user is ready
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       window.location.href = "signin.html";
       return;
     }
-
     try {
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
@@ -147,11 +207,7 @@ homeBtn.addEventListener("click", () => {
         const redirect = role === "teacher"
           ? "../Webside/Teacher.html"
           : "../Webside/Student.html";
-
-        // Use small delay to avoid Firebase race condition
-        setTimeout(() => {
-          window.location.href = redirect;
-        }, 150);
+        setTimeout(() => { window.location.href = redirect; }, 150);
       } else {
         alert("⚠️ User data not found in Firestore");
       }
@@ -161,7 +217,6 @@ homeBtn.addEventListener("click", () => {
   });
 });
 
-// === Logout ===
 logoutBtn.addEventListener("click", async () => {
   try {
     await signOut(auth);
@@ -184,11 +239,7 @@ onAuthStateChanged(auth, async (user) => {
   const snap = await getDoc(userRef);
   const data = snap.exists() ? snap.data() : {};
 
-  // Determine name (Google or manual)
-  const displayName =
-    data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
-
-  // Update UI
+  const displayName = data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
   const role = data.role || "student";
   const xp = data.xp || 0;
   const level = data.level || 1;
@@ -201,9 +252,15 @@ onAuthStateChanged(auth, async (user) => {
 
   usernameEl.textContent = displayName;
   levelEl.textContent = level;
-  xpEl.textContent = `${xp}/${xpMax}`;
-  xpBarFill.style.width = `${(xp / xpMax) * 100}%`;
   rankEl.textContent = `🏅 Rank: ${rankTitle}`;
+
+  // === Animate XP Bar ===
+  const percent = (xp / xpMax) * 100;
+  xpBarFill.style.width = `${percent}%`;
+
+  // === Display formatted XP ===
+  xpEl.textContent = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
+  adjustXPFontSize(xpEl, xpMax);
 });
 </script>
 
