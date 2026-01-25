@@ -389,38 +389,39 @@ footer {
 <main>
   <h1>CHOOSE A CODE LANGUAGE</h1>
 
-  <!-- === New Language Selector Container === -->
   <div class="lesson-container">
-
-    <!-- Navigation Arrows -->
     <button class="nav-arrow left" id="prevLang">⬅</button>
     <button class="nav-arrow right" id="nextLang">➡</button>
-
-    <!-- Back Button (hidden until inside lesson/quiz view) -->
     <button id="backBtn" style="display:none;" class="back-btn">⬅ BACK</button>
 
-    <!-- Language Display Area -->
     <div id="languageView">
       <div class="language-card active" data-lang="HTML">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
       </div>
+
       <div class="language-card" data-lang="CSS">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
       </div>
+
       <div class="language-card" data-lang="JS">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
       </div>
     </div>
 
-    <!-- Lesson/Quiz Buttons -->
+    <!-- ✅ Options panel -->
     <div id="lessonQuizOptions" style="display:none;" class="option-buttons">
       <button id="lessonBtn">📖 Lessons</button>
-      <button id="quizBtn">📝 Quiz</button>
-    </div>
 
+      <div class="quiz-dropdown">
+        <button id="quizBtn">📝 Quiz ▾</button>
+        <div class="quiz-list" id="quizList">
+          <!-- Quiz levels dynamically inserted -->
+        </div>
+      </div>
+    </div>
   </div>
 </main>
 
