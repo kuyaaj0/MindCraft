@@ -59,7 +59,7 @@ header {
 .xp-bar-container {
   display: flex;
   align-items: center;
-  gap: 3px; /* ✅ tighter spacing */
+  gap: 3px;
   min-width: 120px;
 }
 
@@ -171,78 +171,135 @@ main {
   align-items: center;
 }
 
-/* === Lesson Container === */
+/* === Lesson Container (New Layout) === */
 .lesson-container {
-  max-width: 1100px;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(29,185,84,0.4);
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(29,185,84,0.2);
-  padding: 20px;
-  margin-top: 20px;
-}
-
-/* === Scrollable Grid === */
-.language-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 25px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 15px;
-}
-
-.language-grid::-webkit-scrollbar {
-  height: 8px;
-}
-.language-grid::-webkit-scrollbar-thumb {
-  background: #1DB954;
-  border-radius: 5px;
-}
-
-/* === Language Card === */
-.language-card {
-  flex: 0 0 auto;
-  width: 280px;
-  padding: 15px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 12px #1DB954;
-  transition: transform 0.3s ease;
+  position: relative;
   text-align: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(29,185,84,0.4);
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(29,185,84,0.25);
+  overflow: hidden;
 }
-.language-card:hover { transform: scale(1.05); }
+
+/* === Arrows for Navigation === */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(29,185,84,0.8);
+  border: none;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 2;
+}
+.nav-arrow.left { left: 15px; }
+.nav-arrow.right { right: 15px; }
+.nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
+
+/* === Back Button === */
+.back-btn {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.45rem;
+  padding: 6px 10px;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.2s ease;
+}
+.back-btn:hover { transform: scale(1.05); }
+
+/* === Language View === */
+#languageView {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  position: relative;
+  min-height: 200px;
+}
+
+.language-card {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s ease;
+}
+
+.language-card.active {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+  border-color: #1DB954;
+  box-shadow: 0 0 15px #1DB954;
+  animation: fadeSlideIn 0.4s ease;
+}
+
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
 
 .language-card img {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
 }
-
 .language-card p {
   margin-top: 10px;
   font-size: 0.6rem;
 }
 
-/* === Scrollable Dropdowns === */
-.language-card select {
-  margin-top: 10px;
-  font-size: 0.5rem;
+/* === Lesson / Quiz Buttons === */
+.option-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeInOptions 0.4s ease;
+}
+
+@keyframes fadeInOptions {
+  0% { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.option-buttons button {
   font-family: 'Press Start 2P', cursive;
-  padding: 5px;
-  border-radius: 5px;
+  font-size: 0.55rem;
+  padding: 10px 14px;
   background: #1DB954;
   color: #fff;
   border: none;
-  width: 100%;
-  max-height: 80px;
-  overflow-y: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-
-.language-card select option {
-  font-size: 0.5rem;
+.option-buttons button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
 }
 
 /* === Footer === */
@@ -281,16 +338,23 @@ footer {
   10%, 80% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(1.05); }
 }
-  /* === Level-Up Subtle Glow Animation === */
+
+/* === Level-Up Glow === */
 @keyframes levelUpPulse {
   0%   { text-shadow: 0 0 2px #1DB954, 0 0 6px #1DB954, 0 0 10px #1DB954; transform: scale(1); }
   50%  { text-shadow: 0 0 8px #00ff99, 0 0 16px #00ff99, 0 0 25px #00ff99; transform: scale(1.2); color: #adffb0; }
   100% { text-shadow: none; transform: scale(1); color: #fff; }
 }
-
 .level-up-glow {
   animation: levelUpPulse 1s ease-in-out;
-  }
+}
+
+/* === Mobile tweaks === */
+@media (max-width: 600px) {
+  .language-card img { width: 55px; height: 55px; }
+  .nav-arrow { font-size: 0.5rem; padding: 8px 10px; }
+  .option-buttons button { font-size: 0.45rem; padding: 8px 10px; }
+}
 </style>
 </head>
 <body>
