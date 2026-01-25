@@ -302,6 +302,62 @@ main {
   transform: scale(1.05);
 }
 
+/* === QUIZ DROPDOWN === */
+.quiz-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.quiz-dropdown button {
+  font-family: 'Press Start 2P', cursive;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.55rem;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.quiz-dropdown button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+}
+.quiz-list {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.9);
+  border: 2px solid #1DB954;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  max-height: 160px;
+  overflow-y: auto;
+  z-index: 10;
+  animation: fadeIn 0.2s ease forwards;
+  -webkit-overflow-scrolling: touch; /* ✅ smooth scroll for mobile */
+}
+.quiz-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-align: center;
+}
+.quiz-list button:hover {
+  background: rgba(29,185,84,0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scaleY(0.8); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
 /* === Footer === */
 footer {
   background: rgba(0, 0, 0, 0.4);
