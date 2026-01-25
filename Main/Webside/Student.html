@@ -185,44 +185,6 @@ main {
   overflow: hidden;
 }
 
-/* === Arrows for Navigation === */
-.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(29,185,84,0.8);
-  border: none;
-  color: white;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  z-index: 2;
-}
-.nav-arrow.left { left: 15px; }
-.nav-arrow.right { right: 15px; }
-.nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
-
-/* === Back Button === */
-.back-btn {
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  background: #1DB954;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.45rem;
-  padding: 6px 10px;
-  cursor: pointer;
-  z-index: 3;
-  transition: transform 0.2s ease;
-}
-.back-btn:hover { transform: scale(1.05); }
-
 /* === Language View === */
 #languageView {
   display: flex;
@@ -233,6 +195,7 @@ main {
   min-height: 200px;
 }
 
+/* === Language Cards === */
 .language-card {
   display: none;
   flex-direction: column;
@@ -247,22 +210,16 @@ main {
   opacity: 0;
   transform: translateX(30px);
   transition: all 0.5s ease;
+  cursor: pointer;
 }
-
 .language-card.active {
   display: flex;
   opacity: 1;
-  transform: translateX(0);
+  transform: translateX(0) scale(1.05);
   border-color: #1DB954;
-  box-shadow: 0 0 15px #1DB954;
+  box-shadow: 0 0 20px #1DB954;
   animation: fadeSlideIn 0.4s ease;
 }
-
-@keyframes fadeSlideIn {
-  0% { opacity: 0; transform: translateX(40px); }
-  100% { opacity: 1; transform: translateX(0); }
-}
-
 .language-card img {
   width: 70px;
   height: 70px;
@@ -271,22 +228,70 @@ main {
   margin-top: 10px;
   font-size: 0.6rem;
 }
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
 
-/* === Lesson / Quiz Buttons === */
-.option-buttons {
-  margin-top: 20px;
+/* === Arrows for Navigation === */
+.nav-arrow {
+  position: absolute;
+  bottom: 10px;
+  background: rgba(29,185,84,0.8);
+  border: none;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 3;
+}
+.nav-arrow.left { left: 30%; }
+.nav-arrow.right { right: 30%; }
+.nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
+
+/* === Language Panel (Blur + Centered Buttons) === */
+.language-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #1DB954;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 25px #1DB95466;
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInPanel 0.3s ease;
+}
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translate(-50%, -55%) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.page-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === Inside Language Panel Buttons === */
+.language-panel .option-buttons {
+  margin-top: 10px;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 20px;
-  animation: fadeInOptions 0.4s ease;
 }
-
-@keyframes fadeInOptions {
-  0% { opacity: 0; transform: scale(0.9); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-.option-buttons button {
+.language-panel .option-buttons button {
   font-family: 'Press Start 2P', cursive;
   font-size: 0.55rem;
   padding: 10px 14px;
@@ -297,10 +302,25 @@ main {
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.option-buttons button:hover {
+.language-panel .option-buttons button:hover {
   background: #1ed760;
   transform: scale(1.05);
 }
+
+/* === Back Button (Bottom Down Arrow) === */
+.language-panel .back-btn {
+  margin-top: 15px;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.language-panel .back-btn:hover { transform: scale(1.05); }
 
 /* === QUIZ DROPDOWN === */
 .quiz-dropdown {
@@ -336,7 +356,7 @@ main {
   overflow-y: auto;
   z-index: 10;
   animation: fadeIn 0.2s ease forwards;
-  -webkit-overflow-scrolling: touch; /* ✅ smooth scroll for mobile */
+  -webkit-overflow-scrolling: touch;
 }
 .quiz-list button {
   font-size: 0.45rem;
@@ -408,8 +428,9 @@ footer {
 /* === Mobile tweaks === */
 @media (max-width: 600px) {
   .language-card img { width: 55px; height: 55px; }
-  .nav-arrow { font-size: 0.5rem; padding: 8px 10px; }
-  .option-buttons button { font-size: 0.45rem; padding: 8px 10px; }
+  .nav-arrow { font-size: 0.5rem; padding: 6px 8px; bottom: 8px; }
+  .language-panel .option-buttons button { font-size: 0.45rem; padding: 8px 10px; }
+  #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
 </style>
 </head>
