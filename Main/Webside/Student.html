@@ -325,35 +325,38 @@ footer {
 <main>
   <h1>CHOOSE A CODE LANGUAGE</h1>
 
-  <!-- Container for scrolling lessons -->
+  <!-- === New Language Selector Container === -->
   <div class="lesson-container">
-    <div class="language-grid">
 
-      <!-- HTML Card -->
-      <div class="language-card" id="htmlCard">
+    <!-- Navigation Arrows -->
+    <button class="nav-arrow left" id="prevLang">⬅</button>
+    <button class="nav-arrow right" id="nextLang">➡</button>
+
+    <!-- Back Button (hidden until inside lesson/quiz view) -->
+    <button id="backBtn" style="display:none;" class="back-btn">⬅ BACK</button>
+
+    <!-- Language Display Area -->
+    <div id="languageView">
+      <div class="language-card active" data-lang="HTML">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
-        <select id="htmlLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="htmlQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
-
-      <!-- CSS Card -->
-      <div class="language-card" id="cssCard">
+      <div class="language-card" data-lang="CSS">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
-        <select id="cssLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="cssQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
-
-      <!-- JavaScript Card -->
-      <div class="language-card" id="jsCard">
+      <div class="language-card" data-lang="JS">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
-        <select id="jsLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="jsQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
-
     </div>
+
+    <!-- Lesson/Quiz Buttons -->
+    <div id="lessonQuizOptions" style="display:none;" class="option-buttons">
+      <button id="lessonBtn">📖 Lessons</button>
+      <button id="quizBtn">📝 Quiz</button>
+    </div>
+
   </div>
 </main>
 
