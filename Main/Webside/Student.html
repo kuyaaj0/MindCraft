@@ -986,12 +986,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === BLUR BACKGROUND ONLY OUTSIDE CONTAINER ===
   function blurBackground(enable) {
-    const sectionsToBlur = document.querySelectorAll('header, main, footer');
-    sectionsToBlur.forEach(el => {
-      if (enable) el.classList.add('soft-blur');
-      else el.classList.remove('soft-blur');
-    });
+  if (enable) {
+    if (!document.body.classList.contains('soft-blur')) {
+      document.body.classList.add('soft-blur');
+    }
+  } else {
+    document.body.classList.remove('soft-blur');
   }
+    }
 
   // === CARD OPEN EVENTS ===
   cards.forEach((c,i) => {
