@@ -171,21 +171,23 @@ main {
   align-items: center;
 }
 
-/* === Lesson Container (New Layout) === */
+/* === Lesson Container === */
 .lesson-container {
   position: relative;
   text-align: center;
   padding: 20px;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
   border: 1px solid rgba(29,185,84,0.4);
   border-radius: 12px;
   max-width: 600px;
   margin: 20px auto;
   box-shadow: 0 0 15px rgba(29,185,84,0.25);
   overflow: hidden;
+  z-index: 10;
+  transition: all 0.3s ease;
 }
 
-/* === Language View === */
+/* === Language View (Card Selector) === */
 #languageView {
   display: flex;
   justify-content: center;
@@ -195,7 +197,6 @@ main {
   min-height: 200px;
 }
 
-/* === Language Cards === */
 .language-card {
   display: none;
   flex-direction: column;
@@ -233,7 +234,7 @@ main {
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* === Arrows for Navigation === */
+/* === Arrows for Language Navigation === */
 .nav-arrow {
   position: absolute;
   bottom: 10px;
@@ -242,17 +243,25 @@ main {
   color: white;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.6rem;
-  padding: 8px 10px;
+  padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
   z-index: 3;
 }
-.nav-arrow.left { left: 30%; }
-.nav-arrow.right { right: 30%; }
+.nav-arrow.left { left: 25%; }
+.nav-arrow.right { right: 25%; }
 .nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
 
-/* === Language Panel (Blur + Centered Buttons) === */
+/* === Background Blur Effect === */
+.page-blur {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === Language Panel (Inside Lesson Mode) === */
 .language-panel {
   position: fixed;
   top: 50%;
@@ -277,24 +286,18 @@ main {
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-.page-blur {
-  filter: blur(6px);
-  pointer-events: none;
-  user-select: none;
-}
-
-/* === Inside Language Panel Buttons === */
+/* === Option Buttons (Lesson / Quiz) === */
 .language-panel .option-buttons {
   margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
 }
 .language-panel .option-buttons button {
   font-family: 'Press Start 2P', cursive;
   font-size: 0.55rem;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: #1DB954;
   color: #fff;
   border: none;
@@ -307,7 +310,7 @@ main {
   transform: scale(1.05);
 }
 
-/* === Back Button (Bottom Down Arrow) === */
+/* === Back Button === */
 .language-panel .back-btn {
   margin-top: 15px;
   background: #1DB954;
@@ -322,25 +325,10 @@ main {
 }
 .language-panel .back-btn:hover { transform: scale(1.05); }
 
-/* === QUIZ DROPDOWN === */
+/* === Quiz Dropdown === */
 .quiz-dropdown {
   position: relative;
   display: inline-block;
-}
-.quiz-dropdown button {
-  font-family: 'Press Start 2P', cursive;
-  background: #1DB954;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.55rem;
-  padding: 10px 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.quiz-dropdown button:hover {
-  background: #1ed760;
-  transform: scale(1.05);
 }
 .quiz-list {
   position: absolute;
@@ -356,7 +344,6 @@ main {
   overflow-y: auto;
   z-index: 10;
   animation: fadeIn 0.2s ease forwards;
-  -webkit-overflow-scrolling: touch;
 }
 .quiz-list button {
   font-size: 0.45rem;
@@ -367,7 +354,6 @@ main {
   padding: 6px 10px;
   cursor: pointer;
   transition: background 0.2s ease;
-  text-align: center;
 }
 .quiz-list button:hover {
   background: rgba(29,185,84,0.3);
@@ -428,8 +414,8 @@ footer {
 /* === Mobile tweaks === */
 @media (max-width: 600px) {
   .language-card img { width: 55px; height: 55px; }
-  .nav-arrow { font-size: 0.5rem; padding: 6px 8px; bottom: 8px; }
-  .language-panel .option-buttons button { font-size: 0.45rem; padding: 8px 10px; }
+  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; bottom: 6px; }
+  .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
 </style>
