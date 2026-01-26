@@ -261,6 +261,20 @@ main {
   user-select: none;
 }
 
+  /* === Soft Blur Background Fix (keeps lesson container sharp) === */
+.soft-blur::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0.25); /* slightly dark for depth */
+  z-index: 5;
+  pointer-events: none;
+  transition: backdrop-filter 0.3s ease, background 0.3s ease;
+}
+
 /* === Language Panel (Inside Lesson Mode) === */
 .language-panel {
   position: fixed;
@@ -503,7 +517,7 @@ footer {
 <!-- ===================== -->
 <!-- ✅ Auto-generate Lessons & Quizzes -->
 <!-- ===================== -->
-<!--<script>
+<script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
   if (!select) return; // guard if not loaded yet
@@ -537,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateOptions("js", 20, "Lessons", "JS");
   populateOptions("js", 20, "Quizzes", "JS");
 });
-</script>--> <!--keep it as backup plan-->
+</script> <!--keep it as backup plan-->
 
 <!-- ===================== -->
 <!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
