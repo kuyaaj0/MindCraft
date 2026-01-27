@@ -1,438 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Lesson 3 Quiz (Step-by-Step)</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindCraft JS Lesson 3 Quiz</title>
 
-        *{margin:0;padding:0;box-sizing:border-box;}
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-        body{
-            font-family:'Orbitron',monospace;
-            background:#000;
-            color:#e0e0e0;
-            min-height:100vh;
-            padding:30px;
-        }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:10px}
+body{
+    font-family:'Press Start 2P',cursive;
+    background:linear-gradient(#87e4ff,#c8f7b0);
+    padding:20px;
+}
 
-        .container{
-            max-width:800px;
-            margin:0 auto;
-            background:rgba(8,8,25,0.97);
-            border-radius:20px;
-            border:3px solid transparent;
-            border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
-            box-shadow:0 0 50px rgba(255,0,255,0.5);
-            padding:35px 30px 30px;
-            position: relative;
-        }
+.quiz-container{
+    max-width:1000px;
+    margin:auto;
+    height:calc(100vh - 40px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
-        h1{
-            text-align:center;
-            font-size:2.4em;
-            margin-bottom:5px;
-            background:linear-gradient(135deg,#ff00ff,#00ffff,#ff1493);
-            background-clip:text;
-            -webkit-background-clip:text;
-            -webkit-text-fill-color:transparent;
-        }
+.wood-border{
+    width:100%;
+    max-width:900px;
+    background:#8b5a2b;
+    border-radius:28px;
+    padding:16px;
+    box-shadow: inset -8px -8px 0 rgba(0,0,0,.3),0 12px 0 #5c3a1a;
+}
 
-        .subtitle{
-            text-align:center;
-            color:#00ffff;
-            margin-bottom:20px;
-        }
+.quiz-content{
+    background:linear-gradient(#8fe9ff 55%,#7dd37d);
+    border-radius:16px;
+    padding:24px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+}
 
-        .timer-container{
-            text-align:center;
-            margin-bottom:20px;
-        }
+.main-title{
+    text-align:center;
+    font-size:16px;
+    color:#006400;
+    margin-bottom:20px;
+    text-shadow:3px 3px #fff;
+}
 
-        #timer{
-            font-family:'Roboto Mono',monospace;
-            font-size:2em;
-            color:#ff4757;
-            font-weight:700;
-            text-shadow:0 0 10px rgba(255,71,87,0.8);
-            display:inline-block;
-            background:rgba(255,71,87,0.1);
-            padding:10px 20px;
-            border-radius:12px;
-            border:2px solid #ff4757;
-        }
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    font-size:9px;
+    margin-bottom:16px;
+}
 
-        #progress{
-            text-align:center;
-            margin-bottom:20px;
-            font-family:'Roboto Mono',monospace;
-            color:#00ff88;
-        }
+.question-box{
+    background:#fff3cd;
+    border:3px solid #c9a227;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 6px 0 #c9a227;
+    margin-bottom:20px;
+}
 
-        .question-box{
-            background:rgba(0,255,255,0.05);
-            border-left:4px solid #00ffff;
-            border-radius:14px;
-            padding:18px 20px 15px;
-            margin-bottom:18px;
-            font-family:'Roboto Mono',monospace;
-        }
+.question-text{
+    font-size:11px;
+    font-weight:bold;
+    margin-bottom:14px;
+}
 
-        .question-text{
-            margin-bottom:12px;
-        }
+.options label{
+    display:block;
+    margin:10px 0;
+    font-size:9px;
+    cursor:pointer;
+}
 
-        .options label{
-            display:block;
-            margin:4px 0;
-            cursor:pointer;
-        }
+.options input{
+    margin-right:10px;
+    transform:scale(1.3);
+    accent-color:#006400;
+}
 
-        .options input{
-            margin-right:7px;
-        }
+.fill-input{
+    width:100%;
+    padding:12px;
+    border:3px solid #c9a227;
+    border-radius:10px;
+    font-family:'Press Start 2P';
+    font-size:9px;
+    box-shadow:0 4px 0 #c9a227;
+}
 
-        .fill-input{
-            width:100%;
-            max-width:320px;
-            padding:8px 10px;
-            border-radius:8px;
-            border:1px solid #00ffff;
-            background:#050515;
-            color:#00ffff;
-            font-family:'Roboto Mono',monospace;
-        }
+.nav-row{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+}
 
-        .nav-row{
-            display:flex;
-            justify-content:center;
-            gap:10px;
-            margin-top:10px;
-        }
+button{
+    font-family:'Press Start 2P';
+    background:#a56b34;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #5c3a1a;
+    cursor:pointer;
+    font-size:8px;
+    min-width:120px;
+}
 
-        button{
-            font-family:'Orbitron',monospace;
-            font-weight:700;
-            padding:12px 25px;
-            border-radius:14px;
-            border:none;
-            cursor:pointer;
-            font-size:1rem;
-        }
+#finishBtn{
+    background:#d4af37;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #b8860b;
+    display:none;
+}
 
-        #nextBtn{
-            background:linear-gradient(45deg,#ff00ff,#00ffff);
-            color:#000;
-            box-shadow:0 0 20px rgba(255,0,255,0.7);
-        }
+#backBtn{
+    background:#ff6b35;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #cc5533;
+    display:none;
+}
 
-        #finishBtn{
-            background:#ff1493;
-            color:#000;
-            box-shadow:0 0 20px rgba(255,20,147,0.7);
-            display:none;
-        }
-
-        #resultBox{
-            margin-top:18px;
-            padding:25px;
-            border-radius:12px;
-            background:rgba(0,0,0,0.7);
-            border:2px solid #00ffff;
-            font-family:'Roboto Mono',monospace;
-            color:#00ff88;
-            display:none;
-            text-align:center;
-        }
-
-        .score-header{
-            font-size:1.5em;
-            color:#00ff88;
-            margin-bottom:20px;
-        }
-
-        .score-details{
-            background:rgba(0,255,136,0.15);
-            padding:20px;
-            border-radius:10px;
-            margin:20px 0;
-            border-left:4px solid #00ff88;
-        }
-
-        #scoreStatus{
-            font-size:1.2em;
-            margin-top:10px;
-            font-weight:700;
-        }
-
-        .exit-btn{
-            position: fixed;
-            top: 480px;
-            left: 202px;
-            background: #ff4d4d;
-            color: #fff;
-            text-decoration: none;
-            font-family: 'Orbitron';
-            padding: 6px 10px;
-            border-radius: 8px;
-            box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
-            z-index: 1000;
-            font-size: 10px;
-            transition: transform 0.1s;
-            display: none;
-        }
-
-        .exit-btn:hover{
-            transform: translateY(-2px);
-        }
-
-        @media(max-width:600px){
-            .container{padding:25px 18px;}
-            h1{font-size:2em;}
-            .nav-row{flex-direction:column;}
-            .nav-row button{width:100%;}
-            .exit-btn{top: 450px; left: 50px;}
-            #timer{font-size:1.5em;}
-        }
-    </style>
+#resultBox{
+    display:none;
+    background:#d9ead3;
+    border:4px solid #6aa84f;
+    color:#006400;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    margin-top:20px;
+}
+</style>
 </head>
+
 <body>
-    <a href="../../../Webside/Student.html" class="exit-btn" id="exitBtn">BACK</a>
+<div class="quiz-container">
+<div class="wood-border">
+<div class="quiz-content">
 
-    <div class="container">
-        <h1>JS Lesson 3 Quiz</h1>
-        <p class="subtitle">Comments Mastery • Single/Multi/JSDoc • One Question at a Time</p>
-        
-        <div class="timer-container">
-            <div id="timer">10:00</div>
-        </div>
+<div class="main-title">
+LESSON 3<br>
+<span style="font-size:12px;">COMMENTS QUIZ</span>
+</div>
 
-        <p id="progress">Question 1 / 15</p>
+<div class="top-bar">
+<div id="progress">Question 1 / 15</div>
+<div id="timer">10:00</div>
+</div>
 
-        <div id="questionContainer" class="question-box">
-            <!-- question content injected by JS -->
-        </div>
+<div id="questionContainer" class="question-box"></div>
 
-        <div class="nav-row">
-            <button id="nextBtn">Next ⟶</button>
-            <button id="finishBtn">🚀 Finish Quiz</button>
-        </div>
+<div class="nav-row">
+<button id="nextBtn">NEXT →</button>
+<button id="finishBtn">FINISH</button>
+<button id="backBtn">← BACK</button>
+</div>
 
-        <div id="resultBox">
-            <div class="score-header">🎯 Quiz Complete!</div>
-            <div class="score-details">
-                <div style="font-size:1.4em;"><strong>Score:</strong> <span id="finalScore">0</span></div>
-                <div style="font-size:1.2em; margin-top:8px;">of 15 • <span id="percentage">0%</span></div>
-                <div id="scoreStatus"></div>
-            </div>
-            <div style="color:#00ffff; font-size:0.95em; margin-top:15px;">
-                Press F12 → Console for cyberpunk results log. 🔍
-            </div>
-        </div>
-    </div>
+<div id="resultBox"></div>
+
+</div>
+</div>
+</div>
 
 <script>
-    // PERSISTENT STATE - LESSON 3 SPECIFIC STORAGE KEYS
-    let timeLeft = 600;
-    let timerInterval;
-    let currentIndex = 0;
-    const userAnswers = new Array(15).fill(null);
-    const timerEl = document.getElementById('timer');
+const questions=[
+{type:"mc",text:"1. Which symbol starts a single-line comment in JavaScript?",options:["/*","*/","//","#"],correct:2},
+{type:"mc",text:"2. What happens to code after // on the same line?",options:["Executes twice","Ignored","Variable","HTML"],correct:1},
+{type:"mc",text:"3. Correct multi-line comment syntax?",options:["/**/","/* */","// /*","*/ //"],correct:1},
+{type:"mc",text:"4. Best use of single-line comments?",options:["Long docs","Quick notes","Headers","Disable lots"],correct:1},
+{type:"mc",text:"5. Multi-line comments are best for:",options:["One word","Descriptions/disabled code","Variables","CSS"],correct:1},
+{type:"mc",text:"6. Good comments explain:",options:["What","WHY","Date","Color"],correct:1},
+{type:"mc",text:"7. Which is a BAD comment?",options:["Remove fee","Set x to 10","Process students","TODO"],correct:1},
+{type:"mc",text:"8. JSDoc starts with?",options:["/**","/*","//","*/"],correct:0},
+{type:"mc",text:"9. JSDoc helps VS Code with:",options:["Colors","Autocomplete","Speed","Files"],correct:1},
+{type:"mc",text:"10. Comments are used for:",options:["Decor","Docs/TODOs","Secrets","Slow code"],correct:1},
+{type:"fill",text:"11. Single-line comments use ________.",correctText:"//"},
+{type:"fill",text:"12. Multi-line comments start with ________.",correctText:"/*"},
+{type:"fill",text:"13. Professional documentation comments are ________.",correctText:"jsdoc"},
+{type:"fill",text:"14. Good comments explain the ________.",correctText:"why"},
+{type:"fill",text:"15. JSDoc uses @________ for parameters.",correctText:"param"}
+];
 
-    // RESTORE STATE FROM PREVIOUS SESSION (Lesson 3 keys)
-    const savedTime = sessionStorage.getItem('quizTimeLeft3');
-    const savedIndex = sessionStorage.getItem('quizCurrentIndex3');
-    const savedAnswers = sessionStorage.getItem('quizUserAnswers3');
-    
-    if (savedTime !== null) timeLeft = parseInt(savedTime);
-    if (savedIndex !== null) currentIndex = parseInt(savedIndex);
-    if (savedAnswers !== null) userAnswers.splice(0, userAnswers.length, ...JSON.parse(savedAnswers));
+let i=0,ans=new Array(15).fill(null),time=600,timerInt;
 
-    function updateTimer() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        
-        if (timeLeft <= 60) {
-            timerEl.style.color = '#ff0000';
-            timerEl.style.textShadow = '0 0 15px #ff0000';
-        } else {
-            timerEl.style.color = '#ff4757';
-        }
-    }
+const qc=document.getElementById("questionContainer"),
+p=document.getElementById("progress"),
+t=document.getElementById("timer"),
+next=document.getElementById("nextBtn"),
+finish=document.getElementById("finishBtn"),
+back=document.getElementById("backBtn"),
+res=document.getElementById("resultBox");
 
-    function startTimer() {
-        if (timerInterval) clearInterval(timerInterval);
-        
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            updateTimer();
-            sessionStorage.setItem('quizTimeLeft3', timeLeft);
-            
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                saveCurrentAnswer();
-                showResults();
-            }
-        }, 1000);
-    }
+function load(){
+const q=questions[i];
+p.textContent=`Question ${i+1} / ${questions.length}`;
+qc.innerHTML=`<div class="question-text">${q.text}</div>`;
+if(q.type==="mc"){
+q.options.forEach((o,x)=>{
+qc.innerHTML+=`<label><input type="radio" name="mc" value="${x}" ${ans[i]==x?"checked":""}> ${o}</label>`;
+});
+}else{
+qc.innerHTML+=`<input class="fill-input" id="fill" value="${ans[i]||""}">`;
+}
+next.style.display=i===14?"none":"inline-block";
+finish.style.display=i===14?"inline-block":"none";
+back.style.display=i>0?"inline-block":"none";
+}
 
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden && timerInterval) {
-            clearInterval(timerInterval);
-        } else if (!document.hidden && timeLeft > 0 && !timerInterval) {
-            startTimer();
-        }
-    });
+function save(){
+const q=questions[i];
+if(q.type==="mc"){
+const c=document.querySelector("input[name=mc]:checked");
+ans[i]=c?+c.value:null;
+}else{
+ans[i]=document.getElementById("fill").value.trim();
+}
+}
 
-    // LESSON 3 QUESTIONS (your exact questions)
-    const questions = [
-        {type: "mc", text: "1. Which symbol starts a single-line comment in JavaScript?", options: ["/*","*/","//","#"], correct: 2},
-        {type: "mc", text: "2. What happens to code after // on the same line?", options: ["It executes twice","Browser ignores it completely","It becomes a variable","It turns into HTML"], correct: 1},
-        {type: "mc", text: "3. Which is the correct syntax for multi-line comments?", options: ["/**/","/* */","// /*","*/ //"], correct: 1},
-        {type: "mc", text: "4. What is the BEST use for single-line comments (//)?", options: ["Long function descriptions","Quick notes on one line","File headers","Disabling 10+ lines of code"], correct: 1},
-        {type: "mc", text: "5. Multi-line comments /* */ are perfect for:", options: ["One-word notes","Function descriptions and disabled code","Variable names","CSS styling"], correct: 1},
-        {type: "mc", text: "6. According to the lesson, GOOD comments should explain:", options: ["What the code does (obvious)","WHY the code exists (purpose)","The current date","Your favorite color"], correct: 1},
-        {type: "mc", text: "7. Which comment is considered BAD according to the lesson?", options: ["// Remove fee before final calc","// Set x to 10","// Only process active students","// TODO: Add grade validation"], correct: 1},
-        {type: "mc", text: "8. JSDoc comments start with which symbol?", options: ["/**","/*","//","*/"], correct: 0},
-        {type: "mc", text: "9. What does JSDoc help VS Code do?", options: ["Change colors","Auto-completion and documentation","Speed up your computer","Create new files"], correct: 1},
-        {type: "mc", text: "10. In real projects, comments are used for:", options: ["Only decoration","File headers, function docs, TODOs, version history","Hiding secret messages","Making code slower"], correct: 1},
-        {type: "fill", text: "11. Single-line comments use the symbol ________.", correctText: "//"},
-        {type: "fill", text: "12. Multi-line comments start with ________ and end with */.", correctText: "/*"},
-        {type: "fill", text: "13. Professional documentation comments are called ________.", correctText: "jsdoc"},
-        {type: "fill", text: "14. Good comments explain the ________ behind the code, not what it does.", correctText: "why"},
-        {type: "fill", text: "15. In JSDoc, use @________ to describe function parameters.", correctText: "param"}
-    ];
+function score(){
+return questions.reduce((s,q,x)=>{
+if(q.type==="mc") return s+(ans[x]===q.correct);
+return s+((ans[x]||"").toLowerCase()===q.correctText);
+},0);
+}
 
-    const questionContainer = document.getElementById("questionContainer");
-    const progress = document.getElementById("progress");
-    const nextBtn = document.getElementById("nextBtn");
-    const finishBtn = document.getElementById("finishBtn");
-    const resultBox = document.getElementById("resultBox");
-    const finalScoreEl = document.getElementById("finalScore");
-    const percentageEl = document.getElementById("percentage");
-    const scoreStatusEl = document.getElementById("scoreStatus");
-    const exitBtn = document.getElementById("exitBtn");
+function finishQuiz(){
+clearInterval(timerInt);
+const s=score();
+res.style.display="block";
+res.innerHTML=`FINAL SCORE: ${s} / 15<br><span style="font-size:8px;">Comments mastery logged!</span>`;
+next.style.display=finish.style.display="none";
+back.style.display="inline-block";
+}
 
-    function loadQuestion(index){
-        const q = questions[index];
-        progress.textContent = `Question ${index+1} / ${questions.length}`;
-        questionContainer.innerHTML = "";
+next.onclick=()=>{save();i++;load();};
+finish.onclick=()=>{save();finishQuiz();};
+back.onclick=()=>{if(i>0){save();i--;load();}};
 
-        const p = document.createElement("p");
-        p.className = "question-text";
-        p.textContent = q.text;
-        questionContainer.appendChild(p);
+timerInt=setInterval(()=>{
+time--;
+t.textContent=`${Math.floor(time/60)}:${String(time%60).padStart(2,"0")}`;
+if(time<=0) finishQuiz();
+},1000);
 
-        if(q.type === "mc"){
-            const optionsDiv = document.createElement("div");
-            optionsDiv.className = "options";
-            q.options.forEach((opt,i)=>{
-                const label = document.createElement("label");
-                const radio = document.createElement("input");
-                radio.type = "radio";
-                radio.name = "mc";
-                radio.value = i;
-                if(userAnswers[index] === i){ radio.checked = true; }
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt));
-                optionsDiv.appendChild(label);
-            });
-            questionContainer.appendChild(optionsDiv);
-        }else{
-            const input = document.createElement("input");
-            input.type = "text";
-            input.id = "fillInput";
-            input.className = "fill-input";
-            input.placeholder = "Type your answer here";
-            if(userAnswers[index] !== null) input.value = userAnswers[index];
-            questionContainer.appendChild(input);
-        }
-
-        if(index === questions.length - 1){
-            nextBtn.style.display = "none";
-            finishBtn.style.display = "inline-block";
-        }else{
-            nextBtn.style.display = "inline-block";
-            finishBtn.style.display = "none";
-        }
-        sessionStorage.setItem('quizCurrentIndex3', currentIndex);
-    }
-
-    function saveCurrentAnswer(){
-        const q = questions[currentIndex];
-        if(q.type === "mc"){
-            const checked = document.querySelector('input[name="mc"]:checked');
-            userAnswers[currentIndex] = checked ? parseInt(checked.value) : null;
-        }else{
-            const input = document.getElementById("fillInput");
-            userAnswers[currentIndex] = input.value;
-        }
-        sessionStorage.setItem('quizUserAnswers3', JSON.stringify(userAnswers));
-    }
-
-    function calculateScore(){
-        let score = 0;
-        questions.forEach((q,i)=>{
-            if(q.type === "mc"){
-                if(userAnswers[i] === q.correct){ score++; }
-            }else{
-                const user = (userAnswers[i] || "").trim().toLowerCase();
-                const correct = q.correctText.toLowerCase();
-                if(user === correct){ score++; }
-            }
-        });
-        return score;
-    }
-
-    function showResults(){
-        clearInterval(timerInterval);
-        sessionStorage.setItem('quizTimeLeft3', timeLeft);
-        const total = questions.length;
-        const score = calculateScore();
-        const percentage = Math.round((score / total) * 100);
-        
-        finalScoreEl.textContent = score;
-        percentageEl.textContent = `${percentage}%`;
-        
-        let status = "";
-        if(percentage >= 90) status = "🚀 Cyber Elite!";
-        else if(percentage >= 80) status = "🌟 Matrix Master";
-        else if(percentage >= 70) status = "⚡ Code Warrior";
-        else if(percentage >= 60) status = "💻 Solid Progress";
-        else if(percentage >= 50) status = "🔄 Keep Coding!";
-        else status = "🔥 Review & Retry!";
-        
-        scoreStatusEl.innerHTML = `<div style="font-size:1.1em; margin-top:8px;">${status}</div>`;
-        
-        progress.style.display = "none";
-        questionContainer.style.display = "none";
-        nextBtn.style.display = "none";
-        finishBtn.style.display = "none";
-        resultBox.style.display = "block";
-        exitBtn.style.display = "inline-block";
-
-        console.log("🧪 JS Lesson 3 Quiz Score:", score + " / " + total, "(" + percentage + "%)");
-    }
-
-    nextBtn.addEventListener("click",()=>{
-        saveCurrentAnswer();
-        if(currentIndex < questions.length-1){
-            currentIndex++;
-            loadQuestion(currentIndex);
-        }
-    });
-
-    finishBtn.addEventListener("click",()=>{
-        saveCurrentAnswer();
-        showResults();
-    });
-
-    updateTimer();
-    if (timeLeft > 0) startTimer();
-    loadQuestion(currentIndex);
-    console.log("🌌 JS Lesson 3 PERSISTENT QUIZ LOADED! Timer + Question saved on refresh! ✅");
+load();
 </script>
 </body>
 </html>
