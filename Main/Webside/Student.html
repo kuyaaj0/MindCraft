@@ -494,33 +494,36 @@ footer {
 
       <div class="quiz-dropdown">
         <button id="quizBtn">📝 Quiz ▾</button>
-        <div class="quiz-list" id="quizList">
-          <!-- Quiz levels dynamically inserted -->
-        </div>
+        <div class="quiz-list" id="quizList"></div>
       </div>
     </div>
   </div>
+
+  <!-- ✅ Hidden selects for internal data -->
+  <select id="htmlLessons" style="display:none;"></select>
+  <select id="htmlQuizzes" style="display:none;"></select>
+  <select id="cssLessons" style="display:none;"></select>
+  <select id="cssQuizzes" style="display:none;"></select>
+  <select id="jsLessons" style="display:none;"></select>
+  <select id="jsQuizzes" style="display:none;"></select>
 </main>
 
 <footer>
   <p>© 2025 MindCraft | Created by Jaytzy & The Team members</p>
 </footer>
 
-<!-- Scripts -->
 <script src="../Design/theme.js"></script>
 <script>window.useFirestoreXP = true;</script>
-  <!-- levels helper (keeps awardXP etc available) -->
-  <script src="../Exp/levels.js"></script>
- <!-- leaderboard module (IMPORTANT: required so leaderboard button works) -->
-  <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
+<script src="../Exp/levels.js"></script>
+<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
 <!-- ===================== -->
-<!-- ✅ Auto-generate Lessons & Quizzes -->
+<!-- ✅ Lessons (no dropdown) + Quizzes (dropdown) -->
 <!-- ===================== -->
 <script>
 function populateOptions(prefix, count, type, folder) {
   const select = document.getElementById(`${prefix}${type}`);
-  if (!select) return; // guard if not loaded yet
+  if (!select) return;
 
   const isLesson = type === "Lessons";
   const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
@@ -529,10 +532,11 @@ function populateOptions(prefix, count, type, folder) {
     ? `../Modular/${subfolder}/${folder}/lesson-`
     : `../Levels/${subfolder}/${folder}/level-`;
 
-  const opt = document.createElement("option");
-  opt.textContent = label;
-  opt.value = "";
-  select.appendChild(opt);
+  select.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.textContent = label;
+  placeholder.value = "";
+  select.appendChild(placeholder);
 
   for (let i = 1; i <= count; i++) {
     const option = document.createElement("option");
@@ -542,14 +546,72 @@ function populateOptions(prefix, count, type, folder) {
   }
 }
 
-// ✅ Wait until the DOM is fully loaded before populating
 document.addEventListener("DOMContentLoaded", () => {
+  // Fill selects
   populateOptions("html", 20, "Lessons", "HTML");
   populateOptions("html", 20, "Quizzes", "HTML");
   populateOptions("css", 20, "Lessons", "CSS");
   populateOptions("css", 20, "Quizzes", "CSS");
   populateOptions("js", 20, "Lessons", "JS");
   populateOptions("js", 20, "Quizzes", "JS");
+
+  const quizBtn = document.getElementById("quizBtn");
+  const quizList = document.getElementById("quizList");
+  const lessonBtn = document.getElementById("lessonBtn");
+  const languageCards = document.querySelectorAll(".language-card");
+  const optionsPanel = document.getElementById("lessonQuizOptions");
+  const backBtn = document.getElementById("backBtn");
+  let currentLang = "html";
+
+  // Show panel when a language is chosen
+  languageCards.forEach(card => {
+    card.addEventListener("click", () => {
+      currentLang = card.dataset.lang.toLowerCase();
+      populateQuizList(currentLang);
+      optionsPanel.style.display = "flex";
+      backBtn.style.display = "block";
+    });
+  });
+
+  // Close panel
+  backBtn.addEventListener("click", () => {
+    optionsPanel.style.display = "none";
+    backBtn.style.display = "none";
+    quizList.style.display = "none";
+  });
+
+  // ---- LESSON BUTTON (no dropdown) ----
+  lessonBtn.addEventListener("click", () => {
+    const select = document.getElementById(`${currentLang}Lessons`);
+    if (!select || select.options.length <= 1) {
+      alert("No lessons found for " + currentLang.toUpperCase());
+      return;
+    }
+    // open first lesson by default
+    const first = select.options[1].value;
+    window.location.href = first;
+  });
+
+  // ---- QUIZ DROPDOWN ----
+  quizBtn.addEventListener("click", () => {
+    if (quizList.style.display === "flex") {
+      quizList.style.display = "none";
+    } else {
+      quizList.style.display = "flex";
+    }
+  });
+
+  function populateQuizList(lang) {
+    const select = document.getElementById(`${lang}Quizzes`);
+    quizList.innerHTML = "";
+    if (!select) return;
+    Array.from(select.options).slice(1).forEach(opt => {
+      const btn = document.createElement("button");
+      btn.textContent = opt.textContent;
+      btn.onclick = () => window.location.href = opt.value;
+      quizList.appendChild(btn);
+    });
+  }
 });
 </script> <!--keep it as backup plan-->
 
