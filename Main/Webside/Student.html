@@ -249,30 +249,19 @@ main {
   transition: background 0.3s ease, transform 0.2s ease;
   z-index: 3;
 }
-.nav-arrow.left { left: 25%; }
-.nav-arrow.right { right: 25%; }
+.nav-arrow.left { left: 10%; }
+.nav-arrow.right { right: 10%; }
 .nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
 
-/* === Background Blur Effect === */
-.page-blur {
-  filter: blur(5px);
-  transition: filter 0.3s ease;
-  pointer-events: none;
-  user-select: none;
-}
-
-  /* === Soft Blur Background Fix (keeps lesson container sharp) === */
-.soft-blur::before {
-  content: "";
+/* === BACKGROUND BLUR (outside container only) === */
+#panelBackdrop {
   position: fixed;
   top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  backdrop-filter: blur(5px);
-  background: rgba(0,0,0,0.25); /* slightly dark for depth */
+  width: 100vw; height: 100vh;
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.25);
   z-index: 5;
-  pointer-events: none;
-  transition: backdrop-filter 0.3s ease, background 0.3s ease;
+  display: none;
 }
 
 /* === Language Panel (Inside Lesson Mode) === */
@@ -282,13 +271,13 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.9);
-  border: 2px solid #1DB954;
+  border: 3px solid #1DB954;
   border-radius: 12px;
   padding: 25px;
   width: 90%;
-  max-width: 500px;
+  max-width: 520px;
   box-shadow: 0 0 25px #1DB95466;
-  z-index: 9999;
+  z-index: 10;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -300,13 +289,13 @@ main {
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
-/* === Option Buttons (Lesson / Quiz) === */
+/* === Centered Option Buttons === */
 .language-panel .option-buttons {
-  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+  gap: 25px;
+  margin-top: 10px;
 }
 .language-panel .option-buttons button {
   font-family: 'Press Start 2P', cursive;
@@ -324,9 +313,9 @@ main {
   transform: scale(1.05);
 }
 
-/* === Back Button === */
+/* === Back Button (center bottom) === */
 .language-panel .back-btn {
-  margin-top: 15px;
+  margin-top: 18px;
   background: #1DB954;
   color: white;
   border: none;
@@ -339,7 +328,7 @@ main {
 }
 .language-panel .back-btn:hover { transform: scale(1.05); }
 
-/* === Quiz Dropdown === */
+/* === Quiz Dropdown (for Quiz only) === */
 .quiz-dropdown {
   position: relative;
   display: inline-block;
@@ -356,7 +345,7 @@ main {
   flex-direction: column;
   max-height: 160px;
   overflow-y: auto;
-  z-index: 10;
+  z-index: 20;
   animation: fadeIn 0.2s ease forwards;
 }
 .quiz-list button {
@@ -372,7 +361,6 @@ main {
 .quiz-list button:hover {
   background: rgba(29,185,84,0.3);
 }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: scaleY(0.8); }
   to { opacity: 1; transform: scaleY(1); }
@@ -388,41 +376,6 @@ footer {
   width: 100vw;
   border-top: 1px solid rgba(29,185,84,0.4);
   margin-top: auto;
-}
-
-/* === Welcome Popup === */
-#welcomeOverlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  color: #1DB954;
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-  font-family: 'Press Start 2P', cursive;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  opacity: 0;
-  z-index: 999;
-  animation: fadeInOut 3s ease forwards;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.9); }
-  10%, 80% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.05); }
-}
-
-/* === Level-Up Glow === */
-@keyframes levelUpPulse {
-  0%   { text-shadow: 0 0 2px #1DB954, 0 0 6px #1DB954, 0 0 10px #1DB954; transform: scale(1); }
-  50%  { text-shadow: 0 0 8px #00ff99, 0 0 16px #00ff99, 0 0 25px #00ff99; transform: scale(1.2); color: #adffb0; }
-  100% { text-shadow: none; transform: scale(1); color: #fff; }
-}
-.level-up-glow {
-  animation: levelUpPulse 1s ease-in-out;
 }
 
 /* === Mobile tweaks === */
