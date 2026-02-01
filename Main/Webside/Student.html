@@ -258,10 +258,20 @@ main {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  backdrop-filter: blur(6px);
-  background: rgba(0, 0, 0, 0.25);
-  z-index: 5;
+  backdrop-filter: blur(3.5px);
+  -webkit-backdrop-filter: blur(3.5px);
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 998;
   display: none;
+  pointer-events: auto;
+}
+
+/* disable clicks when blur-active */
+.blur-active header,
+.blur-active main,
+.blur-active footer {
+  pointer-events: none;
+  user-select: none;
 }
 
 /* === Language Panel (Inside Lesson Mode) === */
@@ -277,7 +287,7 @@ main {
   width: 90%;
   max-width: 520px;
   box-shadow: 0 0 25px #1DB95466;
-  z-index: 10;
+  z-index: 999;
   display: none;
   flex-direction: column;
   align-items: center;
