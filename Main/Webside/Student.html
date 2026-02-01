@@ -854,7 +854,7 @@ onAuthStateChanged(auth, (user) => {
 });
 </script>
   
-  <script>
+  <<script>
 document.addEventListener('DOMContentLoaded', () => {
   // cards and lesson container expected in DOM
   const cards = Array.from(document.querySelectorAll('.language-card'));
@@ -878,6 +878,7 @@ document.addEventListener('DOMContentLoaded', () => {
     right.textContent = '▶';
     lessonContainer.appendChild(right);
   }
+
   // ensure back button exists (hidden by default)
   let backBtn = lessonContainer.querySelector('.back-btn') || lessonContainer.querySelector('#backBtn');
   if (!backBtn) {
@@ -892,90 +893,83 @@ document.addEventListener('DOMContentLoaded', () => {
   // ensure languageView exists and contains cards
   const languageView = document.getElementById('languageView');
   if (!languageView) return;
-
-  // move cards into languageView (if not already)
   cards.forEach(c => {
     if (!languageView.contains(c)) languageView.appendChild(c);
   });
 
-  // Pan/selection state
+  // language card navigation
   let idx = 0;
   function setActive(i) {
     idx = Math.max(0, Math.min(i, cards.length - 1));
-    cards.forEach((c,ii) => {
+    cards.forEach((c, ii) => {
       c.classList.toggle('active', ii === idx);
       c.setAttribute('aria-hidden', ii === idx ? 'false' : 'true');
     });
     left.disabled = (idx === 0);
-    right.disabled = (idx === (cards.length -1));
+    right.disabled = (idx === (cards.length - 1));
   }
   setActive(0);
 
-  // arrow handlers
   left.addEventListener('click', () => setActive(idx - 1));
   right.addEventListener('click', () => setActive(idx + 1));
 
-  // keyboard navigation (skip while panel open)
+  // prevent arrow key movement while panel open
   document.addEventListener('keydown', (e) => {
-    if (document.querySelector('.language-panel')?.style.display === 'flex') return;
+    if (document.body.classList.contains('blur-active')) return;
     if (e.key === 'ArrowLeft') setActive(idx - 1);
     if (e.key === 'ArrowRight') setActive(idx + 1);
   });
 
-  // create backdrop + panel (single instance)
+  // create backdrop once
   let backdrop = document.getElementById('panelBackdrop');
   if (!backdrop) {
     backdrop = document.createElement('div');
     backdrop.id = 'panelBackdrop';
     document.body.appendChild(backdrop);
   }
+
+  // create language panel if missing
   let panel = document.querySelector('.language-panel');
   if (!panel) {
     panel = document.createElement('div');
     panel.className = 'language-panel';
     panel.innerHTML = `
       <div class="panel-title"><img src="" alt="icon"><span class="titleText"></span></div>
-      <div class="panel-content"><!-- buttons injected here --></div>
+      <div class="panel-content"></div>
       <div class="quiz-list" role="menu"></div>
       <button class="panel-back">⬇ Back</button>
     `;
     document.body.appendChild(panel);
   }
 
-  // helper to get lang key from card (html, css, js)
+  // get key (html, css, js)
   function getLangKeyFromCard(card) {
     const data = (card.dataset && card.dataset.lang) ? card.dataset.lang.toLowerCase() : (card.id || card.querySelector('p')?.textContent || 'html').toLowerCase();
     return data.replace(/\s+/g, '');
   }
 
-  // open panel logic
+  // open panel
   function openLanguagePanel(card) {
-    const langKey = getLangKeyFromCard(card); // e.g. 'html'
-    // set title and icon
+    const langKey = getLangKeyFromCard(card);
     const iconEl = panel.querySelector('.panel-title img');
     const titleText = panel.querySelector('.panel-title .titleText');
-    // try to find image inside card
     const cardImg = card.querySelector('img');
-    if (cardImg) iconEl.src = cardImg.src;
-    else iconEl.src = '../Assets/Icons/html.png'; // fallback
-
+    iconEl.src = cardImg ? cardImg.src : '../Assets/Icons/html.png';
     titleText.textContent = (card.querySelector('p')?.textContent || langKey.toUpperCase());
 
-    // inject center buttons (Lessons + Quiz)
     const pc = panel.querySelector('.panel-content');
     pc.innerHTML = `
       <button class="lessons-btn">📖 Lessons</button>
-      <div style="position:relative; display:inline-block; width:160px; text-align:center;">
+      <div style="position:relative; display:inline-block; text-align:center;">
         <button class="quiz-btn">📝 Quiz ▾</button>
       </div>
     `;
 
-    // populate quiz-list from existing select (populated by populateOptions)
+    // populate quizzes
     const quizList = panel.querySelector('.quiz-list');
-    quizList.innerHTML = ''; // clear
+    quizList.innerHTML = '';
     const select = document.getElementById(`${langKey}Quizzes`);
     if (select && select.options.length > 1) {
-      // create buttons for each option (skip placeholder)
       Array.from(select.options).slice(1).forEach(opt => {
         const b = document.createElement('button');
         b.type = 'button';
@@ -989,11 +983,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = 'No quizzes found';
-      b.addEventListener('click', () => alert('No quizzes available'));
       quizList.appendChild(b);
     }
 
-    // lessons button behavior: go to first lesson (if available)
+    // lessons button
     const lessonBtn = panel.querySelector('.lessons-btn');
     lessonBtn.addEventListener('click', () => {
       const lessonSelect = document.getElementById(`${langKey}Lessons`);
@@ -1002,30 +995,20 @@ document.addEventListener('DOMContentLoaded', () => {
       else alert('No lessons available for this language.');
     });
 
-    // quiz button toggles the quiz-list
+    // quiz dropdown
     const quizBtn = panel.querySelector('.quiz-btn');
     quizBtn.addEventListener('click', (ev) => {
       ev.stopPropagation();
-      if (quizList.style.display === 'flex') {
-        quizList.style.display = 'none';
-      } else {
-        quizList.style.display = 'flex';
-      }
+      quizList.style.display = (quizList.style.display === 'flex') ? 'none' : 'flex';
     });
 
-    // back button closes panel
+    // Back button
     panel.querySelector('.panel-back').addEventListener('click', closeLanguagePanel);
 
-    // show backdrop then panel (panel above, not blurred)
+    // activate blur overlay and panel
     backdrop.style.display = 'block';
+    document.body.classList.add('blur-active');
     panel.style.display = 'flex';
-    panel.classList.add('opening');
-    // small focus trap so keyboard users can tab inside
-    panel.setAttribute('tabindex','-1');
-    panel.focus();
-
-    // prevent page scroll while open on mobile
-    document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
   }
 
@@ -1033,15 +1016,17 @@ document.addEventListener('DOMContentLoaded', () => {
     panel.style.display = 'none';
     panel.querySelector('.quiz-list').style.display = 'none';
     backdrop.style.display = 'none';
-    // restore scrolling
-    document.documentElement.style.overflow = '';
+    document.body.classList.remove('blur-active');
     document.body.style.overflow = '';
   }
 
-  // clicking outside panel closes it (but not clicking inside)
-  backdrop.addEventListener('click', closeLanguagePanel);
+  // clicking the backdrop does NOT close or redirect
+  backdrop.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
 
-  // attach click on active card to open (if not active -> setActive then open)
+  // open card
   cards.forEach((c, i) => {
     c.addEventListener('click', (e) => {
       if (!c.classList.contains('active')) {
@@ -1049,7 +1034,6 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => openLanguagePanel(c), 160);
       } else openLanguagePanel(c);
     });
-    // keyboard accessible
     c.addEventListener('keydown', ev => {
       if (ev.key === 'Enter' || ev.key === ' ') {
         ev.preventDefault();
@@ -1057,59 +1041,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // also show lesson/quiz options inline under the container (if you want)
-  const inlineOptions = document.getElementById('lessonQuizOptions');
-  if (inlineOptions) {
-    // show/hide inline options when a card is active
-    function updateInline() {
-      inlineOptions.style.display = cards[idx] ? 'flex' : 'none';
-      // optionally you can attach lesson/quiz buttons from inline options to navigate similarly
-      const lessonBtnInline = document.getElementById('lessonBtn');
-      const quizBtnInline = document.getElementById('quizBtn');
-      const quizListInline = document.getElementById('quizList');
-      if (lessonBtnInline) {
-        lessonBtnInline.onclick = () => {
-          const langKey = getLangKeyFromCard(cards[idx]);
-          const lessonSelect = document.getElementById(`${langKey}Lessons`);
-          const first = lessonSelect && lessonSelect.options[1] && lessonSelect.options[1].value;
-          if (first) window.location.href = first;
-          else alert('No lessons available');
-        };
-      }
-      if (quizBtnInline && quizListInline) {
-        // populate inline quiz list
-        quizListInline.innerHTML = '';
-        const langKey = getLangKeyFromCard(cards[idx]);
-        const select = document.getElementById(`${langKey}Quizzes`);
-        if (select && select.options.length > 1) {
-          Array.from(select.options).slice(1).forEach(opt => {
-            const b = document.createElement('button');
-            b.type = 'button';
-            b.textContent = opt.textContent;
-            b.addEventListener('click', () => { if (opt.value) window.location.href = opt.value; });
-            quizListInline.appendChild(b);
-          });
-        } else {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.textContent = 'No quizzes';
-          quizListInline.appendChild(b);
-        }
-        // toggle
-        quizBtnInline.onclick = (ev) => {
-          ev.stopPropagation();
-          if (quizListInline.style.display === 'flex') quizListInline.style.display = 'none';
-          else quizListInline.style.display = 'flex';
-        };
-      }
-    }
-    updateInline();
-    // update when selection changes
-    left.addEventListener('click', updateInline);
-    right.addEventListener('click', updateInline);
-  }
-
 });
 </script>
 </body>
