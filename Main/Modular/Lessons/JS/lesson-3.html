@@ -1,644 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JavaScript Comments - Lesson 3 | Cyberpunk Matrix</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindCraft JS Lesson 3 Quiz</title>
 
-        body {
-            font-family: 'Orbitron', monospace;
-            background: #000;
-            color: #e0e0e0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-        /* Pixelated cyber grid */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background:
-                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-            animation: cyberGrid 25s linear infinite;
-            z-index: -2;
-        }
-
-        @keyframes cyberGrid {
-            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            background: rgba(8, 8, 25, 0.97);
-            border: 3px solid transparent;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
-            border-radius: 25px;
-            box-shadow:
-                0 0 60px rgba(255, 0, 255, 0.5),
-                0 0 120px rgba(0, 255, 255, 0.4),
-                inset 0 0 40px rgba(255, 0, 255, 0.08);
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-            margin: 25px;
-        }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
-            animation: rotateAura 10s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes rotateAura {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .exit-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #fff;
-            background: linear-gradient(45deg, #ff1493, #ff00ff);
-            border: 2px solid #ff00ff;
-            border-radius: 12px;
-            padding: 12px 20px;
-            text-decoration: none;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
-            box-shadow: 
-                0 0 20px rgba(255, 0, 255, 0.6),
-                inset 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .exit-btn:hover {
-            background: linear-gradient(45deg, #00ffff, #ff1493);
-            border-color: #00ffff;
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 
-                0 0 40px rgba(0, 255, 255, 0.9),
-                0 0 60px rgba(255, 0, 255, 0.7);
-        }
-
-        header {
-            padding: 80px 40px 60px 40px;
-            text-align: center;
-            position: relative;
-            border-bottom: 5px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-        }
-
-        h1 {
-            font-size: 4.2em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            background-size: 300% 300%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow:
-                0 0 40px #ff00ff,
-                0 0 80px #00ffff,
-                0 0 120px #ff00ff,
-                2px 2px 0px #000;
-            margin-bottom: 20px;
-            animation: neonPulse 3s ease-in-out infinite;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            -webkit-text-stroke: 1px rgba(0,0,0,0.8);
-        }
-
-        @keyframes neonPulse {
-            0%, 100% { 
-                transform: scale(1); 
-                filter: hue-rotate(0deg) brightness(1); 
-            }
-            50% { 
-                transform: scale(1.03); 
-                filter: hue-rotate(180deg) brightness(1.2); 
-            }
-        }
-
-        .subtitle {
-            font-size: 1.6em;
-            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
-            background-size: 200% 200%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            animation: gradientFlow 4s ease infinite;
-            text-shadow: 
-                0 0 25px #00ffff,
-                2px 2px 0px #000;
-            letter-spacing: 2px;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        section {
-            padding: 60px 50px;
-            position: relative;
-            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
-        }
-
-        section:last-of-type { border-bottom: none; }
-        section:nth-child(even) { background: rgba(15, 10, 45, 0.7); }
-
-        h2 {
-            font-size: 2.8em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            background-size: 300% 300%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            position: relative;
-            animation: h2Glow 3s ease infinite;
-            text-shadow:
-                0 0 20px #ff00ff, 
-                0 0 40px #00ffff,
-                1px 1px 0px #000;
-        }
-
-        @keyframes h2Glow {
-            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
-            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100px; height: 6px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff);
-            border-radius: 3px;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
-            animation: underlineShift 2.5s ease-in-out infinite;
-        }
-
-        @keyframes underlineShift {
-            0%, 100% { width: 100px; left: 0; }
-            50% { width: 200px; left: 50px; }
-        }
-
-        .explanation {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.2em;
-            line-height: 1.9;
-            margin-bottom: 40px;
-            color: #d0d0ff;
-            background: rgba(255, 0, 255, 0.05);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #ff00ff;
-            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
-        }
-
-        .code-block {
-            background: rgba(10, 15, 50, 0.95);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-            border-radius: 20px;
-            padding: 35px;
-            margin: 35px 0;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 16px;
-            line-height: 1.8;
-            overflow-x: auto;
-            position: relative;
-            box-shadow:
-                0 0 40px rgba(0, 255, 255, 0.5),
-                inset 0 0 25px rgba(255, 0, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .code-block:hover {
-            box-shadow:
-                0 0 60px rgba(0, 255, 255, 0.7),
-                0 0 100px rgba(255, 0, 255, 0.6),
-                inset 0 0 30px rgba(255, 0, 255, 0.2);
-            transform: translateY(-8px) scale(1.02);
-        }
-
-        .code-block::before {
-            content: ' CODE MATRIX';
-            position: absolute;
-            top: -18px;
-            left: 30px;
-            background: rgba(10, 15, 50, 0.95);
-            color: #00ffff;
-            padding: 8px 25px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #00ffff;
-            border-radius: 25px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            color: #fff;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
-            border: 2px solid #ff00ff;
-            border-radius: 8px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
-            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .copy-btn:hover {
-            background: linear-gradient(45deg, #00ffff, #ff69b4);
-            border-color: #00ffff;
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
-        }
-
-        .copy-btn.copied {
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            border-color: #00ff00;
-        }
-
-        .highlight {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 4px 12px;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 0, 255, 0.4);
-            display: inline-block;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
-            animation: highlightBeat 2s ease-in-out infinite;
-            font-weight: bold;
-        }
-
-        @keyframes highlightBeat {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
-        }
-
-        .demo-output {
-            background: rgba(0, 20, 60, 0.9);
-            border: 2px solid #00ffff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 25px 0;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-            font-family: 'Roboto Mono', monospace;
-        }
-
-        .demo-output::before {
-            content: ' BROWSER OUTPUT';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(0, 20, 60, 0.9);
-            color: #00ffff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-        }
-
-        .comment-demo {
-            background: rgba(60, 20, 80, 0.9);
-            border: 2px solid #ff00ff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .comment-demo::before {
-            content: ' COMMENTS DISABLED';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(60, 20, 80, 0.9);
-            color: #ff00ff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #ff00ff;
-            border-radius: 20px;
-        }
-
-        ul.examples {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul.examples li {
-            background: rgba(0, 255, 255, 0.08);
-            border-left: 6px solid #00ffff;
-            margin: 25px 0;
-            padding: 30px;
-            border-radius: 15px;
-            position: relative;
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-
-        ul.examples li::before {
-            content: ' LIVE EXAMPLE';
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: #00ffff;
-            font-size: 13px;
-            font-weight: bold;
-            text-shadow: 0 0 15px #00ffff;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        ul.examples li:hover {
-            background: rgba(0, 255, 255, 0.15);
-            border-left-color: #ff00ff;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
-            transform: translateX(15px) scale(1.02);
-        }
-
-        .warning {
-            background: rgba(255, 20, 147, 0.15) !important;
-            border-left: 6px solid #ff1493 !important;
-        }
-
-        .warning::before {
-            content: ' ⚠️ TRAP!' !important;
-            color: #ff1493 !important;
-            left: 20px !important;
-            top: -15px !important;
-            background: rgba(255, 20, 147, 0.9) !important;
-        }
-
-        footer {
-            background: rgba(15, 15, 55, 0.95);
-            color: #00ffff;
-            text-align: center;
-            padding: 50px;
-            font-family: 'Roboto Mono', monospace;
-            border-top: 4px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-            text-shadow: 0 0 20px #00ffff;
-        }
-
-        .final-challenge {
-            background: rgba(0, 0, 0, 0.95);
-            border: 4px solid #ff00ff;
-            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
-            margin-top: 50px;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8em; }
-            h2 { font-size: 2.2em; }
-            section { padding: 40px 25px; }
-            .code-block { font-size: 14px; padding: 25px; }
-            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-        
-        <header>
-            <h1>JavaScript Comments</h1>
-            <p class="subtitle">LESSON 3 - Cyberpunk Code Documentation Matrix</p>
-        </header>
-
-        <section id="singleline">
-            <h2>01. Single-Line Comments //</h2>
-            <div class="explanation">
-                <span class="highlight">//</span> = <strong>One line comment</strong>. Everything after <span class="highlight">//</span> on that line = ignored by browser.
-                Perfect for quick notes, explanations, TODOs. Use for each important line!
-            </div>
-            <div class="code-block">
-                <button class="copy-btn">📋 Copy</button>
-                <pre><code>// ✅ SINGLE-LINE COMMENTS
-let studentName = "Jhack";     // Store student name
-let grade = 95;                // Current grade (0-100)
-let isActive = true;           // Student status
-
-console.log(studentName);      // Display name in console
-
-// TODO: Add grade calculation function
-// NOTE: Comments make code readable for team members</code></pre>
-            </div>
-            <div class="comment-demo">
-                <div style="color:#00ff88;font-family:monospace;font-size:18px;">
-                    Jhack<br>
-                    <span style="color:#ff1493;">// Comments = invisible to browser!</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="multiline">
-            <h2>02. Multi-Line Comments /* */</h2>
-            <div class="explanation">
-                <span class="highlight">/* */</span> = <strong>Multiple lines comment</strong>. Everything between <span class="highlight">/*</span> and <span class="highlight">*/</span> = ignored.
-                Use for function descriptions, long explanations, temporarily disabled code.
-            </div>
-            <div class="code-block">
-                <button class="copy-btn">📋 Copy</button>
-                <pre><code>/* ========================================
-   CYBERPUNK STUDENT GRADE CALCULATOR v2.0
-   Created by: Jhack @ CMU
-   Purpose: Calculate final grades with bonus
-========================================= */
-
-/* 
-   FUNCTION: calculateGrade
-   INPUT: current grade (0-100)
-   OUTPUT: final grade with bonus
-   RULES: A=90+, B=80-89, C=70-79
-*/
-function calculateGrade(score) {
-    if (score >= 90) {
-        return "A - ELITE HACKER!";
-    }
-    return "Keep hacking!";
-}</code></pre>
-            </div>
-        </section>
-
-        <section id="good-vs-bad">
-            <h2>03. GOOD vs BAD Comments</h2>
-            <div class="explanation">
-                <strong>GOOD comments EXPLAIN WHY</strong>, not what. BAD comments repeat obvious code.
-                Future you (6 months later) will thank you for good comments!
-            </div>
-            <ul class="examples">
-                <li>
-                    <strong>✅ GOOD COMMENTS (Explain WHY):</strong><br>
-                    <code>let bonus = 5;     // Extra points for perfect attendance</code><br>
-                    <code>total -= fee;    // Remove enrollment fee before final calc</code><br>
-                    <code>if (active) {    // Only process active students</code>
-                </li>
-                <li class="warning">
-                    <strong>❌ BAD COMMENTS (Obvious):</strong><br>
-                    <code>let x = 10;       // Set x to 10 ❌</code><br>
-                    <code>total = total + 5; // Add 5 ❌</code><br>
-                    <code>if (x > 0) {}    // Check if positive ❌</code>
-                </li>
-            </ul>
-        </section>
-
-        <section id="javadoc">
-            <h2>04. JSDoc Style Comments</h2>
-            <div class="explanation">
-                <span class="highlight">JSDoc</span> = Professional documentation format. Starts with <span class="highlight">/**</span> ends with <span class="highlight">*/</span>.
-                Used by VS Code for auto-completion and documentation.
-            </div>
-            <div class="code-block">
-                <button class="copy-btn">📋 Copy</button>
-                <pre><code>/**
- * Calculate student final grade
- * @param {number} score - Current grade (0-100)
- * @param {boolean} attendedAll - Perfect attendance?
- * @returns {string} Grade letter (A,B,C,D,F)
- */
-function getFinalGrade(score, attendedAll) {
-    let finalScore = score;
-    
-    if (attendedAll) {
-        finalScore += 5;  // Attendance bonus
-    }
-    
-    if (finalScore >= 90) return "A";
-    if (finalScore >= 80) return "B";
-    return "C";
-}</code></pre>
-            </div>
-        </section>
-
-        <section id="practice">
-            <h2>05. Comments in Real Projects</h2>
-            <div class="explanation">
-                Real projects use comments for: <strong>file headers, function docs, TODOs, version history</strong>.
-                Team members read your comments to understand your logic!
-            </div>
-            <div class="code-block">
-                <button class="copy-btn">📋 Copy</button>
-                <pre><code>/*==========================================
-    STUDENT PORTAL SYSTEM v1.2 - CMU IT DEPT
-    Last Updated: Jan 2026 by Jhack
-    Features: Grade calc, attendance, profile
-===========================================*/
-
-let students = [];  // Array of student objects
-
-/**
- * Add new student to system
- */
-function addStudent(name, grade) {
-    students.push({name, grade});  // Add to array
-    saveToLocalStorage();          // Persist data
-    updateDashboard();             // Refresh UI
-}</code></pre>
-            </div>
-        </section>
-
-        <section id="challenge">
-            <h2>06. YOUR MISSION: Document Your Code!</h2>
-            <div class="explanation">
-                Copy code below to Console (F12). <strong>Add 5+ comments</strong> explaining:
-                <strong>purpose, logic, TODOs</strong>. Make it professional!
-            </div>
-            <div class="code-block final-challenge">
-                <button class="copy-btn">📋 Copy Challenge</button>
-                <pre><code>/* YOUR MISSION: ADD COMMENTS! */
-
-// Copy to Console F12 and improve:
-
-let name = "Jhack";
-let score = 85;
-let bonusPoints = 0;
-
-if (score >= 90) {
-    bonusPoints = 10;
-} else if (score >= 80) {
-    bonusPoints = 5;
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:10px;overflow:hidden;}
+body{
+    font-family:'Press Start 2P',cursive;
+    background:linear-gradient(#87e4ff,#c8f7b0);
+    padding:20px;
 }
 
-let finalGrade = score + bonusPoints;
-console.log(finalGrade);</code></pre>
-            </div>
-        </section>
+.quiz-container{
+    max-width:1000px;
+    margin:auto;
+    height:calc(100vh - 40px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+}
 
-        <footer>
-            <h3>🚀 READY TO DOCUMENT?</h3>
-            <p><strong>Copy ALL code</strong> → <strong>VS Code</strong> → <strong>Save as</strong> <code>js-comments-lesson3.html</code></p>
-            <p><strong>Live Server</strong> → <strong>F12 Console</strong> → <strong>Test your commented challenge!</strong></p>
-            <p><strong>Dark neon cyberpunk theme</strong> - Perfect for CMU Programming students! 🔥⚡️</p>
-        </footer>
-    </div>
+.wood-border{
+    width:100%;
+    max-width:900px;
+    height:90vh;
+    position:relative;
+    background:#8b5a2b;
+    border-radius:28px;
+    padding:16px;
+    box-shadow: inset -8px -8px 0 rgba(0,0,0,.3),0 12px 0 #5c3a1a;
+}
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Copy buttons functionality
-            document.querySelectorAll('.copy-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const codeBlock = this.parentElement;
-                    const codeText = codeBlock.querySelector('pre').innerText;
-                    
-                    navigator.clipboard.writeText(codeText).then(function() {
-                        const originalText = btn.textContent;
-                        btn.textContent = '✅ COPIED!';
-                        btn.classList.add('copied');
-                        
-                        setTimeout(function() {
-                            btn.textContent = originalText;
-                            btn.classList.remove('copied');
-                        }, 2000);
-                    });
-                });
-            });
+.wood-border::before{
+    content:'MINDCRAFT JS QUIZ';
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#8b5a2b;
+    padding:6px 20px;
+    font-size:11px;
+    color:#ffd966;
+    text-shadow:2px 2px #000;
+    border-radius:10px;
+    box-shadow:0 4px 0 #5c3a1a;
+}
+
+.quiz-content{
+    height:100%;
+    width:100%;
+    background:linear-gradient(#8fe9ff 55%,#7dd37d);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    z-index:2;
+}
+
+.main-title{
+    text-align:center;
+    font-size:16px;
+    color:#006400;
+    margin-bottom:20px;
+    text-shadow:3px 3px #fff;
+}
+
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    font-size:9px;
+    margin-bottom:16px;
+}
+
+.question-box{
+    background:#fff3cd;
+    border:3px solid #c9a227;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 6px 0 #c9a227;
+    margin-bottom:20px;
+    line-height:1.6;
+    max-height:300px;
+}
+
+.question-text{
+    font-size:11px;
+    font-weight:bold;
+    margin-bottom:14px;
+}
+
+.options label{
+    display:block;
+    margin:10px 0;
+    font-size:9px;
+    cursor:pointer;
+}
+
+.options input{
+    margin-right:10px;
+    transform:scale(1.3);
+    accent-color:#006400;
+}
+
+.fill-input{
+    width:100%;
+    padding:12px;
+    border:3px solid #c9a227;
+    border-radius:10px;
+    font-family:'Press Start 2P';
+    font-size:9px;
+    box-shadow:0 4px 0 #c9a227;
+}
+
+.nav-row{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-top:20px;
+}
+
+button{
+    font-family:'Press Start 2P';
+    background:#a56b34;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #5c3a1a;
+    cursor:pointer;
+    font-size:8px;
+    min-width:120px;
+    transition:transform 0.1s;
+}
+
+button:hover:not(:disabled){ transform:translateY(-2px); }
+button:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 2px 0 #5c3a1a;
+}
+
+#nextBtn{ background:#a56b34; }
+#finishBtn{ 
+    background:#d4af37; 
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #b8860b;
+    display:none;
+}
+
+#backBtn{
+    background:#ff6b35;
+    box-shadow: inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #cc5533;
+    display:none;
+}
+
+#resultBox{
+    display:none;
+    background:#d9ead3;
+    border:4px solid #6aa84f;
+    color:#006400;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+}
+.result-success{ display:block !important; background:#d9ead3 !important; border:4px solid #6aa84f !important; color:#006400 !important; }
+</style>
+</head>
+
+<body>
+<div class="quiz-container">
+<div class="wood-border">
+<div class="quiz-content">
+
+<div class="main-title">
+LESSON 3<br>
+<span style="font-size:12px;">COMMENTS QUIZ</span>
+</div>
+
+<div class="top-bar">
+<div id="progress">Question 1 / 15</div>
+<div id="timer">10:00</div>
+</div>
+
+<div id="questionContainer" class="question-box"></div>
+
+<div class="nav-row">
+<button id="nextBtn">NEXT →</button>
+<button id="finishBtn">FINISH</button>
+<button id="backBtn">← BACK</button>
+</div>
+
+<div id="resultBox">Complete all questions for your score!</div>
+
+</div>
+</div>
+</div>
+
+<script>
+const questions=[
+{type:"mc",text:"1. Which symbol starts a single-line comment in JavaScript?",options:["/*","*/","//","#"],correct:2},
+{type:"mc",text:"2. What happens to code after // on the same line?",options:["Executes twice","Ignored","Variable","HTML"],correct:1},
+{type:"mc",text:"3. Correct multi-line comment syntax?",options:["/**/","/* */","// /*","*/ //"],correct:1},
+{type:"mc",text:"4. Best use of single-line comments?",options:["Long docs","Quick notes","Headers","Disable lots"],correct:1},
+{type:"mc",text:"5. Multi-line comments are best for:",options:["One word","Descriptions/disabled code","Variables","CSS"],correct:1},
+{type:"mc",text:"6. Good comments explain:",options:["What","WHY","Date","Color"],correct:1},
+{type:"mc",text:"7. Which is a BAD comment?",options:["Remove fee","Set x to 10","Process students","TODO"],correct:1},
+{type:"mc",text:"8. JSDoc starts with?",options:["/**","/*","//","*/"],correct:0},
+{type:"mc",text:"9. JSDoc helps VS Code with:",options:["Colors","Autocomplete","Speed","Files"],correct:1},
+{type:"mc",text:"10. Comments are used for:",options:["Decor","Docs/TODOs","Secrets","Slow code"],correct:1},
+{type:"fill",text:"11. Single-line comments use ________.",correctText:"//"},
+{type:"fill",text:"12. Multi-line comments start with ________.",correctText:"/*"},
+{type:"fill",text:"13. Professional documentation comments are ________.",correctText:"jsdoc"},
+{type:"fill",text:"14. Good comments explain the ________.",correctText:"why"},
+{type:"fill",text:"15. JSDoc uses @________ for parameters.",correctText:"param"}
+];
+
+const TOTAL_TIME_SECONDS = 10 * 60;
+
+let currentIndex=0;
+let userAnswers=new Array(questions.length).fill(null);
+let remainingSeconds=TOTAL_TIME_SECONDS;
+let quizCompleted=false;
+let timerInterval=null;
+
+const questionContainer=document.getElementById("questionContainer");
+const progress=document.getElementById("progress");
+const timerDisplay=document.getElementById("timer");
+const nextBtn=document.getElementById("nextBtn");
+const finishBtn=document.getElementById("finishBtn");
+const backBtn=document.getElementById("backBtn");
+const resultBox=document.getElementById("resultBox");
+
+function formatTime(secs){
+    const m=Math.floor(secs/60);
+    const s=secs%60;
+    return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+}
+
+function updateTimerDisplay(){ timerDisplay.textContent=formatTime(remainingSeconds); }
+
+function startTimer(){
+    if(timerInterval!==null||quizCompleted||remainingSeconds<=0) return;
+    timerInterval=setInterval(()=>{
+        remainingSeconds--;
+        updateTimerDisplay();
+        if(remainingSeconds<=0){
+            clearInterval(timerInterval);
+            timerInterval=null;
+            if(!quizCompleted) finishQuiz();
+        }
+    },1000);
+}
+
+function loadQuestion(index){
+    const q=questions[index];
+    questionContainer.innerHTML=`<div class="question-text">${q.text}</div>`;
+    if(q.type==="mc"){
+        const optionsDiv=document.createElement("div");
+        optionsDiv.className="options";
+        q.options.forEach((opt,i)=>{
+            const label=document.createElement("label");
+            const radio=document.createElement("input");
+            radio.type="radio";
+            radio.name="mc";
+            radio.value=i;
+            if(userAnswers[index]===i) radio.checked=true;
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(` ${opt}`));
+            optionsDiv.appendChild(label);
         });
-    </script>
+        questionContainer.appendChild(optionsDiv);
+    } else {
+        const input=document.createElement("input");
+        input.type="text";
+        input.id="fillInput";
+        input.className="fill-input";
+        input.placeholder="Type your answer here...";
+        if(userAnswers[index]) input.value=userAnswers[index];
+        questionContainer.appendChild(input);
+    }
+}
+
+function updateUI(){
+    loadQuestion(currentIndex);
+    if(quizCompleted){
+        progress.textContent="Quiz Complete!";
+        timerDisplay.textContent="00:00";
+        nextBtn.style.display="none";
+        finishBtn.style.display="none";
+        backBtn.style.display="inline-block"; // only after finishing
+        const score=calculateScore();
+        const percentage=Math.round((score/questions.length)*100);
+        resultBox.innerHTML=`<strong>FINAL SCORE: ${score} / ${questions.length}</strong><br><span style="font-size:8px;">${percentage}% - Comments mastery logged!</span>`;
+        resultBox.className="result-success";
+        resultBox.style.display="block";
+    } else {
+        progress.textContent=`Question ${currentIndex+1} / ${questions.length}`;
+        nextBtn.style.display=(currentIndex===questions.length-1)?"none":"inline-block";
+        finishBtn.style.display=(currentIndex===questions.length-1)?"inline-block":"none";
+        backBtn.style.display="none"; // hide back until quiz completed
+        resultBox.style.display="none";
+    }
+}
+
+function saveCurrentAnswer(){
+    if(quizCompleted) return;
+    const q=questions[currentIndex];
+    if(q.type==="mc"){
+        const checked=document.querySelector('input[name="mc"]:checked');
+        userAnswers[currentIndex]=checked?parseInt(checked.value):null;
+    } else {
+        const input=document.getElementById("fillInput");
+        userAnswers[currentIndex]=input?input.value.trim():"";
+    }
+}
+
+function calculateScore(){
+    let score=0;
+    questions.forEach((q,i)=>{
+        if(q.type==="mc"){
+            if(userAnswers[i]===q.correct) score++;
+        } else {
+            const user=(userAnswers[i]||"").trim().toLowerCase();
+            const correct=q.correctText.toLowerCase();
+            if(user===correct) score++;
+        }
+    });
+    return score;
+}
+
+function finishQuiz(){
+    if(quizCompleted) return;
+    quizCompleted=true;
+    saveCurrentAnswer();
+    if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+    updateUI();
+}
+
+// Event listeners
+nextBtn.addEventListener("click", ()=>{
+    if(quizCompleted) return;
+    saveCurrentAnswer();
+    if(currentIndex<questions.length-1){
+        currentIndex++;
+        updateUI();
+    }
+});
+
+finishBtn.addEventListener("click", ()=>finishQuiz());
+
+backBtn.addEventListener("click", ()=>{
+    window.location.href="../../../Webside/Student.html";
+});
+
+// start fresh
+updateTimerDisplay();
+updateUI();
+startTimer();
+</script>
 </body>
 </html>
