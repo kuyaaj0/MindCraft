@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindCraft CSS Quiz - Lesson 1</title>
+<title>MindCraft CSS Quiz - Lesson 2</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
@@ -50,33 +50,24 @@ body {
   opacity: .25;
 }
 
-
 .title {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 18px 48px;
+  padding: 24px 64px;
   background: linear-gradient(#c97a36, #8b4d1a);
   color: white;
   font-size: 1.6rem;
-  border-radius: 20px;
+  border-radius: 24px;
   text-shadow: 4px 4px 0 black;
   z-index: 5;
   text-align: center;
 }
 
-
-@media (max-width: 768px) {
-  .title {
-    font-size: 1.6rem;
-    padding: 14px 32px;
-  }
-}
-
 .menu {
   position: relative;
-  margin-top: 140px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -113,9 +104,13 @@ body {
   border: none;
 }
 
+.nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 button.next {
-  align-self: center;
-  margin-top: 12px;
   background: linear-gradient(#46b46b, #2e7d4a);
   color: white;
   font-size: .7rem;
@@ -156,79 +151,78 @@ footer {
 <div class="scene">
   <div class="grid"></div>
 
-  <div class="title">Lesson 1: CSS Basics & Syntax</div>
+  <div class="title">Lesson 2: How to Add CSS</div><br>
 
   <div class="menu">
 
     <div class="question">
-      <strong>1. Which of the following is the correct CSS syntax for changing the text color of all &lt;p&gt; elements to red?</strong>
-      <label><input type="radio" name="q1"> A. p {color: red;}</label>
-      <label><input type="radio" name="q1"> B. p: color = red;</label>
-      <label><input type="radio" name="q1"> C. &lt;p style="color:red;"&gt;</label>
-      <label><input type="radio" name="q1"> D. p {text-color: red;}</label>
+      <strong>1. Which of the following is the correct way to add external CSS to an HTML file?</strong>
+      <label><input type="radio" name="q1"> A. &lt;style src="style.css"&gt;&lt;/style&gt;</label>
+      <label><input type="radio" name="q1"> B. &lt;link rel="stylesheet" href="style.css"&gt;</label>
+      <label><input type="radio" name="q1"> C. &lt;script src="style.css"&gt;&lt;/script&gt;</label>
+      <label><input type="radio" name="q1"> D. &lt;css link="style.css"&gt;</label>
     </div>
 
     <div class="question">
-      <strong>2. What is the purpose of a CSS comment?</strong>
-      <label><input type="radio" name="q2"> A. To apply styles to elements</label>
-      <label><input type="radio" name="q2"> B. To temporarily remove code from being applied</label>
-      <label><input type="radio" name="q2"> C. To make text bold</label>
-      <label><input type="radio" name="q2"> D. To link CSS files</label>
+      <strong>2. Where is internal CSS placed in an HTML document?</strong>
+      <label><input type="radio" name="q2"> A. Inside the &lt;head&gt; section within &lt;style&gt; tags</label>
+      <label><input type="radio" name="q2"> B. Inside the &lt;body&gt; section</label>
+      <label><input type="radio" name="q2"> C. In a separate .css file</label>
+      <label><input type="radio" name="q2"> D. In the &lt;title&gt; tag</label>
     </div>
 
     <div class="question">
-      <strong>3. Which part of a CSS rule specifies the HTML element to style?</strong>
-      <label><input type="radio" name="q3"> A. Property</label>
-      <label><input type="radio" name="q3"> B. Selector</label>
-      <label><input type="radio" name="q3"> C. Value</label>
-      <label><input type="radio" name="q3"> D. Comment</label>
+      <strong>3. Which of the following is inline CSS?</strong>
+      <label><input type="radio" name="q3"> A. &lt;p style="color: blue;"&gt;Hello&lt;/p&gt;</label>
+      <label><input type="radio" name="q3"> B. &lt;style&gt;p {color: blue;}&lt;/style&gt;</label>
+      <label><input type="radio" name="q3"> C. &lt;link rel="stylesheet" href="style.css"&gt;</label>
+      <label><input type="radio" name="q3"> D. p {color: blue;}</label>
     </div>
 
     <div class="question">
-      <strong>4. How does CSS usually interact with HTML?</strong>
-      <label><input type="radio" name="q4"> A. By replacing HTML tags</label>
-      <label><input type="radio" name="q4"> B. By adding functionality to forms</label>
-      <label><input type="radio" name="q4"> C. By styling HTML elements</label>
-      <label><input type="radio" name="q4"> D. By storing data in the browser</label>
+      <strong>4. When is it best to use external CSS?</strong>
+      <label><input type="radio" name="q4"> A. For small, one-page websites</label>
+      <label><input type="radio" name="q4"> B. When you want to style multiple pages consistently</label>
+      <label><input type="radio" name="q4"> C. When you want to style a single element only</label>
+      <label><input type="radio" name="q4"> D. For adding comments in code</label>
     </div>
 
     <div class="question">
-      <strong>5. In the CSS rule h1 { font-size: 24px; }, the h1 is called the ________.</strong>
+      <strong>5. CSS added directly to an HTML element using the style attribute is called ________.</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
     <div class="question">
-      <strong>6. In the CSS rule h1 { font-size: 24px; }, font-size is the ________.</strong>
+      <strong>6. CSS written inside &lt;style&gt; tags in the &lt;head&gt; of an HTML document is called ________.</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
     <div class="question">
-      <strong>7. In the CSS rule h1 { font-size: 24px; }, 24px is the ________.</strong>
+      <strong>7. CSS stored in a separate .css file and linked to an HTML document is called ________.</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
     <div class="question">
-      <strong>8. Identify the CSS comment in this line: /* This is a comment */</strong>
+      <strong>8. Look at this code: &lt;p style="font-size:16px;"&gt;Hello&lt;/p&gt;. What type of CSS is used here?</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
     <div class="question">
-      <strong>9. Which type of CSS is applied directly inside the HTML element using the style attribute?</strong>
+      <strong>9. This type of CSS is written inside the &lt;head&gt; section of an HTML document and applies styles to the page without using a separate file.</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
     <div class="question">
-      <strong>10. Which type of CSS is written in a separate .css file and linked to an HTML document?</strong>
+      <strong>10. Look at this code: &lt;link rel="stylesheet" href="style.css"&gt;. What type of CSS is used here?</strong>
       <input type="text" placeholder="Your answer here">
     </div>
 
-    <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-2.html'">Next Lesson</button>
-  </div>
+    <div class="nav-buttons">
+      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-1.html'">⬅ Prev Lesson</button>
+      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-3.html'">Next Lesson ➤</button>
+    </div>
 </div>
-  <script src="../../../Tools/Quiz-tls/QZTimer.js"></script>
 </body>
 </html>
-
-
 
 
