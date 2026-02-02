@@ -6,231 +6,281 @@
 <title>MindCraft CSS Quiz - Lesson 4</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: 'Press Start 2P', cursive;
-  background: radial-gradient(circle at top, #f3fcff, #bfeaff, #67c2ff);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:10px;overflow:hidden;}
+body{
+    font-family:'Press Start 2P', cursive;
+    background:linear-gradient(#87e4ff,#c8f7b0);
+    padding:20px;
 }
-
-.scene {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  min-height: 92vh;
-  background: linear-gradient(120deg, #eafcff, #c6f0ff, #a4e2c1, #74cfa0);
-  background-size: 300% 300%;
-  animation: bgShift 12s ease infinite;
-  border-radius: 28px;
-  box-shadow: 0 50px 100px rgba(0,0,0,.35);
-  overflow: hidden;
-  padding: 20px 40px;
+.quiz-container{
+    max-width:1000px;
+    margin:0 auto;
+    height:calc(100vh - 40px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
 }
-
-@keyframes bgShift { 
-  0% { background-position: 0% 50%; } 
-  50% { background-position: 100% 50%; } 
-  100% { background-position: 0% 50%; } 
+.wood-border{
+    width:100%;
+    max-width:900px;
+    height:90vh;
+    position:relative;
+    background:#8b5a2b;
+    border-radius:28px;
+    padding:16px;
+    box-shadow:inset -8px -8px 0 rgba(0,0,0,.3), 0 12px 0 #5c3a1a;
 }
-
-.grid { 
-  position: absolute; 
-  inset: 0; 
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px); 
-  background-size: 60px 60px; 
-  opacity: .25; 
+.wood-border::before{
+    content:'MINDCRAFT CSS QUIZ';
+    position:absolute;
+    top:-14px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#8b5a2b;
+    padding:6px 20px;
+    font-size:11px;
+    color:#ffd966;
+    text-shadow:2px 2px #000;
+    border-radius:10px;
+    box-shadow:0 4px 0 #5c3a1a;
 }
-
-
-.title { 
-  position: absolute; 
-  top: 20px; 
-  left: 50%; 
-  transform: translateX(-50%); 
-  padding: 18px 48px;
-  background: linear-gradient(#c97a36, #8b4d1a); 
-  color: white; 
-  font-size: 1.6rem;
-  border-radius: 20px; 
-  text-shadow: 4px 4px 0 black; 
-  z-index: 5; 
-  text-align: center;
+.quiz-content{
+    height:100%;
+    width:100%;
+    background:linear-gradient(#8fe9ff 55%, #7dd37d);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    z-index:2;
 }
-
-@media (max-width: 768px) {
-  .title {
-    font-size: 1.6rem;
-    padding: 14px 32px;
-  }
+.main-title{text-align:center;font-size:16px;text-shadow:3px 3px #fff;margin-bottom:20px;color:#006400;}
+.quiz-panel{flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px;overflow:auto;}
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:9px;}
+.progress{color:#006400;font-weight:bold;}
+.timer{color:#b8860b;font-weight:bold;}
+.question-box{
+    background:#fff3cd;
+    border:3px solid #c9a227;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:24px;
+    line-height:1.6;
+    box-shadow:0 6px 0 #c9a227;
+    max-height:300px;
 }
-
-.menu { 
-  position: relative; 
-  margin-top: 140px;
-  display: flex; 
-  flex-direction: column; 
-  gap: 16px; 
-  z-index: 5; 
+.question-text{font-size:11px;margin-bottom:16px;font-weight:bold;}
+.options label{display:block;margin:10px 0;cursor:pointer;font-size:9px;}
+.options input{margin-right:10px;transform:scale(1.3);accent-color:#006400;}
+.fill-input{
+    width:100%;
+    max-width:380px;
+    padding:12px;
+    border:3px solid #c9a227;
+    background:#fff;
+    border-radius:10px;
+    font-family:'Press Start 2P', cursive;
+    font-size:9px;
+    color:#000;
+    box-shadow:0 4px 0 #c9a227;
 }
-
-.menu .question { 
-  background: rgba(255,255,255,.15); 
-  backdrop-filter: blur(10px); 
-  padding: 18px 24px; 
-  border-radius: 18px; 
-  color: #000; 
-  display: flex; 
-  flex-direction: column; 
-  gap: 10px; 
+.nav-row{display:flex;justify-content:center;gap:16px;margin-top:20px;}
+button{
+    font-family:'Press Start 2P', cursive;
+    background:#a56b34;
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:12px;
+    box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #5c3a1a;
+    cursor:pointer;
+    font-size:8px;
+    transition:transform 0.1s;
+    min-width:120px;
 }
-
-.menu .question label { 
-  cursor: pointer; 
-  background: linear-gradient(#ffe08a, #f2a933); 
-  padding: 12px 16px; 
-  border-radius: 12px; 
-  display: block; 
-  transition: .2s; 
+button:hover:not(:disabled){transform:translateY(-2px);}
+button:disabled{opacity:0.5;cursor:not-allowed;}
+#nextBtn{background:#a56b34;}
+#finishBtn{
+    background:#d4af37;
+    box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #b8860b;
+    display:none;
 }
-
-.menu .question label:hover { 
-  transform: translateX(6px); 
+#backBtn{
+    background:#ff6b35;
+    box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #cc5533;
+    display:none;
 }
-
-.menu .question input[type="text"] {
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
+#resultBox{
+    margin-top:24px;
+    padding:20px;
+    border-radius:12px;
+    font-size:10px;
+    text-align:center;
+    display:none;
+    box-shadow:0 6px 0 #6aa84f;
 }
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-}
-
-button.next { 
-  background: linear-gradient(#46b46b, #2e7d4a); 
-  color: white; 
-  font-size: .7rem; 
-  padding: 14px 28px; 
-  border: none; 
-  border-radius: 18px; 
-  cursor: pointer; 
-  box-shadow: 0 6px 0 rgba(0,0,0,.25); 
-}
-
-button.next:hover { 
-  transform: translateY(-4px); 
-  box-shadow: 0 8px 0 rgba(0,0,0,.35); 
-}
-
-.ground { 
-  position: absolute; 
-  bottom: 0; 
-  width: 100%; 
-  height: 120px; 
-  background: linear-gradient(#46b46b, #2e7d4a); 
-  box-shadow: inset 0 12px 0 rgba(255,255,255,.25); 
-}
-
-footer { 
-  position: absolute; 
-  bottom: 10px; 
-  width: 100%; 
-  text-align: center; 
-  font-size: .5rem; 
-  color: white; 
-  text-shadow: 1px 1px 0 black; 
+.result-success{
+    background:#d9ead3 !important;
+    border:4px solid #6aa84f !important;
+    color:#006400 !important;
+    display:block !important;
 }
 </style>
 </head>
-
 <body>
-<div class="scene">
-  <div class="grid"></div>
-
-  <div class="title">Lesson 4: Colors & Backgrounds</div>
-
-  <div class="menu">
-
-    <div class="question">
-      <strong>1. Which CSS property is used to change the text color of an element?</strong>
-      <label><input type="radio" name="q1"> A. background-color</label>
-      <label><input type="radio" name="q1"> B. color</label>
-      <label><input type="radio" name="q1"> C. font-color</label>
-      <label><input type="radio" name="q1"> D. text-color</label>
-    </div>
-
-    <div class="question">
-      <strong>2. Which CSS property is used to change the background color of an element?</strong>
-      <label><input type="radio" name="q2"> A. color</label>
-      <label><input type="radio" name="q2"> B. background-color</label>
-      <label><input type="radio" name="q2"> C. bgcolor</label>
-      <label><input type="radio" name="q2"> D. background</label>
-    </div>
-
-    <div class="question">
-      <strong>3. Which CSS property is used to add a background image to an element?</strong>
-      <label><input type="radio" name="q3"> A. background-image</label>
-      <label><input type="radio" name="q3"> B. image-background</label>
-      <label><input type="radio" name="q3"> C. bg-image</label>
-      <label><input type="radio" name="q3"> D. background-url</label>
-    </div>
-
-    <div class="question">
-      <strong>4. Which CSS property is used to resize a background image to fit an element?</strong>
-      <label><input type="radio" name="q4"> A. background-fit</label>
-      <label><input type="radio" name="q4"> B. background-size</label>
-      <label><input type="radio" name="q4"> C. image-size</label>
-      <label><input type="radio" name="q4"> D. background-scale</label>
-    </div>
-
-    <div class="question">
-      <strong>5. The CSS property that sets the color of the text is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>6. The CSS property that sets the color behind the content of an element is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>7. The CSS property that sets an image as the background is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>8. This CSS property controls how a background image is stretched, scaled, or fit within an element.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>9. This CSS property changes the color of text in an element.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>10. This CSS property sets a color behind the element’s content, like a highlight.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="buttons">
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-3.html'">⬅ Previous Lesson</button>
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-5.html'">Next Lesson ➤</button>
+<div class="quiz-container">
+    <div class="wood-border">
+        <div class="quiz-content">
+            <div class="main-title">
+                LESSON 4<br>
+                <span style="font-size:12px; font-weight:normal;">COLORS & BACKGROUNDS QUIZ</span>
+            </div>
+            <div class="quiz-panel">
+                <div class="top-bar">
+                    <div class="progress" id="progress">Question 1 / 10</div>
+                    <div class="timer" id="timer">05:00</div>
+                </div>
+                <div id="questionContainer" class="question-box"></div>
+                <div class="nav-row">
+                    <button id="nextBtn">NEXT →</button>
+                    <button id="finishBtn">FINISH & SCORE</button>
+                    <button id="backBtn">← BACK</button>
+                </div>
+                <div id="resultBox">Complete all questions for your score!</div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+const questions = [
+  { type: "mc", text: "1. Which CSS property is used to change the text color of an element?", options: ["background-color","color","font-color","text-color"], correct: 1 },
+  { type: "mc", text: "2. Which CSS property is used to change the background color of an element?", options: ["color","background-color","bgcolor","background"], correct: 1 },
+  { type: "mc", text: "3. Which CSS property is used to add a background image to an element?", options: ["background-image","image-background","bg-image","background-url"], correct: 0 },
+  { type: "mc", text: "4. Which CSS property is used to resize a background image to fit an element?", options: ["background-fit","background-size","image-size","background-scale"], correct: 1 },
+  { type: "fill", text: "5. The CSS property that sets the color of the text is called ________.", correctText: "color" },
+  { type: "fill", text: "6. The CSS property that sets the color behind the content of an element is called ________.", correctText: "background-color" },
+  { type: "fill", text: "7. The CSS property that sets an image as the background is called ________.", correctText: "background-image" },
+  { type: "fill", text: "8. This CSS property controls how a background image is stretched, scaled, or fit within an element.", correctText: "background-size" },
+  { type: "fill", text: "9. This CSS property changes the color of text in an element.", correctText: "color" },
+  { type: "fill", text: "10. This CSS property sets a color behind the element’s content, like a highlight.", correctText: "background-color" }
+];
+
+let TOTAL_TIME_SECONDS = 5 * 60;
+let currentIndex = 0;
+let userAnswers = new Array(questions.length).fill(null);
+let remainingSeconds = TOTAL_TIME_SECONDS;
+let quizCompleted = false;
+let timerInterval = null;
+
+const questionContainer = document.getElementById("questionContainer");
+const progress = document.getElementById("progress");
+const timerDisplay = document.getElementById("timer");
+const nextBtn = document.getElementById("nextBtn");
+const finishBtn = document.getElementById("finishBtn");
+const backBtn = document.getElementById("backBtn");
+const resultBox = document.getElementById("resultBox");
+
+function formatTime(secs){const m=Math.floor(secs/60);const s=secs%60;return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;}
+function updateTimerDisplay(){timerDisplay.textContent=formatTime(remainingSeconds);}
+function startTimer(){
+    if(timerInterval!==null||quizCompleted||remainingSeconds<=0)return;
+    timerInterval=setInterval(()=>{
+        remainingSeconds--;
+        updateTimerDisplay();
+        if(remainingSeconds<=0){clearInterval(timerInterval);timerInterval=null;if(!quizCompleted)finishQuiz();}
+    },1000);
+}
+function loadQuestion(index){
+    const q=questions[index];
+    questionContainer.innerHTML=`<div class="question-text">${q.text}</div>`;
+    if(q.type==="mc"){
+        const optionsDiv=document.createElement("div");
+        optionsDiv.className="options";
+        q.options.forEach((opt,i)=>{
+            const label=document.createElement("label");
+            const radio=document.createElement("input");
+            radio.type="radio";radio.name="mc";radio.value=i;
+            if(userAnswers[index]===i)radio.checked=true;
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(` ${opt}`));
+            optionsDiv.appendChild(label);
+        });
+        questionContainer.appendChild(optionsDiv);
+    }else{
+        const input=document.createElement("input");
+        input.type="text";input.id="fillInput";input.className="fill-input";input.placeholder="Type your answer here...";
+        if(userAnswers[index])input.value=userAnswers[index];
+        questionContainer.appendChild(input);
+    }
+}
+function updateUI(){
+    loadQuestion(currentIndex);
+    if(quizCompleted){
+        progress.textContent=`Quiz Complete!`;
+        timerDisplay.textContent=`00:00`;
+        nextBtn.style.display="none";
+        finishBtn.style.display="none";
+        backBtn.style.display="inline-block";
+        const score=calculateScore();
+        const percent=Math.round((score/questions.length)*100);
+        resultBox.innerHTML=`<strong>FINAL SCORE: ${score} / ${questions.length}</strong><br><span style="font-size:8px;">${percent}% - Lesson mastery logged!</span>`;
+        resultBox.className="result-success";
+        resultBox.style.display="block";
+    }else{
+        progress.textContent=`Question ${currentIndex+1} / ${questions.length}`;
+        if(currentIndex===questions.length-1){
+            nextBtn.style.display="none";finishBtn.style.display="inline-block";
+        }else{
+            nextBtn.style.display="inline-block";finishBtn.style.display="none";
+        }
+        backBtn.style.display="none";
+        resultBox.style.display="none";
+    }
+}
+function saveCurrentAnswer(){
+    if(quizCompleted)return;
+    const q=questions[currentIndex];
+    if(q.type==="mc"){
+        const checked=document.querySelector('input[name="mc"]:checked');
+        userAnswers[currentIndex]=checked?parseInt(checked.value):null;
+    }else{
+        const input=document.getElementById("fillInput");
+        userAnswers[currentIndex]=input?input.value.trim():"";
+    }
+}
+function calculateScore(){
+    let score=0;
+    questions.forEach((q,i)=>{
+        if(q.type==="mc"){
+            if(userAnswers[i]===q.correct)score++;
+        }else{
+            const user=(userAnswers[i]||"").trim().toLowerCase();
+            const corr=q.correctText.toLowerCase();
+            if(user===corr)score++;
+        }
+    });return score;
+}
+function finishQuiz(){
+    if(quizCompleted)return;
+    quizCompleted=true;
+    saveCurrentAnswer();
+    if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+    updateUI();
+}
+nextBtn.addEventListener("click",()=>{if(quizCompleted)return;saveCurrentAnswer();if(currentIndex<questions.length-1){currentIndex++;updateUI();}});
+finishBtn.addEventListener("click",()=>finishQuiz());
+backBtn.addEventListener("click",()=>{window.location.href='../../../Modular/Lessons/CSS/lesson-3.html';});
+
+updateTimerDisplay();
+updateUI();
+startTimer();
+</script>
 </body>
 </html>
-
-
