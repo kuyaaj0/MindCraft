@@ -1,221 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindCraft CSS Quiz - Lesson 7</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<style>
-* { box-sizing: border-box; }
-
-body {
-  margin:0;
-  font-family:'Press Start 2P',cursive;
-  background:radial-gradient(circle at top,#f3fcff,#bfeaff,#67c2ff);
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding-top:20px;
-}
-
-.scene {
-  position:relative;
-  width:100%;
-  max-width:1200px;
-  min-height:92vh;
-  background:linear-gradient(120deg,#eafcff,#c6f0ff,#a4e2c1,#74cfa0);
-  background-size:300% 300%;
-  animation:bgShift 12s ease infinite;
-  border-radius:28px;
-  box-shadow:0 50px 100px rgba(0,0,0,.35);
-  overflow:hidden;
-  padding:20px 40px;
-}
-
-@keyframes bgShift {
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
-}
-
-.grid {
-  position:absolute;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size:60px 60px;
-  opacity:.25;
-}
-
-.title {
-  position:absolute;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:24px 64px;
-  background:linear-gradient(#c97a36,#8b4d1a);
-  color:white;
-  font-size:1.6rem;
-  border-radius:24px;
-  text-shadow:4px 4px 0 black;
-  z-index:5;
-  text-align:center;
-}
-
-.menu {
-  position:relative;
-  margin-top:100px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  z-index:5;
-}
-
-.menu .question {
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(10px);
-  padding:18px 24px;
-  border-radius:18px;
-  color:#000;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.menu .question label {
-  cursor:pointer;
-  background:linear-gradient(#ffe08a,#f2a933);
-  padding:12px 16px;
-  border-radius:12px;
-  display:block;
-  transition:.2s;
-}
-
-.menu .question label:hover {
-  transform:translateX(6px);
-}
-
-.menu .question input[type="text"] {
-  padding:10px;
-  border-radius:12px;
-  border:none;
-}
-
-button.next {
-  align-self:center;
-  margin-top:12px;
-  background:linear-gradient(#46b46b,#2e7d4a);
-  color:white;
-  font-size:.7rem;
-  padding:14px 28px;
-  border:none;
-  border-radius:18px;
-  cursor:pointer;
-  box-shadow:0 6px 0 rgba(0,0,0,.25);
-  transition:.2s;
-}
-
-button.next:hover {
-  transform:translateY(-4px);
-  box-shadow:0 8px 0 rgba(0,0,0,.35);
-}
-
-.ground {
-  position:absolute;
-  bottom:0;
-  width:100%;
-  height:120px;
-  background:linear-gradient(#46b46b,#2e7d4a);
-  box-shadow:inset 0 12px 0 rgba(255,255,255,.25);
-}
-
-footer {
-  position:absolute;
-  bottom:10px;
-  width:100%;
-  text-align:center;
-  font-size:.5rem;
-  color:white;
-  text-shadow:1px 1px 0 black;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindCraft CSS Quiz - Lesson 7</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-size:10px;overflow:hidden;}
+    body{
+      font-family:'Press Start 2P', cursive;
+      background:linear-gradient(#87e4ff,#c8f7b0);
+      padding:20px;
+      margin:0;
+    }
+    .quiz-container{
+      max-width:1000px;
+      margin:0 auto;
+      height:calc(100vh - 40px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+    .wood-border{
+      width:100%;
+      max-width:900px;
+      height:90vh;
+      position:relative;
+      background:#8b5a2b;
+      border-radius:28px;
+      padding:16px;
+      box-shadow:inset -8px -8px 0 rgba(0,0,0,.3),0 12px 0 #5c3a1a;
+    }
+    .wood-border::before{
+      content:'MINDCRAFT CSS QUIZ';
+      position:absolute;
+      top:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#8b5a2b;
+      padding:6px 20px;
+      font-size:11px;
+      color:#ffd966;
+      text-shadow:2px 2px #000;
+      border-radius:10px;
+      box-shadow:0 4px 0 #5c3a1a;
+    }
+    .quiz-content{
+      height:100%;
+      width:100%;
+      background:linear-gradient(#8fe9ff 55%, #7dd37d);
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      z-index:2;
+    }
+    .main-title{
+      text-align:center;
+      font-size:16px;
+      text-shadow:3px 3px #fff;
+      margin-bottom:20px;
+      color:#006400;
+    }
+    .quiz-panel{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:16px;
+      overflow:auto;
+    }
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      font-size:9px;
+    }
+    .progress{ color:#006400; font-weight:bold; }
+    .timer{ color:#b8860b; font-weight:bold; }
+    .question-box{
+      background:#fff3cd;
+      border:3px solid #c9a227;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:24px;
+      line-height:1.6;
+      box-shadow:0 6px 0 #c9a227;
+      max-height:300px;
+    }
+    .question-text{
+      font-size:11px;
+      margin-bottom:16px;
+      font-weight:bold;
+    }
+    .options label{
+      display:block;
+      margin:10px 0;
+      cursor:pointer;
+      font-size:9px;
+    }
+    .options input{
+      margin-right:10px;
+      transform:scale(1.3);
+      accent-color:#006400;
+    }
+    .fill-input{
+      width:100%;
+      max-width:380px;
+      padding:12px;
+      border:3px solid #c9a227;
+      background:#fff;
+      border-radius:10px;
+      font-family:'Press Start 2P', cursive;
+      font-size:9px;
+      color:#000;
+      box-shadow:0 4px 0 #c9a227;
+    }
+    .nav-row{
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      margin-top:20px;
+    }
+    button{
+      font-family:'Press Start 2P', cursive;
+      background:#a56b34;
+      color:#fff;
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #5c3a1a;
+      cursor:pointer;
+      font-size:8px;
+      transition:transform 0.1s;
+      min-width:120px;
+    }
+    button:hover:not(:disabled){
+      transform:translateY(-2px);
+    }
+    button:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,.25), 0 2px 0 #5c3a1a;
+    }
+    #nextBtn{ background:#a56b34; }
+    #finishBtn{
+      background:#d4af37;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #b8860b;
+      display:none;
+    }
+    #backBtn{
+      background:#ff6b35;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #cc5533;
+      display:none;
+    }
+    #resultBox{
+      margin-top:24px;
+      padding:20px;
+      border-radius:12px;
+      font-size:10px;
+      text-align:center;
+      display:none;
+      box-shadow:0 6px 0 #6aa84f;
+    }
+    .result-success{
+      background:#d9ead3 !important;
+      border:4px solid #6aa84f !important;
+      color:#006400 !important;
+      display:block !important;
+    }
+  </style>
 </head>
 <body>
-<div class="scene">
-  <div class="grid"></div>
-  <div class="title">Lesson 7: Width & Height</div>
-
-  <div class="menu">
-
-    <div class="question">
-      <strong>1. Which CSS property sets the width of an element?</strong>
-      <label><input type="radio" name="q1"> A. height</label>
-      <label><input type="radio" name="q1"> B. width</label>
-      <label><input type="radio" name="q1"> C. max-width</label>
-      <label><input type="radio" name="q1"> D. min-width</label>
-    </div>
-
-    <div class="question">
-      <strong>2. Which CSS property sets the height of an element?</strong>
-      <label><input type="radio" name="q2"> A. width</label>
-      <label><input type="radio" name="q2"> B. height</label>
-      <label><input type="radio" name="q2"> C. max-width</label>
-      <label><input type="radio" name="q2"> D. min-height</label>
-    </div>
-
-    <div class="question">
-      <strong>3. Which CSS property sets the maximum width?</strong>
-      <label><input type="radio" name="q3"> A. width</label>
-      <label><input type="radio" name="q3"> B. height</label>
-      <label><input type="radio" name="q3"> C. max-width</label>
-      <label><input type="radio" name="q3"> D. min-width</label>
-    </div>
-
-    <div class="question">
-      <strong>4. Which layout type remains the same size on all screens?</strong>
-      <label><input type="radio" name="q4"> A. Fluid layout</label>
-      <label><input type="radio" name="q4"> B. Fixed layout</label>
-      <label><input type="radio" name="q4"> C. Responsive layout</label>
-      <label><input type="radio" name="q4"> D. Adaptive layout</label>
-    </div>
-
-    <div class="question">
-      <strong>5. A ________ layout changes its width automatically.</strong>
-      <input type="text">
-    </div>
-
-    <div class="question">
-      <strong>6. The CSS property used to prevent an element from becoming too wide is ________.</strong>
-      <input type="text">
-    </div>
-
-    <div class="question">
-      <strong>7. The CSS property that sets exact width is ________.</strong>
-      <input type="text">
-    </div>
-
-    <div class="question">
-      <strong>8. This layout type keeps elements at a specific size.</strong>
-      <input type="text">
-    </div>
-
-    <div class="question">
-      <strong>9. This layout type adjusts width based on screen size.</strong>
-      <input type="text">
-    </div>
-
-    <div class="question">
-      <strong>10. This CSS property limits how wide an element can grow.</strong>
-      <input type="text">
-    </div>
-
-    
-    <div style="display:flex; justify-content:space-between; margin-top:12px;">
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-6.html'">⬅ Previous Lesson</button>
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-8.html'">Next Lesson ➤</button>
+<div class="quiz-container">
+  <div class="wood-border">
+    <div class="quiz-content">
+      <div class="main-title">
+        LESSON 7<br>
+        <span style="font-size:12px; font-weight:normal;">CSS WIDTH & HEIGHT QUIZ</span>
+      </div>
+      <div class="quiz-panel">
+        <div class="top-bar">
+          <div class="progress" id="progress">Question 1 / 10</div>
+          <div class="timer" id="timer">05:00</div>
+        </div>
+        <div id="questionContainer" class="question-box"></div>
+        <div class="nav-row">
+          <button id="nextBtn">NEXT →</button>
+          <button id="finishBtn">FINISH & SCORE</button>
+          <button id="backBtn">← BACK</button>
+        </div>
+        <div id="resultBox">Complete all questions for your score!</div>
+      </div>
     </div>
   </div>
+</div>
+
+<script>
+const questions = [
+  {type:"mc", text:"1. Which CSS property sets the width of an element?", options:["height","width","max-width","min-width"], correct:1},
+  {type:"mc", text:"2. Which CSS property sets the height of an element?", options:["width","height","max-width","min-height"], correct:1},
+  {type:"mc", text:"3. Which CSS property sets the maximum width?", options:["width","height","max-width","min-width"], correct:2},
+  {type:"mc", text:"4. Which layout type remains the same size on all screens?", options:["Fluid layout","Fixed layout","Responsive layout","Adaptive layout"], correct:1},
+  {type:"fill", text:"5. A ________ layout changes its width automatically.", correctText:"fluid"},
+  {type:"fill", text:"6. The CSS property used to prevent an element from becoming too wide is ________.", correctText:"max-width"},
+  {type:"fill", text:"7. The CSS property that sets exact width is ________.", correctText:"width"},
+  {type:"fill", text:"8. This layout type keeps elements at a specific size.", correctText:"fixed"},
+  {type:"fill", text:"9. This layout type adjusts width based on screen size.", correctText:"responsive"},
+  {type:"fill", text:"10. This CSS property limits how wide an element can grow.", correctText:"max-width"}
+];
+
+const TOTAL_TIME_SECONDS = 5*60;
+let currentIndex=0, userAnswers=new Array(questions.length).fill(null);
+let remainingSeconds=TOTAL_TIME_SECONDS, quizCompleted=false, timerInterval=null;
+
+const questionContainer=document.getElementById("questionContainer"),
+progress=document.getElementById("progress"),
+timerDisplay=document.getElementById("timer"),
+nextBtn=document.getElementById("nextBtn"),
+finishBtn=document.getElementById("finishBtn"),
+backBtn=document.getElementById("backBtn"),
+resultBox=document.getElementById("resultBox");
+
+function formatTime(secs){
+  const m=Math.floor(secs/60), s=secs%60;
+  return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+}
+function updateTimerDisplay(){timerDisplay.textContent=formatTime(remainingSeconds);}
+function startTimer(){
+  if(timerInterval!==null||quizCompleted||remainingSeconds<=0)return;
+  timerInterval=setInterval(()=>{
+    remainingSeconds--;
+    updateTimerDisplay();
+    if(remainingSeconds<=0){
+      clearInterval(timerInterval); timerInterval=null;
+      if(!quizCompleted)finishQuiz();
+    }
+  },1000);
+}
+function loadQuestion(index){
+  const q=questions[index];
+  questionContainer.innerHTML=`<div class="question-text">${q.text}</div>`;
+  if(q.type==="mc"){
+    const optionsDiv=document.createElement("div");
+    optionsDiv.className="options";
+    q.options.forEach((opt,i)=>{
+      const label=document.createElement("label");
+      const radio=document.createElement("input");
+      radio.type="radio"; radio.name="mc"; radio.value=i;
+      if(userAnswers[index]===i)radio.checked=true;
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(` ${opt}`));
+      optionsDiv.appendChild(label);
+    });
+    questionContainer.appendChild(optionsDiv);
+  }else{
+    const input=document.createElement("input");
+    input.type="text"; input.id="fillInput"; input.className="fill-input";
+    input.placeholder="Type your answer here...";
+    if(userAnswers[index])input.value=userAnswers[index];
+    questionContainer.appendChild(input);
+  }
+}
+function updateUI(){
+  loadQuestion(currentIndex);
+  if(quizCompleted){
+    progress.textContent=`Quiz Complete!`;
+    timerDisplay.textContent=`00:00`;
+    nextBtn.style.display="none";
+    finishBtn.style.display="none";
+    backBtn.style.display="inline-block";
+    const score=calculateScore();
+    const percentage=Math.round((score/questions.length)*100);
+    resultBox.innerHTML=`<strong>FINAL SCORE: ${score} / ${questions.length}</strong><br><span style="font-size:8px;">${percentage}% - Lesson mastery logged!</span>`;
+    resultBox.className="result-success";
+    resultBox.style.display="block";
+  }else{
+    progress.textContent=`Question ${currentIndex+1} / ${questions.length}`;
+    if(currentIndex===questions.length-1){
+      nextBtn.style.display="none";
+      finishBtn.style.display="inline-block";
+    }else{
+      nextBtn.style.display="inline-block";
+      finishBtn.style.display="none";
+    }
+    backBtn.style.display="none";
+    resultBox.style.display="none";
+  }
+}
+function saveCurrentAnswer(){
+  if(quizCompleted)return;
+  const q=questions[currentIndex];
+  if(q.type==="mc"){
+    const checked=document.querySelector('input[name="mc"]:checked');
+    userAnswers[currentIndex]=checked?parseInt(checked.value):null;
+  }else{
+    const input=document.getElementById("fillInput");
+    userAnswers[currentIndex]=input?input.value.trim():"";
+  }
+}
+function calculateScore(){
+  let score=0;
+  questions.forEach((q,i)=>{
+    if(q.type==="mc"){ if(userAnswers[i]===q.correct)score++; }
+    else{
+      const user=(userAnswers[i]||"").trim().toLowerCase();
+      const correct=q.correctText.toLowerCase();
+      if(user===correct)score++;
+    }
+  });
+  return score;
+}
+function finishQuiz(){
+  if(quizCompleted)return;
+  quizCompleted=true;
+  saveCurrentAnswer();
+  if(timerInterval){clearInterval(timerInterval); timerInterval=null;}
+  updateUI();
+}
+nextBtn.addEventListener("click", ()=>{
+  if(quizCompleted)return;
+  saveCurrentAnswer();
+  if(currentIndex<questions.length-1){
+    currentIndex++;
+    updateUI();
+  }
+});
+finishBtn.addEventListener("click", ()=>finishQuiz());
+backBtn.addEventListener("click", ()=>{
+  window.location.href='../../../Modular/Lessons/CSS/lesson-8.html';
+});
+updateTimerDisplay(); updateUI(); startTimer();
+</script>
 </body>
 </html>
-
