@@ -1034,12 +1034,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeLanguagePanel() {
+  // Hide the panel and backdrop
+  if (panel) {
     panel.style.display = 'none';
-    panel.querySelector('.quiz-list').style.display = 'none';
-    backdrop.style.display = 'none';
-    document.body.classList.remove('blur-active');
-    document.body.style.overflow = '';
+    panel.classList.remove('opening');
+
+    // Clear all panel content
+    const quizList = panel.querySelector('.quiz-list');
+    if (quizList) quizList.style.display = 'none';
+
+    const content = panel.querySelector('.panel-content');
+    if (content) content.innerHTML = ''; // clears leftover buttons
+
+    const title = panel.querySelector('.panel-title');
+    if (title) title.innerHTML = ''; // clear the image + text too
   }
+
+  // Hide blur background
+  if (backdrop) backdrop.style.display = 'none';
+
+  // Re-enable scroll
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+
+  // Remove blur-active if applied
+  document.body.classList.remove('blur-active');
+}
 
   // clicking the backdrop does NOT close or redirect
   backdrop.addEventListener('click', (e) => {
