@@ -1,277 +1,209 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lesson 13 - Flexbox Basics | MindCraft</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-<style>
-body {
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  padding: 0;
-}
-
-.quiz-container {
-  max-width: 700px;
-  margin: 50px auto;
-  padding: 25px;
-  background: rgba(0,0,0,0.5);
-  border-radius: 12px;
-  box-shadow: 0 0 15px #1DB954;
-}
-
-.choice {
-  display: block;
-  margin: 10px auto;
-  padding: 12px;
-  width: 80%;
-  max-width: 400px;
-  border-radius: 10px;
-  background: #1DB954;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'Press Start 2P', cursive;
-}
-.choice:disabled {
-  cursor: not-allowed;
-  background: #555;
-}
-
-/* Correct/wrong colors */
-.choice.correct { background: #00c853 !important; } /* green */
-.choice.wrong { background: #d50000 !important; } /* red */
-
-input[type="text"] {
-  width: 70%;
-  max-width: 350px;
-  padding: 12px;
-  margin-top: 15px;
-  border-radius: 8px;
-  border: none;
-  text-align: center;
-  font-family: 'Press Start 2P', cursive;
-}
-
-#submitBtn, #nextBtn, #finishBtn {
-  display: none;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #1DB954;
-  border: none;
-  border-radius: 10px;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'Press Start 2P', cursive;
-}
-
-#popupOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindCraft CSS Quiz - Lesson 13</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-size:10px;overflow:hidden;}
+    body{
+      font-family:'Press Start 2P',cursive;
+      background:linear-gradient(#87e4ff,#c8f7b0);
+      padding:20px;
+    }
+    .quiz-container{
+      max-width:1000px;margin:0 auto;
+      height:calc(100vh - 40px);
+      display:flex;align-items:center;justify-content:center;
+    }
+    .wood-border{
+      width:100%;max-width:900px;height:90vh;position:relative;
+      background:#8b5a2b;border-radius:28px;padding:16px;
+      box-shadow:inset -8px -8px 0 rgba(0,0,0,.3),0 12px 0 #5c3a1a;
+    }
+    .wood-border::before{
+      content:'MINDCRAFT CSS QUIZ';
+      position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+      background:#8b5a2b;padding:6px 20px;font-size:11px;
+      color:#ffd966;text-shadow:2px 2px #000;border-radius:10px;
+      box-shadow:0 4px 0 #5c3a1a;
+    }
+    .quiz-content{
+      height:100%;width:100%;
+      background:linear-gradient(#8fe9ff 55%,#7dd37d);
+      border-radius:16px;padding:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      display:flex;flex-direction:column;position:relative;z-index:2;
+    }
+    .main-title{text-align:center;font-size:16px;text-shadow:3px 3px #fff;margin-bottom:20px;color:#006400;}
+    .quiz-panel{flex:1;display:flex;flex-direction:column;justify-content:center;padding:16px;overflow:auto;}
+    .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;font-size:9px;}
+    .progress{color:#006400;font-weight:bold;}
+    .timer{color:#b8860b;font-weight:bold;}
+    .question-box{
+      background:#fff3cd;border:3px solid #c9a227;padding:20px;
+      border-radius:12px;margin-bottom:24px;line-height:1.6;
+      box-shadow:0 6px 0 #c9a227;max-height:300px;
+    }
+    .question-text{font-size:11px;margin-bottom:16px;font-weight:bold;}
+    .options label{display:block;margin:10px 0;cursor:pointer;font-size:9px;}
+    .options input{margin-right:10px;transform:scale(1.3);accent-color:#006400;}
+    .fill-input{
+      width:100%;max-width:380px;padding:12px;
+      border:3px solid #c9a227;background:#fff;border-radius:10px;
+      font-family:'Press Start 2P',cursive;font-size:9px;color:#000;
+      box-shadow:0 4px 0 #c9a227;
+    }
+    .nav-row{display:flex;justify-content:center;gap:16px;margin-top:20px;}
+    button{
+      font-family:'Press Start 2P',cursive;background:#a56b34;color:#fff;border:none;
+      padding:12px 20px;border-radius:12px;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #5c3a1a;
+      cursor:pointer;font-size:8px;transition:transform .1s;min-width:120px;
+    }
+    button:hover:not(:disabled){transform:translateY(-2px);}
+    button:disabled{opacity:.5;cursor:not-allowed;transform:none;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 2px 0 #5c3a1a;}
+    #nextBtn{background:#a56b34;}
+    #finishBtn{
+      background:#d4af37;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #b8860b;
+      display:none;
+    }
+    #backBtn{
+      background:#ff6b35;
+      box-shadow:inset -4px -4px 0 rgba(0,0,0,.25),0 6px 0 #cc5533;
+      display:none;
+    }
+    #resultBox{
+      margin-top:24px;padding:20px;border-radius:12px;
+      font-size:10px;text-align:center;display:none;
+      box-shadow:0 6px 0 #6aa84f;
+    }
+    .result-success{
+      background:#d9ead3!important;border:4px solid #6aa84f!important;
+      color:#006400!important;display:block!important;
+    }
+  </style>
 </head>
-
 <body>
-
 <div class="quiz-container">
-  <h2>Lesson 13: Flexbox Basics</h2>
-  <h4 id="progress"></h4>
-  <h4 id="timer">Time Left: 15:00</h4>
-
-  <div id="questionContainer"></div>
-  <div id="result"></div>
-
-  <button id="submitBtn">Submit Answer</button>
-  <button id="nextBtn">Next Question</button>
-  <button id="finishBtn">Finish Level</button>
-</div>
-
-<div id="popupOverlay">
-  <h2>Level Complete</h2>
-  <p id="xpGain"></p>
+  <div class="wood-border">
+    <div class="quiz-content">
+      <div class="main-title">
+        LESSON 13<br>
+        <span style="font-size:12px;font-weight:normal;">CSS FLEXBOX BASICS</span>
+      </div>
+      <div class="quiz-panel">
+        <div class="top-bar">
+          <div class="progress" id="progress">Question 1 / 10</div>
+          <div class="timer" id="timer">15:00</div>
+        </div>
+        <div id="questionContainer" class="question-box"></div>
+        <div class="nav-row">
+          <button id="nextBtn">NEXT →</button>
+          <button id="finishBtn">FINISH & SCORE</button>
+          <button id="backBtn">← BACK</button>
+        </div>
+        <div id="resultBox">Complete all questions for your score!</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-function initQuiz() {
-  let current = 0;
-  let xp = 0;
-  const XP_PER = 5;
+const questions=[
+ {type:"mc",text:"1. Which property defines a flex container?",options:["display: block","display: grid","display: flex","display: inline"],correct:2},
+ {type:"mc",text:"2. Which property changes the main axis direction?",options:["flex-wrap","justify-content","flex-direction","align-items"],correct:2},
+ {type:"mc",text:"3. Which property aligns items vertically (cross-axis)?",options:["justify-content","align-items","flex-wrap","gap"],correct:1},
+ {type:"mc",text:"4. Which value allows items to move to the next line?",options:["nowrap","row","wrap","column"],correct:2},
+ {type:"fill",text:"5. Flexbox works in ________ dimension(s).",correctText:"one"},
+ {type:"fill",text:"6. The default flex direction is ________.",correctText:"row"},
+ {type:"fill",text:"7. The ________ property aligns items along the main axis.",correctText:"justify-content"},
+ {type:"fill",text:"8. Parent element that enables Flexbox.",correctText:"flex container"},
+ {type:"fill",text:"9. Property that controls item wrapping.",correctText:"flex-wrap"},
+ {type:"fill",text:"10. Property that spaces items horizontally.",correctText:"justify-content"}
+];
 
-  /* ===== TIMER ===== */
-  let totalTime = 15 * 60;
-  const timerEl = document.getElementById("timer");
+const TOTAL_TIME_SECONDS=15*60;
+let currentIndex=0,userAnswers=new Array(questions.length).fill(null);
+let remainingSeconds=TOTAL_TIME_SECONDS,quizCompleted=false,timerInterval=null;
+const questionContainer=document.getElementById("questionContainer"),
+progress=document.getElementById("progress"),
+timerDisplay=document.getElementById("timer"),
+nextBtn=document.getElementById("nextBtn"),
+finishBtn=document.getElementById("finishBtn"),
+backBtn=document.getElementById("backBtn"),
+resultBox=document.getElementById("resultBox");
 
-  const timer = setInterval(() => {
-    totalTime--;
-    const m = Math.floor(totalTime / 60);
-    const s = totalTime % 60;
-    timerEl.textContent = `Time Left: ${m}:${s.toString().padStart(2,'0')}`;
-
-    if (totalTime <= 0) {
-      clearInterval(timer);
-      showPopup();
-    }
-  }, 1000);
-
-  const quiz = [
-    { type:"mc", q:"Which property defines a flex container?",
-      choices:["display: block","display: grid","display: flex","display: inline"], a:2 },
-
-    { type:"mc", q:"Which property changes the main axis direction?",
-      choices:["flex-wrap","justify-content","flex-direction","align-items"], a:2 },
-
-    { type:"mc", q:"Which property aligns items vertically (cross-axis)?",
-      choices:["justify-content","align-items","flex-wrap","gap"], a:1 },
-
-    { type:"mc", q:"Which value allows items to move to the next line?",
-      choices:["nowrap","row","wrap","column"], a:2 },
-
-    { type:"fill", q:"Flexbox works in ________ dimension(s).",
-      a:"one" },
-
-    { type:"fill", q:"The default flex direction is ________.",
-      a:"row" },
-
-    { type:"fill", q:"The ________ property aligns items along the main axis.",
-      a:"justify-content" },
-
-    { type:"id", q:"Parent element that enables Flexbox",
-      a:"flex container" },
-
-    { type:"id", q:"Property that controls item wrapping",
-      a:"flex-wrap" },
-
-    { type:"id", q:"Property that spaces items horizontally",
-      a:"justify-content" }
-  ];
-
-  const qc = document.getElementById("questionContainer");
-  const res = document.getElementById("result");
-  const prog = document.getElementById("progress");
-  const submit = document.getElementById("submitBtn");
-  const next = document.getElementById("nextBtn");
-  const finish = document.getElementById("finishBtn");
-
-  /* ===== GLOBAL ENTER KEY SHORTCUT ===== */
-  document.addEventListener("keydown", e => {
-    if (e.key !== "Enter") return;
-
-    if (submit.style.display === "inline-block" && !submit.disabled) {
-      submit.click();
-    } else if (next.style.display === "inline-block") {
-      next.click();
-    } else if (finish.style.display === "inline-block") {
-      finish.click();
-    }
-  });
-
-  function loadQ() {
-    qc.innerHTML = "";
-    res.textContent = "";
-    submit.style.display = next.style.display = finish.style.display = "none";
-    submit.disabled = false;
-
-    const q = quiz[current];
-    prog.textContent = `Question ${current + 1} of ${quiz.length}`;
-
-    const h3 = document.createElement("h3");
-    h3.textContent = q.q;
-    qc.appendChild(h3);
-
-    if (q.type === "mc") {
-      q.choices.forEach((c,i)=>{
-        const btn = document.createElement("button");
-        btn.textContent = c;
-        btn.className = "choice";
-        btn.onclick = () => checkMC(i);
-        qc.appendChild(btn);
-      });
-    } else {
-      const input = document.createElement("input");
-      input.type = "text";
-      input.id = "answerInput";
-      input.placeholder = "Type your answer";
-      qc.appendChild(input);
-      submit.style.display = "inline-block";
-      input.focus();
-    }
-  }
-
-  function checkMC(selectedIndex) {
-    const buttons = document.querySelectorAll(".choice");
-    const correctIndex = quiz[current].a;
-
-    buttons.forEach((btn, i) => {
-      btn.disabled = true;
-      if (i === correctIndex) btn.classList.add("correct");
-      if (i === selectedIndex && i !== correctIndex) btn.classList.add("wrong");
-    });
-
-    if (selectedIndex === correctIndex) {
-      xp += XP_PER;
-      res.textContent = "Correct!";
-    } else {
-      res.textContent = "Wrong! The correct answer is highlighted.";
-    }
-    showNav();
-  }
-
-  submit.onclick = () => {
-    const input = document.getElementById("answerInput");
-    const user = input.value.trim().toLowerCase();
-    const correct = quiz[current].a.toLowerCase();
-
-    input.disabled = true;
-    submit.disabled = true;
-
-    if (user === correct) {
-      xp += XP_PER;
-      res.textContent = "Correct!";
-    } else {
-      res.textContent = `Wrong! Correct answer: ${quiz[current].a}`;
-    }
-    showNav();
-  };
-
-  function showNav() {
-    if (current < quiz.length - 1) {
-      next.style.display = "inline-block";
-    } else {
-      finish.style.display = "inline-block";
-    }
-  }
-
-  next.onclick = () => {
-    current++;
-    loadQ();
-  };
-
-  finish.onclick = () => {
-    clearInterval(timer);
-    showPopup();
-  };
-
-  function showPopup() {
-    document.getElementById("popupOverlay").style.display = "flex";
-    document.getElementById("xpGain").textContent = `+${xp} XP Gained`;
-  }
-
-  loadQ();
+function formatTime(s){const m=Math.floor(s/60),sec=s%60;return `${m.toString().padStart(2,"0")}:${sec.toString().padStart(2,"0")}`;}
+function updateTimerDisplay(){timerDisplay.textContent=formatTime(remainingSeconds);}
+function startTimer(){if(timerInterval)return;timerInterval=setInterval(()=>{remainingSeconds--;updateTimerDisplay();if(remainingSeconds<=0){clearInterval(timerInterval);finishQuiz();}},1000);}
+function loadQuestion(i){
+ const q=questions[i];
+ questionContainer.innerHTML=`<div class="question-text">${q.text}</div>`;
+ if(q.type==="mc"){
+   const div=document.createElement("div");div.className="options";
+   q.options.forEach((opt,idx)=>{
+     const label=document.createElement("label");
+     const input=document.createElement("input");
+     input.type="radio";input.name="mc";input.value=idx;
+     if(userAnswers[i]===idx)input.checked=true;
+     label.appendChild(input);label.appendChild(document.createTextNode(" "+opt));div.appendChild(label);
+   });questionContainer.appendChild(div);
+ }else{
+   const input=document.createElement("input");
+   input.type="text";input.id="fillInput";input.className="fill-input";
+   input.placeholder="Type your answer here...";
+   if(userAnswers[i])input.value=userAnswers[i];
+   questionContainer.appendChild(input);
+ }
 }
-
-initQuiz();
+function updateUI(){
+ loadQuestion(currentIndex);
+ if(quizCompleted){
+   progress.textContent="Quiz Complete!";timerDisplay.textContent="00:00";
+   nextBtn.style.display="none";finishBtn.style.display="none";backBtn.style.display="inline-block";
+   const score=calculateScore();const pct=Math.round((score/questions.length)*100);
+   resultBox.innerHTML=`<strong>FINAL SCORE: ${score} / ${questions.length}</strong><br><span style="font-size:8px;">${pct}% – You’ve mastered Flexbox basics!</span>`;
+   resultBox.className="result-success";resultBox.style.display="block";
+ }else{
+   progress.textContent=`Question ${currentIndex+1} / ${questions.length}`;
+   nextBtn.style.display=currentIndex===questions.length-1?"none":"inline-block";
+   finishBtn.style.display=currentIndex===questions.length-1?"inline-block":"none";
+   backBtn.style.display="none";resultBox.style.display="none";
+ }
+}
+function saveCurrentAnswer(){
+ if(quizCompleted)return;
+ const q=questions[currentIndex];
+ if(q.type==="mc"){
+   const sel=document.querySelector('input[name="mc"]:checked');
+   userAnswers[currentIndex]=sel?parseInt(sel.value):null;
+ }else{
+   const input=document.getElementById("fillInput");
+   userAnswers[currentIndex]=input?input.value.trim():"";
+ }
+}
+function calculateScore(){
+ let s=0;
+ questions.forEach((q,i)=>{
+   if(q.type==="mc"){if(userAnswers[i]===q.correct)s++;}
+   else{const u=(userAnswers[i]||"").trim().toLowerCase();if(u===q.correctText.toLowerCase())s++;}
+ });return s;
+}
+function finishQuiz(){
+ if(quizCompleted)return;
+ quizCompleted=true;saveCurrentAnswer();
+ if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+ updateUI();
+}
+nextBtn.addEventListener("click",()=>{if(quizCompleted)return;saveCurrentAnswer();if(currentIndex<questions.length-1){currentIndex++;updateUI();}});
+finishBtn.addEventListener("click",()=>finishQuiz());
+backBtn.addEventListener("click",()=>window.location.href='../../../Modular/Lessons/CSS/lesson-12.html');
+updateTimerDisplay();updateUI();startTimer();
 </script>
-
 </body>
 </html>
