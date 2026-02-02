@@ -1034,31 +1034,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeLanguagePanel() {
-  // Hide the panel and backdrop
   if (panel) {
     panel.style.display = 'none';
     panel.classList.remove('opening');
 
-    // Clear all panel content
+    // Hide quiz list and clear lessons/quiz area
     const quizList = panel.querySelector('.quiz-list');
     if (quizList) quizList.style.display = 'none';
 
     const content = panel.querySelector('.panel-content');
-    if (content) content.innerHTML = ''; // clears leftover buttons
+    if (content) content.innerHTML = ''; // remove lesson + quiz buttons
 
-    const title = panel.querySelector('.panel-title');
-    if (title) title.innerHTML = ''; // clear the image + text too
+    // Reset title content, but keep structure intact
+    const titleImg = panel.querySelector('.panel-title img');
+    const titleText = panel.querySelector('.panel-title .titleText');
+    if (titleImg) titleImg.src = '';
+    if (titleText) titleText.textContent = '';
+
+    // Hide backdrop and remove blur
+    if (backdrop) backdrop.style.display = 'none';
+    document.body.classList.remove('blur-active');
+
+    // Restore scroll
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
   }
-
-  // Hide blur background
-  if (backdrop) backdrop.style.display = 'none';
-
-  // Re-enable scroll
-  document.documentElement.style.overflow = '';
-  document.body.style.overflow = '';
-
-  // Remove blur-active if applied
-  document.body.classList.remove('blur-active');
 }
 
   // clicking the backdrop does NOT close or redirect
