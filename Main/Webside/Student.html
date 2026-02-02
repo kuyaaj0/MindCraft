@@ -50,8 +50,18 @@ header {
   padding: 0 10px;
 }
 
-.xp-status { display: flex; align-items: center; gap: 5px; }
-.xp-bar-container { display: flex; align-items: center; gap: 3px; min-width: 120px; }
+.xp-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.xp-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 120px;
+}
 
 #xpValue {
   display: inline-block;
@@ -67,11 +77,16 @@ header {
   text-overflow: ellipsis;
   vertical-align: middle;
 }
+
+/* Shrinks when big numbers appear */
 @media (max-width: 480px) {
-  #xpValue { font-size: 0.45rem; max-width: 100px; }
+  #xpValue {
+    font-size: 0.45rem;
+    max-width: 100px;
+  }
 }
 
-/* Tooltip styling */
+/* Tooltip styling for hover/long-press display */
 #xpTooltip {
   position: fixed;
   background: rgba(0, 0, 0, 0.85);
@@ -86,10 +101,21 @@ header {
   transition: opacity 0.2s ease, transform 0.2s ease;
   transform: scale(0.9);
 }
-#xpTooltip.show { opacity: 1; transform: scale(1); }
 
-#xpBar { width: 80px; height: 10px; }
-.level-display { font-size: 0.6rem; text-align: center; }
+#xpTooltip.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#xpBar {
+  width: 80px;
+  height: 10px;
+}
+
+.level-display {
+  font-size: 0.6rem;
+  text-align: center;
+}
 
 .user-actions {
   display: flex;
@@ -126,7 +152,9 @@ button:hover { background: #1ed760; transform: scale(1.05); }
   text-align: center;
   min-width: 60px;
 }
-.rank-top { animation: glowPulse 1.7s infinite alternate; }
+.rank-top {
+  animation: glowPulse 1.7s infinite alternate;
+}
 @keyframes glowPulse {
   0% { box-shadow: 0 0 5px #fff; }
   50% { box-shadow: 0 0 12px #fff; }
@@ -154,7 +182,7 @@ main {
   max-width: 600px;
   margin: 20px auto;
   box-shadow: 0 0 15px rgba(29,185,84,0.25);
-  overflow: hidden;
+  overflow: visible;
   z-index: 10;
   transition: all 0.3s ease;
 }
@@ -168,6 +196,7 @@ main {
   position: relative;
   min-height: 200px;
 }
+
 .language-card {
   display: none;
   flex-direction: column;
@@ -192,46 +221,66 @@ main {
   box-shadow: 0 0 20px #1DB954;
   animation: fadeSlideIn 0.4s ease;
 }
-.language-card img { width: 70px; height: 70px; }
-.language-card p { margin-top: 10px; font-size: 0.6rem; }
+.language-card img {
+  width: 70px;
+  height: 70px;
+}
+.language-card p {
+  margin-top: 10px;
+  font-size: 0.6rem;
+}
 @keyframes fadeSlideIn {
   0% { opacity: 0; transform: translateX(40px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* === Auto-Responsive Navigation Arrows === */
+/* === Navigation Arrows (OUTSIDE language selector) === */
 .nav-arrow {
   position: absolute;
-  bottom: 2vh;
+  top: 50%;
+  transform: translateY(-50%);
   background: rgba(29,185,84,0.9);
   border: none;
   color: white;
   font-family: 'Press Start 2P', cursive;
   font-size: clamp(0.45rem, 2vw, 0.6rem);
-  padding: 0.6em 1em;
+  padding: 8px 12px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.12s ease;
-  z-index: 12;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 15;
 }
-.nav-arrow.left { left: 3vw; }
-.nav-arrow.right { right: 3vw; }
-.nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
+.nav-arrow.left {
+  left: -45px;
+}
+.nav-arrow.right {
+  right: -45px;
+}
+.nav-arrow:hover {
+  background: #1ed760;
+  transform: scale(1.1);
+}
 
 /* === BACKGROUND BLUR (outside container only) === */
 #panelBackdrop {
   position: fixed;
-  inset: 0;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0,0,0,0.3);
   z-index: 998;
   display: none;
   pointer-events: auto;
   animation: fadeBackdrop 0.3s ease;
 }
-@keyframes fadeBackdrop { from {opacity:0;} to {opacity:1;} }
 
+@keyframes fadeBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* disable clicks when blur-active */
 .blur-active header,
 .blur-active main,
 .blur-active footer {
@@ -239,13 +288,13 @@ main {
   user-select: none;
 }
 
-/* === Language Panel === */
+/* === Language Panel (Inside Lesson Mode) === */
 .language-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.96);
+  background: rgba(0, 0, 0, 0.95);
   border: 3px solid #1DB954;
   border-radius: 12px;
   padding: 25px;
@@ -301,10 +350,15 @@ main {
   cursor: pointer;
   transition: transform 0.2s ease;
 }
-.language-panel .back-btn:hover { transform: scale(1.05); }
+.language-panel .back-btn:hover {
+  transform: scale(1.05);
+}
 
 /* === Quiz Dropdown (for Quiz only) === */
-.quiz-dropdown { position: relative; display: inline-block; }
+.quiz-dropdown {
+  position: relative;
+  display: inline-block;
+}
 .quiz-list {
   position: absolute;
   top: 120%;
@@ -329,7 +383,9 @@ main {
   padding: 8px 10px;
   text-align:center;
 }
-.quiz-list button:hover { background: rgba(29,185,84,0.2); }
+.quiz-list button:hover {
+  background: rgba(29,185,84,0.2);
+}
 
 /* === Footer === */
 footer {
@@ -346,6 +402,7 @@ footer {
 /* === Mobile tweaks === */
 @media (max-width: 600px) {
   .language-card img { width: 55px; height: 55px; }
+  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; }
   .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
