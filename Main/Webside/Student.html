@@ -987,7 +987,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // get key (html, css, js)
   function getLangKeyFromCard(card) {
-    const data = (card.dataset && card.dataset.lang) ? card.dataset.lang.toLowerCase() : (card.id || card.querySelector('p')?.textContent || 'html').toLowerCase();
+    const data = (card.dataset && card.dataset.lang)
+      ? card.dataset.lang.toLowerCase()
+      : (card.id || card.querySelector('p')?.textContent || 'html').toLowerCase();
     return data.replace(/\s+/g, '');
   }
 
@@ -1055,35 +1057,42 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'hidden';
   }
 
+  // ✅ FIXED: close panel and reset state properly
   function closeLanguagePanel() {
-  if (panel) {
-    panel.style.display = 'none';
-    panel.classList.remove('opening');
+    if (panel) {
+      panel.style.display = 'none';
+      panel.classList.remove('opening');
 
-    // Hide quiz list and clear lessons/quiz area
-    const quizList = panel.querySelector('.quiz-list');
-    if (quizList) quizList.style.display = 'none';
+      // clear quiz list and content
+      const quizList = panel.querySelector('.quiz-list');
+      if (quizList) {
+        quizList.style.display = 'none';
+        quizList.innerHTML = '';
+      }
 
-    const content = panel.querySelector('.panel-content');
-    if (content) content.innerHTML = ''; // remove lesson + quiz buttons
+      const content = panel.querySelector('.panel-content');
+      if (content) content.innerHTML = '';
 
-    // Reset title content, but keep structure intact
-    const titleImg = panel.querySelector('.panel-title img');
-    const titleText = panel.querySelector('.panel-title .titleText');
-    if (titleImg) titleImg.src = '';
-    if (titleText) titleText.textContent = '';
+      // reset title safely
+      const titleImg = panel.querySelector('.panel-title img');
+      const titleText = panel.querySelector('.panel-title .titleText');
+      if (titleImg) titleImg.src = '';
+      if (titleText) titleText.textContent = '';
 
-    // Hide backdrop and remove blur
-    if (backdrop) backdrop.style.display = 'none';
-    document.body.classList.remove('blur-active');
+      // hide blur
+      if (backdrop) backdrop.style.display = 'none';
+      document.body.classList.remove('blur-active');
 
-    // Restore scroll
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
+      // restore scroll and pointer events
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.querySelectorAll('header, main, footer').forEach(el => {
+        el.style.pointerEvents = 'auto';
+      });
+    }
   }
-}
 
-  // clicking the backdrop does NOT close or redirect
+  // clicking the backdrop should do nothing
   backdrop.addEventListener('click', (e) => {
     e.stopPropagation();
     e.preventDefault();
