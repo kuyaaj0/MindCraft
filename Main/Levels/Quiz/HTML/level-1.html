@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MindCraft HTML Lesson 1 Quiz</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
   <style>
+    /* YOUR EXACT DESIGN - NO CHANGES */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;font-size:10px;overflow:hidden;}
-
+    
     body{
       font-family:'Press Start 2P', cursive;
       background:linear-gradient(#87e4ff,#c8f7b0);
@@ -55,9 +55,7 @@
       box-shadow:0 4px 0 #5c3a1a;
     }
 
-    .wood-brand{
-      display:none;
-    }
+    .wood-brand{display:none;}
 
     .quiz-content{
       height:100%;
@@ -178,8 +176,8 @@
     }
 
     #nextBtn{ background:#a56b34; }
-    #finishBtn{
-      background:#d4af37;
+    #finishBtn{ 
+      background:#d4af37; 
       box-shadow:
         inset -4px -4px 0 rgba(0,0,0,.25),
         0 6px 0 #b8860b;
@@ -265,25 +263,22 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'mindcraft_html_lesson1_quiz';
-
-  // Clear previous quiz state so it always starts fresh
-  localStorage.removeItem(STORAGE_KEY);
+  // ✅ FIXED QUESTIONS 8,9,10 + ALL WORKING FEATURES
+  const TOTAL_TIME_SECONDS = 10 * 60; // 10 minutes
 
   const questions = [
     { type:"mc", text:"1. Which tag wraps all HTML content?", options:["<html>","<head>","<body>","<title>"], correct:0 },
     { type:"mc", text:"2. Which element contains metadata like title and CSS links?", options:["<html>","<head>","<body>","<p>"], correct:1 },
     { type:"mc", text:"3. Which of the following is a valid HTML comment?", options:["// comment","<!-- comment -->","/* comment */","* comment *"], correct:1 },
     { type:"mc", text:"4. Where does the visible content of a webpage go?", options:["<html>","<head>","<body>","<meta>"], correct:2 },
-    { type:"fill", text:"5. HTML elements are defined using <_______> and </_______> tags.", correctText:"tags" },
+    { type:"fill", text:"5. HTML elements are defined using <_______> and </_______> tags.", correctText:"tag" },
     { type:"fill", text:"6. The proper placement of one HTML element inside another is called _______.", correctText:"nesting" },
-    { type:"fill", text:"7. Comments in HTML are written using _______.", correctText:"<!-- -->" },
-    { type:"fill", text:"8. Identify the purpose of the <html> tag.", correctText:"root" },
-    { type:"fill", text:"9. Identify the purpose of the <head> tag.", correctText:"metadata" },
-    { type:"fill", text:"10. Identify the purpose of the <body> tag.", correctText:"visible content" }
+    { type:"fill", text:"7. Comments in HTML are written using _______.", correctText:"<!--" },
+    // ✅ FIXED UNIQUE QUESTIONS 8,9,10
+    { type:"fill", text:"8. The <html> tag is called the ______ element of the document.", correctText:"root" },
+    { type:"fill", text:"9. The <head> tag contains ______ information like titles and links.", correctText:"metadata" },
+    { type:"fill", text:"10. The <body> tag contains the ______ content users see.", correctText:"visible" }
   ];
-
-  const TOTAL_TIME_SECONDS = 10 * 60;
 
   let currentIndex = 0;
   let userAnswers = new Array(questions.length).fill(null);
@@ -298,25 +293,6 @@
   const finishBtn = document.getElementById("finishBtn");
   const backBtn = document.getElementById("backBtn");
   const resultBox = document.getElementById("resultBox");
-
-  function loadQuizState() {
-    return false;
-  }
-
-  function saveQuizState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        currentIndex,
-        userAnswers,
-        remainingSeconds,
-        quizCompleted,
-        score: quizCompleted ? calculateScore() : undefined,
-        percentage: quizCompleted ? Math.round((calculateScore() / questions.length) * 100) : undefined
-      }));
-    } catch (e) {
-      console.log('Failed to save quiz state');
-    }
-  }
 
   function formatTime(secs) {
     const m = Math.floor(secs / 60);
@@ -334,7 +310,6 @@
     timerInterval = setInterval(() => {
       remainingSeconds = Math.max(0, remainingSeconds - 1);
       updateTimerDisplay();
-      saveQuizState();
       if (remainingSeconds <= 0) {
         clearInterval(timerInterval);
         timerInterval = null;
@@ -354,7 +329,9 @@
       q.options.forEach((opt,i)=>{
         const label=document.createElement("label");
         const radio=document.createElement("input");
-        radio.type="radio"; radio.name="mc"; radio.value=i;
+        radio.type="radio"; 
+        radio.name="mc"; 
+        radio.value=i;
         if(userAnswers[index]===i) radio.checked=true;
         label.appendChild(radio);
         label.appendChild(document.createTextNode(" "+opt));
@@ -363,7 +340,10 @@
       questionContainer.appendChild(optionsDiv);
     } else {
       const input=document.createElement("input");
-      input.type="text"; input.id="fillInput"; input.className="fill-input"; input.placeholder="Type your answer here...";
+      input.type="text"; 
+      input.id="fillInput"; 
+      input.className="fill-input"; 
+      input.placeholder="Type your answer here...";
       if(userAnswers[index]!==null) input.value=userAnswers[index];
       questionContainer.appendChild(input);
     }
@@ -371,15 +351,17 @@
 
   function updateUI() {
     if (quizCompleted) {
+      // AFTER FINISH - Results + BACK button only
       progress.textContent=`Quiz Complete!`;
       timerDisplay.textContent=`00:00`;
       loadQuestion(currentIndex);
       nextBtn.style.display="none";
       finishBtn.style.display="none";
-      backBtn.style.display="inline-block"; // show back only after finishing
+      backBtn.style.display="inline-block";
       resultBox.style.display="block";
       resultBox.className="result-success";
     } else {
+      // DURING QUIZ - Back button HIDDEN
       loadQuestion(currentIndex);
       if(currentIndex===questions.length-1){
         nextBtn.style.display="none";
@@ -388,10 +370,9 @@
         nextBtn.style.display="inline-block";
         finishBtn.style.display="none";
       }
-      backBtn.style.display="none"; // hide back during quiz
+      backBtn.style.display="none";
       resultBox.style.display="none";
     }
-    saveQuizState();
   }
 
   function saveCurrentAnswer() {
@@ -404,13 +385,14 @@
       const input=document.getElementById("fillInput");
       userAnswers[currentIndex]=input?input.value.trim():"";
     }
-    saveQuizState();
   }
 
   function calculateScore(){
     let score=0;
     questions.forEach((q,i)=>{
-      if(q.type==="mc"){ if(userAnswers[i]===q.correct) score++; }
+      if(q.type==="mc"){ 
+        if(userAnswers[i]===q.correct) score++; 
+      }
       else{
         const user=(userAnswers[i]||"").trim().toLowerCase();
         const correct=q.correctText.toLowerCase();
@@ -425,7 +407,10 @@
     quizCompleted=true;
     currentIndex=questions.length-1;
     saveCurrentAnswer();
-    if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+    if(timerInterval){ 
+      clearInterval(timerInterval); 
+      timerInterval=null; 
+    }
     const total=questions.length;
     const score=calculateScore();
     const percentage=Math.round((score/total)*100);
@@ -437,24 +422,26 @@
     console.log("🧪 HTML Lesson 1 Quiz Complete:",score,"/",total,`(${percentage}%)`);
   }
 
+  // Event Listeners
   nextBtn.addEventListener("click",()=>{
     if(quizCompleted) return;
     saveCurrentAnswer();
-    if(currentIndex<questions.length-1){ currentIndex++; updateUI(); }
+    if(currentIndex<questions.length-1){ 
+      currentIndex++; 
+      updateUI(); 
+    }
   });
 
   finishBtn.addEventListener("click",()=>finishQuiz());
 
   backBtn.addEventListener("click",()=>{
-    if(quizCompleted){
-      window.location.href="../../../Webside/Student.html";
-    }
+    window.location.href="../../../Webside/Student.html";
   });
 
-  loadQuizState();
+  // START FRESH - NO LOCALSTORAGE
+  updateTimerDisplay();
   updateUI();
-  if(!quizCompleted && remainingSeconds>0){ startTimer(); }
-  setInterval(saveQuizState,5000);
+  startTimer();
 </script>
 </body>
 </html>
