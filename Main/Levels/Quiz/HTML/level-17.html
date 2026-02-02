@@ -1,198 +1,453 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindCraft CSS Quiz - Lesson 17</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MindCraft CSS Lesson 17 Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* ✅ SAME WOODEN DESIGN - ALL LESSONS */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-size:10px;overflow:hidden;}
+    
+    body{
+      font-family:'Press Start 2P', cursive;
+      background:linear-gradient(#87e4ff,#c8f7b0);
+      padding:20px;
+      margin:0;
+    }
 
-<style>
-* { box-sizing: border-box; }
+    .quiz-container{
+      max-width:1000px;
+      margin:0 auto;
+      height:calc(100vh - 40px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
 
-body {
-  margin: 0;
-  font-family: 'Press Start 2P', cursive;
-  background: radial-gradient(circle at top, #f3fcff, #bfeaff, #67c2ff);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;
-}
+    .wood-border{
+      width:100%;
+      max-width:900px;
+      height:90vh;
+      position:relative;
+      background:#8b5a2b;
+      border-radius:28px;
+      padding:16px;
+      box-shadow:
+        inset -8px -8px 0 rgba(0,0,0,.3),
+        0 12px 0 #5c3a1a;
+    }
 
-.scene {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  min-height: 92vh;
-  background: linear-gradient(120deg, #eafcff, #c6f0ff, #a4e2c1, #74cfa0);
-  background-size: 300% 300%;
-  animation: bgShift 12s ease infinite;
-  border-radius: 28px;
-  box-shadow: 0 50px 100px rgba(0,0,0,.35);
-  overflow: hidden;
-  padding: 20px 40px;
-}
+    .wood-border::before{
+      content:'MINDCRAFT CSS QUIZ';
+      position:absolute;
+      top:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#8b5a2b;
+      padding:6px 20px;
+      font-size:11px;
+      color:#ffd966;
+      text-shadow:2px 2px #000;
+      border-radius:10px;
+      box-shadow:0 4px 0 #5c3a1a;
+    }
 
-@keyframes bgShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+    .wood-brand{display:none;}
 
-.grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: .25;
-}
+    .quiz-content{
+      height:100%;
+      width:100%;
+      background:linear-gradient(#8fe9ff 55%, #7dd37d);
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      z-index:2;
+    }
 
-.title {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 18px 48px;
-  background: linear-gradient(#c97a36, #8b4d1a);
-  color: white;
-  font-size: 1.4rem;
-  border-radius: 20px;
-  text-shadow: 4px 4px 0 black;
-  z-index: 5;
-  text-align: center;
-}
+    .main-title{
+      text-align:center;
+      font-size:16px;
+      text-shadow:3px 3px #fff;
+      margin-bottom:20px;
+      color:#006400;
+    }
 
-.menu {
-  position: relative;
-  margin-top: 140px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  z-index: 5;
-}
+    .quiz-panel{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:16px;
+      overflow:auto;
+    }
 
-.menu .question {
-  background: rgba(255,255,255,.15);
-  backdrop-filter: blur(10px);
-  padding: 18px 24px;
-  border-radius: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      font-size:9px;
+    }
 
-.menu .question label {
-  background: linear-gradient(#ffe08a, #f2a933);
-  padding: 12px;
-  border-radius: 12px;
-  cursor: pointer;
-}
+    .progress{ color:#006400; font-weight:bold; }
+    .timer{ color:#b8860b; font-weight:bold; }
 
-.menu input[type="text"] {
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  font-family: inherit;
-}
+    .question-box{
+      background:#fff3cd;
+      border:3px solid #c9a227;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:24px;
+      line-height:1.6;
+      box-shadow:0 6px 0 #c9a227;
+      max-height:300px;
+    }
 
-button.next {
-  align-self: center;
-  background: linear-gradient(#46b46b, #2e7d4a);
-  color: white;
-  font-size: .7rem;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 18px;
-  cursor: pointer;
-}
+    .question-text{
+      font-size:11px;
+      margin-bottom:16px;
+      font-weight:bold;
+    }
 
-.ground {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 120px;
-  background: linear-gradient(#46b46b, #2e7d4a);
-}
-</style>
+    .options label{
+      display:block;
+      margin:10px 0;
+      cursor:pointer;
+      font-size:9px;
+    }
+
+    .options input{
+      margin-right:10px;
+      transform:scale(1.3);
+      accent-color:#006400;
+    }
+
+    .fill-input{
+      width:100%;
+      max-width:380px;
+      padding:12px;
+      border:3px solid #c9a227;
+      background:#fff;
+      border-radius:10px;
+      font-family:'Press Start 2P', cursive;
+      font-size:9px;
+      color:#000;
+      box-shadow:0 4px 0 #c9a227;
+    }
+
+    .nav-row{
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    button{
+      font-family:'Press Start 2P', cursive;
+      background:#a56b34;
+      color:#fff;
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #5c3a1a;
+      cursor:pointer;
+      font-size:8px;
+      transition:transform 0.1s;
+      min-width:120px;
+    }
+
+    button:hover:not(:disabled){
+      transform:translateY(-2px);
+    }
+
+    button:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,.25), 0 2px 0 #5c3a1a;
+    }
+
+    #nextBtn{ background:#a56b34; }
+    #finishBtn{ 
+      background:#d4af37; 
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #b8860b;
+      display:none;
+    }
+
+    #backBtn{
+      background:#ff6b35;
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #cc5533;
+      display:none;
+    }
+
+    #resultBox{
+      margin-top:24px;
+      padding:20px;
+      border-radius:12px;
+      font-size:10px;
+      text-align:center;
+      display:none;
+      box-shadow:0 6px 0 #6aa84f;
+    }
+
+    .result-success{
+      background:#d9ead3 !important;
+      border:4px solid #6aa84f !important;
+      color:#006400 !important;
+      display:block !important;
+    }
+
+    @media(max-width:768px){
+      .quiz-container{
+        height:auto;
+        min-height:calc(100vh - 40px);
+        align-items:flex-start;
+        padding-top:20px;
+      }
+      body{ overflow:auto; padding:10px; }
+      .wood-border{
+        height:auto;
+        min-height:80vh;
+        border-radius:20px;
+        padding:12px;
+      }
+      .quiz-content{ padding:18px; border-radius:12px; }
+      .main-title{ font-size:14px; }
+    }
+  </style>
 </head>
-
 <body>
-<div class="scene">
-<div class="grid"></div>
+<div class="quiz-container">
+  <div class="wood-border">
+    <div class="wood-brand">
+      MindCraft<br>
+      <span style="font-size:6px;">CSS Lesson 17 • CSS Box Model</span>
+    </div>
 
-<div class="title">Lesson 17: CSS Box Model</div>
+    <div class="quiz-content">
+      <div class="main-title">
+        LESSON 17<br>
+        <span style="font-size:12px; font-weight:normal;">CSS BOX MODEL QUIZ</span>
+      </div>
 
-<div class="menu">
+      <div class="quiz-panel">
+        <div class="top-bar">
+          <div class="progress" id="progress">Question 1 / 15</div>
+          <div class="timer" id="timer">10:00</div>
+        </div>
 
-<div class="question">
-<strong>1. Which property adds space inside an element?</strong>
-<label><input type="radio" name="q1"> A. margin</label>
-<label><input type="radio" name="q1"> B. padding</label>
-<label><input type="radio" name="q1"> C. border</label>
-<label><input type="radio" name="q1"> D. width</label>
+        <div id="questionContainer" class="question-box"></div>
+
+        <div class="nav-row">
+          <button id="nextBtn">NEXT →</button>
+          <button id="finishBtn">FINISH & SCORE</button>
+          <button id="backBtn">← BACK</button>
+        </div>
+
+        <div id="resultBox">Complete all questions for your score!</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="question">
-<strong>2. Which property adds space outside an element?</strong>
-<label><input type="radio" name="q2"> A. margin</label>
-<label><input type="radio" name="q2"> B. padding</label>
-<label><input type="radio" name="q2"> C. border</label>
-<label><input type="radio" name="q2"> D. height</label>
-</div>
+<script>
+  const TOTAL_TIME_SECONDS = 10 * 60;
 
-<div class="question">
-<strong>3. Which property defines the thickness of the border?</strong>
-<label><input type="radio" name="q3"> A. border-width</label>
-<label><input type="radio" name="q3"> B. border-style</label>
-<label><input type="radio" name="q3"> C. border-color</label>
-<label><input type="radio" name="q3"> D. border-radius</label>
-</div>
+  const questions = [
+    // ✅ YOUR ORIGINAL 4 MCQs
+    { type:"mc", text:"1. Which property adds space inside an element?", options:["margin","padding","border","width"], correct:1 },
+    { type:"mc", text:"2. Which property adds space outside an element?", options:["margin","padding","border","height"], correct:0 },
+    { type:"mc", text:"3. Which property defines the thickness of the border?", options:["border-width","border-style","border-color","border-radius"], correct:0 },
+    { type:"mc", text:"4. The total width of an element includes ________.", options:["content only","content + padding + border + margin","padding only","margin only"], correct:1 },
 
-<div class="question">
-<strong>4. The total width of an element includes ________.</strong>
-<label><input type="radio" name="q4"> A. content only</label>
-<label><input type="radio" name="q4"> B. content + padding + border + margin</label>
-<label><input type="radio" name="q4"> C. padding only</label>
-<label><input type="radio" name="q4"> D. margin only</label>
-</div>
+    // ✅ ADDED 6 MORE MCQs (5-10)
+    { type:"mc", text:"5. Box-sizing property default value?", options:["content-box","border-box","padding-box","margin-box"], correct:0 },
+    { type:"mc", text:"6. Makes width include padding + border?", options:["box-sizing: border-box","box-sizing: content-box","width: 100%","padding: 0"], correct:0 },
+    { type:"mc", text:"7. Collapses by default?", options:["margin","padding","border","content"], correct:0 },
+    { type:"mc", text:"8. Border style 'solid' creates?", options:["dotted line","dashed line","solid line","double line"], correct:2 },
+    { type:"mc", text:"9. Shorthand for all margins?", options:["margin","padding","border","outline"], correct:0 },
+    { type:"mc", text:"10. Property resets all spacing?", options:["margin: 0; padding: 0;","width: 0;","border: none;","box-sizing: content-box"], correct:0 },
 
-<div class="question">
-<strong>5. Property for rounded corners?</strong>
-<input type="text">
-</div>
+    // ✅ YOUR ORIGINAL 6 FILL-INS (11-15 + 1 extra)
+    { type:"fill", text:"11. Property for rounded corners?", correctText:"border-radius" },
+    { type:"fill", text:"12. To reduce space inside a box, adjust ________.", correctText:"padding" },
+    { type:"fill", text:"13. To increase space outside a box, adjust ________.", correctText:"margin" },
+    { type:"fill", text:"14. Identify the box model part: padding", correctText:"inside" },
+    { type:"fill", text:"15. Identify the box model part: margin", correctText:"outside" }
+  ];
 
-<div class="question">
-<strong>6. To reduce space inside a box, adjust ________.</strong>
-<input type="text">
-</div>
+  let currentIndex = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+  let remainingSeconds = TOTAL_TIME_SECONDS;
+  let quizCompleted = false;
+  let timerInterval = null;
 
-<div class="question">
-<strong>7. To increase space outside a box, adjust ________.</strong>
-<input type="text">
-</div>
+  const questionContainer = document.getElementById("questionContainer");
+  const progress = document.getElementById("progress");
+  const timerDisplay = document.getElementById("timer");
+  const nextBtn = document.getElementById("nextBtn");
+  const finishBtn = document.getElementById("finishBtn");
+  const backBtn = document.getElementById("backBtn");
+  const resultBox = document.getElementById("resultBox");
 
-<div class="question">
-<strong>8. Identify the box model part: padding</strong>
-<input type="text">
-</div>
+  function formatTime(secs) {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+  }
 
-<div class="question">
-<strong>9. Identify the box model part: margin</strong>
-<input type="text">
-</div>
+  function updateTimerDisplay() {
+    timerDisplay.textContent = formatTime(remainingSeconds);
+  }
 
-<div class="question">
-<strong>10. Identify the box model part: border</strong>
-<input type="text">
-</div>
+  function startTimer() {
+    if (timerInterval !== null || quizCompleted) return;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      remainingSeconds = Math.max(0, remainingSeconds - 1);
+      updateTimerDisplay();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        if (!quizCompleted) finishQuiz();
+      }
+    }, 1000);
+  }
 
-<button class="next" onclick="location.href='lesson-18.html'">Next Lesson</button>
+  function loadQuestion(index) {
+    const q = questions[index];
+    progress.textContent = `Question ${index + 1} / ${questions.length}`;
+    questionContainer.innerHTML = `<div class="question-text">${q.text}</div>`;
 
-</div>
-</div>
+    if (q.type === "mc") {
+      const optionsDiv = document.createElement("div");
+      optionsDiv.className = "options";
+      q.options.forEach((opt,i)=>{
+        const label = document.createElement("label");
+        const radio = document.createElement("input");
+        radio.type = "radio"; 
+        radio.name = "mc"; 
+        radio.value = i;
+        if(userAnswers[index] === i) radio.checked = true;
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" " + opt));
+        optionsDiv.appendChild(label);
+      });
+      questionContainer.appendChild(optionsDiv);
+    } else {
+      const input = document.createElement("input");
+      input.type = "text"; 
+      input.id = "fillInput"; 
+      input.className = "fill-input"; 
+      input.placeholder = "Type your answer here...";
+      if(userAnswers[index] !== null) input.value = userAnswers[index];
+      questionContainer.appendChild(input);
+    }
+  }
 
-<div class="ground"></div>
+  function updateUI() {
+    if (quizCompleted) {
+      progress.textContent = `Quiz Complete!`;
+      timerDisplay.textContent = `00:00`;
+      loadQuestion(currentIndex);
+      nextBtn.style.display = "none";
+      finishBtn.style.display = "none";
+      backBtn.style.display = "inline-block";
+      resultBox.style.display = "block";
+      resultBox.className = "result-success";
+    } else {
+      loadQuestion(currentIndex);
+      if(currentIndex === questions.length - 1){
+        nextBtn.style.display = "none";
+        finishBtn.style.display = "inline-block";
+      } else {
+        nextBtn.style.display = "inline-block";
+        finishBtn.style.display = "none";
+      }
+      backBtn.style.display = "none";
+      resultBox.style.display = "none";
+    }
+  }
+
+  function saveCurrentAnswer() {
+    if(quizCompleted) return;
+    const q = questions[currentIndex];
+    if(q.type === "mc"){
+      const checked = document.querySelector('input[name="mc"]:checked');
+      userAnswers[currentIndex] = checked ? parseInt(checked.value) : null;
+    } else {
+      const input = document.getElementById("fillInput");
+      userAnswers[currentIndex] = input ? input.value.trim() : "";
+    }
+  }
+
+  function calculateScore(){
+    let score = 0;
+    questions.forEach((q,i)=>{
+      if(q.type === "mc"){ 
+        if(userAnswers[i] === q.correct) score++; 
+      }
+      else{
+        const user = (userAnswers[i] || "").trim().toLowerCase();
+        const correct = q.correctText.toLowerCase();
+        if(user === correct || user.includes(correct)) score++;
+      }
+    });
+    return score;
+  }
+
+  function finishQuiz(){
+    if(quizCompleted) return;
+    quizCompleted = true;
+    currentIndex = questions.length - 1;
+    saveCurrentAnswer();
+    if(timerInterval){ 
+      clearInterval(timerInterval); 
+      timerInterval = null; 
+    }
+    const total = questions.length;
+    const score = calculateScore();
+    const percentage = Math.round((score/total)*100);
+    resultBox.innerHTML = `
+      <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+      <span style="font-size:8px;">${percentage}% - CSS Box Model mastery logged!</span>
+    `;
+    updateUI();
+    console.log("🧪 CSS Lesson 17 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+  }
+
+  // Event Listeners
+  nextBtn.addEventListener("click",()=>{
+    if(quizCompleted) return;
+    saveCurrentAnswer();
+    if(currentIndex < questions.length - 1){ 
+      currentIndex++; 
+      updateUI(); 
+    }
+  });
+
+  finishBtn.addEventListener("click",()=>finishQuiz());
+
+  backBtn.addEventListener("click",()=>{
+    window.location.href = "../../../Webside/Student.html";
+  });
+
+  // START QUIZ
+  updateTimerDisplay();
+  updateUI();
+  startTimer();
+</script>
 </body>
 </html>
