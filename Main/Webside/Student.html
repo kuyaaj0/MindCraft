@@ -516,98 +516,246 @@ footer {
 <!-- ===================== -->
 <!-- ✅ Lessons (no dropdown) + Quizzes (dropdown) -->
 <!-- ===================== -->
+<!-- ===================== -->
+<!-- ✅ Full Combined Populate + Blur Panel Script -->
+<!-- ===================== -->
 <script>
-function populateOptions(prefix, count, type, folder) {
-  const select = document.getElementById(`${prefix}${type}`);
-  if (!select) return;
-
-  const isLesson = type === "Lessons";
-  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
-  const subfolder = isLesson ? "Lessons" : "Quiz";
-  const basePath = isLesson
-    ? `../Modular/${subfolder}/${folder}/lesson-`
-    : `../Levels/${subfolder}/${folder}/level-`;
-
-  select.innerHTML = "";
-  const placeholder = document.createElement("option");
-  placeholder.textContent = label;
-  placeholder.value = "";
-  select.appendChild(placeholder);
-
-  for (let i = 1; i <= count; i++) {
-    const option = document.createElement("option");
-    option.value = `${basePath}${i}.html`;
-    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
-    select.appendChild(option);
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Fill selects
-  populateOptions("html", 20, "Lessons", "HTML");
-  populateOptions("html", 20, "Quizzes", "HTML");
-  populateOptions("css", 20, "Lessons", "CSS");
-  populateOptions("css", 20, "Quizzes", "CSS");
-  populateOptions("js", 20, "Lessons", "JS");
-  populateOptions("js", 20, "Quizzes", "JS");
-
-  const quizBtn = document.getElementById("quizBtn");
-  const quizList = document.getElementById("quizList");
-  const lessonBtn = document.getElementById("lessonBtn");
-  const languageCards = document.querySelectorAll(".language-card");
-  const optionsPanel = document.getElementById("lessonQuizOptions");
-  const backBtn = document.getElementById("backBtn");
-  let currentLang = "html";
-
-  // Show panel when a language is chosen
-  languageCards.forEach(card => {
-    card.addEventListener("click", () => {
-      currentLang = card.dataset.lang.toLowerCase();
-      populateQuizList(currentLang);
-      optionsPanel.style.display = "flex";
-      backBtn.style.display = "block";
-    });
-  });
-
-  // Close panel
-  backBtn.addEventListener("click", () => {
-    optionsPanel.style.display = "none";
-    backBtn.style.display = "none";
-    quizList.style.display = "none";
-  });
-
-  // ---- LESSON BUTTON (no dropdown) ----
-  lessonBtn.addEventListener("click", () => {
-    const select = document.getElementById(`${currentLang}Lessons`);
-    if (!select || select.options.length <= 1) {
-      alert("No lessons found for " + currentLang.toUpperCase());
-      return;
-    }
-    // open first lesson by default
-    const first = select.options[1].value;
-    window.location.href = first;
-  });
-
-  // ---- QUIZ DROPDOWN ----
-  quizBtn.addEventListener("click", () => {
-    if (quizList.style.display === "flex") {
-      quizList.style.display = "none";
-    } else {
-      quizList.style.display = "flex";
-    }
-  });
-
-  function populateQuizList(lang) {
-    const select = document.getElementById(`${lang}Quizzes`);
-    quizList.innerHTML = "";
+  /* =========================================================
+     1️⃣ AUTO-GENERATE LESSON & QUIZ DROPDOWNS
+     ========================================================= */
+  function populateOptions(prefix, count, type, folder) {
+    const select = document.getElementById(`${prefix}${type}`);
     if (!select) return;
-    Array.from(select.options).slice(1).forEach(opt => {
-      const btn = document.createElement("button");
-      btn.textContent = opt.textContent;
-      btn.onclick = () => window.location.href = opt.value;
-      quizList.appendChild(btn);
-    });
+
+    const isLesson = type === "Lessons";
+    const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+    const subfolder = isLesson ? "Lessons" : "Quiz";
+    const basePath = isLesson
+      ? `../Modular/${subfolder}/${folder}/lesson-`
+      : `../Levels/${subfolder}/${folder}/level-`;
+
+    select.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.textContent = label;
+    placeholder.value = "";
+    select.appendChild(placeholder);
+
+    for (let i = 1; i <= count; i++) {
+      const option = document.createElement("option");
+      option.value = `${basePath}${i}.html`;
+      option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+      select.appendChild(option);
+    }
   }
+
+  // Populate HTML, CSS, JS lessons and quizzes
+  ["html", "css", "js"].forEach(lang => {
+    populateOptions(lang, 20, "Lessons", lang.toUpperCase());
+    populateOptions(lang, 20, "Quizzes", lang.toUpperCase());
+  });
+
+  /* =========================================================
+     2️⃣ LANGUAGE CARD NAVIGATION + PANEL INITIAL SETUP
+     ========================================================= */
+  const cards = Array.from(document.querySelectorAll(".language-card"));
+  const lessonContainer = document.querySelector(".lesson-container");
+  if (!lessonContainer || cards.length === 0) return;
+
+  // Create nav arrows if missing
+  let left = lessonContainer.querySelector(".nav-arrow.left");
+  let right = lessonContainer.querySelector(".nav-arrow.right");
+  if (!left) {
+    left = document.createElement("button");
+    left.className = "nav-arrow left";
+    left.type = "button";
+    left.textContent = "◀";
+    lessonContainer.appendChild(left);
+  }
+  if (!right) {
+    right = document.createElement("button");
+    right.className = "nav-arrow right";
+    right.type = "button";
+    right.textContent = "▶";
+    lessonContainer.appendChild(right);
+  }
+
+  // Navigation logic
+  let idx = 0;
+  function setActive(i) {
+    idx = Math.max(0, Math.min(i, cards.length - 1));
+    cards.forEach((c, ii) => {
+      c.classList.toggle("active", ii === idx);
+      c.setAttribute("aria-hidden", ii === idx ? "false" : "true");
+    });
+    left.disabled = idx === 0;
+    right.disabled = idx === cards.length - 1;
+  }
+  setActive(0);
+  left.onclick = () => setActive(idx - 1);
+  right.onclick = () => setActive(idx + 1);
+
+  // Create backdrop (blur layer)
+  let backdrop = document.getElementById("panelBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "panelBackdrop";
+    document.body.appendChild(backdrop);
+  }
+
+  // Create main panel container
+  let panel = document.querySelector(".language-panel");
+  if (!panel) {
+    panel = document.createElement("div");
+    panel.className = "language-panel";
+    panel.innerHTML = `
+      <div class="panel-title">
+        <img src="" alt="icon"><span class="titleText"></span>
+      </div>
+      <div class="panel-content"></div>
+      <button class="panel-back">⬇ Back</button>
+    `;
+    document.body.appendChild(panel);
+  }
+
+  // Helper: get key (html, css, js)
+  function getLangKeyFromCard(card) {
+    const data = (card.dataset && card.dataset.lang)
+      ? card.dataset.lang.toLowerCase()
+      : (card.id || card.querySelector("p")?.textContent || "html").toLowerCase();
+    return data.replace(/\s+/g, "");
+  }
+
+  /* =========================================================
+     3️⃣ OPEN LANGUAGE PANEL (with dropdown quizzes)
+     ========================================================= */
+  function openLanguagePanel(card) {
+    const langKey = getLangKeyFromCard(card);
+
+    // Update panel title and icon
+    const iconEl = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    const cardImg = card.querySelector("img");
+    iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
+    titleText.textContent =
+      card.querySelector("p")?.textContent || langKey.toUpperCase();
+
+    // Set up lesson & quiz UI
+    const pc = panel.querySelector(".panel-content");
+    pc.innerHTML = `
+      <button class="lessons-btn">📖 Lessons</button>
+      <div class="quiz-dropdown">
+        <button class="quiz-btn">📝 Quiz ▾</button>
+        <div class="quiz-list"></div>
+      </div>
+    `;
+
+    // Populate quiz dropdown list dynamically
+    const quizList = pc.querySelector(".quiz-list");
+    const select = document.getElementById(`${langKey}Quizzes`);
+    quizList.innerHTML = "";
+    if (select && select.options.length > 1) {
+      Array.from(select.options)
+        .slice(1)
+        .forEach(opt => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = opt.textContent;
+          b.addEventListener("click", () => {
+            if (opt.value) window.location.href = opt.value;
+          });
+          quizList.appendChild(b);
+        });
+    } else {
+      quizList.innerHTML = '<button disabled>No quizzes found</button>';
+    }
+
+    // Lesson button handler
+    const lessonBtn = pc.querySelector(".lessons-btn");
+    lessonBtn.addEventListener("click", () => {
+      const lessonSelect = document.getElementById(`${langKey}Lessons`);
+      const first = lessonSelect?.options[1]?.value;
+      if (first) window.location.href = first;
+      else alert("No lessons available for this language.");
+    });
+
+    // Quiz dropdown toggle
+    const quizBtn = pc.querySelector(".quiz-btn");
+    quizBtn.addEventListener("click", ev => {
+      ev.stopPropagation();
+      quizList.style.display =
+        quizList.style.display === "flex" ? "none" : "flex";
+    });
+
+    // Back button inside panel
+    const backBtn = panel.querySelector(".panel-back");
+    backBtn.addEventListener("click", closeLanguagePanel);
+
+    // Show panel + activate blur
+    backdrop.style.display = "block";
+    panel.style.display = "flex";
+    document.body.classList.add("blur-active");
+    document.body.style.overflow = "hidden";
+  }
+
+  /* =========================================================
+     4️⃣ CLOSE LANGUAGE PANEL (bug-free reset)
+     ========================================================= */
+  function closeLanguagePanel() {
+    // Hide panel
+    panel.style.display = "none";
+    panel.classList.remove("opening");
+
+    // Clear quiz list & lesson buttons
+    const quizLists = panel.querySelectorAll(".quiz-list");
+    quizLists.forEach(list => {
+      list.style.display = "none";
+      list.innerHTML = "";
+    });
+
+    const content = panel.querySelector(".panel-content");
+    if (content) content.innerHTML = "";
+
+    // Reset title image/text
+    const titleImg = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    if (titleImg) titleImg.src = "";
+    if (titleText) titleText.textContent = "";
+
+    // Hide blur & enable background again
+    backdrop.style.display = "none";
+    document.body.classList.remove("blur-active");
+    document.body.style.overflow = "";
+  }
+
+  /* =========================================================
+     5️⃣ SAFETY: DISABLE BACKDROP CLICK
+     ========================================================= */
+  backdrop.addEventListener("click", e => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+
+  /* =========================================================
+     6️⃣ CARD CLICK OPEN HANDLER
+     ========================================================= */
+  cards.forEach((card, i) => {
+    card.addEventListener("click", () => {
+      if (!card.classList.contains("active")) {
+        setActive(i);
+        setTimeout(() => openLanguagePanel(card), 160);
+      } else {
+        openLanguagePanel(card);
+      }
+    });
+
+    card.addEventListener("keydown", ev => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        openLanguagePanel(card);
+      }
+    });
+  });
 });
 </script> <!--keep it as backup plan-->
 
@@ -897,7 +1045,7 @@ onAuthStateChanged(auth, (user) => {
 });
 </script>
   
-  <script>
+  <!--<script>
 document.addEventListener('DOMContentLoaded', () => {
   // cards and lesson container expected in DOM
   const cards = Array.from(document.querySelectorAll('.language-card'));
@@ -1114,6 +1262,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
-</script>
+</script>-->
 </body>
 </html>
