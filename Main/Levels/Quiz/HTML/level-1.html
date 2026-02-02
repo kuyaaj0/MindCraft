@@ -1,402 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MindCraft HTML Lesson / Quiz</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MindCraft HTML Lesson 1 Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-size:10px;overflow:hidden;}
 
-<style>
-/* ---------- Page & Scene ---------- */
-* { box-sizing: border-box; }
-html,body { height:100%; margin:0; padding:0; font-family:'Press Start 2P',cursive; background:#eafcff; color:#000; }
-.scene {
-  position: relative;
-  width:100%;
-  max-width:1200px;
-  min-height:92vh;
-  margin: 20px auto;
-  background: linear-gradient(120deg,#eafcff,#c6f0ff,#a4e2c1,#74cfa0);
-  background-size:300% 300%;
-  animation: bgShift 12s ease infinite;
-  border-radius:28px;
-  box-shadow:0 50px 100px rgba(0,0,0,.35);
-  overflow:hidden;
-  padding:20px 40px;
-}
-@keyframes bgShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    body{
+      font-family:'Press Start 2P', cursive;
+      background:linear-gradient(#87e4ff,#c8f7b0);
+      padding:20px;
+      margin:0;
+    }
 
-.grid { position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size:60px 60px; opacity:.25;
-}
+    .quiz-container{
+      max-width:1000px;
+      margin:0 auto;
+      height:calc(100vh - 40px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
 
-/* ---------- Title ---------- */
-.title {
-  position:absolute; top:20px; left:50%; transform:translateX(-50%);
-  padding:18px 48px; background:linear-gradient(#c97a36,#8b4d1a);
-  color:white; font-size:1.6rem; border-radius:20px; text-shadow:4px 4px 0 black;
-  z-index:5; text-align:center;
-}
-@media (max-width:768px){
-  .title { font-size:1.2rem; padding:12px 26px; }
-}
+    .wood-border{
+      width:100%;
+      max-width:900px;
+      height:90vh;
+      position:relative;
+      background:#8b5a2b;
+      border-radius:28px;
+      padding:16px;
+      box-shadow:
+        inset -8px -8px 0 rgba(0,0,0,.3),
+        0 12px 0 #5c3a1a;
+    }
 
-/* ---------- Menu / Questions ---------- */
-.menu { position:relative; margin-top:140px; display:flex; flex-direction:column; gap:16px; z-index:5; padding-bottom:40px; }
-.question {
-  background: rgba(255,255,255,.15);
-  backdrop-filter: blur(8px);
-  padding:18px 24px;
-  border-radius:18px;
-  color:#000;
-  display:flex; flex-direction:column; gap:10px;
-}
-.question strong { display:block; margin-bottom:6px; }
-.question label { cursor:pointer; display:block; background:linear-gradient(#ffe08a,#f2a933);
-  padding:12px 16px; border-radius:12px; transition: .14s ease; user-select:none; font-size:0.92rem; }
-.question label:hover { transform: translateX(6px); }
-.question input[type="text"] { padding:10px; border-radius:12px; border:none; font-family:'Press Start 2P'; }
+    .wood-border::before{
+      content:'MINDCRAFT HTML QUIZ';
+      position:absolute;
+      top:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#8b5a2b;
+      padding:6px 20px;
+      font-size:11px;
+      color:#ffd966;
+      text-shadow:2px 2px #000;
+      border-radius:10px;
+      box-shadow:0 4px 0 #5c3a1a;
+    }
 
-/* ---------- Next / Finish ---------- */
-button.next, button.finish {
-  align-self:center; margin-top:12px; background:linear-gradient(#46b46b,#2e7d4a);
-  color:white; font-size:.8rem; padding:14px 28px; border:none; border-radius:18px; cursor:pointer;
-  box-shadow:0 6px 0 rgba(0,0,0,.25);
-}
-button.next:hover, button.finish:hover { transform: translateY(-4px); box-shadow:0 8px 0 rgba(0,0,0,.35); }
+    .wood-brand{
+      display:none;
+    }
 
-/* ---------- Ground & footer ---------- */
-.ground { position:absolute; bottom:0; width:100%; height:120px; background:linear-gradient(#46b46b,#2e7d4a); box-shadow:inset 0 12px 0 rgba(255,255,255,.25); }
-footer { position:absolute; bottom:10px; width:100%; text-align:center; font-size:.55rem; color:white; text-shadow:1px 1px 0 black; }
+    .quiz-content{
+      height:100%;
+      width:100%;
+      background:linear-gradient(#8fe9ff 55%, #7dd37d);
+      border-radius:16px;
+      padding:24px;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      z-index:2;
+    }
 
-/* ---------- XP Popup Overlay ---------- */
-#popupOverlay {
-  position: fixed; inset:0; display:none; z-index:9999;
-  justify-content:center; align-items:center; flex-direction:column;
-  background: rgba(0,0,0,0.65);
-  padding: 8vh 16px;
-}
-.popup-card {
-  width:100%; max-width:640px; background: rgba(0,0,0,0.92); border:2px solid #1DB954;
-  border-radius:12px; padding:22px; color:#fff; text-align:center; box-shadow:0 0 30px #1DB95466;
-}
-#xpGain { color:#1DB954; font-size:clamp(0.8rem,2vw,1.0rem); margin:10px 0; }
-.xp-bar-container { width:70%; height:16px; background:#222; border-radius:8px; margin:12px auto; overflow:hidden; }
-.xp-bar-fill { width:0%; height:100%; background:linear-gradient(90deg,#00ff90,#1DB954); transition: width 1.4s ease-in-out; border-radius:6px; }
-#backBtn { margin-top:14px; background:#1DB954; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-family:'Press Start 2P'; }
-#backBtn:hover { transform:scale(1.03); }
+    .main-title{
+      text-align:center;
+      font-size:16px;
+      text-shadow:3px 3px #fff;
+      margin-bottom:20px;
+      color:#006400;
+    }
 
-/* ---------- Small helpers ---------- */
-.hidden { display:none !important; }
-.fade-out { animation: fadeOut .8s ease forwards; }
-@keyframes fadeOut { from {opacity:1} to {opacity:0; transform:scale(.98);} }
+    .quiz-panel{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:16px;
+      overflow:auto;
+    }
 
-/* ---------- Responsive ---------- */
-@media (max-width:720px) {
-  .scene { padding:18px 18px; min-height:85vh; border-radius:18px; }
-  .question label { font-size:0.9rem; }
-  button.next, button.finish { font-size:0.78rem; padding:12px 20px; }
-  .popup-card { padding:16px; }
-  .xp-bar-container { width:85%; }
-  .title { font-size:1.2rem; padding:10px 18px; top:14px; }
-}
-</style>
+    .top-bar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:20px;
+      font-size:9px;
+    }
+
+    .progress{ color:#006400; font-weight:bold; }
+    .timer{ color:#b8860b; font-weight:bold; }
+
+    .question-box{
+      background:#fff3cd;
+      border:3px solid #c9a227;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:24px;
+      line-height:1.6;
+      box-shadow:0 6px 0 #c9a227;
+      max-height:300px;
+    }
+
+    .question-text{
+      font-size:11px;
+      margin-bottom:16px;
+      font-weight:bold;
+    }
+
+    .options label{
+      display:block;
+      margin:10px 0;
+      cursor:pointer;
+      font-size:9px;
+    }
+
+    .options input{
+      margin-right:10px;
+      transform:scale(1.3);
+      accent-color:#006400;
+    }
+
+    .fill-input{
+      width:100%;
+      max-width:380px;
+      padding:12px;
+      border:3px solid #c9a227;
+      background:#fff;
+      border-radius:10px;
+      font-family:'Press Start 2P', cursive;
+      font-size:9px;
+      color:#000;
+      box-shadow:0 4px 0 #c9a227;
+    }
+
+    .nav-row{
+      display:flex;
+      justify-content:center;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    button{
+      font-family:'Press Start 2P', cursive;
+      background:#a56b34;
+      color:#fff;
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #5c3a1a;
+      cursor:pointer;
+      font-size:8px;
+      transition:transform 0.1s;
+      min-width:120px;
+    }
+
+    button:hover:not(:disabled){
+      transform:translateY(-2px);
+    }
+
+    button:disabled{
+      opacity:0.5;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,.25), 0 2px 0 #5c3a1a;
+    }
+
+    #nextBtn{ background:#a56b34; }
+    #finishBtn{
+      background:#d4af37;
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #b8860b;
+      display:none;
+    }
+
+    #backBtn{
+      background:#ff6b35;
+      box-shadow:
+        inset -4px -4px 0 rgba(0,0,0,.25),
+        0 6px 0 #cc5533;
+      display:none;
+    }
+
+    #resultBox{
+      margin-top:24px;
+      padding:20px;
+      border-radius:12px;
+      font-size:10px;
+      text-align:center;
+      display:none;
+      box-shadow:0 6px 0 #6aa84f;
+    }
+
+    .result-success{
+      background:#d9ead3 !important;
+      border:4px solid #6aa84f !important;
+      color:#006400 !important;
+      display:block !important;
+    }
+
+    @media(max-width:768px){
+      .quiz-container{
+        height:auto;
+        min-height:calc(100vh - 40px);
+        align-items:flex-start;
+        padding-top:20px;
+      }
+      body{ overflow:auto; padding:10px; }
+      .wood-border{
+        height:auto;
+        min-height:80vh;
+        border-radius:20px;
+        padding:12px;
+      }
+      .quiz-content{ padding:18px; border-radius:12px; }
+      .main-title{ font-size:14px; }
+    }
+  </style>
 </head>
 <body>
-
-<div class="scene">
-  <div class="grid"></div>
-  <div class="title">Lesson 1: HTML Structure & Elements</div>
-
-  <div class="menu" id="menu">
-    <!-- Questions (10 questions) -->
-    <div class="question" id="q1">
-      <strong>1. Which tag wraps all HTML content?</strong>
-      <label><input type="radio" name="q1" value="0"> A. &lt;html&gt;</label>
-      <label><input type="radio" name="q1" value="1"> B. &lt;head&gt;</label>
-      <label><input type="radio" name="q1" value="2"> C. &lt;body&gt;</label>
-      <label><input type="radio" name="q1" value="3"> D. &lt;title&gt;</label>
+<div class="quiz-container">
+  <div class="wood-border">
+    <div class="wood-brand">
+      MindCraft<br>
+      <span style="font-size:6px;">HTML Lesson 1 • Basics Quiz</span>
     </div>
 
-    <div class="question" id="q2">
-      <strong>2. Which element contains metadata like title and CSS links?</strong>
-      <label><input type="radio" name="q2" value="0"> A. &lt;html&gt;</label>
-      <label><input type="radio" name="q2" value="1"> B. &lt;head&gt;</label>
-      <label><input type="radio" name="q2" value="2"> C. &lt;body&gt;</label>
-      <label><input type="radio" name="q2" value="3"> D. &lt;p&gt;</label>
+    <div class="quiz-content">
+      <div class="main-title">
+        LESSON 1<br>
+        <span style="font-size:12px; font-weight:normal;">HTML STRUCTURE & ELEMENTS QUIZ</span>
+      </div>
+
+      <div class="quiz-panel">
+        <div class="top-bar">
+          <div class="progress" id="progress">Question 1 / 10</div>
+          <div class="timer" id="timer">10:00</div>
+        </div>
+
+        <div id="questionContainer" class="question-box"></div>
+
+        <div class="nav-row">
+          <button id="nextBtn">NEXT →</button>
+          <button id="finishBtn">FINISH & SCORE</button>
+          <button id="backBtn">← BACK</button>
+        </div>
+
+        <div id="resultBox">Complete all questions for your score!</div>
+      </div>
     </div>
-
-    <div class="question" id="q3">
-      <strong>3. Which of the following is a valid HTML comment?</strong>
-      <label><input type="radio" name="q3" value="0"> A. // comment</label>
-      <label><input type="radio" name="q3" value="1"> B. &lt;!-- comment --&gt;</label>
-      <label><input type="radio" name="q3" value="2"> C. /* comment */</label>
-      <label><input type="radio" name="q3" value="3"> D. * comment *</label>
-    </div>
-
-    <div class="question" id="q4">
-      <strong>4. Where does the visible content of a webpage go?</strong>
-      <label><input type="radio" name="q4" value="0"> A. &lt;html&gt;</label>
-      <label><input type="radio" name="q4" value="1"> B. &lt;head&gt;</label>
-      <label><input type="radio" name="q4" value="2"> C. &lt;body&gt;</label>
-      <label><input type="radio" name="q4" value="3"> D. &lt;meta&gt;</label>
-    </div>
-
-    <div class="question" id="q5">
-      <strong>5. HTML elements are defined using &lt;_______&gt; and &lt;/_______&gt; tags.</strong>
-      <input type="text" id="a5" placeholder="Enter the answer">
-    </div>
-
-    <div class="question" id="q6">
-      <strong>6. The proper placement of one HTML element inside another is called _______.</strong>
-      <input type="text" id="a6" placeholder="Enter the answer">
-    </div>
-
-    <div class="question" id="q7">
-      <strong>7. Comments in HTML are written using _______.</strong>
-      <input type="text" id="a7" placeholder="Enter the answer">
-    </div>
-
-    <div class="question" id="q8">
-      <strong>8. Identify the purpose of the &lt;html&gt; tag.</strong>
-      <input type="text" id="a8" placeholder="Enter the answer">
-    </div>
-
-    <div class="question" id="q9">
-      <strong>9. Identify the purpose of the &lt;head&gt; tag.</strong>
-      <input type="text" id="a9" placeholder="Enter the answer">
-    </div>
-
-    <div class="question" id="q10">
-      <strong>10. Identify the purpose of the &lt;body&gt; tag.</strong>
-      <input type="text" id="a10" placeholder="Enter the answer">
-    </div>
-
-    <button class="next" id="submitBtn">Submit Answers</button>
-  </div>
-
-  <div class="ground"></div>
-  <footer>© 2025 MindCraft | Kuya AJ & Team</footer>
-</div>
-
-<!-- XP Popup (overlay) -->
-<div id="popupOverlay" aria-hidden="true">
-  <div class="popup-card">
-    <h2>🎉 Lesson Complete!</h2>
-    <p id="xpGain">+0 XP Gained</p>
-    <div class="xp-bar-container"><div class="xp-bar-fill" id="xpBarFill"></div></div>
-    <button id="backBtn">⬅ Back to Lobby</button>
   </div>
 </div>
 
-<!-- Sounds (paths must match your project) -->
-<audio id="correctSound" src="../../../Assets/Sounds/Correct.mp3"></audio>
-<audio id="wrongSound" src="../../../Assets/Sounds/Incorrect.mp3"></audio>
+<script>
+  const STORAGE_KEY = 'mindcraft_html_lesson1_quiz';
 
-<!-- Firebase + Quiz logic -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  // Clear previous quiz state so it always starts fresh
+  localStorage.removeItem(STORAGE_KEY);
 
-// ---------- Firebase config (same as your other files) ----------
-const firebaseConfig = {
-  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-  authDomain: "mindcraft-83f81.firebaseapp.com",
-  projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.firebasestorage.app",
-  messagingSenderId: "483019456762",
-  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+  const questions = [
+    { type:"mc", text:"1. Which tag wraps all HTML content?", options:["<html>","<head>","<body>","<title>"], correct:0 },
+    { type:"mc", text:"2. Which element contains metadata like title and CSS links?", options:["<html>","<head>","<body>","<p>"], correct:1 },
+    { type:"mc", text:"3. Which of the following is a valid HTML comment?", options:["// comment","<!-- comment -->","/* comment */","* comment *"], correct:1 },
+    { type:"mc", text:"4. Where does the visible content of a webpage go?", options:["<html>","<head>","<body>","<meta>"], correct:2 },
+    { type:"fill", text:"5. HTML elements are defined using <_______> and </_______> tags.", correctText:"tags" },
+    { type:"fill", text:"6. The proper placement of one HTML element inside another is called _______.", correctText:"nesting" },
+    { type:"fill", text:"7. Comments in HTML are written using _______.", correctText:"<!-- -->" },
+    { type:"fill", text:"8. Identify the purpose of the <html> tag.", correctText:"root" },
+    { type:"fill", text:"9. Identify the purpose of the <head> tag.", correctText:"metadata" },
+    { type:"fill", text:"10. Identify the purpose of the <body> tag.", correctText:"visible content" }
+  ];
 
-// ---------- Quiz correct answers (0-based indices / text answers) ----------
-const ANSWERS_RADIO = {
-  q1: 0, q2: 1, q3: 1, q4: 2
-};
-const ANSWERS_TEXT = {
-  a5: ['element','tag','tags','html element'],      // accept some variants
-  a6: ['nesting','nested','nesting elements'],
-  a7: ['<!-- -->','!-- --','<!-- comment -->','<!--comment-->','<!--'],
-  a8: ['root','root element','controls document','wraps all content'],
-  a9: ['metadata','metadata container','contains title','links to css','contains metadata'],
-  a10: ['visible content','page content','body content','holds visible content']
-};
+  const TOTAL_TIME_SECONDS = 10 * 60;
 
-// ---------- XP reward table (per lesson number) ----------
-const LESSON_XP_MAP = {
-  1: 15, 2: 18, 3: 22, 4: 25, 5: 30,
-  6: 35, 7: 40, 8: 45, 9: 50, 10: 60
-};
+  let currentIndex = 0;
+  let userAnswers = new Array(questions.length).fill(null);
+  let remainingSeconds = TOTAL_TIME_SECONDS;
+  let quizCompleted = false;
+  let timerInterval = null;
 
-// ---------- Helpers ----------
-function normalizeTextAnswer(s) {
-  return (s || '').toString().trim().toLowerCase().replace(/\s+/g,' ');
-}
-function matchesTextAnswer(input, acceptedArr) {
-  if (!input) return false;
-  const inp = normalizeTextAnswer(input);
-  return acceptedArr.some(a => inp.includes(normalizeTextAnswer(a)));
-}
+  const questionContainer = document.getElementById("questionContainer");
+  const progress = document.getElementById("progress");
+  const timerDisplay = document.getElementById("timer");
+  const nextBtn = document.getElementById("nextBtn");
+  const finishBtn = document.getElementById("finishBtn");
+  const backBtn = document.getElementById("backBtn");
+  const resultBox = document.getElementById("resultBox");
 
-// ---------- UI elements ----------
-const submitBtn = document.getElementById('submitBtn');
-const popupOverlay = document.getElementById('popupOverlay');
-const xpGainEl = document.getElementById('xpGain');
-const xpBarFill = document.getElementById('xpBarFill');
-const backBtn = document.getElementById('backBtn');
-const correctSound = document.getElementById('correctSound');
-const wrongSound = document.getElementById('wrongSound');
-
-let earnedXP = 0;
-let soundEnabled = localStorage.getItem('sound') === 'on';
-let vibrationEnabled = localStorage.getItem('vibration') === 'on';
-
-// ---------- Read lesson param to pick XP reward ----------
-function getLessonNumber() {
-  try {
-    const url = new URL(window.location.href);
-    const l = url.searchParams.get('lesson');
-    return l ? parseInt(l.replace(/\D/g,''),10) || 1 : 1;
-  } catch(e){ return 1; }
-}
-const lessonNum = Math.max(1, Math.min(100, getLessonNumber()));
-const XP_REWARD_FOR_LESSON = LESSON_XP_MAP[lessonNum] ?? 15;
-
-// ---------- Auth check before allowing submit ----------
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    alert('⚠️ You must be signed in to take this lesson/quiz.');
-    window.location.href = '../../../Account/signin.html';
-    return;
-  }
-  // user is signed in — enable submit (we keep button enabled but check again during submit)
-});
-
-// ---------- Quiz scoring logic ----------
-function gradeQuiz() {
-  earnedXP = 0;
-  // radio questions
-  for (const q of Object.keys(ANSWERS_RADIO)) {
-    const input = document.querySelector(`input[name="${q}"]:checked`);
-    const correct = ANSWERS_RADIO[q];
-    if (input && parseInt(input.value,10) === correct) {
-      earnedXP += Math.round(XP_REWARD_FOR_LESSON /  (Object.keys(ANSWERS_RADIO).length + 1)); // split across radios
-      if (soundEnabled) { try { correctSound.play(); } catch(e){} }
-      if (vibrationEnabled && navigator.vibrate) navigator.vibrate(60);
-    } else {
-      if (soundEnabled) { try { wrongSound.play(); } catch(e){} }
-    }
+  function loadQuizState() {
+    return false;
   }
 
-  // text questions (weight heavier)
-  const textKeys = Object.keys(ANSWERS_TEXT);
-  for (const key of textKeys) {
-    const val = document.getElementById(key)?.value;
-    if (matchesTextAnswer(val, ANSWERS_TEXT[key])) {
-      earnedXP += Math.round(XP_REWARD_FOR_LESSON / (textKeys.length + 1)); // slightly larger share
-      if (soundEnabled) { try { correctSound.play(); } catch(e){} }
-      if (vibrationEnabled && navigator.vibrate) navigator.vibrate(60);
-    } else {
-      if (soundEnabled) { try { wrongSound.play(); } catch(e){} }
-    }
-  }
-
-  // clamp: at least 1 XP if anything correct, else 0; but also ensure not more than XP_REWARD_FOR_LESSON
-  if (earnedXP > XP_REWARD_FOR_LESSON) earnedXP = XP_REWARD_FOR_LESSON;
-  earnedXP = Math.max(0, Math.round(earnedXP));
-}
-
-// ---------- Submit flow: compute XP, update Firestore, show popup ----------
-submitBtn.addEventListener('click', async () => {
-  // grade locally
-  gradeQuiz();
-
-  // show immediate feedback if no XP earned
-  if (earnedXP === 0) {
-    // still show popup with 0 XP
-    await showPopupAndSaveXP(0);
-    return;
-  }
-
-  // update Firestore
-  try {
-    const user = auth.currentUser;
-    if (!user) {
-      alert('⚠️ You must be signed in (session expired).');
-      window.location.href = '../../../Account/signin.html';
-      return;
-    }
-
-    const userRef = doc(db, 'users', user.uid);
-    const snap = await getDoc(userRef);
-    if (!snap.exists()) {
-      alert('⚠️ User record missing in Firestore.');
-      return;
-    }
-
-    const data = snap.data();
-    let oldXP = Number(data.xp || 0);
-    let oldLevel = Number(data.level || 1);
-    let xpMax = Number(data.xpMax || Math.floor(100 * Math.pow(1.1, oldLevel - 1)));
-
-    // Add earnedXP (but cap final level increments using xpMax multiplier logic)
-    let newXP = oldXP + earnedXP;
-    let newLevel = oldLevel;
-
-    while (newXP >= xpMax) {
-      newXP -= xpMax;
-      newLevel++;
-      xpMax = Math.floor(100 * Math.pow(1.1, newLevel - 1));
-    }
-
-    // Save to Firestore
-    await updateDoc(userRef, { xp: newXP, level: newLevel, xpMax: xpMax });
-
-    // Also persist locally for offline UI
+  function saveQuizState() {
     try {
-      localStorage.setItem(`${user.uid}_xp`, newXP);
-      localStorage.setItem(`${user.uid}_level`, newLevel);
-      localStorage.setItem(`${user.uid}_xpMax`, xpMax);
-    } catch(e) {
-      // ignore localStorage errors silently (space)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        currentIndex,
+        userAnswers,
+        remainingSeconds,
+        quizCompleted,
+        score: quizCompleted ? calculateScore() : undefined,
+        percentage: quizCompleted ? Math.round((calculateScore() / questions.length) * 100) : undefined
+      }));
+    } catch (e) {
+      console.log('Failed to save quiz state');
     }
-
-    await showPopupAndSaveXP(earnedXP);
-
-  } catch (err) {
-    // show alert for visibility on mobile
-    alert('⚠️ Error saving XP: ' + (err?.message || err));
-    // still show popup (no saving)
-    await showPopupAndSaveXP(earnedXP);
   }
-});
 
-// ---------- Popup / animation helper ----------
-async function showPopupAndSaveXP(xpAmount) {
-  xpGainEl.textContent = `+${xpAmount} XP Gained`;
-  xpBarFill.style.width = '0%';
-  popupOverlay.style.display = 'flex';
-  popupOverlay.setAttribute('aria-hidden','false');
-  // animate bar to full width to feel good
-  setTimeout(() => xpBarFill.style.width = '100%', 140);
-}
+  function formatTime(secs) {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+  }
 
-// ---------- Back to lobby button ----------
-backBtn.addEventListener('click', () => {
-  popupOverlay.classList.add('fade-out');
-  setTimeout(() => { window.location.href = '../../../Webside/Student.html'; }, 650);
-});
+  function updateTimerDisplay() {
+    timerDisplay.textContent = formatTime(remainingSeconds);
+  }
 
-// ---------- Optional:  automatic finish after time expires ----------
-// (not necessary here but you can reuse a timer implementation if needed)
+  function startTimer() {
+    if (timerInterval !== null || quizCompleted) return;
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      remainingSeconds = Math.max(0, remainingSeconds - 1);
+      updateTimerDisplay();
+      saveQuizState();
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        if (!quizCompleted) finishQuiz();
+      }
+    }, 1000);
+  }
 
+  function loadQuestion(index) {
+    const q = questions[index];
+    progress.textContent = `Question ${index + 1} / ${questions.length}`;
+    questionContainer.innerHTML = `<div class="question-text">${q.text}</div>`;
+
+    if (q.type === "mc") {
+      const optionsDiv = document.createElement("div");
+      optionsDiv.className = "options";
+      q.options.forEach((opt,i)=>{
+        const label=document.createElement("label");
+        const radio=document.createElement("input");
+        radio.type="radio"; radio.name="mc"; radio.value=i;
+        if(userAnswers[index]===i) radio.checked=true;
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" "+opt));
+        optionsDiv.appendChild(label);
+      });
+      questionContainer.appendChild(optionsDiv);
+    } else {
+      const input=document.createElement("input");
+      input.type="text"; input.id="fillInput"; input.className="fill-input"; input.placeholder="Type your answer here...";
+      if(userAnswers[index]!==null) input.value=userAnswers[index];
+      questionContainer.appendChild(input);
+    }
+  }
+
+  function updateUI() {
+    if (quizCompleted) {
+      progress.textContent=`Quiz Complete!`;
+      timerDisplay.textContent=`00:00`;
+      loadQuestion(currentIndex);
+      nextBtn.style.display="none";
+      finishBtn.style.display="none";
+      backBtn.style.display="inline-block"; // show back only after finishing
+      resultBox.style.display="block";
+      resultBox.className="result-success";
+    } else {
+      loadQuestion(currentIndex);
+      if(currentIndex===questions.length-1){
+        nextBtn.style.display="none";
+        finishBtn.style.display="inline-block";
+      } else {
+        nextBtn.style.display="inline-block";
+        finishBtn.style.display="none";
+      }
+      backBtn.style.display="none"; // hide back during quiz
+      resultBox.style.display="none";
+    }
+    saveQuizState();
+  }
+
+  function saveCurrentAnswer() {
+    if(quizCompleted) return;
+    const q=questions[currentIndex];
+    if(q.type==="mc"){
+      const checked=document.querySelector('input[name="mc"]:checked');
+      userAnswers[currentIndex]=checked?parseInt(checked.value):null;
+    } else {
+      const input=document.getElementById("fillInput");
+      userAnswers[currentIndex]=input?input.value.trim():"";
+    }
+    saveQuizState();
+  }
+
+  function calculateScore(){
+    let score=0;
+    questions.forEach((q,i)=>{
+      if(q.type==="mc"){ if(userAnswers[i]===q.correct) score++; }
+      else{
+        const user=(userAnswers[i]||"").trim().toLowerCase();
+        const correct=q.correctText.toLowerCase();
+        if(user===correct || user.includes(correct)) score++;
+      }
+    });
+    return score;
+  }
+
+  function finishQuiz(){
+    if(quizCompleted) return;
+    quizCompleted=true;
+    currentIndex=questions.length-1;
+    saveCurrentAnswer();
+    if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+    const total=questions.length;
+    const score=calculateScore();
+    const percentage=Math.round((score/total)*100);
+    resultBox.innerHTML=`
+      <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+      <span style="font-size:8px;">${percentage}% - HTML basics mastery logged!</span>
+    `;
+    updateUI();
+    console.log("🧪 HTML Lesson 1 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+  }
+
+  nextBtn.addEventListener("click",()=>{
+    if(quizCompleted) return;
+    saveCurrentAnswer();
+    if(currentIndex<questions.length-1){ currentIndex++; updateUI(); }
+  });
+
+  finishBtn.addEventListener("click",()=>finishQuiz());
+
+  backBtn.addEventListener("click",()=>{
+    if(quizCompleted){
+      window.location.href="../../../Webside/Student.html";
+    }
+  });
+
+  loadQuizState();
+  updateUI();
+  if(!quizCompleted && remainingSeconds>0){ startTimer(); }
+  setInterval(saveQuizState,5000);
 </script>
 </body>
 </html>
