@@ -50,18 +50,8 @@ header {
   padding: 0 10px;
 }
 
-.xp-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.xp-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  min-width: 120px;
-}
+.xp-status { display: flex; align-items: center; gap: 5px; }
+.xp-bar-container { display: flex; align-items: center; gap: 3px; min-width: 120px; }
 
 #xpValue {
   display: inline-block;
@@ -77,13 +67,8 @@ header {
   text-overflow: ellipsis;
   vertical-align: middle;
 }
-
-/* Shrinks when big numbers appear */
 @media (max-width: 480px) {
-  #xpValue {
-    font-size: 0.45rem;
-    max-width: 100px;
-  }
+  #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
 
 /* Tooltip styling */
@@ -104,7 +89,6 @@ header {
 #xpTooltip.show { opacity: 1; transform: scale(1); }
 
 #xpBar { width: 80px; height: 10px; }
-
 .level-display { font-size: 0.6rem; text-align: center; }
 
 .user-actions {
@@ -184,7 +168,6 @@ main {
   position: relative;
   min-height: 200px;
 }
-
 .language-card {
   display: none;
   flex-direction: column;
@@ -211,29 +194,28 @@ main {
 }
 .language-card img { width: 70px; height: 70px; }
 .language-card p { margin-top: 10px; font-size: 0.6rem; }
-
 @keyframes fadeSlideIn {
   0% { opacity: 0; transform: translateX(40px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* === Arrows for Language Navigation === */
+/* === Auto-Responsive Navigation Arrows === */
 .nav-arrow {
   position: absolute;
-  bottom: 12px;
+  bottom: 2vh;
   background: rgba(29,185,84,0.9);
   border: none;
   color: white;
   font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-  padding: 6px 8px;
+  font-size: clamp(0.45rem, 2vw, 0.6rem);
+  padding: 0.6em 1em;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.12s ease;
   z-index: 12;
 }
-.nav-arrow.left { left: 12px; }
-.nav-arrow.right { right: 12px; }
+.nav-arrow.left { left: 3vw; }
+.nav-arrow.right { right: 3vw; }
 .nav-arrow:hover { background: #1ed760; transform: scale(1.1); }
 
 /* === BACKGROUND BLUR (outside container only) === */
@@ -248,13 +230,8 @@ main {
   pointer-events: auto;
   animation: fadeBackdrop 0.3s ease;
 }
+@keyframes fadeBackdrop { from {opacity:0;} to {opacity:1;} }
 
-@keyframes fadeBackdrop {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* disable clicks when blur-active */
 .blur-active header,
 .blur-active main,
 .blur-active footer {
@@ -262,7 +239,7 @@ main {
   user-select: none;
 }
 
-/* === Language Panel (Inside Lesson Mode) === */
+/* === Language Panel === */
 .language-panel {
   position: fixed;
   top: 50%;
@@ -369,7 +346,6 @@ footer {
 /* === Mobile tweaks === */
 @media (max-width: 600px) {
   .language-card img { width: 55px; height: 55px; }
-  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; bottom: 6px; }
   .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
