@@ -354,6 +354,28 @@ main {
   transform: scale(1.05);
 }
 
+/* === Panel Title Fix (icon on top, text below) === */
+.language-panel .panel-title {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.language-panel .panel-title img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.language-panel .panel-title .titleText {
+  font-size: 0.7rem;
+  color: #1DB954;
+  text-align: center;
+}
+
 /* === Quiz Dropdown (for Quiz only) === */
 .quiz-dropdown {
   position: relative;
