@@ -1,334 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Input Attributes UX - Cyberpunk Lesson 18</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel JS Lessons Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ===== WORLD BACKGROUND ===== */
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-    body {
-      font-family: 'Orbitron', monospace;
-      background: #000;
-      color: #e0e0e0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
 
-    /* Pixelated cyber grid */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background:
-        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-      animation: cyberGrid 25s linear infinite;
-      z-index: -2;
-    }
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
+}
 
-    @keyframes cyberGrid {
-      0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-      100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
-    }
 
-    .container {
-      max-width: 1300px;
-      margin: 25px auto;
-      background: rgba(8, 8, 25, 0.97);
-      border: 3px solid transparent;
-      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
-      border-radius: 25px;
-      box-shadow:
-        0 0 60px rgba(255, 0, 255, 0.5),
-        0 0 120px rgba(0, 255, 255, 0.4),
-        inset 0 0 40px rgba(255, 0, 255, 0.08);
-      backdrop-filter: blur(20px);
-      position: relative;
-      overflow: hidden;
-    }
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
 
-    .container::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
-      animation: rotateAura 10s linear infinite;
-      z-index: -1;
-    }
 
-    @keyframes rotateAura {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+}
 
-    header {
-      background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      padding: 60px 40px;
-      text-align: center;
-      position: relative;
-      border-bottom: 5px solid transparent;
-      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-    }
 
-    h1 {
-      font-size: 4em;
-      font-weight: 900;
-      text-shadow: 0 0 0 #ff00ff, 0 0 0 #00ffff;
-      margin-bottom: 20px;
-      animation: neonPulse 3s ease-in-out infinite;
-    }
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
 
-    @keyframes neonPulse {
-      0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-      50% { transform: scale(1.03); filter: hue-rotate(180deg); }
-    }
 
-    .subtitle {
-      font-size: 1.6em;
-      background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
-      background-size: 200% 200%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 700;
-      animation: gradientFlow 4s ease infinite;
-      text-shadow: 0 0 25px #00ffff;
-    }
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-    @keyframes gradientFlow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-    section {
-      padding: 60px 50px;
-      position: relative;
-      border-bottom: 2px solid rgba(255, 0, 255, 0.3);
-    }
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
+}
 
-    section:last-of-type { border-bottom: none; }
-    section:nth-child(even) { background: rgba(15, 10, 45, 0.7); }
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
+}
 
-    h2 {
-      font-size: 2.8em;
-      font-weight: 900;
-      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-      background-size: 300% 300%;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 35px;
-      padding-bottom: 25px;
-      position: relative;
-      animation: h2Glow 3s ease infinite;
-    }
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
+}
 
-    @keyframes h2Glow {
-      0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
-      50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
-    }
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
+}
 
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0;
-      width: 100px; height: 6px;
-      background: linear-gradient(90deg, #ff00ff, #00ffff);
-      border-radius: 3px;
-      box-shadow: 0 0 20px rgba(255, 0, 255, 1);
-      animation: underlineShift 2.5s ease-in-out infinite;
-    }
 
-    @keyframes underlineShift {
-      0%, 100% { width: 100px; left: 0; }
-      50% { width: 200px; left: 50px; }
-    }
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+}
 
-    .explanation {
-      font-family: 'Roboto Mono', monospace;
-      font-size: 1.2em;
-      line-height: 1.9;
-      margin-bottom: 40px;
-      color: #d0d0ff;
-      background: rgba(255, 0, 255, 0.05);
-      padding: 25px;
-      border-radius: 15px;
-      border-left: 4px solid #ff00ff;
-      box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
-    }
 
-    .cyber-form {
-      background: rgba(10, 15, 50, 0.9);
-      border: 2px solid #ff00ff;
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 600px;
-      margin: 20px 0;
-    }
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
 
-    .form-group { margin-bottom: 25px; }
-    label {
-      display: block;
-      color: #00ffff;
-      margin-bottom: 8px;
-      font-weight: bold;
-      text-shadow: 0 0 10px #00ffff;
-    }
 
-    input {
-      width: 100%;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid #ff00ff;
-      border-radius: 10px;
-      color: #e0e0e0;
-      font-family: 'Roboto Mono', monospace;
-      font-size: 16px;
-      box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
-      transition: all 0.3s ease;
-    }
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
 
-    input:focus {
-      outline: none;
-      border-color: #00ffff;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-      background: rgba(255, 255, 255, 0.15);
-    }
 
-    input:invalid {
-      border-color: #ff1493;
-      box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-    }
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-    input:valid {
-      border-color: #00ff88;
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-    }
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
 
-    button {
-      background: linear-gradient(45deg, #ff00ff, #00ffff);
-      color: #000;
-      border: none;
-      padding: 20px 40px;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 15px;
-      cursor: pointer;
-      font-family: 'Orbitron', monospace;
-      text-transform: uppercase;
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
-      transition: all 0.3s ease;
-      width: 100%;
-    }
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
 
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 50px rgba(0, 255, 255, 0.8);
-    }
 
-    footer {
-      background: rgba(15, 15, 55, 0.95);
-      color: #00ffff;
-      text-align: center;
-      padding: 50px;
-      border-top: 4px solid transparent;
-      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-      text-shadow: 0 0 20px #00ffff;
-    }
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
 
-    @media (max-width: 768px) {
-      h1 { font-size: 2.8em; }
-      h2 { font-size: 2.2em; }
-      section { padding: 40px 25px; }
-      .cyber-form { padding: 25px; }
-    }
-  </style>
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
+
+
+.lesson-panel.visible{display:block}
+
+
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
+
+
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
+}
+
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:0 5px 0 #00563f;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  box-shadow:0 2px 0 #00563f;
+  background:#19d6a4;
+}
+
+
+/* ===== LESSON CONTENT TEXT ===== */
+.lesson-panel p{
+  font-size:8px;
+  line-height:1.6;
+}
+
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Input Attributes UX</h1>
-      <p class="subtitle">LESSON 18 - Cyberpunk Validation Matrix</p>
-    </header>
 
-    <!-- Placeholder Example -->
-    <section id="placeholder">
-      <h2>01. Placeholder Text</h2>
-      <div class="explanation">
-        <span class="highlight">placeholder</span> = hint text inside inputs.
-      </div>
-      <form class="cyber-form">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input id="username" placeholder="Enter your CMU ID">
-        </div>
-      </form>
-    </section>
+<a href="#" class="exit-btn">Exit Dashboard</a>
 
-    <!-- Required -->
-    <section id="required">
-      <h2>02. Required Fields</h2>
-      <div class="explanation"><span class="highlight">required</span> prevents empty submissions.</div>
-      <form class="cyber-form">
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-          <input id="fullname" required placeholder="Your full name">
-        </div>
-      </form>
-    </section>
+<div class="app">
 
-    <!-- Pattern -->
-    <section id="pattern">
-      <h2>03. Pattern Validation</h2>
-      <div class="explanation"><span class="highlight">pattern</span> ensures correct format.</div>
-      <form class="cyber-form">
-        <div class="form-group">
-          <label for="studentid">Student ID</label>
-          <input id="studentid" pattern="[0-9]{4}-[A-Z]{3}-[0-9]{4}" placeholder="2024-IT-0001" required>
-        </div>
-      </form>
-    </section>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="brand">
+      <h1>INPUT Attributes for UX</h1>
+      <p>LESSON 18</p>
+    </div>
 
-    <!-- Min Max Step -->
-    <section id="minmax-step">
-      <h2>04. Min, Max & Step</h2>
-      <div class="explanation">
-        <span class="highlight">min</span> & <span class="highlight">max</span> set limits.
-        <span class="highlight">step</span> controls increments.
-      </div>
-      <form class="cyber-form" action="#" method="POST">
-        <div class="form-group">
-          <label for="age">Age (min=18, max=60)</label>
-          <input type="number" id="age" name="age" min="18" max="60" placeholder="18–60">
-        </div>
-        <div class="form-group">
-          <label for="gpa">GPA (step=0.1)</label>
-          <input type="number" id="gpa" name="gpa" step="0.1" min="1" max="5" placeholder="e.g. 1.5">
-        </div>
-        <button type="submit">CHECK RANGE</button>
-      </form>
-    </section>
-
-    <footer>
-      <h3>Ready to Test Input Attributes?</h3>
-      <p>Use placeholders, validation patterns, and number limits for a better UX.</p>
-    </footer>
+    <div class="lessons-list">
+      <button data-target="lesson-1">
+        <span class="num">01</span> Placeholder Attribute
+      </button>
+      <button data-target="lesson-2">
+        <span class="num">02</span> Required Attribute
+      </button>
+      <button data-target="lesson-3">
+        <span class="num">03</span> Pattern Attribute
+      </button>
+      <button data-target="lesson-4">
+        <span class="num">04</span> Min/Max Attribute
+      </button>
+      <button data-target="lesson-5">
+        <span class="num">05</span> Step Attribute
+      </button>
+    </div>
   </div>
 
-  <!-- Global tools (copy & exit) -->
-  <script src="../../../Tools/Lesson-tls/GLTools.js"></script>
+  <!-- Content Area -->
+  <div class="content">
+    <div class="content-head">
+      <h1 class="title">Lesson: Placeholder Attribute</h1>
+      <button class="next-btn">Next Lesson</button>
+    </div>
+
+    <div class="panel-wrap">
+      <!-- Lesson 1: Placeholder Attribute -->
+      <div id="lesson-1" class="lesson-panel visible">
+        <h1>Placeholder Attribute</h1>
+        <h2>What is a placeholder?</h2>
+        <p>The placeholder attribute specifies a short hint that describes the expected value of an input field.</p>
+
+        <div class="explain">
+          <p>The placeholder is displayed in the input field until the user enters a value.</p>
+        </div>
+
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+          <code>
+            &lt;input type="text" placeholder="Enter your name"&gt;
+          </code>
+        </div>
+
+        <div class="demo">
+          <button>Try It</button>
+        </div>
+      </div>
+
+      <!-- Lesson 2: Required Attribute -->
+      <div id="lesson-2" class="lesson-panel">
+        <h1>Required Attribute</h1>
+        <h2>What is the required attribute?</h2>
+        <p>The required attribute specifies that an input field must be filled out before submitting the form.</p>
+
+        <div class="explain">
+          <p>If the user attempts to submit the form without filling out the required field, the browser will display a warning.</p>
+        </div>
+
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+          <code>
+            &lt;input type="text" required&gt;
+          </code>
+        </div>
+
+        <div class="demo">
+          <button>Try It</button>
+        </div>
+      </div>
+
+      <!-- Lesson 3: Pattern Attribute -->
+      <div id="lesson-3" class="lesson-panel">
+        <h1>Pattern Attribute</h1>
+        <h2>What is the pattern attribute?</h2>
+        <p>The pattern attribute allows you to define a regular expression that the input value must match.</p>
+
+        <div class="explain">
+          <p>Use the pattern attribute to validate specific formats, such as email addresses or phone numbers.</p>
+        </div>
+
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+          <code>
+            &lt;input type="text" pattern="^[A-Za-z]+$"&gt;
+          </code>
+        </div>
+
+        <div class="demo">
+          <button>Try It</button>
+        </div>
+      </div>
+
+      <!-- Lesson 4: Min/Max Attribute -->
+      <div id="lesson-4" class="lesson-panel">
+        <h1>Min/Max Attribute</h1>
+        <h2>What are the min/max attributes?</h2>
+        <p>The min and max attributes specify the range of acceptable values for an input field, typically used with number input types.</p>
+
+        <div class="explain">
+          <p>Ensure the entered number falls within the specified range.</p>
+        </div>
+
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+          <code>
+            &lt;input type="number" min="1" max="10"&gt;
+          </code>
+        </div>
+
+        <div class="demo">
+          <button>Try It</button>
+        </div>
+      </div>
+
+      <!-- Lesson 5: Step Attribute -->
+      <div id="lesson-5" class="lesson-panel">
+        <h1>Step Attribute</h1>
+        <h2>What is the step attribute?</h2>
+        <p>The step attribute specifies the legal number intervals for an input field, typically used with number inputs.</p>
+
+        <div class="explain">
+          <p>It helps define the precision or increment between allowed values.</p>
+        </div>
+
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+          <code>
+            &lt;input type="number" step="0.5"&gt;
+          </code>
+        </div>
+
+        <div class="demo">
+          <button>Try It</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // JavaScript to handle lesson navigation
+  document.querySelectorAll('.lessons-list button').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetLesson = document.getElementById(button.getAttribute('data-target'));
+      
+      document.querySelectorAll('.lesson-panel').forEach(panel => {
+        panel.classList.remove('visible');
+      });
+
+      targetLesson.classList.add('visible');
+    });
+  });
+</script>
+
 </body>
 </html>
