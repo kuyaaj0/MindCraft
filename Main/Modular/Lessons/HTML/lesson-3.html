@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel HTML Text Lessons</title>
+<title>Pixel HTML Lessons – Text Formatting</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 
-/* ===== WORLD BACKGROUND ===== */
 body{
   font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
@@ -38,7 +37,6 @@ body{
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
-/* ===== MAIN APP ===== */
 .app{
   max-width:1200px;
   margin:0 auto;
@@ -52,7 +50,6 @@ body{
   padding:18px;
 }
 
-/* ===== SIDEBAR ===== */
 .sidebar{
   background:#8b5a2b;
   border-radius:18px;
@@ -77,7 +74,6 @@ body{
   margin-top:6px;
 }
 
-/* ===== LESSON BUTTONS ===== */
 .lessons-list{
   margin-top:16px;
   display:flex;
@@ -112,14 +108,6 @@ body{
   background:#ffe38a;
 }
 
-.lessons-list button:active{
-  transform:translateY(1px);
-  box-shadow:
-    0 1px 0 #b5741b,
-    0 2px 0 #3b2a15;
-  background:#f5b93a;
-}
-
 .lessons-list button.active{
   background:#ffe89c;
   border-color:#fff7c9;
@@ -134,7 +122,6 @@ body{
   font-size:8px;
 }
 
-/* ===== CONTENT ===== */
 .content{
   background:#e8f4ff;
   border-radius:18px;
@@ -146,7 +133,6 @@ body{
   flex-direction:column;
 }
 
-/* ===== HEADER ===== */
 .content-head{
   display:flex;
   justify-content:space-between;
@@ -159,7 +145,6 @@ body{
   text-shadow:2px 2px #fff;
 }
 
-/* ===== NAV BUTTONS ===== */
 .content-head button{
   font-family:'Press Start 2P';
   background:#4e91ff;
@@ -178,20 +163,8 @@ body{
 .content-head button:hover{
   transform:translateY(-2px);
   background:#6aa7ff;
-  box-shadow:
-    0 5px 0 #16347a,
-    0 6px 0 #0c1b3a;
 }
 
-.content-head button:active{
-  transform:translateY(1px);
-  background:#3f7aed;
-  box-shadow:
-    0 1px 0 #16347a,
-    0 2px 0 #0c1b3a;
-}
-
-/* ===== PANELS ===== */
 .panel-wrap{
   flex:1;
   position:relative;
@@ -207,7 +180,6 @@ body{
 
 .lesson-panel.visible{display:block}
 
-/* ===== LESSON CONTENT ===== */
 .lesson-panel h1{
   font-size:14px;
   margin-bottom:6px;
@@ -222,30 +194,33 @@ body{
 .explain{
   background:#fff3cd;
   border:3px solid #c9a227;
-  padding:14px;
+  padding:18px;
   border-radius:12px;
-  margin-bottom:14px;
+  margin-bottom:18px;
   line-height:1.6;
+  font-size:9px;
 }
 
 .code{
   background:#1e1e1e;
   color:#00ff90;
-  padding:14px;
+  padding:18px;
   border-radius:12px;
-  margin-bottom:14px;
+  margin-bottom:18px;
   overflow:auto;
   position:relative;
+  font-size:9px;
+  line-height:1.5;
 }
 
-.code button.copy-btn{
+.copy-btn{
   position:absolute;
-  top:8px;
-  right:8px;
+  top:10px;
+  right:10px;
   background:#ffd966;
   color:#000;
   border:2px solid #b59b24;
-  padding:4px 6px;
+  padding:6px 8px;
   border-radius:6px;
   cursor:pointer;
   font-size:7px;
@@ -255,26 +230,29 @@ body{
 .demo{
   background:#d9ead3;
   border:3px solid #6aa84f;
-  padding:14px;
+  padding:20px;
   border-radius:12px;
-  margin-bottom:14px;
+  margin-bottom:18px;
+  font-size:10px;
+  line-height:1.6;
 }
 
-.demo button{
-  font-family:'Press Start 2P';
-  background:#00c98b;
-  color:#003322;
-  border:3px solid #00805c;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:
-    0 3px 0 #00563f,
-    0 4px 0 #001f16;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-top:8px;
+.demo pre {
+  background:#f0f8f0;
+  padding:12px;
+  border-radius:8px;
+  border-left:4px solid #6aa84f;
+  margin:12px 0;
+  font-size:9px;
+  white-space:pre-wrap;
+  overflow:auto;
+}
+
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
 }
 </style>
 </head>
@@ -283,24 +261,26 @@ body{
 
 <aside class="sidebar">
   <div class="brand">
-    <h1>📄 Text Formatting</h1>
-    <p>LESSON 3</p>
+    <h1>🧠 Pixel HTML</h1>
+    <p>Lesson 3</p>
   </div>
 
   <div class="lessons-list">
-    <button data-lesson="bold" class="active"><span class="num">01</span> Bold Text</button>
-    <button data-lesson="italic"><span class="num">02</span> Italic Text</button>
-    <button data-lesson="small"><span class="num">03</span> Small Text</button>
-    <button data-lesson="subsup"><span class="num">04</span> Sub / Sup</button>
-    <button data-lesson="quotes"><span class="num">05</span> Quotes</button>
-    <button data-lesson="code"><span class="num">06</span> Code Text</button>
+    <button data-lesson="topic-1" class="active"><span class="num">01</span> Text Formatting</button>
+    <button data-lesson="topic-2"><span class="num">02</span> Bold & Italic</button>
+    <button data-lesson="topic-3"><span class="num">03</span> Sub/Sup Scripts</button>
+    <button data-lesson="topic-4"><span class="num">04</span> Quotes & Code</button>
+    <button data-lesson="topic-5"><span class="num">05</span> Small Text</button>
+    <button data-lesson="topic-6"><span class="num">06</span> Your Challenge</button>
   </div>
 </aside>
 
 <main class="content">
   <div class="content-head">
-    <a href="#" class="exit-btn">EXIT</a>
-    <div class="title" id="panel-title">01 • Bold Text</div>
+    <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+    </div>
+    <div class="title" id="panel-title">01 • Text Formatting</div>
     <div>
       <button id="prevLesson">◀</button>
       <button id="nextLesson">▶</button>
@@ -309,57 +289,182 @@ body{
 
   <div class="panel-wrap">
 
-    <article id="bold" class="lesson-panel visible">
-      <h1>Bold Text</h1>
-      <div class="meta">Lesson 1</div>
-      <div class="explain">Use <code>&lt;b&gt;</code> or <code>&lt;strong&gt;</code> to make text bold.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>&lt;b&gt;Bold Text&lt;/b&gt;
-&lt;strong&gt;Strong Text&lt;/strong&gt;</pre></div>
-      <div class="demo">This is <b>bold text</b> and <strong>strong text</strong>.</div>
+    <!-- TOPIC 1 -->
+    <article id="topic-1" class="lesson-panel visible">
+      <h1>Text Formatting</h1>
+      <div class="meta">Lesson 3</div>
+      <div class="explain">
+        HTML formatting tags make text <strong>BOLD</strong>, <em>ITALIC</em>, <small>small</small>, 
+        add sub/superscripts like H<sub>2</sub>O, and handle <q>quotes</q> or <code>code snippets</code> perfectly!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;My Page&lt;/title&gt;&lt;/head&gt;
+&lt;body style="font-family:monospace;"&gt;
+  &lt;p&gt;This is &lt;strong&gt;BOLD TEXT&lt;/strong&gt;&lt;/p&gt;
+  &lt;p&gt;This is &lt;em&gt;ITALIC TEXT&lt;/em&gt;&lt;/p&gt;
+  &lt;p&gt;Chemical: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+  &lt;p&gt;Math: x&lt;sup&gt;2&lt;/sup&gt; + 2x&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre>This is BOLD TEXT
+This is ITALIC TEXT
+Chemical: H₂O
+Math: x² + 2x</pre>
+      </div>
     </article>
 
-    <article id="italic" class="lesson-panel">
-      <h1>Italic Text</h1>
-      <div class="explain">Use <code>&lt;i&gt;</code> or <code>&lt;em&gt;</code> to italicize text.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>&lt;i&gt;Italic Text&lt;/i&gt;
-&lt;em&gt;Emphasized Text&lt;/em&gt;</pre></div>
-      <div class="demo">This is <i>italic text</i> and <em>emphasized text</em>.</div>
+    <!-- TOPIC 2 -->
+    <article id="topic-2" class="lesson-panel">
+      <h1>Bold & Italic</h1>
+      <div class="explain">
+        <strong>&lt;strong&gt;</strong> shows importance (renders bold), 
+        <em>&lt;em&gt;</em> shows emphasis (renders italic). 
+        Perfect for pixel games and warnings!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="background:#000;color:#0f0;font-family:monospace;"&gt;
+  &lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
+  &lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
+  &lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
+  &lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre style="background:#000;color:#0f0;font-family:monospace;padding:15px;">
+PIXEL QUEST (BOLD)
+WARNING: Save often! (BOLD)
+I love making games! (ITALIC)
+Next level: very hard (ITALIC)</pre>
+      </div>
     </article>
 
-    <article id="small" class="lesson-panel">
+    <!-- TOPIC 3 -->
+    <article id="topic-3" class="lesson-panel">
+      <h1>Sub/Sup Scripts</h1>
+      <div class="explain">
+        <sub>&lt;sub&gt;</sub> drops text below baseline, 
+        <sup>&lt;sup&gt;</sup> raises it above - 
+        essential for math, chemistry, and game stats!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+  &lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
+  &lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+  &lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;
+  &lt;p&gt;Game score: Level&lt;sup&gt;5&lt;/sup&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre>Water: H₂O
+Carbon: CO₂
+Square: x²
+Power: 10³ = 1000
+Game score: Level⁵</pre>
+      </div>
+    </article>
+
+    <!-- TOPIC 4 -->
+    <article id="topic-4" class="lesson-panel">
+      <h1>Quotes & Code</h1>
+      <div class="explain">
+        <q>&lt;q&gt;</q> adds smart quotes automatically, 
+        <code>&lt;code&gt;</code> shows monospace code text 
+        - perfect for tutorials and game instructions!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
+  &lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
+  &lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;
+  &lt;p&gt;Code: &lt;code&gt;score += 100;&lt;/code&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre>Pixel says: "Code is magic!"
+Player says: "I won!"
+Try: alert("WIN!");
+Code: score += 100;</pre>
+      </div>
+    </article>
+
+    <!-- TOPIC 5 -->
+    <article id="topic-5" class="lesson-panel">
       <h1>Small Text</h1>
-      <div class="explain">Use <code>&lt;small&gt;</code> for smaller text.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>&lt;small&gt;Small Text&lt;/small&gt;</pre></div>
-      <div class="demo">This is <small>small text</small>.</div>
+      <div class="explain">
+        <small>&lt;small&gt;</small> creates smaller text 
+        for prices, timestamps, copyrights, 
+        game disclaimers, and fine print!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
+  &lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
+  &lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;
+  &lt;footer&gt;&lt;small&gt;© 2026 Pixel Games PH&lt;/small&gt;&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre>Game Price: ₱199 + tax
+Pixels: 32x32 (small size)
+Updated: Jan 2026 (v1.2)
+© 2026 Pixel Games PH</pre>
+      </div>
     </article>
 
-    <article id="subsup" class="lesson-panel">
-      <h1>Subscript / Superscript</h1>
-      <div class="explain">Use <code>&lt;sub&gt;</code> and <code>&lt;sup&gt;</code> for subscripts and superscripts.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>H&lt;sub&gt;2&lt;/sub&gt;O
-E = mc&lt;sup&gt;2&lt;/sup&gt;</pre></div>
-      <div class="demo">H<sub>2</sub>O &nbsp;&nbsp; E = mc<sup>2</sup></div>
-    </article>
-
-    <article id="quotes" class="lesson-panel">
-      <h1>Quotes</h1>
-      <div class="explain">Use <code>&lt;q&gt;</code> for inline quotes or <code>&lt;blockquote&gt;</code> for block quotes.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>&lt;q&gt;Inline Quote&lt;/q&gt;
-&lt;blockquote&gt;Block Quote&lt;/blockquote&gt;</pre></div>
-      <div class="demo">This is <q>an inline quote</q>.<br><blockquote>A block quote example.</blockquote></div>
-    </article>
-
-    <article id="code" class="lesson-panel">
-      <h1>Code Text</h1>
-      <div class="explain">Use <code>&lt;code&gt;</code> to show code snippets.</div>
-      <div class="code"><button class="copy-btn">Copy</button>
-<pre>&lt;code&gt;console.log("Hello")&lt;/code&gt;</pre></div>
-      <div class="demo"><code>console.log("Hello")</code></div>
+    <!-- TOPIC 6 -->
+    <article id="topic-6" class="lesson-panel">
+      <h1>Your Challenge</h1>
+      <div class="explain">
+        Create YOUR pixel profile! Use <strong>name</strong>, <em>hobby</em>, 
+        math formula (sub/sup), <q>quote</q>, <code>code</code>, 
+        and <small>price</small> - make it 8+ lines!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;My Profile&lt;/title&gt;&lt;/head&gt;
+&lt;body style="background:#111;color:#0ff;font-family:monospace;"&gt;
+  &lt;h1&gt;&lt;strong&gt;[YOUR NAME]&lt;/strong&gt;&lt;/h1&gt;
+  &lt;p&gt;I &lt;em&gt;LOVE CODING&lt;/em&gt;!&lt;/p&gt;
+  &lt;p&gt;Score formula: points&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+  &lt;p&gt;&lt;q&gt;Pixels = Future!&lt;/q&gt;&lt;/p&gt;
+  &lt;p&gt;Try: &lt;code&gt;score++;&lt;/code&gt;&lt;/p&gt;
+  &lt;p&gt;Course: ₱299 &lt;small&gt;student price&lt;/small&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <pre style="background:#111;color:#0ff;font-family:monospace;padding:20px;border-radius:8px;">
+[YOUR NAME] (BOLD)
+I LOVE CODING! (ITALIC)
+Score formula: points²
+"Pixels = Future!"
+Try: score++;
+Course: ₱299 student price</pre>
+      </div>
     </article>
 
   </div>
@@ -377,7 +482,7 @@ function showLesson(id){
   document.getElementById(id).classList.add('visible');
   const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
   btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\\d+\\s+/, '');
 }
 
 buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
@@ -387,17 +492,14 @@ const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').
 document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
 document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
 
-// Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const codeBlock = btn.nextElementSibling || btn.parentElement.querySelector('pre');
-    if(codeBlock){
-      navigator.clipboard.writeText(codeBlock.innerText).then(()=>{
-        btn.textContent='Copied!';
-        setTimeout(()=>btn.textContent='Copy',1500);
-      });
-    }
-  });
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
 });
 </script>
 </body>
