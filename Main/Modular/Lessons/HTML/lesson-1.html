@@ -1,230 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HTML Structure & Elements Lesson</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel JS Lessons Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: 'Orbitron', monospace;
-      background: #0a0a0a;
-      color: #e0e0e0;
-      min-height: 100vh;
-      padding: 20px;
-      background-image:
-        radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120,219,255,0.2) 0%, transparent 50%);
-      position: relative;
-      overflow-x: hidden;
-    }
+/* ===== WORLD BACKGROUND ===== */
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      background: rgba(15, 15, 25, 0.95);
-      border: 2px solid #ff69b4;
-      border-image: linear-gradient(45deg, #ff69b4, #00bfff, #ff69b4) 1;
-      border-radius: 15px;
-      box-shadow:
-        0 0 30px rgba(255, 105, 180, 0.4),
-        0 0 60px rgba(0, 191, 255, 0.3),
-        inset 0 0 20px rgba(255, 105, 180, 0.1);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-      position: relative;
-    }
 
-    header {
-      text-align: center;
-      padding: 50px 30px;
-      position: relative;
-    }
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
+}
 
-    h1 {
-      font-size: 3em;
-      font-weight: 900;
-      background: linear-gradient(135deg, #ff69b4, #00bfff, #ff1493);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
-      margin-bottom: 10px;
-    }
 
-    .subtitle {
-      font-size: 1.2em;
-      color: #00ffff;
-      text-shadow: 0 0 15px #00ffff;
-    }
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
 
-    section {
-      padding: 40px;
-      position: relative;
-      border-top: 1px solid rgba(255, 105, 180, 0.1);
-    }
 
-    h2 {
-      color: transparent;
-      background: linear-gradient(135deg, #ff69b4, #00bfff, #ff1493);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 2.2em;
-      font-weight: 700;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-    }
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+}
 
-    .code-block {
-      background: rgba(10, 15, 30, 0.9);
-      border: 2px solid #ff69b4;
-      border-radius: 12px;
-      padding: 25px;
-      margin: 25px 0;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.6;
-      overflow-x: auto;
-      position: relative;
-      box-shadow:
-        0 0 20px rgba(255, 105, 180, 0.3),
-        inset 0 0 10px rgba(0, 191, 255, 0.1);
-    }
 
-    .code-block::before {
-      content: 'CODE BOX';
-      position: absolute;
-      top: -12px;
-      left: 20px;
-      background: #0f0f1a;
-      color: #ff69b4;
-      padding: 0 15px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
 
-    .code-output {
-      background: rgba(0, 20, 60, 0.9);
-      border: 2px solid #00ffff;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 15px;
-      font-family: 'Orbitron', sans-serif;
-      color: #00ffff;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-      position: relative;
-    }
 
-    .code-output::before {
-      content: "OUTPUT";
-      position: absolute;
-      top: -12px;
-      left: 20px;
-      background: #0f0f1a;
-      color: #00ffff;
-      padding: 0 15px;
-      font-size: 12px;
-      font-weight: bold;
-    }
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-    footer {
-      background: rgba(20, 20, 40, 0.8);
-      color: #00ffcc;
-      text-align: center;
-      padding: 25px;
-      font-size: 1em;
-      border-top: 2px solid rgba(0, 191, 255, 0.5);
-      text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
-    }
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-    @media (max-width: 768px) {
-      h1 { font-size: 2.2em; }
-    }
-  </style>
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
+}
+
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
+}
+
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
+}
+
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
+}
+
+
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+}
+
+
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
+
+
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
+
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
+
+
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
+
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
+
+
+.lesson-panel.visible{display:block}
+
+
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
+
+
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
+}
+
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
+}
+
+
+.examples{
+  margin-left:16px;
+}
+
+
+.examples li{
+  margin:6px 0;
+}
+
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>HTML Structure & Elements</h1>
-      <p class="subtitle">Neon Cyberpunk Edition - Complete Beginner Lesson</p>
-    </header>
+<div class="app">
 
-    <section id="doctype">
-      <h2>1. DOCTYPE Declaration</h2>
-      <p>The <code>&lt;!DOCTYPE html&gt;</code> must be the very first line. It tells browsers this is HTML5.</p>
-      <div class="code-block">
-        <pre><code>&lt;!DOCTYPE html&gt;</code></pre>
-      </div>
-      <div class="code-output">
-        ✅ Declares HTML5 document type
-      </div>
-    </section>
 
-    <section id="html-tag">
-      <h2>2. &lt;html&gt; Root Element</h2>
-      <p>The <code>&lt;html&gt;</code> tag is the <span class="highlight">root container</span> for all content.</p>
-      <div class="code-block">
-        <pre><code>&lt;html lang="en"&gt;
-  &lt;!-- All content here --&gt;
-&lt;/html&gt;</code></pre>
-      </div>
-      <div class="code-output">
-        🌐 Creates the main HTML container for the page
-      </div>
-    </section>
-
-    <section id="head">
-      <h2>3. &lt;head&gt; Element</h2>
-      <p><code>&lt;head&gt;</code> holds metadata only: title, charset, viewport, CSS/JS links.</p>
-      <div class="code-block">
-        <pre><code>&lt;head&gt;
-  &lt;title&gt;My Page&lt;/title&gt;
-  &lt;meta charset="UTF-8"&gt;
-  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-&lt;/head&gt;</code></pre>
-      </div>
-      <div class="code-output">
-        🧠 Metadata area (not visible on the webpage)
-      </div>
-    </section>
-
-    <section id="body">
-      <h2>4. &lt;body&gt; Element</h2>
-      <p><code>&lt;body&gt;</code> contains all visible content: text, images, links, etc.</p>
-      <div class="code-block">
-        <pre><code>&lt;body&gt;
-  &lt;h1&gt;Hello World&lt;/h1&gt;
-  &lt;p&gt;Welcome to my first webpage!&lt;/p&gt;
-&lt;/body&gt;</code></pre>
-      </div>
-      <div class="code-output">
-        <h1 style="color:#ff69b4;">Hello World</h1>
-        <p style="color:#00ffff;">Welcome to my first webpage!</p>
-      </div>
-    </section>
-
-    <section id="tags">
-      <h2>5. HTML Tags & Elements</h2>
-      <p>Tags create elements with an opening tag, content, and closing tag.</p>
-      <div class="code-block">
-        <pre><code>&lt;p&gt;Hello World!&lt;/p&gt;</code></pre>
-      </div>
-      <div class="code-output">
-        <p style="color:#ffb6c1;">Hello World!</p>
-      </div>
-    </section>
-
-    <footer>
-      <p>© 2025 MindCraft | End of Lesson 1</p>
-    </footer>
+<aside class="sidebar">
+  <div class="brand">
+    <h1>🧠 HTML structure & Elements</h1>
+    <p>Lesson 1</p>
   </div>
 
-  <!-- Global Lesson Tools -->
-  <script src="../../../Tools/Lesson-tls/GLTools.js"></script>
+
+  <div class="lessons-list">
+    <button data-lesson="topic-1" class="active"><span class="num">01</span> Intro / Where To / Output</button>
+    <button data-lesson="topic-2"><span class="num">02</span> Script Tags</button>
+    <button data-lesson="topic-3"><span class="num">03</span> External Files</button>
+    <button data-lesson="topic-4"><span class="num">04</span> Console</button>
+    <button data-lesson="topic-5"><span class="num">05</span> Alert Popups</button>
+    <button data-lesson="topic-6"><span class="num">06</span> innerHTML</button>
+    <button data-lesson="topic-7"><span class="num">07</span> Your Challenge</button>
+  </div>
+</aside>
+
+
+<main class="content">
+  <div class="content-head">
+
+
+    <div class="container">
+        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+      </div>
+      
+    <div class="title" id="panel-title">01 • Intro / Where To / Output</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
+    </div>
+  </div>
+
+
+  <div class="panel-wrap">
+
+
+    <!-- TOPIC 1 -->
+    <article id="topic-1" class="lesson-panel visible">
+      <h1>Intro / Where To / Output</h1>
+      <div class="meta">Lesson 1</div>
+      <div class="explain">JS makes websites <strong>interactive</strong>. HTML is skeleton, CSS skin, JS brain.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>console.log("JS Engine ON");
+alert("Welcome!");
+document.body.innerHTML += "&lt;p&gt;Hello from JS&lt;/p&gt;";</pre>
+      </div>
+      <div class="demo">
+        <p>Click to test JS:</p>
+        <button onclick="alert('Hello from JS!')">Test JS</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 2 -->
+    <article id="topic-2" class="lesson-panel">
+      <h1>Script Tags</h1>
+      <div class="explain">Use &lt;script&gt; tags in HEAD or BODY or External JS.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;script defer&gt;console.log("HEAD loaded")&lt;/script&gt;
+&lt;script&gt;alert("BODY script")&lt;/script&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</pre>
+      </div>
+      <div class="demo">
+        <button onclick="alert('Script Tag Simulated')">Run Script</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 3 -->
+    <article id="topic-3" class="lesson-panel">
+      <h1>External JS Files</h1>
+      <div class="explain">Put JS in a separate file for better management.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;script src="app.js"&gt;&lt;/script&gt;
+console.log("External JS loaded");
+document.getElementById("demoExt").innerHTML="Loaded";</pre>
+      </div>
+      <div class="demo">
+        <div id="demoExt" style="padding:10px;background:#fff;color:#000;border-radius:6px;">External JS not loaded</div>
+        <button onclick="document.getElementById('demoExt').innerHTML='External JS Loaded!'">Load External JS</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 4 -->
+    <article id="topic-4" class="lesson-panel">
+      <h1>Console</h1>
+      <div class="explain">Use console.log(), console.warn(), console.error() for debugging.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>console.log("Info");
+console.warn("Warning");
+console.error("Error");</pre>
+      </div>
+      <div class="demo">
+        <div id="demoConsole" style="padding:10px;background:#fff;color:#000;border-radius:6px;height:80px;overflow:auto;font-family:monospace;">// Console output here</div>
+        <button onclick="document.getElementById('demoConsole').innerHTML='Info\nWarning\nError'">Simulate Console</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 5 -->
+    <article id="topic-5" class="lesson-panel">
+      <h1>Alert Popups</h1>
+      <div class="explain">Use alert() to show popup messages to users.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>alert('Hello!');
+alert('Score: 100');
+alert('Game Over!');</pre>
+      </div>
+      <div class="demo">
+        <button onclick="alert('Hello from alert!')">Test Alert</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 6 -->
+    <article id="topic-6" class="lesson-panel">
+      <h1>innerHTML</h1>
+      <div class="explain">Change HTML content dynamically using innerHTML.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;div id="demoDiv"&gt;Loading...&lt;/div&gt;
+document.getElementById("demoDiv").innerHTML="Hello Pixel!";</pre>
+      </div>
+      <div class="demo">
+        <div id="demoDiv" style="padding:10px;background:#fff;color:#000;border-radius:6px;">Loading...</div>
+        <button onclick="document.getElementById('demoDiv').innerHTML='Hello Pixel!'">Run innerHTML</button>
+      </div>
+    </article>
+
+
+    <!-- TOPIC 7 -->
+    <article id="topic-7" class="lesson-panel">
+      <h1>Your Challenge</h1>
+      <div class="explain">Create your own interactive Pixel-themed login screen! Use alert(), console.log(), innerHTML.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;body style="background:#000;color:#0ff"&gt;
+&lt;h1 id="welcome"&gt;Pixel Login&lt;/h1&gt;
+&lt;p id="status"&gt;Waiting...&lt;/p&gt;
+&lt;script&gt;
+alert("Welcome!");
+console.log("Student login");
+document.getElementById("welcome").innerHTML="WELCOME [NAME]";
+document.getElementById("status").innerHTML="Pixel Theme Active";
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;</pre>
+      </div>
+    </article>
+
+
+  </div>
+</main>
+</div>
+
+
+<script>
+// Lesson navigation
+const buttons = document.querySelectorAll('.lessons-list button');
+const panels = document.querySelectorAll('.lesson-panel');
+const title = document.getElementById('panel-title');
+
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+}
+
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
+});
+</script>
 </body>
 </html>
