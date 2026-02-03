@@ -2,306 +2,608 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSS Display & Visibility – Cyberpunk Lesson 10</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSS Display & Visibility - Pixel Lesson 10</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
 body{
-  font-family:'Orbitron',monospace;
-  background:#000;
-  color:#e0e0e0;
-  overflow-x:hidden;
-  min-height:100vh;
-  position:relative;
-}
-/* PIXEL GRID */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 20%,#ff00ff20 0%,transparent 40%),
-    radial-gradient(circle at 80% 80%,#00ffff20 0%,transparent 40%),
-    linear-gradient(90deg,transparent 49%,#ff00ff08 50%,transparent 52%),
-    linear-gradient(0deg,transparent 49%,#00ffff08 50%,transparent 52%);
-  background-size:50px 50px,50px 50px,25px 25px,25px 25px;
-  animation:cyber 25s linear infinite;
-  z-index:-2;
-}
-@keyframes cyber{
-  0%{background-position:0 0;}
- 100%{background-position:50px 50px;}
-}
-.container{
-  max-width:1300px;margin:25px auto;
-  background:rgba(8,8,25,.97);
-  border:3px solid transparent;
-  border-image:linear-gradient(45deg,#ff00ff,#00ffff,#ff1493)1;
-  border-radius:25px;
-  box-shadow:0 0 60px rgba(255,0,255,.5),0 0 120px rgba(0,255,255,.4),inset 0 0 40px rgba(255,0,255,.08);
-  backdrop-filter:blur(20px);
-  position:relative;overflow:hidden;
-}
-header{
-  padding:60px 40px;text-align:center;
-  background:linear-gradient(135deg,#ff00ff90,#00ffff90,#ff149390);
-  background-clip:text;-webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  border-bottom:5px solid transparent;
-  border-image:linear-gradient(90deg,#ff00ff,#00ffff)1;
-}
-h1{
-  font-size:4em;font-weight:900;
-  text-shadow:0 0 30px #ff00ff,0 0 60px #00ffff;
-  animation:pulse 3s ease-in-out infinite;
-}
-@keyframes pulse{
-  0%,100%{transform:scale(1);}
- 50%{transform:scale(1.03);}
-}
-.subtitle{
-  font-size:1.5em;color:#00ffff;text-shadow:0 0 25px #00ffff;
-}
-section{padding:60px 50px;border-bottom:2px solid rgba(255,0,255,.3);}
-h2{
-  font-size:2.6em;
-  background:linear-gradient(135deg,#ff00ff,#00ffff,#ff1493);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  margin-bottom:25px;
-}
-.explanation{
-  font-family:'Roboto Mono',monospace;
-  font-size:1.2em;line-height:1.9;
-  background:rgba(255,0,255,.05);
-  border-left:6px solid #ff00ff;
-  border-radius:15px;
-  color:#d0d0ff;padding:25px;margin-bottom:30px;
-}
-.code-block{
-  background:rgba(10,15,50,.95);
-  border:2px solid transparent;
-  border-image:linear-gradient(45deg,#00ffff,#ff00ff)1;
-  border-radius:20px;
-  padding:30px;margin:25px 0;
-  font-family:'Roboto Mono',monospace;
-  color:#00ffff;
-}
-.demo-output{
-  position:relative;
-  background:rgba(0,20,60,.9);
-  border:2px solid #00ffff;
-  border-radius:15px;
-  padding:30px;margin-top:25px;
-  box-shadow:0 0 35px rgba(0,255,255,.4);
-}
-.demo-output::before{
-  content:'BROWSER OUTPUT';
-  position:absolute;top:-15px;left:25px;
-  background:rgba(0,20,60,.9);
-  border:2px solid #00ffff;color:#00ffff;
-  padding:5px 20px;border-radius:20px;
-  font-size:13px;
-}
-footer{
-  background:rgba(15,15,55,.95);
-  color:#00ffff;text-align:center;
-  padding:50px;border-top:3px solid #ff00ff;
-  text-shadow:0 0 20px #00ffff;
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
 }
 
-/* DEMO blocks */
-.demo-box{
-  border:2px solid #ff00ff;
-  color:#ff00ff;
-  background:rgba(0,0,40,.9);
-  padding:15px;
-  margin:10px;
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
-.inline-demo{
-  display:inline;
-  border:2px solid #00ffff;
-  color:#00ffff;
-  padding:5px 10px;
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
-.inline-block-demo{
-  display:inline-block;
-  width:120px;
-  padding:10px;
-  border:2px solid #ff1493;
-  color:#ff1493;
+
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+}
+
+.brand h1{
+  font-size:14px;
   text-align:center;
+  text-shadow:2px 2px #000;
 }
-.hidden-demo{
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
+
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
+}
+
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
+}
+
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
+}
+
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
+}
+
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
+
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
+
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
+
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
   display:none;
 }
-.visibility-demo{
-  visibility:hidden;
+
+.lesson-panel.visible{display:block}
+
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
 }
 
-@media(max-width:768px){
-  h1{font-size:2.8em;}
-  h2{font-size:2em;}
-  section{padding:40px 25px;}
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
+
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
+}
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin:4px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
+}
+
+/* Display demo styles */
+.block-demo {
+  display:block;
+  width:100%;
+  background:#ff4444;
+  border:2px solid #cc0000;
+  color:#fff;
+  padding:12px;
+  margin:8px 0;
+  text-align:center;
+}
+
+.inline-demo {
+  display:inline;
+  background:#44ff44;
+  border:2px solid #00cc00;
+  color:#000;
+  padding:8px 12px;
+  margin:2px;
+}
+
+.inline-block-demo {
+  display:inline-block;
+  width:100px;
+  height:60px;
+  background:#4444ff;
+  border:2px solid #0000cc;
+  color:#fff;
+  text-align:center;
+  padding:8px;
+  vertical-align:top;
+  margin:4px;
+}
+
+.hidden-demo {
+  display:none;
+}
+
+.visibility-demo {
+  visibility:hidden;
+  height:60px;
+  background:#ff88ff;
+  border:2px solid #cc44cc;
+  margin:8px 0;
+}
+
+.nav-demo {
+  text-align:center;
+  margin:12px 0;
+}
+
+.nav-demo a {
+  display:inline-block;
+  padding:8px 16px;
+  margin:4px;
+  border:2px solid #00ff88;
+  color:#00ff88;
+  text-decoration:none;
+  border-radius:6px;
+  font-size:9px;
+}
+
+.examples{
+  margin-left:16px;
+}
+
+.examples li{
+  margin:6px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
 }
 </style>
 </head>
-
 <body>
-<div class="container">
-<header>
-  <h1>Display & Visibility</h1>
-  <p class="subtitle">Lesson 10 – Block, Inline, Inline‑Block, None, Visibility</p>
-</header>
+<div class="app">
 
-<section id="display-intro">
-  <h2>01. What Is Display?</h2>
-  <div class="explanation">
-    Every element has a <span style="color:#00ffff;">display type</span> that controls how it behaves in the page’s flow.  
-    The display property determines whether elements stack (block) or sit side by side (inline).
+<aside class="sidebar">
+  <div class="brand">
+    <h1>👁️ Pixel Display</h1>
+    <p>Lesson 10</p>
   </div>
-</section>
 
-<section id="block">
-  <h2>02. Block Elements</h2>
-  <div class="explanation">
-    <span style="color:#ff00ff;">Block‑level elements</span> take the **full width** available and start on a new line.  
-    They can have width, height, margins, and padding applied.
+  <div class="lessons-list">
+    <button data-lesson="disp-1" class="active"><span class="num">01</span> What is Display?</button>
+    <button data-lesson="disp-2"><span class="num">02</span> Block Elements</button>
+    <button data-lesson="disp-3"><span class="num">03</span> Inline Elements</button>
+    <button data-lesson="disp-4"><span class="num">04</span> Inline-Block</button>
+    <button data-lesson="disp-5"><span class="num">05</span> Display None</button>
+    <button data-lesson="disp-6"><span class="num">06</span> Visibility Hidden</button>
+    <button data-lesson="disp-7"><span class="num">07</span> Your Challenge</button>
   </div>
-  <div class="code-block">
-<pre><code>div {
+</aside>
+
+<main class="content">
+  <div class="content-head">
+    <div class="title" id="panel-title">01 • What is Display?</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
+    </div>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- TOPIC 1 -->
+    <article id="disp-1" class="lesson-panel visible">
+      <h1>What Is Display?</h1>
+      <div class="meta">Lesson 10 • Topic 1</div>
+      <div class="explain"><strong>display</strong> controls how elements flow: <strong>block</strong> = new line, <strong>inline</strong> = same line, <strong>inline-block</strong> = both + sizing!</div>
+      <div class="demo">
+        <p>Watch these change with display types:</p>
+        <div id="displayTest" class="block-demo">Display Test Box</div>
+      </div>
+    </article>
+
+    <!-- TOPIC 2 -->
+    <article id="disp-2" class="lesson-panel">
+      <h1>Block Elements</h1>
+      <div class="explain"><strong>display:block</strong> = full width, new line, accepts width/height/margin.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>div {
   display: block;
   width: 300px;
   background: #111144;
-}</code></pre>
-  </div>
-  <div class="demo-output">
-    <div class="demo-box">This is a block element (full width break line)</div>
-    <div class="demo-box">Another block below it</div>
-  </div>
-</section>
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="block-demo">BLOCK 1 (full width)</div>
+        <div class="block-demo">BLOCK 2 (new line)</div>
+      </div>
+    </article>
 
-<section id="inline">
-  <h2>03. Inline Elements</h2>
-  <div class="explanation">
-    <span style="color:#00ffff;">Inline</span> elements do **not break lines**; they only take up as much width as needed.  
-    Padding works horizontally, but width/height usually doesn’t.
-  </div>
-  <div class="code-block">
-<pre><code>span {
+    <!-- TOPIC 3 -->
+    <article id="disp-3" class="lesson-panel">
+      <h1>Inline Elements</h1>
+      <div class="explain"><strong>display:inline</strong> = no line breaks, only content width, no height/width control.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>span {
   display: inline;
-}</code></pre>
-  </div>
-  <div class="demo-output">
-    <p>This is <span class="inline-demo">inline</span> text <span class="inline-demo">elements</span> all in one line.</p>
-  </div>
-</section>
+}</pre>
+      </div>
+      <div class="demo">
+        <p>Inline spans: <span class="inline-demo">INLINE A</span> <span class="inline-demo">INLINE B</span> <span class="inline-demo">INLINE C</span> all same line!</p>
+      </div>
+    </article>
 
-<section id="inlineblock">
-  <h2>04. Inline‑Block Elements</h2>
-  <div class="explanation">
-    <span style="color:#ff1493;">Inline‑block</span> keeps elements side‑by‑side **like inline**,  
-    but allows you to set **width, height, and padding** like blocks — best of both worlds!
-  </div>
-  <div class="code-block">
-<pre><code>div {
+    <!-- TOPIC 4 -->
+    <article id="disp-4" class="lesson-panel">
+      <h1>Inline-Block Magic</h1>
+      <div class="explain"><strong>display:inline-block</strong> = inline flow + block sizing (width/height work)!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>div {
   display: inline-block;
   width: 120px;
-}</code></pre>
-  </div>
-  <div class="demo-output">
-    <div class="inline-block-demo">Box A</div>
-    <div class="inline-block-demo">Box B</div>
-    <div class="inline-block-demo">Box C</div>
-  </div>
-</section>
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="inline-block-demo">Box A</div>
+        <div class="inline-block-demo">Box B</div>
+        <div class="inline-block-demo">Box C</div>
+      </div>
+    </article>
 
-<section id="none">
-  <h2>05. Display: none</h2>
-  <div class="explanation">
-    <span style="color:#ff00ff;">display:none</span> completely removes an element from the page layout  
-    — it won’t take up space or be visible.
-  </div>
-  <div class="code-block">
-<pre><code>#secret {
+    <!-- TOPIC 5 -->
+    <article id="disp-5" class="lesson-panel">
+      <h1>Display: None</h1>
+      <div class="explain"><strong>display:none</strong> = completely removes element + space!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>#secret {
   display: none;
-}</code></pre>
-  </div>
-  <div class="demo-output">
-    <div class="demo-box">Visible Box</div>
-    <div class="demo-box hidden-demo">Hidden Box</div>
-    <div class="demo-box">Visible Again</div>
-    <p style="color:#ff1493;">The middle box is removed — notice the gap disappears.</p>
-  </div>
-</section>
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="block-demo">Visible Box</div>
+        <div id="hideDemo" class="block-demo">Click to Hide!</div>
+        <div class="block-demo">Visible Box</div>
+        <button onclick="document.getElementById('hideDemo').style.display='none'">Hide Middle</button>
+        <button onclick="document.getElementById('hideDemo').style.display='block'">Show Again</button>
+      </div>
+    </article>
 
-<section id="visibility">
-  <h2>06. Visibility Property</h2>
-  <div class="explanation">
-    <span style="color:#00ffff;">visibility:hidden</span> hides the element but **keeps its space** in the layout.  
-    Compare it with <code>display:none</code> which removes the element entirely.
-  </div>
-  <div class="code-block">
-<pre><code>.invisible {
+    <!-- TOPIC 6 -->
+    <article id="disp-6" class="lesson-panel">
+      <h1>Visibility: Hidden</h1>
+      <div class="explain"><strong>visibility:hidden</strong> = hides but keeps space (unlike display:none)!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.invisible {
   visibility: hidden;
-}</code></pre>
-  </div>
-  <div class="demo-output">
-    <div class="demo-box">Visible One</div>
-    <div class="demo-box visibility-demo">Invisible (but space left!)</div>
-    <div class="demo-box">Visible Two</div>
-  </div>
-</section>
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="block-demo">Visible Box</div>
+        <div id="visDemo" class="visibility-demo" style="visibility:visible;background:#ff88ff;border-color:#cc44cc;">Visibility Test</div>
+        <div class="block-demo">Visible Box</div>
+        <button onclick="document.getElementById('visDemo').style.visibility='hidden'">Hide (space stays!)</button>
+        <button onclick="document.getElementById('visDemo').style.visibility='visible'">Show</button>
+      </div>
+    </article>
 
-<section id="summary">
-  <h2>07. Quick Comparison Table</h2>
-  <div class="explanation">
-    <table style="width:100%;border-collapse:collapse;font-family:'Roboto Mono',monospace;color:#e0e0ff;">
-      <tr style="color:#00ffff;">
-        <th align="left">Property</th><th align="left">Effect</th><th align="left">Takes Space?</th>
-      </tr>
-      <tr><td>block</td><td>Starts on new line, full width</td><td>✅</td></tr>
-      <tr><td>inline</td><td>No line break, text‑like</td><td>✅</td></tr>
-      <tr><td>inline‑block</td><td>Side‑by‑side with set size</td><td>✅</td></tr>
-      <tr><td>display:none</td><td>Hidden & removed</td><td>❌</td></tr>
-      <tr><td>visibility:hidden</td><td>Hidden but keeps layout</td><td>✅</td></tr>
-    </table>
-  </div>
-</section>
-
-<section id="challenge">
-  <h2>08. YOUR CHALLENGE!</h2>
-  <div class="explanation">
-    💡 Build a glowing navigation bar!  
-    Use <code>display:inline‑block</code> for each button and try hiding one button using  
-    <code>display:none</code> then <code>visibility:hidden</code> to compare spacing.
-  </div>
-  <div class="code-block">
-<pre><code>&lt;nav&gt;
+    <!-- TOPIC 7 -->
+    <article id="disp-7" class="lesson-panel">
+      <h1>Your Challenge!</h1>
+      <div class="explain">Build glowing nav bar! Use <strong>inline-block</strong> buttons + toggle <strong>display:none</strong> vs <strong>visibility:hidden</strong>.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;nav&gt;
   &lt;a style="display:inline-block;padding:10px 20px;
   border:2px solid #00ffff;margin:5px;color:#00ffff;
   text-decoration:none;border-radius:10px;"&gt;Home&lt;/a&gt;
-  &lt;a style="display:inline-block;padding:10px 20px;
+  &lt;a id="toggleBtn" style="display:inline-block;padding:10px 20px;
   border:2px solid #ff00ff;margin:5px;color:#ff00ff;
-  text-decoration:none;border-radius:10px;display:none;"&gt;Hidden&lt;/a&gt;
+  text-decoration:none;border-radius:10px;"&gt;Secret&lt;/a&gt;
   &lt;a style="display:inline-block;padding:10px 20px;
   border:2px solid #00ffff;margin:5px;color:#00ffff;
   text-decoration:none;border-radius:10px;"&gt;Contact&lt;/a&gt;
-&lt;/nav&gt;</code></pre>
-  </div>
-</section>
+&lt;/nav&gt;
+&lt;button onclick="toggleNav()"&gt;Toggle Secret&lt;/button&gt;</pre>
+      </div>
+      <div class="demo">
+        <div class="nav-demo">
+          <a href="#" style="display:inline-block;padding:8px 16px;margin:4px;border:2px solid #00ff88;color:#00ff88;text-decoration:none;border-radius:6px;font-size:9px;">Home</a>
+          <a id="challengeBtn" href="#" style="display:inline-block;padding:8px 16px;margin:4px;border:2px solid #ff0088;color:#ff0088;text-decoration:none;border-radius:6px;font-size:9px;">Secret</a>
+          <a href="#" style="display:inline-block;padding:8px 16px;margin:4px;border:2px solid #00ff88;color:#00ff88;text-decoration:none;border-radius:6px;font-size:9px;">Contact</a>
+        </div>
+        <button onclick="toggleChallenge()">Toggle Secret Button</button>
+      </div>
+    </article>
 
-<footer>
-  <h3>🔮 Layout Visibility Mastered</h3>
-  <p>Save as <code>lesson10-display-visibility.html</code> → open in browser → toggle display & visibility!</p>
-  <p>Next: learn <strong>Positioning (relative, absolute, fixed, sticky)</strong> for even deeper control ⚙️</p>
-</footer>
+  </div>
+</main>
 </div>
+
+<a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+
+<script>
+// Lesson navigation
+const buttons = document.querySelectorAll('.lessons-list button');
+const panels = document.querySelectorAll('.lesson-panel');
+const title = document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+}
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
+});
+
+// Challenge toggle function
+let challengeToggle = 0;
+function toggleChallenge() {
+  const btn = document.getElementById('challengeBtn');
+  if (challengeToggle === 0) {
+    btn.style.display = 'none';
+    challengeToggle = 1;
+  } else {
+    btn.style.visibility = 'hidden';
+    challengeToggle = 2;
+  }
+}
+</script>
 </body>
 </html>
