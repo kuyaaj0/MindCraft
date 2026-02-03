@@ -409,6 +409,40 @@ main {
   background: rgba(29,185,84,0.2);
 }
 
+.lesson-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.lesson-list {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.95);
+  border: 2px solid #1DB954;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px 4px;
+}
+.lesson-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  text-align:center;
+}
+.lesson-list button:hover {
+  background: rgba(29,185,84,0.2);
+}
+
+
 /* === Footer === */
 footer {
   background: rgba(0, 0, 0, 0.4);
