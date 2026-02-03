@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel JS Lessons Dashboard - Links Example</title>
+<title>Pixel HTML Lessons – Links</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 
-/* ===== WORLD BACKGROUND ===== */
 body{
   font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
@@ -18,7 +17,6 @@ body{
   font-size:10px;
 }
 
-/* ===== EXIT BUTTON ===== */
 .exit-btn{
   position:fixed;
   top:480px;
@@ -32,14 +30,13 @@ body{
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
   z-index:1000;
   font-size:9px;
-  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 .exit-btn:hover{
   transform:translateY(-2px);
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
-/* ===== MAIN APP ===== */
 .app{
   max-width:1200px;
   margin:0 auto;
@@ -53,7 +50,6 @@ body{
   padding:18px;
 }
 
-/* ===== SIDEBAR ===== */
 .sidebar{
   background:#8b5a2b;
   border-radius:18px;
@@ -63,164 +59,48 @@ body{
   display:flex;
   flex-direction:column;
 }
-.brand h1{
-  font-size:14px;
-  text-align:center;
-  text-shadow:2px 2px #000;
-}
-.brand p{
-  font-size:8px;
-  text-align:center;
-  opacity:.9;
-  margin-top:6px;
-}
 
-/* ===== LESSON BUTTONS ===== */
-.lessons-list{
-  margin-top:16px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+.brand h1{font-size:14px;text-align:center;text-shadow:2px 2px #000;}
+.brand p{font-size:8px;text-align:center;opacity:.9;margin-top:6px;}
+
+.lessons-list{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
 .lessons-list button{
-  background:#ffcc4d;
-  border:3px solid #e09c2b;
-  padding:10px;
-  border-radius:10px;
-  cursor:pointer;
-  color:#3b2a15;
-  font-size:8px;
-  display:flex;
-  gap:8px;
-  align-items:center;
-  box-shadow: 0 3px 0 #b5741b, 0 4px 0 #3b2a15;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+  background:#ffcc4d;border:3px solid #e09c2b;padding:10px;border-radius:10px;cursor:pointer;
+  color:#3b2a15;font-size:8px;display:flex;gap:8px;align-items:center;box-shadow:0 3px 0 #b5741b,0 4px 0 #3b2a15;
+  text-transform:uppercase;letter-spacing:1px;transition:transform 0.1s,box-shadow 0.1s,background 0.1s;
 }
-.lessons-list button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 5px 0 #b5741b, 0 6px 0 #3b2a15;
-  background:#ffe38a;
-}
-.lessons-list button:active{
-  transform:translateY(1px);
-  box-shadow:0 1px 0 #b5741b, 0 2px 0 #3b2a15;
-  background:#f5b93a;
-}
-.lessons-list button.active{
-  background:#ffe89c;
-  border-color:#fff7c9;
-}
-.num{
-  background:#3b2a15;
-  color:#ffd966;
-  padding:4px 7px;
-  border-radius:6px;
-  box-shadow:0 2px 0 #1e1309;
-  font-size:8px;
-}
+.lessons-list button:hover{transform:translateY(-2px);box-shadow:0 5px 0 #b5741b,0 6px 0 #3b2a15;background:#ffe38a;}
+.lessons-list button:active{transform:translateY(1px);box-shadow:0 1px 0 #b5741b,0 2px 0 #3b2a15;background:#f5b93a;}
+.lessons-list button.active{background:#ffe89c;border-color:#fff7c9;}
+.num{background:#3b2a15;color:#ffd966;padding:4px 7px;border-radius:6px;box-shadow:0 2px 0 #1e1309;font-size:8px;}
 
-/* ===== CONTENT ===== */
-.content{
-  background:#e8f4ff;
-  border-radius:18px;
-  padding:16px;
-  box-shadow: inset -6px -6px 0 rgba(0,0,0,.15), 0 8px 0 #6fa8dc;
-  display:flex;
-  flex-direction:column;
-}
+.content{background:#e8f4ff;border-radius:18px;padding:16px;box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 8px 0 #6fa8dc;display:flex;flex-direction:column;}
+.content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.content-head .title{font-size:12px;text-shadow:2px 2px #fff;}
+.content-head button{font-family:'Press Start 2P';background:#4e91ff;color:#fff;border:3px solid #1f4fb8;padding:6px 10px;border-radius:8px;box-shadow:0 3px 0 #16347a,0 4px 0 #0c1b3a;cursor:pointer;font-size:8px;transition:transform 0.1s,box-shadow 0.1s,background 0.1s;}
+.content-head button:hover{transform:translateY(-2px);background:#6aa7ff;box-shadow:0 5px 0 #16347a,0 6px 0 #0c1b3a;}
+.content-head button:active{transform:translateY(1px);background:#3f7aed;box-shadow:0 1px 0 #16347a,0 2px 0 #0c1b3a;}
 
-/* ===== HEADER ===== */
-.content-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-}
-.content-head .title{
-  font-size:12px;
-  text-shadow:2px 2px #fff;
-}
-.content-head button{
-  font-family:'Press Start 2P';
-  background:#4e91ff;
-  color:#fff;
-  border:3px solid #1f4fb8;
-  padding:6px 10px;
-  border-radius:8px;
-  box-shadow:0 3px 0 #16347a, 0 4px 0 #0c1b3a;
-  cursor:pointer;
-  font-size:8px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-}
-.content-head button:hover{
-  transform:translateY(-2px);
-  background:#6aa7ff;
-  box-shadow:0 5px 0 #16347a, 0 6px 0 #0c1b3a;
-}
-.content-head button:active{
-  transform:translateY(1px);
-  background:#3f7aed;
-  box-shadow:0 1px 0 #16347a, 0 2px 0 #0c1b3a;
-}
-
-/* ===== PANELS ===== */
-.panel-wrap{
-  flex:1;
-  position:relative;
-}
-.lesson-panel{
-  position:absolute;
-  inset:0;
-  padding:16px;
-  overflow:auto;
-  display:none;
-}
+.panel-wrap{flex:1;position:relative;}
+.lesson-panel{position:absolute;inset:0;padding:16px;overflow:auto;display:none;}
 .lesson-panel.visible{display:block}
 
-/* ===== BOXES ===== */
-.explain{
-  background:#fff3cd;
-  border:3px solid #c9a227;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:14px;
-  line-height:1.6;
-}
-.demo{
-  background:#d9ead3;
-  border:3px solid #6aa84f;
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:14px;
-}
-.demo button, .demo a button{
-  font-family:'Press Start 2P';
-  background:#00c98b;
-  color:#003322;
-  border:3px solid #00805c;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:0 3px 0 #00563f, 0 4px 0 #001f16;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-top:8px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-  text-decoration:none;
-}
-.demo button:hover, .demo a button:hover{
-  transform:translateY(-2px);
-  background:#29e2aa;
-  box-shadow:0 5px 0 #00563f, 0 6px 0 #001f16;
-}
-.demo button:active, .demo a button:active{
-  transform:translateY(1px);
-  background:#00b27a;
-  box-shadow:0 1px 0 #00563f, 0 2px 0 #001f16;
-}
+.lesson-panel h1{font-size:14px;margin-bottom:6px;}
+.meta{font-size:8px;opacity:.7;margin-bottom:16px;}
+
+.explain{background:#fff3cd;border:3px solid #c9a227;padding:18px;border-radius:12px;margin-bottom:18px;line-height:1.6;font-size:9px;}
+.code{background:#1e1e1e;color:#00ff90;padding:18px;border-radius:12px;margin-bottom:18px;overflow:auto;position:relative;font-size:9px;line-height:1.5;}
+.copy-btn{position:absolute;top:10px;right:10px;background:#ffd966;color:#000;border:2px solid #b59b24;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:7px;box-shadow:0 2px 0 #7a6515;transition:transform 0.1s,box-shadow 0.1s,background 0.1s;}
+.copy-btn:hover{transform:translateY(-1px);background:#fff1a8;box-shadow:0 3px 0 #7a6515;}
+.copy-btn:active{transform:translateY(1px);box-shadow:0 1px 0 #7a6515;background:#f2c93a;}
+
+.demo{background:#d9ead3;border:3px solid #6aa84f;padding:20px;border-radius:12px;margin-bottom:18px;font-size:10px;line-height:1.6;}
+.demo pre{background:#f0f8f0;padding:12px;border-radius:8px;border-left:4px solid #6aa84f;margin:12px 0;font-size:9px;white-space:pre-wrap;overflow:auto;}
+.demo button{font-family:'Press Start 2P';background:#00c98b;color:#003322;border:3px solid #00805c;padding:8px 12px;border-radius:10px;box-shadow:0 3px 0 #00563f,0 4px 0 #001f16;cursor:pointer;font-size:8px;text-transform:uppercase;letter-spacing:1px;margin:4px;text-decoration:none;display:inline-block;transition:transform 0.1s,box-shadow 0.1s,background 0.1s;}
+.demo button:hover{transform:translateY(-2px);background:#29e2aa;box-shadow:0 5px 0 #00563f,0 6px 0 #001f16;}
+.demo button:active{transform:translateY(1px);background:#00b27a;box-shadow:0 1px 0 #00563f,0 2px 0 #001f16;}
+
+@media(max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr;}}
 </style>
 </head>
 <body>
@@ -228,8 +108,8 @@ body{
 
 <aside class="sidebar">
   <div class="brand">
-    <h1>🧠 LINKS</h1>
-    <p>LESSON 4</p>
+    <h1>🧠 Pixel HTML</h1>
+    <p>Lesson 4</p>
   </div>
 
   <div class="lessons-list">
@@ -243,6 +123,7 @@ body{
 
 <main class="content">
   <div class="content-head">
+    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
     <div class="title" id="panel-title">01 • Absolute URL</div>
     <div>
       <button id="prevLesson">◀</button>
@@ -252,54 +133,138 @@ body{
 
   <div class="panel-wrap">
 
-    <!-- Lesson Panels with link examples -->
+    <!-- LESSON 1 -->
     <article id="lesson-1" class="lesson-panel visible">
       <h1>Absolute URL</h1>
-      <div class="explain">This is an absolute URL linking to another website.</div>
+      <div class="meta">Lesson 4</div>
+      <div class="explain">Full <code>https://website.com</code> links to external sites</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="padding:20px;font-family:monospace;"&gt;
+&lt;p&gt;Best HTML Tutorial:&lt;/p&gt;
+&lt;a href="https://www.w3schools.com/html/"&gt;
+  W3Schools HTML Tutorial
+&lt;/a&gt;
+&lt;p&gt;← Click the blue underlined text&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
       <div class="demo">
-        <a href="https://www.example.com" target="_blank">
-          <button>Go to Example.com</button>
-        </a>
+        <pre style="background:#f8f9fa;padding:20px;border-radius:8px;border-left:4px solid #007bff;font-family:monospace;font-size:11px;">
+Best HTML Tutorial:
+W3Schools HTML Tutorial
+← Click the blue underlined text</pre>
       </div>
     </article>
 
+    <!-- LESSON 2 -->
     <article id="lesson-2" class="lesson-panel">
       <h1>Relative URL</h1>
-      <div class="explain">This is a relative URL linking to a page in the same folder.</div>
+      <div class="explain">Links to files in your project folder (<code>page.html</code>, <code>img.png</code>)</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="padding:20px;"&gt;
+&lt;p&gt;Game Pages:&lt;/p&gt;
+&lt;a href="level2.html"&gt;Level 2&lt;/a&gt; |
+&lt;a href="images/sprite.png"&gt;Player Sprite&lt;/a&gt; |
+&lt;a href="../menu.html"&gt;Main Menu&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
       <div class="demo">
-        <a href="relative-page.html">
-          <button>Open Relative Page</button>
-        </a>
+        <pre style="background:#f8f9fa;padding:20px;border-radius:8px;border-left:4px solid #28a745;font-family:monospace;font-size:11px;">
+Game Pages:
+Level 2              Player Sprite       Main Menu
+(blue underlined)   (blue underlined)   (blue underlined)</pre>
       </div>
     </article>
 
+    <!-- LESSON 3 -->
     <article id="lesson-3" class="lesson-panel">
       <h1>Target _blank</h1>
-      <div class="explain">This link opens in a new tab using target="_blank".</div>
+      <div class="explain"><code>target="_blank"</code> = opens link in NEW tab</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="padding:20px;"&gt;
+&lt;p&gt;External Links (New Tabs):&lt;/p&gt;
+&lt;a href="https://google.com" target="_blank"&gt;
+  Google Search
+&lt;/a&gt; |
+&lt;a href="https://github.com" target="_blank"&gt;
+  GitHub
+&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
       <div class="demo">
-        <a href="https://www.wikipedia.org" target="_blank">
-          <button>Open Wikipedia</button>
-        </a>
+        <pre style="background:#f8f9fa;padding:20px;border-radius:8px;border-left:4px solid #17a2b8;font-family:monospace;font-size:11px;">
+External Links (New Tabs):
+Google Search  |  GitHub
+(NEW TAB ↗️)    (NEW TAB ↗️)</pre>
+        <a href="https://google.com" target="_blank"><button>TEST Google</button></a>
       </div>
     </article>
 
+    <!-- LESSON 4 -->
     <article id="lesson-4" class="lesson-panel">
       <h1>Download Link</h1>
-      <div class="explain">Clicking this link will download a file.</div>
+      <div class="explain"><code>download</code> = saves file to Downloads folder</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="padding:20px;"&gt;
+&lt;p&gt;Game Assets:&lt;/p&gt;
+&lt;a href="game.zip" download&gt;
+  Download Pixel Game
+&lt;/a&gt;
+&lt;a href="sprite.png" download="cool-sprite.png"&gt;
+  Save Sprite as "cool-sprite.png"
+&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
       <div class="demo">
-        <a href="downloads/sample-file.txt" download>
-          <button>Download Sample File</button>
-        </a>
+        <pre style="background:#f8f9fa;padding:20px;border-radius:8px;border-left:4px solid #ffc107;font-family:monospace;font-size:11px;">
+Game Assets:
+Download Pixel Game          ↓ Downloads folder
+Save Sprite as "cool-sprite.png"  ↓ Downloads folder</pre>
+        <a href="data:text/plain;base64,U0NPUkU6IDEwMDAKTUVOVTogUGl4ZWwgR2FtZQpMRVZFTDoxCkJFU1QgU0NPUkU6IDUwMA==" download="pixel-game-save.txt"><button>Download Save File</button></a>
       </div>
     </article>
 
+    <!-- LESSON 5 -->
     <article id="lesson-5" class="lesson-panel">
       <h1>Mailto Link</h1>
-      <div class="explain">Clicking this will open your email client.</div>
+      <div class="explain"><code>mailto:</code> = opens your email app</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body style="padding:20px;"&gt;
+&lt;p&gt;Contact Links:&lt;/p&gt;
+&lt;a href="mailto:teacher@school.ph?subject=HTML Lesson 4"&gt;
+  📧 Email Teacher (Help)
+&lt;/a&gt;
+&lt;a href="mailto:?subject=Pixel Game Idea&body=Hi! I made a cool game!"&gt;
+  📧 Email Friend (Share)
+&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
       <div class="demo">
-        <a href="mailto:teacher@example.com?subject=Help%20Needed&body=Please%20help%20me">
-          <button>Email Teacher</button>
-        </a>
+        <pre style="background:#f8f9fa;padding:20px;border-radius:8px;border-left:4px solid #6f42c1;font-family:monospace;font-size:11px;">
+Contact Links:
+📧 Email Teacher (Help)     → Opens Gmail/Outlook
+📧 Email Friend (Share)    → Opens Gmail/Outlook
+(Pre-filled subject/body!)</pre>
+        <a href="mailto:teacher@school.ph?subject=Links%20Lesson%204&body=Hi%20teacher!%0AI%20finished%20HTML%20links%20lesson!"><button>TEST Email</button></a>
       </div>
     </article>
 
@@ -308,26 +273,34 @@ body{
 </div>
 
 <script>
-// Lesson navigation
-const buttons = document.querySelectorAll('.lessons-list button');
-const panels = document.querySelectorAll('.lesson-panel');
-const title = document.getElementById('panel-title');
+const buttons=document.querySelectorAll('.lessons-list button');
+const panels=document.querySelectorAll('.lesson-panel');
+const title=document.getElementById('panel-title');
 
 function showLesson(id){
   panels.forEach(p=>p.classList.remove('visible'));
   buttons.forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('visible');
-  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  const btn=document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
   btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+  title.textContent=btn.querySelector('.num').textContent+' • '+btn.textContent.replace(/^\d+\s+/,'');
 }
 
 buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
-
 const order=[...buttons].map(b=>b.dataset.lesson);
 const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
-document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
-document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+document.getElementById('prevLesson').onclick=()=>{let i=current();if(i>0)showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current();if(i<order.length-1)showLesson(order[i+1]);};
+
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const code=btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(()=>{
+      btn.innerText='✔ Copied!';
+      setTimeout(()=>btn.innerText='Copy',1500);
+    });
+  });
+});
 </script>
 </body>
 </html>
