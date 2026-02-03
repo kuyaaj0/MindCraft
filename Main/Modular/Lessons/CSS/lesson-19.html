@@ -1,543 +1,313 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shadows, Gradients & Borders - Cyberpunk Lesson 19</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🌈 Glow Effects - Pixel Lesson 19</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-        body {
-            font-family: 'Orbitron', monospace;
-            background: #000;
-            color: #e0e0e0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-        /* Pixelated cyber grid */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-            animation: cyberGrid 25s linear infinite;
-            z-index: -2;
-        }
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.exit-btn:hover{transform:translateY(-2px);box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 5px 0 #a30000;}
+.exit-btn:active{transform:translateY(1px);box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 1px 0 #a30000;background:#e63b3b;}
 
-        @keyframes cyberGrid {
-            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
-        }
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;margin:0 auto;height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%,#7dd37d);
+  border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;grid-template-columns:260px 1fr;gap:18px;padding:18px;
+}
 
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            background: rgba(8, 8, 25, 0.97);
-            border: 3px solid transparent;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
-            border-radius: 25px;
-            box-shadow: 
-                0 0 60px rgba(255, 0, 255, 0.5),
-                0 0 120px rgba(0, 255, 255, 0.4),
-                inset 0 0 40px rgba(255, 0, 255, 0.08);
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-            margin: 25px;
-        }
+/* ===== SIDEBAR ===== */
+.sidebar{background:#8b5a2b;border-radius:18px;padding:18px;box-shadow:inset -6px -6px 0 rgba(0,0,0,.25),0 8px 0 #5c3a1a;color:#fff;display:flex;flex-direction:column;}
+.brand h1{font-size:14px;text-align:center;text-shadow:2px 2px #000;}
+.brand p{font-size:8px;text-align:center;opacity:.9;margin-top:6px;}
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
-            animation: rotateAura 10s linear infinite;
-            z-index: -1;
-        }
+/* ===== LESSON BUTTONS ===== */
+.lessons-list{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+.lessons-list button{background:#ffcc4d;border:3px solid #e09c2b;padding:10px 10px;border-radius:10px;cursor:pointer;color:#3b2a15;font-size:8px;display:flex;gap:8px;align-items:center;box-shadow:0 3px 0 #b5741b,0 4px 0 #3b2a15;text-transform:uppercase;letter-spacing:1px;transition:all .2s;}
+.lessons-list button:hover{transform:translateY(-2px);box-shadow:0 5px 0 #b5741b,0 6px 0 #3b2a15;background:#ffe38a;}
+.lessons-list button:active{transform:translateY(1px);box-shadow:0 1px 0 #b5741b,0 2px 0 #3b2a15;background:#f5b93a;}
+.lessons-list button.active{background:#ffe89c;border-color:#fff7c9;}
+.num{background:#3b2a15;color:#ffd966;padding:4px 7px;border-radius:6px;box-shadow:0 2px 0 #1e1309;font-size:8px;}
 
-        @keyframes rotateAura {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+/* ===== CONTENT ===== */
+.content{background:#e8f4ff;border-radius:18px;padding:16px;box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 8px 0 #6fa8dc;display:flex;flex-direction:column;}
+.content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.content-head .title{font-size:12px;text-shadow:2px 2px #fff;}
+.content-head button{font-family:'Press Start 2P';background:#4e91ff;color:#fff;border:3px solid #1f4fb8;padding:6px 10px;border-radius:8px;box-shadow:0 3px 0 #16347a,0 4px 0 #0c1b3a;cursor:pointer;font-size:8px;margin:0 2px;transition:all .2s;}
+.content-head button:hover{transform:translateY(-2px);background:#6aa7ff;box-shadow:0 5px 0 #16347a,0 6px 0 #0c1b3a;}
+.content-head button:active{transform:translateY(1px);background:#3f7aed;box-shadow:0 1px 0 #16347a,0 2px 0 #0c1b3a;}
 
-        header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 60px 40px;
-            text-align: center;
-            position: relative;
-            border-bottom: 5px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-        }
+/* ===== PANELS ===== */
+.panel-wrap{flex:1;position:relative;}
+.lesson-panel{position:absolute;inset:0;padding:16px;overflow:auto;display:none;}
+.lesson-panel.visible{display:block;}
 
-        h1 {
-            font-size: 4em;
-            font-weight: 900;
-            text-shadow: 
-                0 0 30px #ff00ff,
-                0 0 60px #00ffff,
-                0 0 90px #ff00ff;
-            margin-bottom: 20px;
-            animation: neonPulse 3s ease-in-out infinite;
-        }
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{font-size:14px;margin-bottom:6px;text-shadow:2px 2px #000;}
+.lesson-panel h2{font-size:11px;margin:12px 0 8px 0;text-shadow:1px 1px #000;}
+.meta{font-size:8px;opacity:.7;margin-bottom:16px;}
 
-        @keyframes neonPulse {
-            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
-        }
+/* ===== BOXES ===== */
+.explain{background:#fff3cd;border:3px solid #c9a227;padding:14px;border-radius:12px;margin-bottom:14px;line-height:1.6;box-shadow:0 4px 0 #a88b1f;}
+.code{background:#1e1e1e;color:#00ff90;padding:14px;border-radius:12px;margin-bottom:14px;overflow:auto;position:relative;font-family:monospace;font-size:9px;line-height:1.5;}
+.code button.copy-btn{position:absolute;top:8px;right:8px;background:#ffd966;color:#000;border:2px solid #b59b24;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:7px;box-shadow:0 2px 0 #7a6515;transition:all .2s;}
+.code button.copy-btn:hover{transform:translateY(-1px);background:#fff1a8;box-shadow:0 3px 0 #7a6515;}
+.code button.copy-btn:active{transform:translateY(1px);box-shadow:0 1px 0 #7a6515;background:#f2c93a;}
+.demo{background:#d9ead3;border:3px solid #6aa84f;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 4px 0 #55843d;}
 
-        .subtitle {
-            font-size: 1.6em;
-            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
-            background-size: 200% 200%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            animation: gradientFlow 4s ease infinite;
-            text-shadow: 0 0 25px #00ffff;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        section {
-            padding: 60px 50px;
-            position: relative;
-            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
-        }
-
-        section:last-of-type {
-            border-bottom: none;
-        }
-
-        section:nth-child(even) {
-            background: rgba(15, 10, 45, 0.7);
-        }
-
-        h2 {
-            font-size: 2.8em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            background-size: 300% 300%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            position: relative;
-            animation: h2Glow 3s ease infinite;
-        }
-
-        @keyframes h2Glow {
-            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
-            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100px;
-            height: 6px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff);
-            border-radius: 3px;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
-            animation: underlineShift 2.5s ease-in-out infinite;
-        }
-
-        @keyframes underlineShift {
-            0%, 100% { width: 100px; left: 0; }
-            50% { width: 200px; left: 50px; }
-        }
-
-        .explanation {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.2em;
-            line-height: 1.9;
-            margin-bottom: 40px;
-            color: #d0d0ff;
-            background: rgba(255, 0, 255, 0.05);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #ff00ff;
-            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
-        }
-
-        .code-block {
-            background: rgba(10, 15, 50, 0.95);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-            border-radius: 20px;
-            padding: 35px;
-            margin: 35px 0;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 16px;
-            line-height: 1.8;
-            overflow-x: auto;
-            position: relative;
-            box-shadow: 
-                0 0 40px rgba(0, 255, 255, 0.5),
-                inset 0 0 25px rgba(255, 0, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .code-block:hover {
-            box-shadow: 
-                0 0 60px rgba(0, 255, 255, 0.7),
-                0 0 100px rgba(255, 0, 255, 0.6),
-                inset 0 0 30px rgba(255, 0, 255, 0.2);
-            transform: translateY(-8px) scale(1.02);
-        }
-
-        .code-block::before {
-            content: ' CODE MATRIX';
-            position: absolute;
-            top: -18px;
-            left: 30px;
-            background: rgba(10, 15, 50, 0.95);
-            color: #00ffff;
-            padding: 8px 25px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #00ffff;
-            border-radius: 25px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-        }
-
-        .highlight {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 4px 12px;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 0, 255, 0.4);
-            display: inline-block;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
-            animation: highlightBeat 2s ease-in-out infinite;
-            font-weight: bold;
-        }
-
-        @keyframes highlightBeat {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
-        }
-
-        .demo-output {
-            background: rgba(0, 20, 60, 0.9);
-            border: 2px solid #00ffff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 25px 0;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-        }
-
-        .demo-output::before {
-            content: ' BROWSER OUTPUT';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(0, 20, 60, 0.9);
-            color: #00ffff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-        }
-
-        ul.examples {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul.examples li {
-            background: rgba(0, 255, 255, 0.08);
-            border-left: 6px solid #00ffff;
-            margin: 25px 0;
-            padding: 30px;
-            border-radius: 15px;
-            position: relative;
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-
-        ul.examples li::before {
-            content: ' LIVE EXAMPLE';
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: #00ffff;
-            font-size: 13px;
-            font-weight: bold;
-            text-shadow: 0 0 15px #00ffff;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        ul.examples li:hover {
-            background: rgba(0, 255, 255, 0.15);
-            border-left-color: #ff00ff;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
-            transform: translateX(15px) scale(1.02);
-        }
-
-        .warning {
-            background: rgba(255, 20, 147, 0.15);
-            border-left-color: #ff1493 !important;
-        }
-
-        .warning::before {
-            content: ' WARNING';
-            color: #ff1493 !important;
-            text-shadow: 0 0 15px #ff1493;
-        }
-
-        footer {
-            background: rgba(15, 15, 55, 0.95);
-            color: #00ffff;
-            text-align: center;
-            padding: 50px;
-            font-family: 'Roboto Mono', monospace;
-            border-top: 4px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-            text-shadow: 0 0 20px #00ffff;
-        }
-
-        .final-challenge {
-            background: rgba(0, 0, 0, 0.95);
-            border: 4px solid #ff00ff;
-            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
-            margin-top: 50px;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8em; }
-            h2 { font-size: 2.2em; }
-            section { padding: 40px 25px; }
-            .code-block { font-size: 14px; padding: 25px; }
-        }
-    </style>
+/* GLOW EFFECTS */
+.glow-box{background:#e8f4ff;border:3px solid #4682b4;border-radius:12px;padding:20px;margin:12px 0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:bold;color:#0066cc;position:relative;overflow:hidden;}
+.glow-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,transparent 40%,rgba(78,145,255,.3) 50%,transparent 60%);animation:glowPulse 3s ease-in-out infinite;opacity:0;transition:opacity .3s;}
+.glow-box.glow1{box-shadow:0 0 10px #ff6b6b,0 0 20px #ff6b6b,0 0 30px rgba(255,107,107,.5);}
+.glow-box.glow2{box-shadow:0 0 10px #4ecdc4,0 0 20px #4ecdc4,0 0 30px rgba(78,205,196,.5);}
+.glow-box.glow3{box-shadow:0 0 15px #45b7d1,0 0 30px #45b7d1,0 0 45px rgba(69,183,209,.6);}
+.neon-text{font-size:12px;font-weight:bold;text-shadow:0 0 5px #ff6b6b,0 0 10px #ff6b6b,0 0 15px #ff6b6b,0 0 20px rgba(255,107,107,.7);margin:8px 0;}
+.gradient-bg{background:linear-gradient(45deg,#ff6b6b 0%,#4ecdc4 25%,#45b7d1 50%,#f9ca24 75%,#ff6b6b 100%);background-size:400% 400%;animation:gradientShift 6s ease infinite;border-radius:12px;height:120px;margin:12px 0;position:relative;}
+.gradient-border{border:4px solid transparent;border-image:linear-gradient(45deg,#ff6b6b,#4ecdc4,#45b7d1) 1;border-image-slice:1;background:#e8f4ff;border-radius:12px;padding:20px;margin:12px 0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#0066cc;}
+.ultimate-card{background:linear-gradient(135deg,rgba(232,244,255,.9),rgba(135,206,250,.8));border:3px solid transparent;border-image:linear-gradient(45deg,#ff6b6b,#4ecdc4) 1;border-image-slice:1;border-radius:16px;padding:20px;margin:12px 0;box-shadow:0 0 20px #ff6b6b,0 0 40px #4ecdc4,0 0 60px rgba(69,183,209,.5);transition:all .3s;}
+.ultimate-card:hover{box-shadow:0 0 30px #ff6b6b,0 0 60px #4ecdc4,0 0 80px rgba(69,183,209,.7);transform:translateY(-5px);}
+@keyframes glowPulse{0%,100%{transform:scale(1) rotate(0deg);opacity:0;}50%{transform:scale(1.2) rotate(180deg);opacity:1;}}
+@keyframes gradientShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+.examples{margin-left:16px;}
+.examples li{background:#e8f4ff;border-left:4px solid #4e91ff;padding:10px;margin:6px 0;border-radius:6px;font-size:9px;transition:all .2s;}
+.examples li:hover{transform:translateX(5px);border-left-color:#ffcc4d;box-shadow:0 4px 0 #c9a227;}
+.warning{background:#ffe6e6;border-left-color:#ff6b6b !important;color:#cc0000;}
+@media(max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:12px;padding:12px;}.exit-btn{top:20px;left:20px;}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Shadows, Gradients & Borders</h1>
-            <p class="subtitle"> LESSON 19 - Cyberpunk Visual Effects</p>
-        </header>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <h1>🌈 Glow Effects</h1>
+    <p>Lesson 19</p>
+  </div>
+  <div class="lessons-list">
+    <button data-lesson="topic-1" class="active"><span class="num">01</span> Box Shadow</button>
+    <button data-lesson="topic-2"><span class="num">02</span> Text Glow</button>
+    <button data-lesson="topic-3"><span class="num">03</span> Gradients</button>
+    <button data-lesson="topic-4"><span class="num">04</span> Border Glow</button>
+    <button data-lesson="topic-5"><span class="num">05</span> Ultimate Card</button>
+    <button data-lesson="topic-6"><span class="num">06</span> Pro Tips</button>
+    <button data-lesson="topic-7"><span class="num">07</span> Challenge</button>
+  </div>
+</aside>
 
-        <section id="box-shadow">
-            <h2>01. box-shadow</h2>
-            <div class="explanation">
-                <span class="highlight">box-shadow:</span> Creates glowing shadows around boxes. 
-                Syntax: <code>box-shadow: X Y BLUR RADIUS COLOR</code>. Multiple layers = neon glow!
-            </div>
-            <div class="code-block">
-                <pre><code>.cyber-glow {
+<main class="content">
+  <div class="content-head">
+    <div class="title" id="panel-title">01 • Box Shadow</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
+    </div>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- TOPIC 1: Box Shadow -->
+    <article id="topic-1" class="lesson-panel visible">
+      <h1>box-shadow Glow</h1>
+      <div class="meta">Lesson 19 • Topic 1</div>
+      <div class="explain">Multiple shadows = neon glow effect!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.glow-box {
   box-shadow: 
-    0 0 20px #ff00ff,     /* Pink glow */
-    0 0 40px #00ffff,     /* Blue glow */
-    0 0 60px rgba(255,0,255,0.5); /* Outer glow */
-}</code></pre>
-            </div>
-            <div class="demo-output" style="
-                width: 350px; height: 180px; margin: 20px auto; display: flex;
-                align-items: center; justify-content: center; font-size: 1.4em;
-                background: rgba(10,15,50,0.9); border-radius: 20px; border: 2px solid #00ffff;
-                box-shadow: 
-                    0 0 20px #ff00ff,
-                    0 0 40px #00ffff,
-                    0 0 60px rgba(255,0,255,0.5);">
-                CYBERPUNK BOX GLOW
-            </div>
-        </section>
+    0 0 10px #ff6b6b,
+    0 0 20px #ff6b6b,
+    0 0 30px rgba(255,107,107,.5);
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="glow-box glow1">PINK GLOW<br><small>3 layers</small></div>
+        <div class="glow-box glow2">CYAN GLOW<br><small>3 layers</small></div>
+        <div class="glow-box glow3">BLUE GLOW<br><small>3 layers</small></div>
+      </div>
+    </article>
 
-        <section id="text-shadow">
-            <h2>02. text-shadow</h2>
-            <div class="explanation">
-                <span class="highlight">text-shadow:</span> Makes text glow like neon signs! 
-                Multiple shadows = realistic cyberpunk effect. Syntax: <code>text-shadow: X Y BLUR COLOR</code>
-            </div>
-            <div class="code-block">
-                <pre><code>h1.neon {
+    <!-- TOPIC 2: Text Shadow -->
+    <article id="topic-2" class="lesson-panel">
+      <h1 class="neon-text">text-shadow</h1>
+      <div class="meta">Lesson 19 • Topic 2</div>
+      <div class="explain">Neon text = multiple text-shadow layers!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.neon-text {
   text-shadow: 
-    0 0 10px #ff00ff,
-    0 0 20px #00ffff,
-    0 0 30px #ff00ff,
-    0 0 40px #00ffff;
-}</code></pre>
-            </div>
-            <div class="demo-output" style="text-align:center;">
-                <h1 style="
-                    font-size: 3em; margin: 30px 0; font-weight: 900;
-                    text-shadow: 
-                        0 0 10px #ff00ff,
-                        0 0 20px #00ffff,
-                        0 0 30px #ff00ff,
-                        0 0 40px #00ffff;">
-                    NEON TEXT GLOW
-                </h1>
-            </div>
-        </section>
+    0 0 5px #ff6b6b,
+    0 0 10px #ff6b6b,
+    0 0 15px #ff6b6b;
+}</pre>
+      </div>
+      <div class="demo">
+        <p class="neon-text" style="color:#ff6b6b;margin:0;">NEON TEXT GLOW</p>
+        <p class="neon-text" style="color:#4ecdc4;">CYBERPUNK LETTERS</p>
+        <p class="neon-text" style="color:#45b7d1;">GLOWING HEADLINES</p>
+      </div>
+    </article>
 
-        <section id="linear-gradient">
-            <h2>03. linear-gradient()</h2>
-            <div class="explanation">
-                <span class="highlight">linear-gradient()</span> creates smooth color transitions. 
-                Perfect for cyberpunk backgrounds and borders! Syntax: <code>linear-gradient(angle, color1, color2)</code>
-            </div>
-            <div class="code-block">
-                <pre><code>.gradient-bg {
-  background: linear-gradient(45deg,
-    #ff00ff 0%,
-    #8a2be2 25%,
-    #00ffff 50%,
-    #ff1493 75%,
-    #ff00ff 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
-}</code></pre>
-            </div>
-            <div class="demo-output" style="
-                width: 450px; height: 220px; margin: 25px auto;
-                background: linear-gradient(45deg, #ff00ff 0%, #8a2be2 25%, #00ffff 50%, #ff1493 75%, #ff00ff 100%);
-                background-size: 400% 400%;
-                border-radius: 25px;
-                animation: gradientShift 8s ease infinite;">
-            </div>
-            <style>
-                @keyframes gradientShift {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-            </style>
-        </section>
+    <!-- TOPIC 3: Gradients -->
+    <article id="topic-3" class="lesson-panel">
+      <h1>Animated Gradients</h1>
+      <div class="meta">Lesson 19 • Topic 3</div>
+      <div class="explain">linear-gradient(45deg, ...) + animation = moving colors!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>background: linear-gradient(45deg,
+  #ff6b6b 0%,
+  #4ecdc4 25%,
+  #45b7d1 50%);
+background-size: 400% 400%;
+animation: gradientShift 6s infinite;</pre>
+      </div>
+      <div class="demo">
+        <div class="gradient-bg"></div>
+        <p style="font-size:8px;text-align:center;">Watch gradient move → ✨</p>
+      </div>
+    </article>
 
-        <section id="border-image">
-            <h2>04. border-image + gradient</h2>
-            <div class="explanation">
-                <span class="highlight">border-image:</span> Creates gradient borders! 
-                Use <code>border-image: linear-gradient(...) 1;</code> for cyberpunk edges.
-            </div>
-            <div class="code-block">
-                <pre><code>.gradient-border {
+    <!-- TOPIC 4: Border Image -->
+    <article id="topic-4" class="lesson-panel">
+      <h1>Gradient Borders</h1>
+      <div class="meta">Lesson 19 • Topic 4</div>
+      <div class="explain">border-image: linear-gradient() = rainbow edges!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.gradient-border {
   border: 4px solid transparent;
   border-image: linear-gradient(45deg,
-    #ff00ff, #00ffff, #ff1493) 1;
-  border-image-slice: 1;
-}</code></pre>
-            </div>
-            <div class="demo-output" style="
-                width: 320px; height: 140px; margin: 25px auto; display: flex;
-                align-items: center; justify-content: center; font-size: 1.3em;
-                background: rgba(0,20,60,0.9); border-radius: 18px;
-                border: 4px solid transparent;
-                border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
-                border-image-slice: 1;">
-                GRADIENT BORDER EFFECT
-            </div>
-        </section>
+    #ff6b6b, #4ecdc4, #45b7d1) 1;
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="gradient-border">GRADIENT BORDER<br><small>border-image magic</small></div>
+        <div class="gradient-border" style="border-image:linear-gradient(90deg,#f9ca24,#ff6b6b,#4ecdc4) 1;">HORIZONTAL GRADIENT</div>
+      </div>
+    </article>
 
-        <section id="advanced">
-            <h2>05. Advanced Combinations</h2>
-            <div class="explanation">
-                Combine ALL effects for maximum cyberpunk! <span class="highlight">box-shadow + text-shadow + linear-gradient = ULTIMATE</span>
-            </div>
-            <ul class="examples">
-                <li>
-                    <strong>Ultimate Cyber Card:</strong><br>
-                    <code>box-shadow → Multi-layer neon glow</code><br>
-                    <code>border-image → Gradient border</code><br>
-                    <code>background → Animated gradient</code><br>
-                    <code>text-shadow → Neon text</code>
-                </li>
-                <li class="warning">
-                    <strong>⚠️ Performance Tip:</strong><br>
-                    Too many shadows = slow! Use <code>will-change: box-shadow;</code> for smooth animations.
-                </li>
-            </ul>
-        </section>
+    <!-- TOPIC 5: Ultimate Card -->
+    <article id="topic-5" class="lesson-panel">
+      <h1>Ultimate Cyber Card</h1>
+      <div class="meta">Lesson 19 • Topic 5</div>
+      <div class="explain">ALL effects combined = portfolio perfection!</div>
+      <div class="demo">
+        <div class="ultimate-card">
+          <h3 style="font-size:10px;margin-bottom:6px;color:#ff6b6b;">[YOUR NAME]</h3>
+          <p style="font-size:8px;color:#0066cc;">CMU IT Student<br>Web Developer</p>
+        </div>
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.ultimate-card {
+  box-shadow: 0 0 20px #ff6b6b,
+              0 0 40px #4ecdc4;
+  border-image: linear-gradient(...);
+  background: linear-gradient(...);
+}</pre>
+      </div>
+    </article>
 
-        <section id="challenge">
-            <h2>06. YOUR CHALLENGE!</h2>
-            <div class="explanation">
-                Create your own <strong>cyberpunk portfolio card</strong> using ALL effects learned!
-            </div>
-            <div class="code-block final-challenge">
-                <pre><code>&lt;!DOCTYPE html&gt;
+    <!-- TOPIC 6: Pro Tips -->
+    <article id="topic-6" class="lesson-panel">
+      <h1>Pro Tips</h1>
+      <div class="meta">Lesson 19 • Topic 6</div>
+      <ul class="examples">
+        <li><code>Multiple shadows</code> = realistic neon glow</li>
+        <li><code>border-image-slice: 1</code> = perfect gradient borders</li>
+        <li><code>background-size: 400%</code> + animation = moving gradients</li>
+        <li class="warning">Too many shadows = lag ❌</li>
+      </ul>
+    </article>
+
+    <!-- TOPIC 7: Challenge -->
+    <article id="topic-7" class="lesson-panel">
+      <h1>YOUR CHALLENGE!</h1>
+      <div class="meta">Build Cyber Card</div>
+      <div class="explain">YOUR portfolio card with ALL glow effects!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;[YOUR NAME] Portfolio&lt;/title&gt;
-&lt;/head&gt;
+&lt;head&gt;&lt;title&gt;Your Portfolio&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
-    &lt;div class=&quot;cyber-card&quot;&gt;
-        [YOUR NAME]
-        &lt;br&gt;Central Mindanao University
-        &lt;br&gt;IT Student | Web Developer
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+  &lt;div class="glow-card"&gt;
+    [YOUR NAME]
+    &lt;br&gt;CMU IT Student
+  &lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;</pre>
+      </div>
+      <div class="demo">
+        <p style="font-size:8px;">Replace with YOUR info! 🚀</p>
+        <div class="ultimate-card" onclick="alert('Build YOUR cyber card! 🌈')" style="cursor:pointer;padding:16px;text-align:center;">
+          <span style="font-size:9px;">CLICK TO START</span>
+        </div>
+      </div>
+    </article>
 
-&lt;style&gt;
-.cyber-card {
-    width: 380px; height: 220px; margin: 50px auto;
-    background: linear-gradient(135deg, rgba(10,0,30,0.9), rgba(0,10,40,0.9));
-    border: 3px solid transparent;
-    border-image: linear-gradient(45deg, #ff00ff, #00ffff) 1;
-    border-radius: 25px;
-    box-shadow: 
-        0 0 30px #ff00ff,
-        0 0 60px #00ffff,
-        inset 0 0 30px rgba(255,0,255,0.1);
-    color: #00ffff;
-    text-align: center;
-    padding-top: 60px;
-    font-family: monospace;
-    text-shadow: 0 0 20px #ff00ff;
-    animation: cardPulse 3s ease-in-out infinite;
+  </div>
+</main>
+</div>
+
+<script>
+const buttons=document.querySelectorAll('.lessons-list button');
+const panels=document.querySelectorAll('.lesson-panel');
+const title=document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn=document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent=btn.querySelector('.num').textContent+' • '+btn.textContent.replace(/^\\d+\\s+/,'');
 }
-&lt;/style&gt;</code></pre>
-            </div>
-        </section>
 
-        <footer>
-            <h3> READY TO CODE?</h3>
-            <p><strong>Copy ALL code → VS Code → Save <code>lesson19-shadows.html</code></p>
-            <p><strong>Open browser → Edit challenge → Create YOUR cyberpunk portfolio!</strong></p>
-            <p> <strong>Dark neon pixelated cyberpunk theme</strong> - Perfect for CMU IT students! </p>
-        </footer>
-    </div>
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current();if(i>0)showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current();if(i<order.length-1)showLesson(order[i+1]);};
+
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const code=btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(()=>{
+      btn.innerText='✔ Copied!';
+      setTimeout(()=>btn.innerText='Copy',1500);
+    }).catch(()=>{
+      btn.innerText='❌ Failed';
+      setTimeout(()=>btn.innerText='Copy',1500);
+    });
+  });
+});
+</script>
 </body>
 </html>
