@@ -1,0 +1,85 @@
+/* Pixel HTML Editor Tool */
+
+.html-editor {
+  background: #e8f4ff;
+  border-radius: 18px;
+  box-shadow: inset -6px -6px 0 rgba(0,0,0,0.15), 0 8px 0 #6fa8dc;
+  padding: 16px;
+  font-family: 'Press Start 2P', cursive;
+  color: #000;
+  margin-top: 18px;
+}
+
+.html-editor h2 {
+  font-size: 12px;
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 2px 2px #fff;
+}
+
+.editor-area {
+  width: 100%;
+  height: 220px;
+  border-radius: 12px;
+  border: 3px solid #c9a227;
+  background: #1e1e1e;
+  color: #00ff90;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 10px;
+  resize: vertical;
+  outline: none;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.4);
+}
+
+.editor-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.editor-controls button {
+  font-family: 'Press Start 2P', cursive;
+  background: #00c98b;
+  color: #003322;
+  border: 3px solid #00805c;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 3px 0 #00563f, 0 4px 0 #001f16;
+  cursor: pointer;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.editor-controls button:hover {
+  transform: translateY(-2px);
+  background: #29e2aa;
+  box-shadow: 0 5px 0 #00563f, 0 6px 0 #001f16;
+}
+
+.editor-controls button:active {
+  transform: translateY(1px);
+  background: #00b27a;
+  box-shadow: 0 1px 0 #00563f, 0 2px 0 #001f16;
+}
+
+/* Output Box */
+.editor-output {
+  background: #fff;
+  border: 3px solid #6aa84f;
+  border-radius: 12px;
+  height: 260px;
+  padding: 6px;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.25);
+}
+
+.editor-output iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+}
