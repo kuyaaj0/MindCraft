@@ -1,311 +1,586 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JavaScript Events – Cyberpunk Lesson 17</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pixel JS Lessons Dashboard - Lesson 17</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-    body {
-      font-family: 'Orbitron', monospace;
-      background: #000;
-      color: #e0e0e0;
-      overflow-x: hidden;
-      position: relative;
-      min-height: 100vh;
-    }
+.exit-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow: 
+    0 3px 0 #a30000,
+    inset -2px -2px 0 rgba(0,0,0,.25);
+  z-index:1000;
+  font-size:9px;
+  transition: all 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: 
+    0 5px 0 #a30000,
+    inset -2px -2px 0 rgba(0,0,0,.25);
+}
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: 
-        radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-        linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-        linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-      background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-      animation: cyberFlow 25s linear infinite;
-      z-index: -2;
-    }
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
 
-    @keyframes cyberFlow {
-      0% { background-position: 0 0; }
-      100% { background-position: 50px 50px; }
-    }
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+}
 
-    .container {
-      max-width: 1300px;
-      margin: 25px auto;
-      background: rgba(8,8,25,0.97);
-      border: 3px solid transparent;
-      border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
-      border-radius: 25px;
-      box-shadow:
-        0 0 60px rgba(255,0,255,0.5),
-        0 0 120px rgba(0,255,255,0.4),
-        inset 0 0 40px rgba(255,0,255,0.08);
-      overflow: hidden;
-      backdrop-filter: blur(15px);
-    }
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
 
-    header {
-      text-align: center;
-      padding: 60px 40px;
-      border-bottom: 5px solid transparent;
-      border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-    }
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-    h1 {
-      font-size: 4em;
-      font-weight: 900;
-      background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px #ff00ff, 0 0 80px #00ffff;
-      animation: neonPulse 3s ease-in-out infinite;
-    }
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition: all 0.1s;
+}
 
-    @keyframes neonPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.85; }
-    }
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
+}
 
-    .subtitle {
-      font-size: 1.5em;
-      background: linear-gradient(90deg, #00ffff, #ff1493);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientScroll 4s ease infinite;
-    }
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+}
 
-    @keyframes gradientScroll {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
+}
 
-    section {
-      padding: 60px 50px;
-      border-bottom: 2px solid rgba(255,0,255,0.3);
-    }
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
+}
 
-    section:nth-child(even) {
-      background: rgba(15,10,45,0.7);
-    }
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
 
-    h2 {
-      font-size: 2.6em;
-      font-weight: 900;
-      background: linear-gradient(135deg, #ff00ff, #00ffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 25px;
-    }
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
 
-    .explanation {
-      font-family: 'Roboto Mono', monospace;
-      background: rgba(255,0,255,0.05);
-      border-left: 4px solid #ff00ff;
-      padding: 25px;
-      border-radius: 10px;
-      color: #d0d0ff;
-      margin-bottom: 25px;
-      line-height: 1.8;
-      font-size: 1.1em;
-    }
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
 
-    .code-block {
-      background: rgba(10,15,50,0.95);
-      border: 2px solid transparent;
-      border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-      border-radius: 15px;
-      padding: 30px;
-      font-family: 'Roboto Mono', monospace;
-      color: #aefaff;
-      margin-bottom: 25px;
-      box-shadow: 0 0 40px rgba(0,255,255,0.4);
-    }
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition: all 0.1s;
+}
 
-    .demo-output {
-      font-family: monospace;
-      background: rgba(0, 20, 60, 0.9);
-      border: 2px solid #ff00ff;
-      border-radius: 10px;
-      padding: 25px;
-      color: #00ffff;
-      margin-bottom: 15px;
-    }
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
 
-    .highlight {
-      color: #ff00ff;
-      font-weight: bold;
-    }
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+}
 
-    footer {
-      background: rgba(15,15,55,0.95);
-      color: #00ffff;
-      text-align: center;
-      padding: 50px;
-      text-shadow: 0 0 20px #00ffff;
-      border-top: 3px solid #ff00ff;
-    }
+/* BROWSER OUTPUT STYLE */
+.browser-output {
+  background:rgba(0,20,60,0.95) !important;
+  border:3px solid #00ffff !important;
+  color:#00ff88 !important;
+  font-family:monospace !important;
+  position:relative !important;
+  padding:14px !important;
+  border-radius:12px !important;
+  margin-bottom:14px !important;
+}
 
-    button {
-      background: linear-gradient(90deg, #ff00ff, #00ffff);
-      color: #000;
-      border: none;
-      padding: 10px 25px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      font-family: 'Orbitron', monospace;
-      box-shadow: 0 0 15px #00ffff;
-      transition: 0.3s;
-    }
+.browser-output::before {
+  content:" BROWSER OUTPUT" !important;
+  position:absolute !important;
+  top:-12px !important;
+  left:15px !important;
+  background:rgba(0,20,60,0.95) !important;
+  color:#00ffff !important;
+  padding:4px 12px !important;
+  font-size:8px !important;
+  border:2px solid #00ffff !important;
+  border-radius:8px !important;
+  font-family:'Press Start 2P' !important;
+}
 
-    button:hover {
-      box-shadow: 0 0 25px #ff00ff;
-      transform: scale(1.05);
-    }
-  </style>
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
+
+.lesson-panel.visible{display:block}
+
+.lesson-panel h1{font-size:14px;margin-bottom:6px;}
+.lesson-panel h2{font-size:11px;margin-bottom:8px;}
+.meta{font-size:8px;opacity:.7;margin-bottom:16px;}
+
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition: all 0.1s;
+}
+
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+}
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition: all 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+}
+
+.examples{
+  margin-left:16px;
+}
+
+.examples li{
+  margin:6px 0;
+  padding:10px;
+  background:#f0f8f0;
+  border-left:4px solid #4CAF50;
+  border-radius:6px;
+}
+
+.warning{
+  background:#ffebee !important;
+  border-left-color:#f44336 !important;
+}
+
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
+}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>JavaScript Events</h1>
-      <p class="subtitle">Lesson 17 - Cyberpunk Interaction Matrix</p>
-    </header>
+<div class="app">
 
-    <section id="intro">
-      <h2>01. What Are Events?</h2>
-      <div class="explanation">
-        <span class="highlight">Events</span> are actions that happen in the browser — like clicking, typing,  
-        submitting a form, or hovering over an element. JavaScript can respond to these dynamically to make  
-        websites interactive.
-      </div>
-    </section>
-
-    <section id="onclick">
-      <h2>02. The onclick Event</h2>
-      <div class="explanation">
-        The simplest event in JavaScript is <span class="highlight">onclick</span>.  
-        It runs code when the user clicks the element.
-      </div>
-      <div class="code-block">
-<pre><code>&lt;button onclick="alert('Cyber click!')"&gt;Click Me&lt;/button&gt;
-</code></pre>
-      </div>
-      <div class="demo-output">
-        Output → A pop-up alert appears when the button is clicked.
-      </div>
-    </section>
-
-    <section id="addEvent">
-      <h2>03. addEventListener()</h2>
-      <div class="explanation">
-        Instead of inline code, we often use <span class="highlight">addEventListener()</span> —  
-        it "listens" for actions and runs a function when an event occurs.
-      </div>
-      <div class="code-block">
-<pre><code>&lt;button id="hackerBtn"&gt;Activate&lt;/button&gt;
-
-&lt;script&gt;
-let button = document.getElementById("hackerBtn");
-button.addEventListener("click", function(){
-  alert("Access Granted!");
-});
-&lt;/script&gt;</code></pre>
-      </div>
-      <div class="demo-output">
-        Output → Alert "Access Granted!" appears when pressed.
-      </div>
-    </section>
-
-    <section id="form">
-      <h2>04. Handling Form Submissions</h2>
-      <div class="explanation">
-        Forms can trigger <span class="highlight">submit</span> events.  
-        Use <strong>preventDefault()</strong> to stop reloading the page.
-      </div>
-      <div class="code-block">
-<pre><code>&lt;form id="loginForm"&gt;
-  &lt;input type="text" placeholder="Username"&gt;
-  &lt;button&gt;Login&lt;/button&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-let form = document.getElementById("loginForm");
-form.addEventListener("submit", function(event){
-  event.preventDefault(); // Stop page refresh
-  alert("Form submitted successfully!");
-});
-&lt;/script&gt;</code></pre>
-      </div>
-      <div class="demo-output">
-        Output → Alert displays without refreshing the page.
-      </div>
-    </section>
-
-    <section id="keys">
-      <h2>05. Key Press Events</h2>
-      <div class="explanation">
-        The <span class="highlight">keydown</span> event fires when any key is pressed on the keyboard.  
-        Perfect for game controls or dynamic text effects!
-      </div>
-      <div class="code-block">
-<pre><code>&lt;input type="text" id="inputBox" placeholder="Type something..."&gt;
-
-&lt;script&gt;
-let box = document.getElementById("inputBox");
-box.addEventListener("keydown", function(e){
-  console.log("Key pressed:", e.key);
-});
-&lt;/script&gt;</code></pre>
-      </div>
-      <div class="demo-output">
-        Output → Logs each key you press inside the input box.
-      </div>
-    </section>
-
-    <section id="hover">
-      <h2>06. Mouse Events</h2>
-      <div class="explanation">
-        You can also capture hovering or leaving an element using  
-        <span class="highlight">mouseover</span> and <span class="highlight">mouseout</span>.
-      </div>
-      <div class="code-block">
-<pre><code>&lt;div id="panel"&gt;Hover over me!&lt;/div&gt;
-
-&lt;script&gt;
-let panel = document.getElementById("panel");
-
-panel.addEventListener("mouseover", () => {
-  panel.style.color = "#00ffff";
-  panel.textContent = "Neon Energy Detected!";
-});
-
-panel.addEventListener("mouseout", () => {
-  panel.style.color = "#ff00ff";
-  panel.textContent = "Hover again!";
-});
-&lt;/script&gt;</code></pre>
-      </div>
-      <div class="demo-output">
-        Output → The text and color change when you hover and leave.
-      </div>
-    </section>
-
-    <footer>
-      <h3>💥 Cyber Challenge</h3>
-      <p>Create buttons that trigger different actions using <span class="highlight">addEventListener()</span>.  
-      Try combining events like <span class="highlight">click</span>, <span class="highlight">mouseover</span>, and <span class="highlight">keydown</span>.</p>
-      <p>Save as <code>lesson17-events.html</code> and test your cyber-interactive powers!</p>
-    </footer>
+<aside class="sidebar">
+  <div class="brand">
+    <h1>🧠 Pixel JS</h1>
+    <p>Lesson 17</p>
   </div>
+
+  <div class="lessons-list">
+    <button data-lesson="onclick" class="active"><span class="num">01</span> onclick Handler</button>
+    <button data-lesson="add-event"><span class="num">02</span> addEventListener</button>
+    <button data-lesson="event-object"><span class="num">03</span> Event Object</button>
+    <button data-lesson="form-events"><span class="num">04</span> Form Events</button>
+    <button data-lesson="key-events"><span class="num">05</span> Keyboard Events</button>
+    <button data-lesson="challenge"><span class="num">06</span> Your Mission</button>
+  </div>
+</aside>
+
+<main class="content">
+  <div class="content-head">
+    <div class="container">
+      <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+    </div>
+    <div class="title" id="panel-title">01 • onclick Handler</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
+    </div>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- ONCLICK HANDLER -->
+    <article id="onclick" class="lesson-panel visible">
+      <h1>onclick Property</h1>
+      <div class="meta">Lesson 17 • Topic 1</div>
+      <div class="explain">
+        Simplest way: <strong>onclick="function()"</strong> directly in HTML<br>
+        or <code>element.onclick = function</code> in JavaScript!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;!-- HTML onclick --&gt;
+&lt;button onclick="startGame()"&gt;START&lt;/button&gt;
+
+&lt;script&gt;
+// OR JavaScript onclick
+let startBtn = document.getElementById("start");
+startBtn.onclick = function() {
+  console.log("GAME STARTED!");
+};</pre>
+      </div>
+      <div class="demo browser-output">
+        <div style="font-size:11px;">
+          GAME STARTED!
+        </div>
+      </div>
+    </article>
+
+    <!-- ADD EVENT LISTENER -->
+    <article id="add-event" class="lesson-panel">
+      <h1>addEventListener() Power</h1>
+      <div class="meta">Lesson 17 • Topic 2</div>
+      <div class="explain">
+        <strong>Best practice:</strong> <code>addEventListener()</code>!<br>
+        Add multiple listeners, remove them, handles bubbling. 🔥
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>let jumpBtn = document.getElementById("jump");
+
+jumpBtn.addEventListener("click", function() {
+  console.log("JUMP! 🚀");
+});
+
+jumpBtn.addEventListener("click", function() {
+  console.log("Player jumped higher!");
+});</pre>
+      </div>
+      <div class="demo browser-output">
+        <div style="font-size:11px;">
+          JUMP! 🚀<br>
+          Player jumped higher!
+        </div>
+      </div>
+    </article>
+
+    <!-- EVENT OBJECT -->
+    <article id="event-object" class="lesson-panel">
+      <h1>Event Object Magic</h1>
+      <div class="meta">Lesson 17 • Topic 3</div>
+      <div class="explain">
+        Event handlers get <strong>event object</strong> with target, key, mouse position!<br>
+        Pass as first parameter: <code>function(event)</code>
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>button.addEventListener("click", function(event) {
+  console.log("Clicked element:", event.target.id);
+  console.log("Mouse X:", event.clientX);
+});</pre>
+      </div>
+      <div class="demo browser-output">
+        <div style="font-size:11px;">
+          Clicked element: fire-btn<br>
+          Mouse X: 450
+        </div>
+      </div>
+    </article>
+
+    <!-- FORM EVENTS -->
+    <article id="form-events" class="lesson-panel">
+      <h1>Form Submit Events</h1>
+      <div class="meta">Lesson 17 • Topic 4</div>
+      <div class="explain">
+        Handle <code>"submit"</code> on forms, prevent default with <code>event.preventDefault()</code>!<br>
+        Perfect for login screens, high score submissions.
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>let loginForm = document.getElementById("login-form");
+
+loginForm.addEventListener("submit", function(event) {
+  event.preventDefault();  // Stop page refresh
+  let username = event.target.username.value;
+  console.log("Player logged in:", username);
+});</pre>
+      </div>
+      <div class="demo browser-output">
+        <div style="font-size:11px;">
+          Player logged in: PixelHero
+        </div>
+      </div>
+    </article>
+
+    <!-- KEYBOARD EVENTS -->
+    <article id="key-events" class="lesson-panel">
+      <h1>Keyboard Events</h1>
+      <div class="meta">Lesson 17 • Topic 5</div>
+      <div class="explain">
+        Listen for <code>"keydown"</code>, <code>"keyup"</code> on document or elements!<br>
+        Check <code>event.key</code> or <code>event.code</code> for WASD, arrows, SPACE!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowRight") {
+    console.log("Move RIGHT!");
+  }
+  if (event.key === " ") {
+    console.log("JUMP!");
+    event.preventDefault();  // Stop scroll
+  }
+});</pre>
+      </div>
+      <div class="demo browser-output">
+        <div style="font-size:11px;">
+          Move RIGHT!<br>
+          JUMP!
+        </div>
+      </div>
+    </article>
+
+    <!-- CHALLENGE -->
+    <article id="challenge" class="lesson-panel">
+      <h1>YOUR MISSION: Game Controls!</h1>
+      <div class="meta">Lesson 17 • Topic 6</div>
+      <div class="explain">
+        Build complete <strong>game controls system</strong>:<br>
+        • Click START button (addEventListener)<br>
+        • WASD keys for movement<br>
+        • SPACEBAR to shoot<br>
+        • Form submit for player name<br>
+        Update score display live!
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy Challenge</button>
+<pre>/*
+  YOUR MISSION: Complete game controls!
+  Elements exist: #start-btn, #score, #player-name-form
+  
+  1. START button → gameStarted = true
+  2. WASD → log movement 
+  3. SPACE → log "PEW PEW!"
+  4. Form submit → set playerName
+  5. Update score counter
+*/
+
+let gameStarted = false;
+let score = 0;
+let playerName = "";
+
+document.addEventListener("keydown", function(event) {
+  // YOUR CODE HERE
+});</pre>
+      </div>
+      <div class="demo browser-output">
+        <p><strong>Expected Output:</strong></p>
+        <div style="font-size:11px;color:#00ff88;">
+          GAME STARTED!<br>
+          Player: PixelHero<br>
+          Move UP<br>
+          PEW PEW!<br>
+          Score: 100
+        </div>
+      </div>
+    </article>
+
+  </div>
+</main>
+</div>
+
+<script>
+// Lesson navigation
+const buttons = document.querySelectorAll('.lessons-list button');
+const panels = document.querySelectorAll('.lesson-panel');
+const title = document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\\d+\\s+/, '');
+}
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
+});
+</script>
 </body>
 </html>
