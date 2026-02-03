@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel JS Lessons Dashboard</title>
+<title>Pixel HTML Lessons Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-
 
 /* ===== WORLD BACKGROUND ===== */
 body{
@@ -18,7 +17,6 @@ body{
   overflow:hidden;
   font-size:10px;
 }
-
 
 .exit-btn{
   position:fixed;
@@ -40,7 +38,6 @@ body{
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
-
 /* ===== MAIN APP ===== */
 .app{
   max-width:1200px;
@@ -55,7 +52,6 @@ body{
   padding:18px;
 }
 
-
 /* ===== SIDEBAR ===== */
 .sidebar{
   background:#8b5a2b;
@@ -69,7 +65,6 @@ body{
   flex-direction:column;
 }
 
-
 .brand h1{
   font-size:14px;
   text-align:center;
@@ -81,7 +76,6 @@ body{
   opacity:.9;
   margin-top:6px;
 }
-
 
 /* ===== LESSON BUTTONS - PIXEL STYLE ===== */
 .lessons-list{
@@ -140,7 +134,6 @@ body{
   font-size:8px;
 }
 
-
 /* ===== CONTENT ===== */
 .content{
   background:#e8f4ff;
@@ -153,7 +146,6 @@ body{
   flex-direction:column;
 }
 
-
 /* ===== HEADER ===== */
 .content-head{
   display:flex;
@@ -162,12 +154,10 @@ body{
   margin-bottom:14px;
 }
 
-
 .content-head .title{
   font-size:12px;
   text-shadow:2px 2px #fff;
 }
-
 
 /* ===== NAV BUTTONS - PIXEL STYLE ===== */
 .content-head button{
@@ -201,13 +191,11 @@ body{
     0 2px 0 #0c1b3a;
 }
 
-
 /* ===== PANELS ===== */
 .panel-wrap{
   flex:1;
   position:relative;
 }
-
 
 .lesson-panel{
   position:absolute;
@@ -217,9 +205,7 @@ body{
   display:none;
 }
 
-
 .lesson-panel.visible{display:block}
-
 
 /* ===== LESSON CONTENT ===== */
 .lesson-panel h1{
@@ -227,19 +213,16 @@ body{
   margin-bottom:6px;
 }
 
-
 .lesson-panel h2{
   font-size:11px;
   margin-bottom:8px;
 }
-
 
 .meta{
   font-size:8px;
   opacity:.7;
   margin-bottom:16px;
 }
-
 
 /* ===== BOXES ===== */
 .explain{
@@ -251,7 +234,6 @@ body{
   line-height:1.6;
 }
 
-
 .code{
   background:#1e1e1e;
   color:#00ff90;
@@ -261,7 +243,6 @@ body{
   overflow:auto;
   position:relative;
 }
-
 
 /* ===== COPY BUTTON - PIXEL STYLE ===== */
 .code button.copy-btn{
@@ -291,7 +272,6 @@ body{
   background:#f2c93a;
 }
 
-
 .demo{
   background:#d9ead3;
   border:3px solid #6aa84f;
@@ -299,7 +279,6 @@ body{
   border-radius:12px;
   margin-bottom:14px;
 }
-
 
 /* ===== DEMO BUTTONS - PIXEL STYLE ===== */
 .demo button{
@@ -336,17 +315,6 @@ body{
     0 2px 0 #001f16;
 }
 
-
-.examples{
-  margin-left:16px;
-}
-
-
-.examples li{
-  margin:6px 0;
-}
-
-
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .app{
@@ -356,173 +324,145 @@ body{
 }
 </style>
 </head>
+
 <body>
 <div class="app">
-
-
-<aside class="sidebar">
-  <div class="brand">
-    <h1>🧠 HTML structure & Elements</h1>
-    <p>Lesson 1</p>
-  </div>
-
-
-  <div class="lessons-list">
-    <button data-lesson="topic-1" class="active"><span class="num">01</span> Intro / Where To / Output</button>
-    <button data-lesson="topic-2"><span class="num">02</span> Script Tags</button>
-    <button data-lesson="topic-3"><span class="num">03</span> External Files</button>
-    <button data-lesson="topic-4"><span class="num">04</span> Console</button>
-    <button data-lesson="topic-5"><span class="num">05</span> Alert Popups</button>
-    <button data-lesson="topic-6"><span class="num">06</span> innerHTML</button>
-    <button data-lesson="topic-7"><span class="num">07</span> Your Challenge</button>
-  </div>
-</aside>
-
-
-<main class="content">
-  <div class="content-head">
-
-
-    <div class="container">
-        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-      </div>
-      
-    <div class="title" id="panel-title">01 • Intro / Where To / Output</div>
-    <div>
-      <button id="prevLesson">◀</button>
-      <button id="nextLesson">▶</button>
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>🧠 Pixel HTML</h1>
+      <p>Page Setup & Text</p>
     </div>
-  </div>
+    <div class="lessons-list">
+      <button data-lesson="topic-1" class="active"><span class="num">01</span> HTML Structure</button>
+      <button data-lesson="topic-2"><span class="num">02</span> Head & Body</button>
+      <button data-lesson="topic-3"><span class="num">03</span> Tags & Nesting</button>
+      <button data-lesson="topic-4"><span class="num">04</span> Your Challenge</button>
+    </div>
+  </aside>
 
-
-  <div class="panel-wrap">
-
-
-    <!-- TOPIC 1 -->
-    <article id="topic-1" class="lesson-panel visible">
-      <h1>Intro / Where To / Output</h1>
-      <div class="meta">Lesson 1</div>
-      <div class="explain">JS makes websites <strong>interactive</strong>. HTML is skeleton, CSS skin, JS brain.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>console.log("JS Engine ON");
-alert("Welcome!");
-document.body.innerHTML += "&lt;p&gt;Hello from JS&lt;/p&gt;";</pre>
+  <main class="content">
+    <div class="content-head">
+      <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+      <div class="title" id="panel-title">01 • HTML Structure</div>
+      <div>
+        <button id="prevLesson">◀</button>
+        <button id="nextLesson">▶</button>
       </div>
-      <div class="demo">
-        <p>Click to test JS:</p>
-        <button onclick="alert('Hello from JS!')">Test JS</button>
-      </div>
-    </article>
+    </div>
 
-
-    <!-- TOPIC 2 -->
-    <article id="topic-2" class="lesson-panel">
-      <h1>Script Tags</h1>
-      <div class="explain">Use &lt;script&gt; tags in HEAD or BODY or External JS.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;script defer&gt;console.log("HEAD loaded")&lt;/script&gt;
-&lt;script&gt;alert("BODY script")&lt;/script&gt;
-&lt;script src="script.js"&gt;&lt;/script&gt;</pre>
-      </div>
-      <div class="demo">
-        <button onclick="alert('Script Tag Simulated')">Run Script</button>
-      </div>
-    </article>
-
-
-    <!-- TOPIC 3 -->
-    <article id="topic-3" class="lesson-panel">
-      <h1>External JS Files</h1>
-      <div class="explain">Put JS in a separate file for better management.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;script src="app.js"&gt;&lt;/script&gt;
-console.log("External JS loaded");
-document.getElementById("demoExt").innerHTML="Loaded";</pre>
-      </div>
-      <div class="demo">
-        <div id="demoExt" style="padding:10px;background:#fff;color:#000;border-radius:6px;">External JS not loaded</div>
-        <button onclick="document.getElementById('demoExt').innerHTML='External JS Loaded!'">Load External JS</button>
-      </div>
-    </article>
-
-
-    <!-- TOPIC 4 -->
-    <article id="topic-4" class="lesson-panel">
-      <h1>Console</h1>
-      <div class="explain">Use console.log(), console.warn(), console.error() for debugging.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>console.log("Info");
-console.warn("Warning");
-console.error("Error");</pre>
-      </div>
-      <div class="demo">
-        <div id="demoConsole" style="padding:10px;background:#fff;color:#000;border-radius:6px;height:80px;overflow:auto;font-family:monospace;">// Console output here</div>
-        <button onclick="document.getElementById('demoConsole').innerHTML='Info\nWarning\nError'">Simulate Console</button>
-      </div>
-    </article>
-
-
-    <!-- TOPIC 5 -->
-    <article id="topic-5" class="lesson-panel">
-      <h1>Alert Popups</h1>
-      <div class="explain">Use alert() to show popup messages to users.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>alert('Hello!');
-alert('Score: 100');
-alert('Game Over!');</pre>
-      </div>
-      <div class="demo">
-        <button onclick="alert('Hello from alert!')">Test Alert</button>
-      </div>
-    </article>
-
-
-    <!-- TOPIC 6 -->
-    <article id="topic-6" class="lesson-panel">
-      <h1>innerHTML</h1>
-      <div class="explain">Change HTML content dynamically using innerHTML.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;div id="demoDiv"&gt;Loading...&lt;/div&gt;
-document.getElementById("demoDiv").innerHTML="Hello Pixel!";</pre>
-      </div>
-      <div class="demo">
-        <div id="demoDiv" style="padding:10px;background:#fff;color:#000;border-radius:6px;">Loading...</div>
-        <button onclick="document.getElementById('demoDiv').innerHTML='Hello Pixel!'">Run innerHTML</button>
-      </div>
-    </article>
-
-
-    <!-- TOPIC 7 -->
-    <article id="topic-7" class="lesson-panel">
-      <h1>Your Challenge</h1>
-      <div class="explain">Create your own interactive Pixel-themed login screen! Use alert(), console.log(), innerHTML.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
+    <div class="panel-wrap">
+      <!-- TOPIC 1 -->
+      <article id="topic-1" class="lesson-panel visible">
+        <h1>HTML Structure</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          HTML (HyperText Markup Language) gives structure to a web page. Every HTML file starts with a <strong>doctype</strong>, followed by <strong>html</strong>, <strong>head</strong>, and <strong>body</strong> tags.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;&lt;body style="background:#000;color:#0ff"&gt;
-&lt;h1 id="welcome"&gt;Pixel Login&lt;/h1&gt;
-&lt;p id="status"&gt;Waiting...&lt;/p&gt;
-&lt;script&gt;
-alert("Welcome!");
-console.log("Student login");
-document.getElementById("welcome").innerHTML="WELCOME [NAME]";
-document.getElementById("status").innerHTML="Pixel Theme Active";
-&lt;/script&gt;
-&lt;/body&gt;&lt;/html&gt;</pre>
-      </div>
-    </article>
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My First Webpage&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="demo">
+          <p>Try it below:</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Hello World!</h1>
+          </div>
+        </div>
+      </article>
 
+      <!-- TOPIC 2 - CORRECTED -->
+      <article id="topic-2" class="lesson-panel">
+        <h1>Head & Body</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          The <strong>head</strong> contains <strong>invisible</strong> info (title, CSS links, meta). The <strong>body</strong> shows <strong>visible content only</strong>.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Webpage&lt;/title&gt;  ← Tab title only
+    &lt;link rel="stylesheet" href="style.css"&gt; ← Styles
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome!&lt;/h1&gt;  ← Visible!
+    &lt;p&gt;This shows up.&lt;/p&gt;  ← Visible!
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="demo">
+          <p><strong>Browser Result:</strong></p>
+          <div style="background:#fff;padding:12px;border-radius:8px;color:#000;border-left:4px solid #00c98b;">
+            <h1 style="margin:0 0 8px 0;">Welcome!</h1>
+            <p>This shows up.</p>
+          </div>
+          <p style="font-size:7px;color:#666;margin-top:8px;">
+            <strong>Tab shows:</strong> "My Webpage" 👆 (head works!)
+          </p>
+          <button onclick="alert('Head: Title=\'My Webpage\', CSS loaded\nBody: Welcome! + paragraph visible')">What Browser Sees</button>
+        </div>
+      </article>
 
-  </div>
-</main>
+      <!-- TOPIC 3 -->
+      <article id="topic-3" class="lesson-panel">
+        <h1>Tags & Nesting</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          HTML uses opening and closing <strong>tags</strong>. Tags can be <strong>nested</strong> inside each other, but they must close in the correct order.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;div&gt;
+  &lt;p&gt;This is &lt;strong&gt;nested&lt;/strong&gt; text.&lt;/p&gt;
+&lt;/div&gt;</pre>
+        </div>
+        <div class="demo">
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <p>This is <strong>nested</strong> text.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- TOPIC 4 -->
+      <article id="topic-4" class="lesson-panel">
+        <h1>Your Challenge</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          Create a simple webpage using <strong>html</strong>, <strong>head</strong>, <strong>body</strong>, and nested tags. Add your name as the title and a short introduction inside the body.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;[Your Name]&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome to My Page&lt;/h1&gt;
+    &lt;p&gt;Hi! I'm [Your Name] and this is my first webpage.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="demo">
+          <p>Replace [Your Name] with your actual name!</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Welcome to My Page</h1>
+            <p>Hi! I'm [Your Name] and this is my first webpage.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
 </div>
-
 
 <script>
 // Lesson navigation
@@ -530,25 +470,21 @@ const buttons = document.querySelectorAll('.lessons-list button');
 const panels = document.querySelectorAll('.lesson-panel');
 const title = document.getElementById('panel-title');
 
-
 function showLesson(id){
   panels.forEach(p=>p.classList.remove('visible'));
   buttons.forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('visible');
   const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
   btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/,'');
 }
 
-
 buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
-
 
 const order=[...buttons].map(b=>b.dataset.lesson);
 const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
 document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
 document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
-
 
 // Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
