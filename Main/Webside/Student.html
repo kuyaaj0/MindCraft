@@ -438,9 +438,10 @@ footer {
   z-index: 2000;
   text-align: center;
   flex-direction: column;
-  animation: welcomeFade 0.4s ease;
+  animation: welcomeFadeIn 0.5s ease forwards;
 }
 
+/* Message box style */
 #welcomeOverlay p {
   margin: 0;
   padding: 10px 20px;
@@ -448,13 +449,28 @@ footer {
   border: 2px solid #1DB954;
   border-radius: 10px;
   box-shadow: 0 0 20px #1DB95455;
+  opacity: 0;
+  animation: textFadeIn 0.8s ease forwards 0.2s;
 }
 
-/* Animation for entry */
-@keyframes welcomeFade {
+/* Fade-in and fade-out keyframes */
+@keyframes welcomeFadeIn {
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
-    }
+}
+@keyframes textFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes welcomeFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+/* Fade-out helper class triggered before hiding */
+#welcomeOverlay.fade-out {
+  animation: welcomeFadeOut 0.6s ease forwards;
+}
 
 /* === Mobile tweaks === */
 @media (max-width: 600px) {
