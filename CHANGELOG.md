@@ -1,8 +1,18 @@
+# February 3
+-- Major Changes for students webpage <br>
+-- Fixed bugs <br>
+-- New Design Changes for Two lessons seperate and it depends of the design <br>
+-- Few more that needed to change today or later <br>
+-- Latest Version of this platform is near <br>
+-- 1.0.3-Beta version
+--
+
 # January 22
 -- Minor adjustments <br>
 -- few bugs fixed <br>
--- and more
+-- and more <br>
 -- 1.0.1-Beta version
+--
 
 # January 16
 -- Fixed html Lesson 1 to 20 but not all html lessons are fixed <br>
