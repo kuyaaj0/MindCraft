@@ -1,494 +1,526 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Selectors - Cyberpunk Lesson 3</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSS Selectors - Pixel Lesson 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
+}
 
-        body {
-            font-family: 'Orbitron', monospace;
-            background: #000;
-            color: #e0e0e0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
 
-        /* Pixelated cyber grid */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-            animation: cyberGrid 25s linear infinite;
-            z-index: -2;
-        }
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+}
 
-        @keyframes cyberGrid {
-            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
-        }
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
 
-        .container {
-            max-width: 1300px;
-            margin: 25px auto;
-            background: rgba(8, 8, 25, 0.97);
-            border: 3px solid transparent;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
-            border-radius: 25px;
-            box-shadow:
-                0 0 60px rgba(255, 0, 255, 0.5),
-                0 0 120px rgba(0, 255, 255, 0.4),
-                inset 0 0 40px rgba(255, 0, 255, 0.08);
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-            position: relative;
-        }
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
-            animation: rotateAura 10s linear infinite;
-            z-index: -1;
-        }
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-        @keyframes rotateAura {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
+}
 
-        .exit-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 1rem;
-            color: #fff;
-            background: linear-gradient(45deg, #ff1493, #ff00ff);
-            border: 2px solid #ff00ff;
-            border-radius: 12px;
-            padding: 12px 20px;
-            text-decoration: none;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
-            box-shadow:
-                0 0 20px rgba(255, 0, 255, 0.6),
-                inset 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
+}
 
-        .exit-btn:hover {
-            background: linear-gradient(45deg, #00ffff, #ff1493);
-            border-color: #00ffff;
-            transform: scale(1.1) rotate(5deg);
-            box-shadow:
-                0 0 40px rgba(0, 255, 255, 0.9),
-                0 0 60px rgba(255, 0, 255, 0.7);
-        }
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
+}
 
-        header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 80px 40px 60px 40px;
-            text-align: center;
-            border-bottom: 5px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-        }
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
+}
 
-        h1 {
-            font-size: 4.2em;
-            font-weight: 900;
-            /* Less blur here as well */
-            text-shadow:
-                0 0 0 #ff00ff,
-                0 0 0 #00ffff,
-                0 0 0 #ff00ff;
-            margin-bottom: 20px;
-            animation: neonPulse 3s ease-in-out infinite;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+}
 
-        @keyframes neonPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
 
-        .subtitle {
-            font-size: 1.6em;
-            color: #00ffff;
-            font-weight: bold;
-            text-shadow: 0 0 20px #00ffff;
-            letter-spacing: 2px;
-        }
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
 
-        h2 {
-            font-size: 2.7em;
-            background: linear-gradient(135deg, #ff00ff, #00ffff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
-        }
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-        section {
-            padding: 60px 50px;
-            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
-        }
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
 
-        section:last-of-type {
-            border-bottom: none;
-        }
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
 
-        section:nth-child(even) {
-            background: rgba(15, 10, 45, 0.7);
-        }
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
 
-        .explanation {
-            background: rgba(255, 0, 255, 0.05);
-            padding: 25px;
-            margin-bottom: 30px;
-            border-left: 5px solid #ff00ff;
-            border-radius: 15px;
-            font-family: 'Roboto Mono', monospace;
-            line-height: 1.8;
-            color: #d0d0ff;
-            font-size: 1.2em;
-        }
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
 
-        .code-block {
-            background: rgba(10, 15, 50, 0.95);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-            padding: 25px;
-            margin: 30px 0;
-            border-radius: 20px;
-            font-family: 'Roboto Mono', monospace;
-            color: #00ffff;
-            position: relative;
-            font-size: 16px;
-            line-height: 1.8;
-            overflow-x: auto;
-            box-shadow:
-                0 0 40px rgba(0, 255, 255, 0.5),
-                inset 0 0 25px rgba(255, 0, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+.lesson-panel.visible{display:block}
 
-        .code-block:hover {
-            box-shadow:
-                0 0 60px rgba(0, 255, 255, 0.7),
-                0 0 100px rgba(255, 0, 255, 0.6),
-                inset 0 0 30px rgba(255, 0, 255, 0.2);
-            transform: translateY(-8px) scale(1.02);
-        }
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
+}
 
-        .code-block::before {
-            content: ' CODE MATRIX';
-            position: absolute;
-            top: -18px;
-            left: 30px;
-            background: rgba(10, 15, 50, 0.95);
-            color: #00ffff;
-            padding: 8px 25px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #00ffff;
-            border-radius: 25px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-        }
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
 
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            color: #fff;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
-            border: 2px solid #ff00ff;
-            border-radius: 8px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
-            box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
 
-        .copy-btn:hover {
-            background: linear-gradient(45deg, #00ffff, #ff69b4);
-            border-color: #00ffff;
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8);
-        }
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
 
-        .copy-btn.copied {
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            border-color: #00ff00;
-        }
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
 
-        .demo-output {
-            background: rgba(0, 20, 60, 0.9);
-            border: 2px solid #00ffff;
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 20px;
-            font-family: 'Roboto Mono', monospace;
-            position: relative;
-        }
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-        .demo-output::before {
-            content: ' BROWSER OUTPUT';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(0, 20, 60, 0.9);
-            color: #00ffff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-        }
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
 
-        .highlight {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-        }
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
+}
 
-        footer {
-            background: rgba(15, 15, 55, 0.95);
-            color: #00ffff;
-            text-align: center;
-            padding: 40px;
-            border-top: 3px solid #ff00ff;
-            text-shadow: 0 0 15px #00ffff;
-            font-family: 'Roboto Mono', monospace;
-        }
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
 
-        /* Mini demo styling */
-        .demo-output h1 {
-            color: #ff00ff;
-        }
-        .demo-output p {
-            color: #00ffff;
-        }
-        .special {
-            color: #ff1493;
-            font-weight: bold;
-        }
-        #unique {
-            background: rgba(0, 255, 255, 0.15);
-            border: 2px solid #00ffff;
-            padding: 10px;
-        }
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px;
+  margin-right:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8em; }
-            h2 { font-size: 2.1em; }
-            section { padding: 40px 25px; }
-            .code-block { font-size: 14px; padding: 25px; }
-            .exit-btn { font-size: 0.9rem; padding: 8px 14px; top: 15px; left: 15px; }
-        }
-    </style>
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
+}
+
+.examples{
+  margin-left:16px;
+}
+
+.examples li{
+  margin:6px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
+}
+</style>
 </head>
-
 <body>
-    <div class="container">
-        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+<div class="app">
 
-        <header>
-            <h1>CSS Selectors</h1>
-            <p class="subtitle">Lesson 3 - Targeting Elements Efficiently</p>
-        </header>
+<aside class="sidebar">
+  <div class="brand">
+    <h1>🎨 CSS Matrix</h1>
+    <p>Lesson 3</p>
+  </div>
 
-        <section id="intro">
-            <h2>01. What Are CSS Selectors?</h2>
-            <div class="explanation">
-                A <span class="highlight">CSS selector</span> tells the browser which HTML elements to style.
-                It’s how we target parts of a web page — like paragraphs, buttons, or titles — and apply specific designs to them.
-            </div>
-        </section>
+  <div class="lessons-list">
+    <button data-lesson="css3-1" class="active"><span class="num">01</span> What Are Selectors?</button>
+    <button data-lesson="css3-2"><span class="num">02</span> Element Selector</button>
+    <button data-lesson="css3-3"><span class="num">03</span> Class Selector (.dot)</button>
+    <button data-lesson="css3-4"><span class="num">04</span> ID Selector (#hash)</button>
+    <button data-lesson="css3-5"><span class="num">05</span> Element vs Class vs ID</button>
+    <button data-lesson="css3-6"><span class="num">06</span> Your Challenge!</button>
+  </div>
+</aside>
 
-        <section id="element-selector">
-            <h2>02. Element Selector</h2>
-            <div class="explanation">
-                Targets elements directly by name — for example <code>p</code>, <code>h1</code>, or <code>div</code>.
-                All matching elements will share the same style.
-            </div>
-
-            <div class="code-block">
-                <button class="copy-btn">Copy</button>
-<pre><code>/* Applies style to ALL paragraphs */
-p {
-    color: cyan;
-    font-size: 18px;
-}</code></pre>
-            </div>
-
-            <div class="demo-output">
-                <h1>Page Title</h1>
-                <p>This paragraph styles every &lt;p&gt; element the same way.</p>
-                <p>All paragraphs share this cyan color and font size.</p>
-            </div>
-        </section>
-
-        <section id="class-selector">
-            <h2>03. Class Selector (.)</h2>
-            <div class="explanation">
-                Classes are used when you want to style multiple elements in the same way.
-                They start with a period (<code>.</code>). Apply them in HTML using <code>class="name"</code>.
-            </div>
-
-            <div class="code-block">
-                <button class="copy-btn">Copy</button>
-<pre><code>/* CSS */
-.special {
-    color: hotpink;
-    text-shadow: 0 0 10px #ff00ff;
-}
-
-/* HTML */
-&lt;p class="special"&gt;This text uses the "special" class.&lt;/p&gt;</code></pre>
-            </div>
-
-            <div class="demo-output">
-                <p class="special">This text uses the “special” class!</p>
-            </div>
-        </section>
-
-        <section id="id-selector">
-            <h2>04. ID Selector (#)</h2>
-            <div class="explanation">
-                IDs are unique identifiers — used for one element only.
-                They start with a hash symbol (<code>#</code>) and are applied in HTML using <code>id="name"</code>.
-            </div>
-
-            <div class="code-block">
-                <button class="copy-btn">Copy</button>
-<pre><code>/* CSS */
-#unique {
-    background-color: rgba(0,255,255,0.15);
-    border: 2px solid cyan;
-    padding: 15px;
-}
-
-/* HTML */
-&lt;div id="unique"&gt;I have a unique ID!&lt;/div&gt;</code></pre>
-            </div>
-
-            <div class="demo-output">
-                <div id="unique">I have a unique ID!</div>
-            </div>
-        </section>
-
-        <section id="difference">
-            <h2>05. Element vs Class vs ID</h2>
-            <div class="explanation">
-                - <span class="highlight">Element selector</span>: Styles all tags of that type.<br>
-                - <span class="highlight">Class selector</span>: Styles a group of elements sharing the same class.<br>
-                - <span class="highlight">ID selector</span>: Styles one specific element only.
-            </div>
-
-            <div class="code-block">
-                <button class="copy-btn">Copy</button>
-<pre><code>/* Example CSS */
-h2 { color: cyan; }
-.special { color: hotpink; }
-#unique { color: yellow; }</code></pre>
-            </div>
-
-            <div class="demo-output">
-                <h2>This is an Element Selector (h2)</h2>
-                <p class="special">This is a Class Selector (.special)</p>
-                <p id="unique">This is an ID Selector (#unique)</p>
-            </div>
-        </section>
-
-        <section id="challenge">
-            <h2>06. YOUR CHALLENGE!</h2>
-            <div class="explanation">
-                Create a mini personal webpage that uses:
-                <ul>
-                    <li>At least one <span class="highlight">element selector</span>.</li>
-                    <li>Two different <span class="highlight">classes</span>.</li>
-                    <li>One <span class="highlight">unique ID</span>.</li>
-                </ul>
-                Style them with neon colors and glowing text like this lesson!
-            </div>
-
-            <div class="code-block">
-                <button class="copy-btn">Copy</button>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;style&gt;
-    h1 { color: cyan; }
-    .highlight-me { color: magenta; font-weight: bold; }
-    #my-info { border: 2px solid cyan; padding: 10px; }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;My Neon Profile&lt;/h1&gt;
-  &lt;p class="highlight-me"&gt;I love learning CSS!&lt;/p&gt;
-  &lt;p id="my-info"&gt;Student at Central Mindanao University&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-        </section>
-
-        <footer>
-            <h3>⚡ Save and Run!</h3>
-            <p>Copy this code into Visual Studio Code → Save as <code>lesson3-selectors.html</code> → Open in your browser!</p>
-            <p>Enjoy the glowing neon cyberpunk style while mastering CSS selectors!</p>
-        </footer>
+<main class="content">
+  <div class="content-head">
+    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+    <div class="title" id="panel-title">01 • What Are Selectors?</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
     </div>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.copy-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const codeBlock = this.parentElement;
-                    const codeText = codeBlock.querySelector('pre').innerText;
+  <div class="panel-wrap">
 
-                    navigator.clipboard.writeText(codeText).then(function() {
-                        const originalText = btn.textContent;
-                        btn.textContent = 'COPIED!';
-                        btn.classList.add('copied');
+    <!-- TOPIC 1: WHAT ARE SELECTORS -->
+    <article id="css3-1" class="lesson-panel visible">
+      <h1>CSS Selectors</h1>
+      <div class="meta">Lesson 3 • Targeting Elements</div>
+      <div class="explain"><strong>CSS selectors</strong> tell browser WHICH HTML to style! Target paragraphs, buttons, titles with specific designs.</div>
+      <div class="demo">
+        <p>3 Selector Types:</p>
+        <button onclick="document.querySelectorAll('p')[0].style.color='cyan'">Element (p)</button>
+        <button onclick="document.querySelectorAll('.special')[0].style.color='hotpink'">Class (.special)</button>
+        <button onclick="document.querySelectorAll('#unique')[0].style.color='yellow'">ID (#unique)</button>
+      </div>
+    </article>
 
-                        setTimeout(function() {
-                            btn.textContent = originalText;
-                            btn.classList.remove('copied');
-                        }, 2000);
-                    });
-                });
-            });
+    <!-- TOPIC 2: ELEMENT SELECTOR -->
+    <article id="css3-2" class="lesson-panel">
+      <h1>Element Selector</h1>
+      <div class="meta">Lesson 3 • Topic 2</div>
+      <div class="explain">Targets ALL elements by tag name. <strong>p</strong> = all paragraphs, <strong>h1</strong> = all H1s.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>p {
+  color: cyan;
+  font-size: 18px;
+}</pre>
+      </div>
+      <div class="demo-output">
+        <p style="color:cyan;">ALL &lt;p&gt; tags get cyan!</p>
+        <p style="color:cyan;">Every paragraph matches!</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 3: CLASS SELECTOR -->
+    <article id="css3-3" class="lesson-panel">
+      <h1>Class Selector (.dot)</h1>
+      <div class="meta">Lesson 3 • Topic 3</div>
+      <div class="explain">Use <strong>.</strong> + class name. Multiple elements can share same class! Add <code>class="special"</code> in HTML.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.special {
+  color: hotpink;
+  text-shadow: 0 0 10px #ff00ff;
+}
+
+/* HTML */
+&lt;p class="special"&gt;Hotpink text!&lt;/p&gt;</pre>
+      </div>
+      <div class="demo-output">
+        <p style="color:hotpink;font-weight:bold;">.special class demo!</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 4: ID SELECTOR -->
+    <article id="css3-4" class="lesson-panel">
+      <h1>ID Selector (#hash)</h1>
+      <div class="meta">Lesson 3 • Topic 4</div>
+      <div class="explain"><strong>#</strong> + ID name. UNIQUE - only ONE element per page! Use <code>id="unique"</code> in HTML.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>#unique {
+  background: rgba(0,255,255,0.15);
+  border: 2px solid cyan;
+  padding: 15px;
+}
+
+/* HTML */
+&lt;div id="unique"&gt;Unique!&lt;/div&gt;</pre>
+      </div>
+      <div class="demo-output">
+        <div style="background:rgba(0,255,255,0.15);border:2px solid cyan;padding:10px;">#unique ID demo!</div>
+      </div>
+    </article>
+
+    <!-- TOPIC 5: COMPARISON -->
+    <article id="css3-5" class="lesson-panel">
+      <h1>Element vs Class vs ID</h1>
+      <div class="meta">Lesson 3 • Summary</div>
+      <div class="explain">
+        <strong>Element:</strong> ALL matching tags (p, h1, div)<br>
+        <strong>Class:</strong> GROUP of elements (.special)<br>
+        <strong>ID:</strong> ONE unique element (#unique)
+      </div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>h2 { color: cyan; }
+.special { color: hotpink; }
+#unique { color: yellow; }</pre>
+      </div>
+      <div class="demo-output">
+        <h2 style="color:cyan;">h2 = Element</h2>
+        <p style="color:hotpink;">.special = Class</p>
+        <p style="color:yellow;">#unique = ID</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 6: CHALLENGE -->
+    <article id="css3-6" class="lesson-panel">
+      <h1>Your Challenge!</h1>
+      <div class="meta">Lesson 3 • Practice Time</div>
+      <div class="explain">Create webpage with: 1 element selector + 2 classes + 1 ID. Use neon colors!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;style&gt;
+  h1 { color: cyan; }
+  .highlight-me { 
+    color: magenta; 
+    font-weight: bold; 
+  }
+  #my-info { 
+    border: 2px solid cyan; 
+    padding: 10px; 
+  }
+&lt;/style&gt;
+
+&lt;h1&gt;My Neon Profile&lt;/h1&gt;
+&lt;p class="highlight-me"&gt;I love CSS!&lt;/p&gt;
+&lt;div id="my-info"&gt;Student&lt;/div&gt;</pre>
+      </div>
+      <div class="demo">
+        <button onclick="alert('Save as lesson3.html and add your selectors! 🚀')">START CHALLENGE</button>
+      </div>
+    </article>
+
+  </div>
+</main>
+</div>
+
+<script>
+// Lesson navigation
+const buttons = document.querySelectorAll('.lessons-list button');
+const panels = document.querySelectorAll('.lesson-panel');
+const title = document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+}
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
         });
-    </script>
+    });
+});
+</script>
 </body>
 </html>
-
-
