@@ -1,621 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📍 Positioning (static, relative, absolute, fixed, sticky, z-index) - Cyberpunk Lesson 11</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>📍 Positioning - Pixel Lesson 11</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-        body {
-            font-family: 'Orbitron', monospace;
-            background: #000;
-            color: #e0e0e0;
-            min-height: 200vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
 
-        /* Pixelated cyber grid */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-                linear-gradient(90deg, transparent 49%, #ff00ff08 50%, #ff00ff08 51%, transparent 52%),
-                linear-gradient(0deg, transparent 49%, #00ffff08 50%, #00ffff08 51%, transparent 52%);
-            background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-            animation: cyberGrid 25s linear infinite;
-            z-index: -2;
-        }
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition:transform 0.1s,box-shadow 0.1s,background 0.1s;
+}
+.exit-btn:hover{transform:translateY(-2px);box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 5px 0 #a30000;}
+.exit-btn:active{transform:translateY(1px);box-shadow:inset -2px -2px 0 rgba(0,0,0,.25),0 1px 0 #a30000;background:#e63b3b;}
 
-        @keyframes cyberGrid {
-            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
-            100% { background-position: 50px 50px, -50px -50px, 25px 25px, -25px -25px; }
-        }
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;margin:0 auto;height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%,#7dd37d);
+  border-radius:24px;box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;grid-template-columns:260px 1fr;gap:18px;padding:18px;
+}
 
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            background: rgba(8, 8, 25, 0.97);
-            border: 3px solid transparent;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493, #1e90ff) 1;
-            border-radius: 25px;
-            box-shadow: 
-                0 0 60px rgba(255, 0, 255, 0.5),
-                0 0 120px rgba(0, 255, 255, 0.4),
-                inset 0 0 40px rgba(255, 0, 255, 0.08);
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-            margin: 25px;
-        }
+/* ===== SIDEBAR ===== */
+.sidebar{background:#8b5a2b;border-radius:18px;padding:18px;box-shadow:inset -6px -6px 0 rgba(0,0,0,.25),0 8px 0 #5c3a1a;color:#fff;display:flex;flex-direction:column;}
+.brand h1{font-size:14px;text-align:center;text-shadow:2px 2px #000;}
+.brand p{font-size:8px;text-align:center;opacity:.9;margin-top:6px;}
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                conic-gradient(from 0deg, transparent 0deg, #ff00ff15 90deg, transparent 180deg, #00ffff15 270deg, transparent);
-            animation: rotateAura 10s linear infinite;
-            z-index: -1;
-        }
+/* ===== LESSON BUTTONS ===== */
+.lessons-list{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+.lessons-list button{background:#ffcc4d;border:3px solid #e09c2b;padding:10px 10px;border-radius:10px;cursor:pointer;color:#3b2a15;font-size:8px;display:flex;gap:8px;align-items:center;box-shadow:0 3px 0 #b5741b,0 4px 0 #3b2a15;text-transform:uppercase;letter-spacing:1px;transition:all .1s;}
+.lessons-list button:hover{transform:translateY(-2px);box-shadow:0 5px 0 #b5741b,0 6px 0 #3b2a15;background:#ffe38a;}
+.lessons-list button:active{transform:translateY(1px);box-shadow:0 1px 0 #b5741b,0 2px 0 #3b2a15;background:#f5b93a;}
+.lessons-list button.active{background:#ffe89c;border-color:#fff7c9;}
+.num{background:#3b2a15;color:#ffd966;padding:4px 7px;border-radius:6px;box-shadow:0 2px 0 #1e1309;font-size:8px;}
 
-        @keyframes rotateAura {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+/* ===== CONTENT ===== */
+.content{background:#e8f4ff;border-radius:18px;padding:16px;box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 8px 0 #6fa8dc;display:flex;flex-direction:column;}
+.content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.content-head .title{font-size:12px;text-shadow:2px 2px #fff;}
+.content-head button{font-family:'Press Start 2P';background:#4e91ff;color:#fff;border:3px solid #1f4fb8;padding:6px 10px;border-radius:8px;box-shadow:0 3px 0 #16347a,0 4px 0 #0c1b3a;cursor:pointer;font-size:8px;margin:0 2px;transition:all .1s;}
+.content-head button:hover{transform:translateY(-2px);background:#6aa7ff;box-shadow:0 5px 0 #16347a,0 6px 0 #0c1b3a;}
+.content-head button:active{transform:translateY(1px);background:#3f7aed;box-shadow:0 1px 0 #16347a,0 2px 0 #0c1b3a;}
 
-        header {
-            background: linear-gradient(135deg, #ff00ff90, #00ffff90, #ff149390);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 60px 40px;
-            text-align: center;
-            position: relative;
-            border-bottom: 5px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-        }
+/* ===== PANELS ===== */
+.panel-wrap{flex:1;position:relative;}
+.lesson-panel{position:absolute;inset:0;padding:16px;overflow:auto;display:none;}
+.lesson-panel.visible{display:block;}
 
-        h1 {
-            font-size: 4em;
-            font-weight: 900;
-            color: #ff00ff;
-            text-shadow: 
-                0 0 30px #ff00ff,
-                0 0 60px #00ffff,
-                0 0 90px #ff00ff;
-            margin-bottom: 20px;
-            animation: neonPulse 3s ease-in-out infinite;
-        }
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{font-size:14px;margin-bottom:6px;text-shadow:2px 2px #000;}
+.lesson-panel h2{font-size:11px;margin:12px 0 8px 0;text-shadow:1px 1px #000;}
+.meta{font-size:8px;opacity:.7;margin-bottom:16px;}
 
-        @keyframes neonPulse {
-            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
-            50% { transform: scale(1.03); filter: hue-rotate(180deg); }
-        }
+/* ===== BOXES ===== */
+.explain{background:#fff3cd;border:3px solid #c9a227;padding:14px;border-radius:12px;margin-bottom:14px;line-height:1.6;box-shadow:0 4px 0 #a88b1f;}
+.code{background:#1e1e1e;color:#00ff90;padding:14px;border-radius:12px;margin-bottom:14px;overflow:auto;position:relative;font-family:monospace;font-size:9px;line-height:1.5;}
+.code button.copy-btn{position:absolute;top:8px;right:8px;background:#ffd966;color:#000;border:2px solid #b59b24;padding:4px 6px;border-radius:6px;cursor:pointer;font-size:7px;box-shadow:0 2px 0 #7a6515;transition:all .1s;}
+.code button.copy-btn:hover{transform:translateY(-1px);background:#fff1a8;box-shadow:0 3px 0 #7a6515;}
+.code button.copy-btn:active{transform:translateY(1px);box-shadow:0 1px 0 #7a6515;background:#f2c93a;}
+.demo{background:#d9ead3;border:3px solid #6aa84f;padding:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 4px 0 #55843d;}
+.demo button{font-family:'Press Start 2P';background:#00c98b;color:#003322;border:3px solid #00805c;padding:8px 12px;border-radius:10px;box-shadow:0 3px 0 #00563f,0 4px 0 #001f16;cursor:pointer;font-size:8px;text-transform:uppercase;letter-spacing:1px;margin-top:8px;transition:all .1s;}
+.demo button:hover{transform:translateY(-2px);background:#29e2aa;box-shadow:0 5px 0 #00563f,0 6px 0 #001f16;}
+.demo button:active{transform:translateY(1px);background:#00b27a;box-shadow:0 1px 0 #00563f,0 2px 0 #001f16;}
 
-        .subtitle {
-            font-size: 1.6em;
-            background: linear-gradient(45deg, #00ffff, #ff1493, #ff00ff);
-            background-size: 200% 200%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            animation: gradientFlow 4s ease infinite;
-            text-shadow: 0 0 25px #00ffff;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        section {
-            padding: 60px 50px;
-            position: relative;
-            border-bottom: 2px solid rgba(255, 0, 255, 0.3);
-        }
-
-        section:last-of-type {
-            border-bottom: none;
-        }
-
-        section:nth-child(even) {
-            background: rgba(15, 10, 45, 0.7);
-        }
-
-        h2 {
-            font-size: 2.8em;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            background-size: 300% 300%;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 35px;
-            padding-bottom: 25px;
-            position: relative;
-            animation: h2Glow 3s ease infinite;
-        }
-
-        @keyframes h2Glow {
-            0%, 100% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff; }
-            50% { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff, 0 0 10px #ff1493; }
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100px;
-            height: 6px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff);
-            border-radius: 3px;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 1);
-            animation: underlineShift 2.5s ease-in-out infinite;
-        }
-
-        @keyframes underlineShift {
-            0%, 100% { width: 100px; left: 0; }
-            50% { width: 200px; left: 50px; }
-        }
-
-        .explanation {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.2em;
-            line-height: 1.9;
-            margin-bottom: 40px;
-            color: #d0d0ff;
-            background: rgba(255, 0, 255, 0.05);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #ff00ff;
-            box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.1);
-        }
-
-        .code-block {
-            background: rgba(10, 15, 50, 0.95);
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-            border-radius: 20px;
-            padding: 35px;
-            margin: 35px 0;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 16px;
-            line-height: 1.8;
-            overflow-x: auto;
-            position: relative;
-            box-shadow: 
-                0 0 40px rgba(0, 255, 255, 0.5),
-                inset 0 0 25px rgba(255, 0, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .code-block:hover {
-            box-shadow: 
-                0 0 60px rgba(0, 255, 255, 0.8),
-                0 0 100px rgba(255, 0, 255, 0.6),
-                inset 0 0 30px rgba(255, 0, 255, 0.2);
-            transform: translateY(-8px) scale(1.02);
-        }
-
-        .code-block::before {
-            content: '💿 CODE MATRIX';
-            position: absolute;
-            top: -18px;
-            left: 30px;
-            background: rgba(10, 15, 50, 0.95);
-            color: #00ffff;
-            padding: 8px 25px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #00ffff;
-            border-radius: 25px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
-        }
-
-        .highlight {
-            background: linear-gradient(45deg, #ff00ff, #00ffff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            padding: 4px 12px;
-            border-radius: 10px;
-            border: 2px solid rgba(255, 0, 255, 0.4);
-            display: inline-block;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.6);
-            animation: highlightBeat 2s ease-in-out infinite;
-            font-weight: bold;
-        }
-
-        @keyframes highlightBeat {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.6); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
-        }
-
-        .demo-output {
-            background: rgba(0, 20, 60, 0.9);
-            border: 2px solid #00ffff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 25px 0;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-            min-height: 300px;
-        }
-
-        .demo-output::before {
-            content: '👁️ BROWSER OUTPUT';
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            background: rgba(0, 20, 60, 0.9);
-            color: #00ffff;
-            padding: 5px 20px;
-            font-size: 13px;
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-        }
-
-        ul.examples {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul.examples li {
-            background: rgba(0, 255, 255, 0.08);
-            border-left: 6px solid #00ffff;
-            margin: 25px 0;
-            padding: 30px;
-            border-radius: 15px;
-            position: relative;
-            transition: all 0.5s ease;
-            overflow: hidden;
-        }
-
-        ul.examples li::before {
-            content: '⚡ LIVE EXAMPLE';
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: #00ffff;
-            font-size: 13px;
-            font-weight: bold;
-            text-shadow: 0 0 15px #00ffff;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        ul.examples li:hover {
-            background: rgba(0, 255, 255, 0.15);
-            border-left-color: #ff00ff;
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
-            transform: translateX(15px) scale(1.02);
-        }
-
-        .warning {
-            background: rgba(255, 20, 147, 0.15);
-            border-left-color: #ff1493 !important;
-        }
-
-        .warning::before {
-            content: '⚠️ WARNING';
-            color: #ff1493 !important;
-            text-shadow: 0 0 15px #ff1493;
-        }
-
-        footer {
-            background: rgba(15, 15, 55, 0.95);
-            color: #00ffff;
-            text-align: center;
-            padding: 50px;
-            font-family: 'Roboto Mono', monospace;
-            border-top: 4px solid transparent;
-            border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
-            text-shadow: 0 0 20px #00ffff;
-        }
-
-        .final-challenge {
-            background: rgba(0, 0, 0, 0.95);
-            border: 4px solid #ff00ff;
-            box-shadow: 0 0 80px rgba(255, 0, 255, 1);
-            margin-top: 50px;
-        }
-
-        /* POSITIONING DEMO STYLES */
-        .position-box {
-            width: 100px;
-            height: 100px;
-            padding: 15px;
-            margin: 20px;
-            border-radius: 12px;
-            color: white;
-            font-family: 'Roboto Mono';
-            font-weight: bold;
-            font-size: 12px;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .static-box { 
-            background: #666; 
-            position: static; 
-        }
-
-        .relative-box { 
-            background: #ff00ff; 
-            position: relative; 
-            top: 20px;
-            left: 30px;
-            box-shadow: 0 0 20px #ff00ff;
-        }
-
-        .absolute-box { 
-            background: #00ffff; 
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 120px;
-            box-shadow: 0 0 20px #00ffff;
-        }
-
-        .fixed-box { 
-            background: #ff4444; 
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1000;
-            box-shadow: 0 0 25px #ff4444;
-        }
-
-        .sticky-box { 
-            background: #44ff44; 
-            position: sticky;
-            top: 20px;
-            margin: 40px 20px;
-            box-shadow: 0 0 20px #44ff44;
-        }
-
-        .demo-container {
-            position: relative;
-            min-height: 400px;
-            background: rgba(0,20,60,0.3);
-            border: 2px solid #00ffff;
-            border-radius: 20px;
-            padding: 40px;
-            margin: 30px 0;
-        }
-
-        .z-index-demo {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            border: 3px solid white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Roboto Mono';
-            font-weight: bold;
-            color: white;
-        }
-
-        .z1 { background: rgba(255,0,255,0.8); z-index: 1; top: 50px; left: 50px; }
-        .z2 { background: rgba(0,255,255,0.8); z-index: 2; top: 70px; left: 70px; }
-        .z3 { background: rgba(255,255,0,0.8); z-index: 3; top: 90px; left: 90px; }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8em; }
-            h2 { font-size: 2.2em; }
-            section { padding: 40px 25px; }
-            .code-block { font-size: 14px; padding: 25px; }
-        }
-    </style>
+/* POSITIONING DEMOS */
+.position-box{width:80px;height:80px;padding:8px;margin:10px;border-radius:8px;color:#fff;font-family:monospace;font-weight:bold;font-size:8px;text-align:center;display:inline-block;transition:all .3s;box-shadow:0 2px 0 rgba(0,0,0,.3);}
+.static-box{background:#666;position:static;}
+.relative-box{background:#ff00ff;position:relative;top:15px;left:20px;box-shadow:0 0 15px #ff00ff;}
+.absolute-box{background:#00ffff;position:absolute;top:10px;right:10px;width:90px;box-shadow:0 0 15px #00ffff;}
+.fixed-box{background:#ff4444;position:fixed;top:20px;left:20px;z-index:999;box-shadow:0 0 20px #ff4444;}
+.sticky-box{background:#44ff44;position:sticky;top:10px;margin:20px 10px;box-shadow:0 0 15px #44ff44;}
+.demo-container{position:relative;min-height:300px;background:rgba(135,206,235,0.3);border:3px solid #4682b4;border-radius:12px;padding:30px;margin:10px 0;}
+.z-index-demo{position:absolute;width:60px;height:60px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-family:monospace;font-weight:bold;color:#fff;font-size:8px;}
+.z1{background:rgba(255,0,255,0.8);z-index:1;top:40px;left:40px;}
+.z2{background:rgba(0,255,255,0.8);z-index:2;top:55px;left:55px;}
+.z3{background:rgba(255,255,0,0.8);z-index:3;top:70px;left:70px;}
+.css-plain{background:#f0f0f0;border:2px solid #666;padding:10px;margin:6px 0;border-radius:6px;font-family:monospace;font-size:8px;}
+@media(max-width:900px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:12px;padding:12px;}.exit-btn{top:20px;left:20px;}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Positioning (static, relative, absolute, fixed, sticky, z-index)</h1>
-            <p class="subtitle">🎮 LESSON 11 - Element Placement Matrix</p>
-        </header>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">
+    <h1>📍 Position Matrix</h1>
+    <p>Lesson 11</p>
+  </div>
+  <div class="lessons-list">
+    <button data-lesson="topic-1" class="active"><span class="num">01</span> Static (Default)</button>
+    <button data-lesson="topic-2"><span class="num">02</span> Relative</button>
+    <button data-lesson="topic-3"><span class="num">03</span> Absolute</button>
+    <button data-lesson="topic-4"><span class="num">04</span> Fixed</button>
+    <button data-lesson="topic-5"><span class="num">05</span> Sticky</button>
+    <button data-lesson="topic-6"><span class="num">06</span> Z-Index</button>
+    <button data-lesson="topic-7"><span class="num">07</span> Challenge</button>
+  </div>
+</aside>
 
-        <section id="static">
-            <h2>01. 📦 static (Default - Normal Flow)</h2>
-            <div class="explanation">
-                <span class="highlight">position: static</span> = <strong>DEFAULT BEHAVIOR</strong>. Elements follow normal document flow.
-                <strong>top, left, right, bottom</strong> do NOTHING. Every element starts as static.
-            </div>
-            <div class="code-block">
-                <pre><code>&lt;div style="position:static; background:gray;"&gt;Static Box&lt;/div&gt;
-&lt;div style="position:static; background:blue;"&gt;Static Box&lt;/div&gt;
-&lt;!-- Boxes stack normally, top/bottom/left/right IGNORED --&gt;</code></pre>
-            </div>
-            <div class="demo-output">
-                <p style="font-family:'Roboto Mono'; margin-bottom:20px;">📦 Static boxes flow normally:</p>
-                <div class="position-box static-box">STATIC 1</div>
-                <div class="position-box static-box">STATIC 2</div>
-                <div class="position-box static-box">STATIC 3</div>
-                <p style="font-family:'Roboto Mono'; color:#00ffff;">← Normal stacking (top, left ignored!)</p>
-            </div>
-        </section>
-
-        <section id="relative">
-            <h2>02. ➡️ relative (Offset from Normal Position)</h2>
-            <div class="explanation">
-                <span class="highlight">position: relative</span> = moves from <strong>normal position</strong>. 
-                Leaves empty space behind. Perfect for subtle tweaks, hover effects.
-            </div>
-            <div class="code-block">
-                <pre><code>.relative-box {
-    position: relative;
-    top: 20px;    /* Move DOWN 20px */
-    left: 30px;   /* Move RIGHT 30px */
-}</code></pre>
-            </div>
-            <div class="demo-output">
-                <div style="height:150px; background:rgba(255,0,255,0.1); border:2px solid #ff00ff; position:relative;">
-                    <div class="position-box static-box" style="position:absolute; top:20px; left:20px;">📦 Normal</div>
-                    <div class="position-box relative-box">➡️ RELATIVE<br>(offset 20px down, 30px right)</div>
-                </div>
-                <p style="font-family:'Roboto Mono'; color:#ff00ff;">← Empty space reserved!</p>
-            </div>
-        </section>
-
-        <section id="absolute">
-            <h2>03. 🎯 absolute (Out of Flow - Container Relative)</h2>
-            <div class="explanation">
-                <span class="highlight">position: absolute</span> = <strong>REMOVED from flow</strong>. Positioned relative to 
-                nearest positioned parent. Perfect for badges, popups, overlays.
-            </div>
-            <div class="code-block">
-                <pre><code>.demo-container { position: relative; }
-.absolute-box {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}</code></pre>
-            </div>
-            <div class="demo-output demo-container">
-                <div class="position-box static-box">📦 Normal Flow</div>
-                <div class="position-box static-box">📦 Normal Flow</div>
-                <div class="absolute-box">🎯 ABSOLUTE<br>(top:20px right:20px)</div>
-            </div>
-        </section>
-
-        <section id="fixed">
-            <h2>04. 📌 fixed (Stays on Screen - Viewport Relative)</h2>
-            <div class="explanation">
-                <span class="highlight">position: fixed</span> = <strong>ALWAYS VISIBLE</strong> even when scrolling. 
-                Relative to viewport (screen). Perfect for navbars, chat bubbles.
-            </div>
-            <div class="code-block">
-                <pre><code>.fixed-nav {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-}</code></pre>
-            </div>
-            <div class="demo-output" style="height:400px; padding-top:100px;">
-                <p style="font-family:'Roboto Mono'; margin-bottom:40px;">📜 SCROLL DOWN TO SEE FIXED BOX STAY!</p>
-                <div class="position-box static-box">📦 Normal (scrolls away)</div>
-                <div class="position-box static-box">📦 Normal (scrolls away)</div>
-                <div class="fixed-box">📌 FIXED<br>(Always visible!)</div>
-                <div style="height:800px; background:linear-gradient(180deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1)); margin-top:50px; padding:40px;">
-                    <p style="font-family:'Roboto Mono'; color:#00ffff;">← Fixed box stays at top-left while scrolling!</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="sticky">
-            <h2>05. 🧲 sticky (Hybrid - Scrolls then Sticks)</h2>
-            <div class="explanation">
-                <span class="highlight">position: sticky</span> = <strong>SCROLLS NORMALLY then STICKS</strong> when reaching threshold.
-                Perfect for sticky headers, navbars that stick after scrolling.
-            </div>
-            <div class="code-block">
-                <pre><code>.sticky-header {
-    position: sticky;
-    top: 0;
-    background: rgba(0,20,60,0.95);
-}</code></pre>
-            </div>
-            <div class="demo-output" style="height:600px;">
-                <div class="sticky-box">🧲 STICKY BOX<br>(Scrolls until top:20px, then sticks!)</div>
-                <div style="height:400px; background:linear-gradient(180deg, rgba(255,0,255,0.1), rgba(0,255,255,0.1)); padding:40px; margin:20px 0;">
-                    <p style="font-family:'Roboto Mono'; color:#44ff44;">← Sticky box scrolls normally, then STICKS at top!</p>
-                </div>
-                <div style="height:300px; background:rgba(255,0,255,0.2); padding:40px;">
-                    <p style="font-family:'Roboto Mono'; color:#ff00ff;">Content continues scrolling...</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="z-index">
-            <h2>06. 🥇 z-index (Layer Stacking)</h2>
-            <div class="explanation">
-                <span class="highlight">z-index</span> = <strong>LAYER ORDER</strong>. Higher numbers appear on top. 
-                Only works on positioned elements (relative, absolute, fixed, sticky).
-            </div>
-            <div class="code-block">
-                <pre><code>.layer1 { z-index: 1; }
-.layer2 { z-index: 2; }
-.layer3 { z-index: 999; }</code></pre>
-            </div>
-            <div class="demo-output demo-container">
-                <div class="z-index-demo z1">Z=1</div>
-                <div class="z-index-demo z2">Z=2</div>
-                <div class="z-index-demo z3">Z=3<br>(TOP!)</div>
-                <p style="margin-top:200px; font-family:'Roboto Mono'; color:#ffff00;">🥇 Higher z-index = higher layer!</p>
-            </div>
-        </section>
-
-        <section id="challenge" class="final-challenge">
-            <h2>07. YOUR CHALLENGE!</h2>
-            <div class="explanation">
-                Build a <strong>CYBERPUNK NAVBAR + NOTIFICATION</strong> using fixed positioning + z-index!
-            </div>
-            <div class="code-block final-challenge">
-                <pre><code>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;&lt;title&gt;Cyber Nav&lt;/title&gt;&lt;/head&gt;
-&lt;body style="height:200vh; background:#000; margin:0;"&gt;
-    &lt;!-- FIXED NAVBAR --&gt;
-    &lt;nav style="position:fixed; top:0; left:0; right:0; 
-                background:rgba(0,20,60,0.95); padding:20px; 
-                z-index:1000; border-bottom:3px solid #ff00ff;"&gt;
-        &lt;h2 style="color:#00ffff; margin:0;"&gt;🚀 CYBER NAV&lt;/h2&gt;
-    &lt;/nav&gt;
-
-    &lt;!-- ABSOLUTE NOTIFICATION --&gt;
-    &lt;div style="position:absolute; top:100px; right:20px; 
-                background:rgba(255,0,255,0.9); color:#000; 
-                padding:20px; border-radius:15px; z-index:999; 
-                box-shadow:0 0 30px #ff00ff;"&gt;
-        💀 ALERT: System Hacked!
-    &lt;/div&gt;
-
-    &lt;!-- SCROLLABLE CONTENT --&gt;
-    &lt;div style="margin-top:120px; padding:50px;"&gt;
-        &lt;p style="color:#00ffff; font-family:monospace;"&gt;
-            Navbar stays fixed! Alert stays positioned! ✨
-        &lt;/p&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-        </section>
-
-        <footer>
-            <h3>💻 READY TO CODE?</h3>
-            <p><strong>1️⃣</strong> Copy ALL code → <strong>2️⃣</strong> VS Code → <strong>3️⃣</strong> Save <code>lesson11-positioning.html</code></p>
-            <p><strong>4️⃣</strong> Scroll to see fixed/sticky → <strong>5️⃣</strong> Build your cyber navbar!</p>
-            <p>✨ <strong>Master positioning like a pro frontend dev!</strong> Perfect for CMU IT students ✨</p>
-        </footer>
+<main class="content">
+  <div class="content-head">
+    <div class="title" id="panel-title">01 • Static (Default)</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
     </div>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- TOPIC 1: Static -->
+    <article id="topic-1" class="lesson-panel visible">
+      <h1>Static (Default)</h1>
+      <div class="meta">Lesson 11 • Topic 1</div>
+      <div class="explain">position: static = DEFAULT. Elements flow normally. top/left/right/bottom do NOTHING.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>div { position: static; } /* DEFAULT - no effect */
+.top { top: 20px; }      /* IGNORED! */</pre>
+      </div>
+      <div class="demo">
+        <p>Static boxes stack normally:</p>
+        <div class="position-box static-box">STATIC 1</div>
+        <div class="position-box static-box">STATIC 2</div>
+        <div class="position-box static-box">STATIC 3</div>
+        <p style="font-size:8px;color:#666;">← Normal flow (top/left ignored)</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 2: Relative -->
+    <article id="topic-2" class="lesson-panel">
+      <h1>Relative (Offset)</h1>
+      <div class="meta">Lesson 11 • Topic 2</div>
+      <div class="explain">position: relative moves from normal position. Leaves empty space behind.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.relative {
+  position: relative;
+  top: 15px;   /* DOWN */
+  left: 20px;  /* RIGHT */
+}</pre>
+      </div>
+      <div class="demo demo-container">
+        <div class="position-box static-box" style="position:absolute;top:10px;left:10px;">📦 Normal</div>
+        <div class="position-box relative-box">➡️ RELATIVE</div>
+        <p style="font-size:8px;color:#ff00ff;margin-top:60px;">← Empty space reserved!</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 3: Absolute -->
+    <article id="topic-3" class="lesson-panel">
+      <h1>Absolute (Out of Flow)</h1>
+      <div class="meta">Lesson 11 • Topic 3</div>
+      <div class="explain">position: absolute = REMOVED from flow. Positioned vs nearest positioned parent.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.container { position: relative; }
+.absolute {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}</pre>
+      </div>
+      <div class="demo demo-container">
+        <div class="position-box static-box">📦 Normal</div>
+        <div class="position-box static-box">📦 Normal</div>
+        <div class="absolute-box">🎯 ABSOLUTE</div>
+      </div>
+    </article>
+
+    <!-- TOPIC 4: Fixed -->
+    <article id="topic-4" class="lesson-panel">
+      <h1>Fixed (Always Visible)</h1>
+      <div class="meta">Lesson 11 • Topic 4</div>
+      <div class="explain">position: fixed stays on screen even when scrolling. Relative to viewport.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.fixed-nav {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 999;
+}</pre>
+      </div>
+      <div class="demo" style="height:350px;overflow:auto;padding:20px;">
+        <p>📜 Scroll to test fixed:</p>
+        <div class="position-box static-box">📦 Scrolls away</div>
+        <div class="position-box static-box">📦 Scrolls away</div>
+        <div class="fixed-box">📌 FIXED!</div>
+        <div style="height:600px;background:linear-gradient(180deg,#87e4ff,#c8f7b0);padding:20px;margin-top:20px;">
+          <p style="font-size:8px;">← Fixed stays visible!</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- TOPIC 5: Sticky -->
+    <article id="topic-5" class="lesson-panel">
+      <h1>Sticky (Hybrid)</h1>
+      <div class="meta">Lesson 11 • Topic 5</div>
+      <div class="explain">position: sticky scrolls normally, then STICKS when reaching threshold.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.sticky-header {
+  position: sticky;
+  top: 10px;
+}</pre>
+      </div>
+      <div class="demo" style="height:400px;overflow:auto;">
+        <div class="sticky-box">🧲 STICKY BOX</div>
+        <div style="height:500px;background:linear-gradient(180deg,#8fe9ff,#7dd37d);padding:30px;margin:20px 0;">
+          <p style="font-size:8px;color:#44ff44;">← Scrolls then STICKS!</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- TOPIC 6: Z-Index -->
+    <article id="topic-6" class="lesson-panel">
+      <h1>Z-Index (Layers)</h1>
+      <div class="meta">Lesson 11 • Topic 6</div>
+      <div class="explain">z-index controls layer stacking. Higher = on top. Only works on positioned elements.</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.layer1 { z-index: 1; }
+.layer2 { z-index: 2; }
+.layer3 { z-index: 999; }</pre>
+      </div>
+      <div class="demo demo-container">
+        <div class="z-index-demo z1">Z=1</div>
+        <div class="z-index-demo z2">Z=2</div>
+        <div class="z-index-demo z3">Z=3 TOP!</div>
+        <p style="margin-top:150px;font-size:8px;color:#ffff00;">🥇 Higher z-index = higher layer</p>
+      </div>
+    </article>
+
+    <!-- TOPIC 7: Challenge -->
+    <article id="topic-7" class="lesson-panel">
+      <h1>YOUR CHALLENGE!</h1>
+      <div class="meta">Lesson 11 • Final Challenge</div>
+      <div class="explain">Build PIXEL NAVBAR + ALERT using fixed + absolute + z-index!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;nav style="position:fixed;top:0;left:0;right:0;
+  background:#8b5a2b;padding:15px;z-index:1000;"&gt;
+  🧠 PIXEL NAV
+&lt;/nav&gt;
+
+&lt;div style="position:absolute;top:80px;right:20px;
+  background:#ff4444;color:#fff;padding:15px;
+  border-radius:10px;z-index:999;box-shadow:0 4px 0 #cc0000;"&gt;
+  🚨 ALERT!
+&lt;/div&gt;</pre>
+      </div>
+      <div class="demo demo-container" style="height:400px;overflow:auto;">
+        <div style="position:absolute;top:20px;left:20px;background:#ffcc4d;color:#3b2a15;padding:12px;border-radius:8px;font-size:9px;box-shadow:0 4px 0 #b5741b;z-index:1000;">🧠 PIXEL NAVBAR</div>
+        <div style="position:absolute;top:60px;right:20px;background:#ff4444;color:#fff;padding:12px;border-radius:8px;font-size:8px;box-shadow:0 4px 0 #cc0000;z-index:999;">🚨 SYSTEM ALERT!</div>
+        <div style="height:600px;padding:50px;margin-top:100px;">
+          <p style="font-size:8px;">Navbar stays fixed! Alert positioned! ✨</p>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</main>
+</div>
+
+<script>
+const buttons=document.querySelectorAll('.lessons-list button');
+const panels=document.querySelectorAll('.lesson-panel');
+const title=document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn=document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent=btn.querySelector('.num').textContent+' • '+btn.textContent.replace(/^\\d+\\s+/,'');
+}
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current();if(i>0)showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current();if(i<order.length-1)showLesson(order[i+1]);};
+
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const code=btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(()=>{
+      btn.innerText='✔ Copied!';
+      setTimeout(()=>btn.innerText='Copy',1500);
+    }).catch(()=>{
+      btn.innerText='❌ Failed';
+      setTimeout(()=>btn.innerText='Copy',1500);
+    });
+  });
+});
+</script>
 </body>
 </html>
-
