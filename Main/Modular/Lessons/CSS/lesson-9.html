@@ -2,307 +2,570 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSS Margin & Padding Patterns – Cyberpunk Lesson 9</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSS Margin & Padding - Pixel Lesson 9</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
 }
 
-body {
-  font-family: 'Orbitron', monospace;
-  background: #000;
-  color: #e0e0e0;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
+.exit-btn{
+  position:fixed;
+  top:480px;
+  left:202px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
-/* Pixel Cyber Grid */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background:
-    radial-gradient(circle at 20% 20%, #ff00ff20 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, #00ffff20 0%, transparent 40%),
-    linear-gradient(90deg, transparent 49%, #ff00ff08 50%, transparent 51%, #ff00ff08 52%, transparent 53%),
-    linear-gradient(0deg, transparent 49%, #00ffff08 50%, transparent 51%, #00ffff08 52%, transparent 53%);
-  background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-  animation: cyberGrid 25s linear infinite;
-  z-index: -2;
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
 }
 
-@keyframes cyberGrid {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 50px; }
-}
-
-.container {
-  max-width: 1300px;
-  margin: 25px auto;
-  background: rgba(8, 8, 25, 0.97);
-  border: 3px solid transparent;
-  border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ff1493) 1;
-  border-radius: 25px;
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
   box-shadow:
-    0 0 60px rgba(255, 0, 255, 0.5),
-    0 0 120px rgba(0, 255, 255, 0.4),
-    inset 0 0 40px rgba(255, 0, 255, 0.08);
-  backdrop-filter: blur(20px);
-  position: relative;
-  overflow: hidden;
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
 }
 
-/* Header */
-header {
-  text-align: center;
-  padding: 60px 40px;
-  background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  border-bottom: 5px solid;
-  border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1;
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
 }
 
-h1 {
-  font-size: 4em;
-  font-weight: 900;
-  text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
-  animation: pulse 3s infinite ease-in-out;
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.subtitle {
-  font-size: 1.5em;
-  color: #00ffff;
-  text-shadow: 0 0 20px #00ffff;
+.lessons-list button{
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:10px 10px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#3b2a15;
+  font-size:8px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
-section {
-  padding: 60px 50px;
-  border-bottom: 2px solid rgba(255, 0, 255, 0.3);
+.lessons-list button:hover{
+  transform:translateY(-2px);
+  box-shadow:
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
 }
 
-h2 {
-  font-size: 2.6em;
-  background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 25px;
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
 }
 
-.explanation {
-  font-family: 'Roboto Mono', monospace;
-  font-size: 1.2em;
-  color: #d0d0ff;
-  line-height: 1.9;
-  background: rgba(255, 0, 255, 0.05);
-  border-left: 6px solid #ff00ff;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 30px;
+.lessons-list button.active{
+  background:#ffe89c;
+  border-color:#fff7c9;
 }
 
-.code-block {
-  background: rgba(10,15,50,0.95);
-  border: 2px solid transparent;
-  border-image: linear-gradient(45deg, #00ffff, #ff00ff) 1;
-  border-radius: 20px;
-  padding: 30px;
-  margin: 25px 0;
-  font-family: 'Roboto Mono', monospace;
-  color: #00ffff;
+.num{
+  background:#3b2a15;
+  color:#ffd966;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
 }
 
-.demo-output {
-  position: relative;
-  background: rgba(0,20,60,0.9);
-  border: 2px solid #00ffff;
-  border-radius: 15px;
-  padding: 30px;
-  margin-top: 25px;
-  box-shadow: 0 0 35px rgba(0,255,255,0.4);
-}
-.demo-output::before {
-  content: 'BROWSER OUTPUT';
-  position: absolute;
-  top: -15px;
-  left: 25px;
-  background: rgba(0,20,60,0.9);
-  border: 2px solid #00ffff;
-  color: #00ffff;
-  padding: 5px 20px;
-  font-size: 13px;
-  border-radius: 20px;
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
 }
 
-footer {
-  background: rgba(15,15,55,0.95);
-  color: #00ffff;
-  text-align: center;
-  padding: 50px;
-  border-top: 3px solid #ff00ff;
-  text-shadow: 0 0 20px #00ffff;
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
 }
 
-/* Demo boxes */
-.box {
-  background: rgba(10,10,50,0.9);
-  border: 2px solid #ff00ff;
-  font-family: 'Roboto Mono', monospace;
-  color: #ff00ff;
-  padding: 25px;
-  text-align: center;
-}
-.center {
-  width: 300px;
-  margin: 20px auto;
-}
-.stack {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 15px;
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
 }
 
-@media (max-width: 768px) {
-  h1 { font-size: 2.8em; }
-  h2 { font-size: 2em; }
-  section { padding: 40px 25px; }
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#4e91ff;
+  color:#fff;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
+  cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.content-head button:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
+
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
+
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
+
+.lesson-panel.visible{display:block}
+
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
+
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
+.code button.copy-btn{
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:#ffd966;
+  color:#000;
+  border:2px solid #b59b24;
+  padding:4px 6px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.code button.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.code button.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
+}
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
+.demo button{
+  font-family:'Press Start 2P';
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin:4px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
+}
+
+.margin-demo, .padding-demo {
+  margin:8px 0;
+  padding:12px;
+  border-radius:8px;
+  text-align:center;
+  font-size:9px;
+  border:2px solid;
+}
+
+.margin-demo {
+  background:#ff6666;
+  border-color:#cc3333;
+  color:#fff;
+  margin:20px 10px;
+}
+
+.padding-demo {
+  background:#66ff66;
+  border-color:#33cc33;
+  color:#000;
+  padding:20px 15px;
+}
+
+.center-demo {
+  width:280px;
+  margin:15px auto;
+  background:#4e91ff;
+  border:2px solid #1f4fb8;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+  border-radius:8px;
+}
+
+.stack-demo {
+  margin-bottom:15px;
+  padding:12px;
+  border:2px solid #00ff88;
+  background:#1a1a2e;
+  color:#00ff88;
+  border-radius:8px;
+}
+
+.examples{
+  margin-left:16px;
+}
+
+.examples li{
+  margin:6px 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
 }
 </style>
 </head>
-
 <body>
-<div class="container">
-  <header>
-    <h1>Margin & Padding Patterns</h1>
-    <p class="subtitle">Lesson 9 - Centering Blocks & Stacking Sections</p>
-  </header>
+<div class="app">
 
-  <section id="intro">
-    <h2>01. Margin vs Padding</h2>
-    <div class="explanation">
-      Both <span style="color:#00ffff;">margin</span> and <span style="color:#ff00ff;">padding</span> control spacing —
-      but in different ways:
-      <ul>
-        <li><strong>Margin</strong> = space <em>outside</em> the element (creates gaps between elements)</li>
-        <li><strong>Padding</strong> = space <em>inside</em> the element (pushes content away from borders)</li>
-      </ul>
+<aside class="sidebar">
+  <div class="brand">
+    <h1>📐 Pixel Spacing</h1>
+    <p>Lesson 9</p>
+  </div>
+
+  <div class="lessons-list">
+    <button data-lesson="space-1" class="active"><span class="num">01</span> Margin vs Padding</button>
+    <button data-lesson="space-2"><span class="num">02</span> Centering Blocks</button>
+    <button data-lesson="space-3"><span class="num">03</span> Stacking Sections</button>
+    <button data-lesson="space-4"><span class="num">04</span> Layout Patterns</button>
+    <button data-lesson="space-5"><span class="num">05</span> Shorthand Values</button>
+    <button data-lesson="space-6"><span class="num">06</span> Real Examples</button>
+    <button data-lesson="space-7"><span class="num">07</span> Your Challenge</button>
+  </div>
+</aside>
+
+<main class="content">
+  <div class="content-head">
+    <div class="title" id="panel-title">01 • Margin vs Padding</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
     </div>
+  </div>
 
-    <div class="code-block">
-<pre><code>div {
-  margin: 30px;
-  padding: 20px;
-}</code></pre>
-    </div>
+  <div class="panel-wrap">
 
-    <div class="demo-output">
-      <div style="margin:20px;padding:20px;border:2px solid #00ffff;color:#00ffff;">
-        Margin adds space <em>outside</em> the box. Padding adds space <em>inside</em>.
+    <!-- TOPIC 1 -->
+    <article id="space-1" class="lesson-panel visible">
+      <h1>Margin vs Padding</h1>
+      <div class="meta">Lesson 9 • Topic 1</div>
+      <div class="explain"><strong>Margin</strong> = space OUTSIDE elements (between boxes). <strong>Padding</strong> = space INSIDE elements (content to border).</div>
+      <div class="demo">
+        <div class="margin-demo" style="margin:25px;">MARGIN (outside)</div>
+        <div class="padding-demo" style="padding:25px;">PADDING (inside)</div>
+        <button onclick="document.querySelector('.margin-demo').style.margin='40px';document.querySelector('.padding-demo').style.padding='30px'">More Space!</button>
       </div>
-    </div>
-  </section>
+    </article>
 
-  <section id="centering">
-    <h2>02. Centering Blocks</h2>
-    <div class="explanation">
-      To center a block element horizontally, set its left and right margins to <code>auto</code>.  
-      You’ll also need to define a <strong>width</strong> so the element knows how wide it should be.
-    </div>
-    <div class="code-block">
-<pre><code>.center {
+    <!-- TOPIC 2 -->
+    <article id="space-2" class="lesson-panel">
+      <h1>Centering Blocks</h1>
+      <div class="explain">Use <code>margin: auto</code> + fixed <code>width</code> to center blocks horizontally!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>.center {
   width: 300px;
   margin: auto;
-}</code></pre>
-    </div>
-    <div class="demo-output">
-      <div class="box center">Centered Block (using margin: auto)</div>
-    </div>
-  </section>
+}</pre>
+      </div>
+      <div class="demo">
+        <div class="center-demo">Centered with margin: auto</div>
+        <button onclick="this.previousElementSibling.style.width='200px'">Narrower</button>
+        <button onclick="this.previousElementSibling.style.width='350px'">Wider</button>
+      </div>
+    </article>
 
-  <section id="stacking">
-    <h2>03. Stacking Sections</h2>
-    <div class="explanation">
-      Use consistent top and bottom <span style="color:#ff00ff;">margins or padding</span> between sections  
-      to create a pleasant visual flow.  
-      This makes the layout breathable and easier to read.
-    </div>
-
-    <div class="code-block">
-<pre><code>section {
+    <!-- TOPIC 3 -->
+    <article id="space-3" class="lesson-panel">
+      <h1>Stacking Sections</h1>
+      <div class="explain">Use <code>margin-bottom</code> or <code>margin-top</code> to space stacked sections!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>section {
   margin-bottom: 40px;
   padding: 30px 20px;
-}</code></pre>
-    </div>
-
-    <div class="demo-output">
-      <div class="box stack">Section 1</div>
-      <div class="box stack" style="border-color:#00ffff;color:#00ffff;">Section 2</div>
-      <div class="box stack" style="border-color:#ff1493;color:#ff1493;">Section 3</div>
-    </div>
-  </section>
-
-  <section id="patterns">
-    <h2>04. Common Layout Patterns</h2>
-    <div class="explanation">
-      Margin and padding are essential for these layout techniques:
-      <ul>
-        <li><strong>Centered Card:</strong> margin: auto + width</li>
-        <li><strong>Stacked Sections:</strong> margin-bottom for spacing</li>
-        <li><strong>Even Padding:</strong> padding adds comfort inside elements</li>
-      </ul>
-    </div>
-
-    <div class="demo-output" style="display:flex;flex-wrap:wrap;gap:25px;justify-content:center;">
-      <div style="width:200px;margin:auto;padding:20px;border:2px solid #ff00ff;border-radius:10px;text-align:center;color:#ff00ff;">
-        Center Card
+}</pre>
       </div>
-      <div style="padding:30px;border:2px solid #00ffff;width:200px;text-align:center;color:#00ffff;">
-        Padded Card
+      <div class="demo">
+        <div class="stack-demo" style="margin-bottom:10px;">Section 1</div>
+        <div class="stack-demo" style="margin-bottom:20px;">Section 2</div>
+        <div class="stack-demo">Section 3</div>
+        <button onclick="document.querySelectorAll('.stack-demo')[1].style.marginBottom='40px'">More Space</button>
       </div>
-    </div>
-  </section>
+    </article>
 
-  <section id="challenge">
-    <h2>05. YOUR CHALLENGE!</h2>
-    <div class="explanation">
-      🌐 Create a personal “About Me” section with:
-      <ul>
-        <li>Centered container (margin: auto, width: 80%)</li>
-        <li>Even padding for text readability</li>
-        <li>Stack 3 sections using margin-bottom</li>
-      </ul>
-    </div>
+    <!-- TOPIC 4 -->
+    <article id="space-4" class="lesson-panel">
+      <h1>Layout Patterns</h1>
+      <div class="explain">Common patterns: Centered cards, stacked sections, padded content blocks.</div>
+      <div class="demo">
+        <div style="display:flex;flex-wrap:wrap;gap:15px;justify-content:center;">
+          <div class="center-demo" style="width:220px;">Center Card</div>
+          <div class="padding-demo" style="width:200px;padding:25px;">Padded Box</div>
+          <div class="margin-demo" style="width:200px;margin:20px;">Margin Box</div>
+        </div>
+      </div>
+    </article>
 
-    <div class="code-block">
-<pre><code>&lt;div style="width:80%;margin:auto;padding:30px;background:rgba(0,0,60,0.8);
-border:2px solid #ff00ff;color:#fff;border-radius:15px;"&gt;
+    <!-- TOPIC 5 -->
+    <article id="space-5" class="lesson-panel">
+      <h1>Shorthand Values</h1>
+      <div class="explain">Use shorthand: <code>margin: 20px</code> (all sides), <code>margin: 10px 20px</code> (top/bottom left/right).</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>margin: 20px;          /* All sides */
+margin: 10px 20px;     /* Top/bottom, left/right */
+margin: 15px 30px 10px; /* Top, left/right, bottom */
+padding: 20px 15px;    /* All around */</pre>
+      </div>
+      <div class="demo">
+        <button onclick="alert('margin: 20px 10px = top/bottom 20px, left/right 10px!')">Shorthand Guide</button>
+      </div>
+    </article>
+
+    <!-- TOPIC 6 -->
+    <article id="space-6" class="lesson-panel">
+      <h1>Real Examples</h1>
+      <div class="explain">Copy these complete working spacing patterns!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>/* Centered Card */
+.card {
+  width: 90%;
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 40px 25px;
+}
+
+/* Section Spacing */
+section {
+  margin-bottom: 50px;
+  padding: 35px 25px;
+}</pre>
+      </div>
+      <div class="demo">
+        <div style="width:90%;max-width:400px;margin:20px auto;padding:25px;background:#4e91ff;border:2px solid #1f4fb8;color:#fff;border-radius:10px;text-align:center;">Perfect Spacing!</div>
+      </div>
+    </article>
+
+    <!-- TOPIC 7 -->
+    <article id="space-7" class="lesson-panel">
+      <h1>Your Challenge!</h1>
+      <div class="explain">Create "About Me" section: 80% width, centered, padded, 3 stacked sections with margin-bottom!</div>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre>&lt;div style="width:80%;margin:auto;padding:30px;
+background:rgba(0,0,60,0.8);border:2px solid #ff00ff;
+color:#fff;border-radius:15px;"&gt;
   &lt;h2&gt;About Me&lt;/h2&gt;
-  &lt;p&gt;I love coding futuristic designs!&lt;/p&gt;
-&lt;/div&gt;</code></pre>
-    </div>
-  </section>
+  &lt;p style="margin-bottom:20px;"&gt;I love coding!&lt;/p&gt;
+  &lt;p style="margin-bottom:20px;"&gt;Pixel art master&lt;/p&gt;
+  &lt;p&gt;Responsive designs&lt;/p&gt;
+&lt;/div&gt;</pre>
+      </div>
+      <div class="demo">
+        <button onclick="alert('✅ CHALLENGE COMPLETE! Perfect spacing layout! 🎉')">Test Layout</button>
+      </div>
+    </article>
 
-  <footer>
-    <h3>💡 Lesson Complete: Layout Flow Mastery!</h3>
-    <p>Save as <code>lesson9-margin-padding.html</code> → Open in browser → Try adjusting margin & padding values!</p>
-    <p>Next challenge: create balanced spacing for a full page design 🌐</p>
-  </footer>
+  </div>
+</main>
 </div>
+
+<a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+
+<script>
+// Lesson navigation
+const buttons = document.querySelectorAll('.lessons-list button');
+const panels = document.querySelectorAll('.lesson-panel');
+const title = document.getElementById('panel-title');
+
+function showLesson(id){
+  panels.forEach(p=>p.classList.remove('visible'));
+  buttons.forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
+  btn.classList.add('active');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+}
+
+buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+
+const order=[...buttons].map(b=>b.dataset.lesson);
+const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
+document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
+document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
+});
+</script>
 </body>
 </html>
