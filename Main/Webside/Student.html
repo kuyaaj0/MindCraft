@@ -1130,10 +1130,15 @@ onAuthStateChanged(auth, (user) => {
     const welcomeOverlay = document.getElementById("welcomeOverlay");
     applyThemeToWelcomeOverlay();
     if (!sessionStorage.getItem("welcomeShown")) {
-      sessionStorage.setItem("welcomeShown", "true");
-      welcomeOverlay.style.display = "flex";
-      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
-    }
+  sessionStorage.setItem("welcomeShown", "true");
+  welcomeOverlay.style.display = "flex";
+
+  // 🌟 Fade out smoothly after 3 seconds
+  setTimeout(() => {
+    welcomeOverlay.classList.add("fade-out");
+    setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
+  }, 3000);
+}
 
     const rankDisplay = document.getElementById("rankDisplay");
     const usersRef = collection(db, "users");
