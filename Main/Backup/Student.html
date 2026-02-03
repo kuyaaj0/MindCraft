@@ -59,7 +59,7 @@ header {
 .xp-bar-container {
   display: flex;
   align-items: center;
-  gap: 3px; /* ✅ tighter spacing */
+  gap: 3px;
   min-width: 120px;
 }
 
@@ -173,76 +173,240 @@ main {
 
 /* === Lesson Container === */
 .lesson-container {
-  max-width: 1100px;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(29,185,84,0.4);
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(29,185,84,0.2);
-  padding: 20px;
-  margin-top: 20px;
-}
-
-/* === Scrollable Grid === */
-.language-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  gap: 25px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 15px;
-}
-
-.language-grid::-webkit-scrollbar {
-  height: 8px;
-}
-.language-grid::-webkit-scrollbar-thumb {
-  background: #1DB954;
-  border-radius: 5px;
-}
-
-/* === Language Card === */
-.language-card {
-  flex: 0 0 auto;
-  width: 280px;
-  padding: 15px;
-  border-radius: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 12px #1DB954;
-  transition: transform 0.3s ease;
+  position: relative;
   text-align: center;
+  padding: 20px;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(29,185,84,0.4);
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(29,185,84,0.25);
+  overflow: visible;
+  z-index: 10;
+  transition: all 0.3s ease;
 }
-.language-card:hover { transform: scale(1.05); }
 
+/* === Language View (Card Selector) === */
+#languageView {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  position: relative;
+  min-height: 200px;
+}
+
+.language-card {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+.language-card.active {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0) scale(1.05);
+  border-color: #1DB954;
+  box-shadow: 0 0 20px #1DB954;
+  animation: fadeSlideIn 0.4s ease;
+}
 .language-card img {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
 }
-
 .language-card p {
   margin-top: 10px;
   font-size: 0.6rem;
 }
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
 
-/* === Scrollable Dropdowns === */
-.language-card select {
-  margin-top: 10px;
-  font-size: 0.5rem;
+/* === Navigation Arrows (OUTSIDE language selector) === */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(29,185,84,0.9);
+  border: none;
+  color: white;
   font-family: 'Press Start 2P', cursive;
-  padding: 5px;
-  border-radius: 5px;
+  font-size: clamp(0.45rem, 2vw, 0.6rem);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 15;
+}
+.nav-arrow.left {
+  left: -45px;
+}
+.nav-arrow.right {
+  right: -45px;
+}
+.nav-arrow:hover {
+  background: #1ed760;
+  transform: scale(1.1);
+}
+
+/* === BACKGROUND BLUR (outside container only) === */
+#panelBackdrop {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.3);
+  z-index: 998;
+  display: none;
+  pointer-events: auto;
+  animation: fadeBackdrop 0.3s ease;
+}
+
+@keyframes fadeBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* disable clicks when blur-active */
+.blur-active header,
+.blur-active main,
+.blur-active footer {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* === Language Panel (Inside Lesson Mode) === */
+.language-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.95);
+  border: 3px solid #1DB954;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 0 32px #1DB95466;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInPanel 0.3s ease;
+}
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translate(-50%, -55%) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* === Centered Option Buttons === */
+.language-panel .option-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-top: 10px;
+}
+.language-panel .option-buttons button {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  padding: 8px 12px;
   background: #1DB954;
   color: #fff;
   border: none;
-  width: 100%;
-  max-height: 80px;
-  overflow-y: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.language-panel .option-buttons button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
 }
 
-.language-card select option {
+/* === Back Button (center bottom) === */
+.language-panel .back-btn {
+  margin-top: 18px;
+  background: #1DB954;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
   font-size: 0.5rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.language-panel .back-btn:hover {
+  transform: scale(1.05);
+}
+
+/* === Panel Title Fix (icon on top, text below) === */
+.language-panel .panel-title {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.language-panel .panel-title img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.language-panel .panel-title .titleText {
+  font-size: 0.7rem;
+  color: #1DB954;
+  text-align: center;
+}
+
+/* === Quiz Dropdown (for Quiz only) === */
+.quiz-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.quiz-list {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.95);
+  border: 2px solid #1DB954;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px 4px;
+}
+.quiz-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  text-align:center;
+}
+.quiz-list button:hover {
+  background: rgba(29,185,84,0.2);
 }
 
 /* === Footer === */
@@ -257,40 +421,64 @@ footer {
   margin-top: auto;
 }
 
-/* === Welcome Popup === */
+  /* === Welcome Overlay === */
 #welcomeOverlay {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.85);
-  color: #1DB954;
-  font-size: clamp(0.8rem, 2vw, 1.2rem);
-  font-family: 'Press Start 2P', cursive;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  color: #1DB954;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  z-index: 2000;
+  text-align: center;
   flex-direction: column;
+  animation: welcomeFadeIn 0.5s ease forwards;
+}
+
+/* Message box style */
+#welcomeOverlay p {
+  margin: 0;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid #1DB954;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #1DB95455;
   opacity: 0;
-  z-index: 999;
-  animation: fadeInOut 3s ease forwards;
+  animation: textFadeIn 0.8s ease forwards 0.2s;
 }
 
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: scale(0.9); }
-  10%, 80% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.05); }
+/* Fade-in and fade-out keyframes */
+@keyframes welcomeFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
 }
-  /* === Level-Up Subtle Glow Animation === */
-@keyframes levelUpPulse {
-  0%   { text-shadow: 0 0 2px #1DB954, 0 0 6px #1DB954, 0 0 10px #1DB954; transform: scale(1); }
-  50%  { text-shadow: 0 0 8px #00ff99, 0 0 16px #00ff99, 0 0 25px #00ff99; transform: scale(1.2); color: #adffb0; }
-  100% { text-shadow: none; transform: scale(1); color: #fff; }
+@keyframes textFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes welcomeFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
 }
 
-.level-up-glow {
-  animation: levelUpPulse 1s ease-in-out;
-  }
+/* Fade-out helper class triggered before hiding */
+#welcomeOverlay.fade-out {
+  animation: welcomeFadeOut 0.6s ease forwards;
+}
+
+/* === Mobile tweaks === */
+@media (max-width: 600px) {
+  .language-card img { width: 55px; height: 55px; }
+  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; }
+  .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
+  #xpValue { font-size: 0.45rem; max-width: 100px; }
+}
 </style>
 </head>
 <body>
@@ -325,88 +513,324 @@ footer {
 <main>
   <h1>CHOOSE A CODE LANGUAGE</h1>
 
-  <!-- Container for scrolling lessons -->
   <div class="lesson-container">
-    <div class="language-grid">
+    <button class="nav-arrow left" id="prevLang">⬅</button>
+    <button class="nav-arrow right" id="nextLang">➡</button>
+    <button id="backBtn" style="display:none;" class="back-btn">⬅ BACK</button>
 
-      <!-- HTML Card -->
-      <div class="language-card" id="htmlCard">
+    <div id="languageView">
+      <div class="language-card active" data-lang="HTML">
         <img src="../Assets/Icons/html.png" alt="HTML">
         <p>HTML</p>
-        <select id="htmlLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="htmlQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
-      <!-- CSS Card -->
-      <div class="language-card" id="cssCard">
+      <div class="language-card" data-lang="CSS">
         <img src="../Assets/Icons/css.png" alt="CSS">
         <p>CSS</p>
-        <select id="cssLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="cssQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
 
-      <!-- JavaScript Card -->
-      <div class="language-card" id="jsCard">
+      <div class="language-card" data-lang="JS">
         <img src="../Assets/Icons/js.png" alt="JavaScript">
         <p>JavaScript</p>
-        <select id="jsLessons" onchange="if(this.value) window.location.href=this.value"></select>
-        <select id="jsQuizzes" onchange="if(this.value) window.location.href=this.value"></select>
       </div>
+    </div>
 
+    <!-- ✅ Options panel -->
+    <div id="lessonQuizOptions" style="display:none;" class="option-buttons">
+      <button id="lessonBtn">📖 Lessons</button>
+
+      <div class="quiz-dropdown">
+        <button id="quizBtn">📝 Quiz ▾</button>
+        <div class="quiz-list" id="quizList"></div>
+      </div>
     </div>
   </div>
+
+  <!-- ✅ Hidden selects for internal data -->
+  <select id="htmlLessons" style="display:none;"></select>
+  <select id="htmlQuizzes" style="display:none;"></select>
+  <select id="cssLessons" style="display:none;"></select>
+  <select id="cssQuizzes" style="display:none;"></select>
+  <select id="jsLessons" style="display:none;"></select>
+  <select id="jsQuizzes" style="display:none;"></select>
 </main>
 
 <footer>
-  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
+  <p>© 2025 MindCraft | Created by Jaytzy & The Team members</p>
 </footer>
 
-<!-- Scripts -->
 <script src="../Design/theme.js"></script>
 <script>window.useFirestoreXP = true;</script>
-  <!-- levels helper (keeps awardXP etc available) -->
-  <script src="../Exp/levels.js"></script>
- <!-- leaderboard module (IMPORTANT: required so leaderboard button works) -->
-  <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
+<script src="../Exp/levels.js"></script>
+<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
 <!-- ===================== -->
-<!-- ✅ Auto-generate Lessons & Quizzes -->
+<!-- ✅ Lessons (no dropdown) + Quizzes (dropdown) -->
+<!-- ===================== -->
+<!-- ===================== -->
+<!-- ✅ Full Combined Populate + Blur Panel Script -->
 <!-- ===================== -->
 <script>
-function populateOptions(prefix, count, type, folder) {
-  const select = document.getElementById(`${prefix}${type}`);
-  if (!select) return; // guard if not loaded yet
+document.addEventListener("DOMContentLoaded", () => {
+  /* =========================================================
+     1️⃣ AUTO-GENERATE LESSON & QUIZ DROPDOWNS
+     ========================================================= */
+  function populateOptions(prefix, count, type, folder) {
+    const select = document.getElementById(`${prefix}${type}`);
+    if (!select) return;
 
-  const isLesson = type === "Lessons";
-  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
-  const subfolder = isLesson ? "Lessons" : "Quiz";
-  const basePath = isLesson
-    ? `../Modular/${subfolder}/${folder}/lesson-`
-    : `../Levels/${subfolder}/${folder}/level-`;
+    const isLesson = type === "Lessons";
+    const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+    const subfolder = isLesson ? "Lessons" : "Quiz";
+    const basePath = isLesson
+      ? `../Modular/${subfolder}/${folder}/lesson-`
+      : `../Levels/${subfolder}/${folder}/level-`;
 
-  const opt = document.createElement("option");
-  opt.textContent = label;
-  opt.value = "";
-  select.appendChild(opt);
+    select.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.textContent = label;
+    placeholder.value = "";
+    select.appendChild(placeholder);
 
-  for (let i = 1; i <= count; i++) {
-    const option = document.createElement("option");
-    option.value = `${basePath}${i}.html`;
-    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
-    select.appendChild(option);
+    for (let i = 1; i <= count; i++) {
+      const option = document.createElement("option");
+      option.value = `${basePath}${i}.html`;
+      option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+      select.appendChild(option);
+    }
   }
+
+  // Populate HTML, CSS, JS lessons and quizzes
+  ["html", "css", "js"].forEach(lang => {
+    populateOptions(lang, 20, "Lessons", lang.toUpperCase());
+    populateOptions(lang, 20, "Quizzes", lang.toUpperCase());
+  });
+
+  /* =========================================================
+     2️⃣ LANGUAGE CARD NAVIGATION + PANEL INITIAL SETUP
+     ========================================================= */
+  const cards = Array.from(document.querySelectorAll(".language-card"));
+  const lessonContainer = document.querySelector(".lesson-container");
+  if (!lessonContainer || cards.length === 0) return;
+
+  // Create nav arrows if missing
+  let left = lessonContainer.querySelector(".nav-arrow.left");
+  let right = lessonContainer.querySelector(".nav-arrow.right");
+  if (!left) {
+    left = document.createElement("button");
+    left.className = "nav-arrow left";
+    left.type = "button";
+    left.textContent = "◀";
+    lessonContainer.appendChild(left);
+  }
+  if (!right) {
+    right = document.createElement("button");
+    right.className = "nav-arrow right";
+    right.type = "button";
+    right.textContent = "▶";
+    lessonContainer.appendChild(right);
+  }
+
+  // Navigation logic
+  let idx = 0;
+  function setActive(i) {
+    idx = Math.max(0, Math.min(i, cards.length - 1));
+    cards.forEach((c, ii) => {
+      c.classList.toggle("active", ii === idx);
+      c.setAttribute("aria-hidden", ii === idx ? "false" : "true");
+    });
+    left.disabled = idx === 0;
+    right.disabled = idx === cards.length - 1;
+  }
+  setActive(0);
+  left.onclick = () => setActive(idx - 1);
+  right.onclick = () => setActive(idx + 1);
+
+  // Create backdrop (blur layer)
+  let backdrop = document.getElementById("panelBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "panelBackdrop";
+    document.body.appendChild(backdrop);
+  }
+
+  // Create main panel container
+  let panel = document.querySelector(".language-panel");
+  if (!panel) {
+    panel = document.createElement("div");
+    panel.className = "language-panel";
+    panel.innerHTML = `
+      <div class="panel-title">
+        <img src="" alt="icon"><span class="titleText"></span>
+      </div>
+      <div class="panel-content"></div>
+      <button class="panel-back">⬇ Back</button>
+    `;
+    document.body.appendChild(panel);
+  }
+
+  // Helper: get key (html, css, js)
+  function getLangKeyFromCard(card) {
+    const data = (card.dataset && card.dataset.lang)
+      ? card.dataset.lang.toLowerCase()
+      : (card.id || card.querySelector("p")?.textContent || "html").toLowerCase();
+    return data.replace(/\s+/g, "");
+  }
+
+  /* =========================================================
+     3️⃣ OPEN LANGUAGE PANEL (with dropdown quizzes)
+     ========================================================= */
+  function openLanguagePanel(card) {
+  const langKey = getLangKeyFromCard(card);
+
+  // Update panel title and icon
+  const iconEl = panel.querySelector(".panel-title img");
+  const titleText = panel.querySelector(".panel-title .titleText");
+  const cardImg = card.querySelector("img");
+  iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
+  titleText.textContent =
+    card.querySelector("p")?.textContent || langKey.toUpperCase();
+
+  // Set up lesson & quiz UI (both with dropdowns)
+  const pc = panel.querySelector(".panel-content");
+  pc.innerHTML = `
+    <div class="lesson-dropdown">
+      <button class="lessons-btn">📖 Lessons ▾</button>
+      <div class="lesson-list"></div>
+    </div>
+
+    <div class="quiz-dropdown">
+      <button class="quiz-btn">📝 Quiz ▾</button>
+      <div class="quiz-list"></div>
+    </div>
+  `;
+
+  // === LESSON DROPDOWN ===
+  const lessonList = pc.querySelector(".lesson-list");
+  const lessonSelect = document.getElementById(`${langKey}Lessons`);
+  lessonList.innerHTML = "";
+  if (lessonSelect && lessonSelect.options.length > 1) {
+    Array.from(lessonSelect.options)
+      .slice(1)
+      .forEach(opt => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = opt.textContent;
+        b.addEventListener("click", () => {
+          if (opt.value) window.location.href = opt.value;
+        });
+        lessonList.appendChild(b);
+      });
+  } else {
+    lessonList.innerHTML = '<button disabled>No lessons found</button>';
+  }
+
+  const lessonBtn = pc.querySelector(".lessons-btn");
+  lessonBtn.addEventListener("click", ev => {
+    ev.stopPropagation();
+    lessonList.style.display =
+      lessonList.style.display === "flex" ? "none" : "flex";
+  });
+
+  // === QUIZ DROPDOWN ===
+  const quizList = pc.querySelector(".quiz-list");
+  const quizSelect = document.getElementById(`${langKey}Quizzes`);
+  quizList.innerHTML = "";
+  if (quizSelect && quizSelect.options.length > 1) {
+    Array.from(quizSelect.options)
+      .slice(1)
+      .forEach(opt => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = opt.textContent;
+        b.addEventListener("click", () => {
+          if (opt.value) window.location.href = opt.value;
+        });
+        quizList.appendChild(b);
+      });
+  } else {
+    quizList.innerHTML = '<button disabled>No quizzes found</button>';
+  }
+
+  const quizBtn = pc.querySelector(".quiz-btn");
+  quizBtn.addEventListener("click", ev => {
+    ev.stopPropagation();
+    quizList.style.display =
+      quizList.style.display === "flex" ? "none" : "flex";
+  });
+
+  // === BACK BUTTON INSIDE PANEL ===
+  const backBtn = panel.querySelector(".panel-back");
+  backBtn.addEventListener("click", closeLanguagePanel);
+
+  // === Activate Blur and Panel ===
+  backdrop.style.display = "block";
+  panel.style.display = "flex";
+  document.body.classList.add("blur-active");
+  document.body.style.overflow = "hidden";
 }
 
-// ✅ Wait until the DOM is fully loaded before populating
-document.addEventListener("DOMContentLoaded", () => {
-  populateOptions("html", 20, "Lessons", "HTML");
-  populateOptions("html", 20, "Quizzes", "HTML");
-  populateOptions("css", 20, "Lessons", "CSS");
-  populateOptions("css", 20, "Quizzes", "CSS");
-  populateOptions("js", 20, "Lessons", "JS");
-  populateOptions("js", 20, "Quizzes", "JS");
+
+  /* =========================================================
+     4️⃣ CLOSE LANGUAGE PANEL (bug-free reset)
+     ========================================================= */
+  function closeLanguagePanel() {
+    // Hide panel
+    panel.style.display = "none";
+    panel.classList.remove("opening");
+
+    // Clear quiz list & lesson buttons
+    const quizLists = panel.querySelectorAll(".quiz-list");
+    quizLists.forEach(list => {
+      list.style.display = "none";
+      list.innerHTML = "";
+    });
+
+    const content = panel.querySelector(".panel-content");
+    if (content) content.innerHTML = "";
+
+    // Reset title image/text
+    const titleImg = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    if (titleImg) titleImg.src = "";
+    if (titleText) titleText.textContent = "";
+
+    // Hide blur & enable background again
+    backdrop.style.display = "none";
+    document.body.classList.remove("blur-active");
+    document.body.style.overflow = "";
+  }
+
+  /* =========================================================
+     5️⃣ SAFETY: DISABLE BACKDROP CLICK
+     ========================================================= */
+  backdrop.addEventListener("click", e => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+
+  /* =========================================================
+     6️⃣ CARD CLICK OPEN HANDLER
+     ========================================================= */
+  cards.forEach((card, i) => {
+    card.addEventListener("click", () => {
+      if (!card.classList.contains("active")) {
+        setActive(i);
+        setTimeout(() => openLanguagePanel(card), 160);
+      } else {
+        openLanguagePanel(card);
+      }
+    });
+
+    card.addEventListener("keydown", ev => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        openLanguagePanel(card);
+      }
+    });
+  });
 });
-</script>
+</script> <!--keep it as backup plan-->
 
 <!-- ===================== -->
 <!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
@@ -693,5 +1117,224 @@ onAuthStateChanged(auth, (user) => {
   });
 });
 </script>
+  
+  <!--<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // cards and lesson container expected in DOM
+  const cards = Array.from(document.querySelectorAll('.language-card'));
+  const lessonContainer = document.querySelector('.lesson-container');
+  if (!lessonContainer || cards.length === 0) return;
+
+  // create small arrows if not already present
+  let left = lessonContainer.querySelector('.nav-arrow.left');
+  let right = lessonContainer.querySelector('.nav-arrow.right');
+  if (!left) {
+    left = document.createElement('button');
+    left.className = 'nav-arrow left';
+    left.type = 'button';
+    left.textContent = '◀';
+    lessonContainer.appendChild(left);
+  }
+  if (!right) {
+    right = document.createElement('button');
+    right.className = 'nav-arrow right';
+    right.type = 'button';
+    right.textContent = '▶';
+    lessonContainer.appendChild(right);
+  }
+
+  // ensure back button exists (hidden by default)
+  let backBtn = lessonContainer.querySelector('.back-btn') || lessonContainer.querySelector('#backBtn');
+  if (!backBtn) {
+    backBtn = document.createElement('button');
+    backBtn.className = 'back-btn';
+    backBtn.id = 'backBtn';
+    backBtn.textContent = '⬅ BACK';
+    backBtn.style.display = 'none';
+    lessonContainer.appendChild(backBtn);
+  }
+
+  // ensure languageView exists and contains cards
+  const languageView = document.getElementById('languageView');
+  if (!languageView) return;
+  cards.forEach(c => {
+    if (!languageView.contains(c)) languageView.appendChild(c);
+  });
+
+  // language card navigation
+  let idx = 0;
+  function setActive(i) {
+    idx = Math.max(0, Math.min(i, cards.length - 1));
+    cards.forEach((c, ii) => {
+      c.classList.toggle('active', ii === idx);
+      c.setAttribute('aria-hidden', ii === idx ? 'false' : 'true');
+    });
+    left.disabled = (idx === 0);
+    right.disabled = (idx === (cards.length - 1));
+  }
+  setActive(0);
+
+  left.addEventListener('click', () => setActive(idx - 1));
+  right.addEventListener('click', () => setActive(idx + 1));
+
+  // prevent arrow key movement while panel open
+  document.addEventListener('keydown', (e) => {
+    if (document.body.classList.contains('blur-active')) return;
+    if (e.key === 'ArrowLeft') setActive(idx - 1);
+    if (e.key === 'ArrowRight') setActive(idx + 1);
+  });
+
+  // create backdrop once
+  let backdrop = document.getElementById('panelBackdrop');
+  if (!backdrop) {
+    backdrop = document.createElement('div');
+    backdrop.id = 'panelBackdrop';
+    document.body.appendChild(backdrop);
+  }
+
+  // create language panel if missing
+  let panel = document.querySelector('.language-panel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.className = 'language-panel';
+    panel.innerHTML = `
+      <div class="panel-title"><img src="" alt="icon"><span class="titleText"></span></div>
+      <div class="panel-content"></div>
+      <div class="quiz-list" role="menu"></div>
+      <button class="panel-back">⬇ Back</button>
+    `;
+    document.body.appendChild(panel);
+  }
+
+  // get key (html, css, js)
+  function getLangKeyFromCard(card) {
+    const data = (card.dataset && card.dataset.lang)
+      ? card.dataset.lang.toLowerCase()
+      : (card.id || card.querySelector('p')?.textContent || 'html').toLowerCase();
+    return data.replace(/\s+/g, '');
+  }
+
+  // open panel
+  function openLanguagePanel(card) {
+    const langKey = getLangKeyFromCard(card);
+    const iconEl = panel.querySelector('.panel-title img');
+    const titleText = panel.querySelector('.panel-title .titleText');
+    const cardImg = card.querySelector('img');
+    iconEl.src = cardImg ? cardImg.src : '../Assets/Icons/html.png';
+    titleText.textContent = (card.querySelector('p')?.textContent || langKey.toUpperCase());
+
+    const pc = panel.querySelector('.panel-content');
+    pc.innerHTML = `
+      <button class="lessons-btn">📖 Lessons</button>
+      <div style="position:relative; display:inline-block; text-align:center;">
+        <button class="quiz-btn">📝 Quiz ▾</button>
+      </div>
+    `;
+
+    // populate quizzes
+    const quizList = panel.querySelector('.quiz-list');
+    quizList.innerHTML = '';
+    const select = document.getElementById(`${langKey}Quizzes`);
+    if (select && select.options.length > 1) {
+      Array.from(select.options).slice(1).forEach(opt => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = opt.textContent;
+        b.addEventListener('click', () => {
+          if (opt.value) window.location.href = opt.value;
+        });
+        quizList.appendChild(b);
+      });
+    } else {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = 'No quizzes found';
+      quizList.appendChild(b);
+    }
+
+    // lessons button
+    const lessonBtn = panel.querySelector('.lessons-btn');
+    lessonBtn.addEventListener('click', () => {
+      const lessonSelect = document.getElementById(`${langKey}Lessons`);
+      const first = lessonSelect && lessonSelect.options[1] && lessonSelect.options[1].value;
+      if (first) window.location.href = first;
+      else alert('No lessons available for this language.');
+    });
+
+    // quiz dropdown
+    const quizBtn = panel.querySelector('.quiz-btn');
+    quizBtn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      quizList.style.display = (quizList.style.display === 'flex') ? 'none' : 'flex';
+    });
+
+    // Back button
+    panel.querySelector('.panel-back').addEventListener('click', closeLanguagePanel);
+
+    // activate blur overlay and panel
+    backdrop.style.display = 'block';
+    document.body.classList.add('blur-active');
+    panel.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  // ✅ FIXED: close panel and reset state properly
+  function closeLanguagePanel() {
+    if (panel) {
+      panel.style.display = 'none';
+      panel.classList.remove('opening');
+
+      // clear quiz list and content
+      const quizList = panel.querySelector('.quiz-list');
+      if (quizList) {
+        quizList.style.display = 'none';
+        quizList.innerHTML = '';
+      }
+
+      const content = panel.querySelector('.panel-content');
+      if (content) content.innerHTML = '';
+
+      // reset title safely
+      const titleImg = panel.querySelector('.panel-title img');
+      const titleText = panel.querySelector('.panel-title .titleText');
+      if (titleImg) titleImg.src = '';
+      if (titleText) titleText.textContent = '';
+
+      // hide blur
+      if (backdrop) backdrop.style.display = 'none';
+      document.body.classList.remove('blur-active');
+
+      // restore scroll and pointer events
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.querySelectorAll('header, main, footer').forEach(el => {
+        el.style.pointerEvents = 'auto';
+      });
+    }
+  }
+
+  // clicking the backdrop should do nothing
+  backdrop.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+
+  // open card
+  cards.forEach((c, i) => {
+    c.addEventListener('click', (e) => {
+      if (!c.classList.contains('active')) {
+        setActive(i);
+        setTimeout(() => openLanguagePanel(c), 160);
+      } else openLanguagePanel(c);
+    });
+    c.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        openLanguagePanel(c);
+      }
+    });
+  });
+});
+</script>-->
 </body>
 </html>
