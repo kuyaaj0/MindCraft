@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel HTML Lessons • Headings & Paragraphs</title>
+<title>Pixel HTML Lessons Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Tools/Design/Html-Editor.css">
 <style>
@@ -16,29 +16,28 @@ body{
   background:linear-gradient(#87e4ff,#c8f7b0);
   padding:20px;
   overflow:hidden;
-  font-size:14px;
-  line-height:1.4;
+  font-size:10px;
 }
 
 .exit-btn{
   position:fixed;
-  top:20px;
-  right:20px;
+  top:480px;
+  left:202px;
   background:#ff4d4d;
   color:#fff;
   text-decoration:none;
   font-family:'JetBrains Mono', monospace;
-  padding:10px 16px;
+  padding:6px 10px;
   border-radius:8px;
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 4px 0 #a30000;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
   z-index:1000;
-  font-size:13px;
+  font-size:9px;
   font-weight:500;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 .exit-btn:hover{
   transform:translateY(-2px);
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 6px 0 #a30000;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
 /* ===== MAIN APP ===== */
@@ -69,20 +68,20 @@ body{
 }
 
 .brand h1{
-  font-size:18px;
+  font-size:14px;
   font-weight:700;
   text-align:center;
   text-shadow:2px 2px #000;
 }
 .brand p{
-  font-size:11px;
+  font-size:8px;
+  font-weight:500;
   text-align:center;
   opacity:.9;
   margin-top:6px;
-  font-weight:500;
 }
 
-/* ===== LESSON BUTTONS ===== */
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
 .lessons-list{
   margin-top:16px;
   display:flex;
@@ -93,11 +92,11 @@ body{
 .lessons-list button{
   background:#ffcc4d;
   border:3px solid #e09c2b;
-  padding:12px 14px;
+  padding:10px 10px;
   border-radius:10px;
   cursor:pointer;
   color:#3b2a15;
-  font-size:12px;
+  font-size:8px;
   font-weight:500;
   display:flex;
   gap:8px;
@@ -106,8 +105,8 @@ body{
     0 3px 0 #b5741b,
     0 4px 0 #3b2a15;
   text-transform:uppercase;
-  letter-spacing:0.5px;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .lessons-list button:hover{
@@ -134,10 +133,10 @@ body{
 .num{
   background:#3b2a15;
   color:#ffd966;
-  padding:6px 9px;
+  padding:4px 7px;
   border-radius:6px;
   box-shadow:0 2px 0 #1e1309;
-  font-size:11px;
+  font-size:8px;
   font-weight:700;
 }
 
@@ -162,26 +161,26 @@ body{
 }
 
 .content-head .title{
-  font-size:15px;
+  font-size:12px;
   font-weight:700;
-  text-shadow:1px 1px #fff;
+  text-shadow:2px 2px #fff;
 }
 
-/* ===== NAV BUTTONS ===== */
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
 .content-head button{
   font-family:'JetBrains Mono', monospace;
   background:#4e91ff;
   color:#fff;
   border:3px solid #1f4fb8;
-  padding:8px 12px;
+  padding:6px 10px;
   border-radius:8px;
   box-shadow:
     0 3px 0 #16347a,
     0 4px 0 #0c1b3a;
   cursor:pointer;
-  font-size:12px;
+  font-size:8px;
   font-weight:500;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .content-head button:hover{
@@ -216,68 +215,75 @@ body{
 
 .lesson-panel.visible{display:block}
 
+/* ===== LESSON CONTENT ===== */
 .lesson-panel h1{
-  font-size:18px;
+  font-size:14px;
   font-weight:700;
+  margin-bottom:6px;
+}
+
+.lesson-panel h2{
+  font-size:11px;
+  font-weight:600;
   margin-bottom:8px;
 }
 
 .meta{
-  font-size:11px;
+  font-size:8px;
+  font-weight:500;
   opacity:.7;
   margin-bottom:16px;
-  font-weight:500;
 }
 
 /* ===== BOXES ===== */
 .explain{
   background:#fff3cd;
   border:3px solid #c9a227;
-  padding:16px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:16px;
+  margin-bottom:14px;
   line-height:1.6;
-  font-size:13px;
+  font-size:10px;
 }
 
 .code{
   background:#1e1e1e;
   color:#00ff90;
-  padding:16px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:16px;
+  margin-bottom:14px;
   overflow:auto;
   position:relative;
   font-family:'JetBrains Mono', monospace;
-  font-size:12px;
-  line-height:1.5;
+  font-size:9px;
+  line-height:1.4;
 }
 
 .code pre{
   margin:0;
 }
 
-/* ===== COPY BUTTON ===== */
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
 .code button.copy-btn{
   position:absolute;
-  top:10px;
-  right:10px;
+  top:8px;
+  right:8px;
   background:#ffd966;
   color:#000;
   border:2px solid #b59b24;
-  padding:6px 10px;
+  padding:4px 6px;
   border-radius:6px;
   cursor:pointer;
-  font-size:11px;
+  font-size:7px;
   font-weight:500;
   box-shadow:0 2px 0 #7a6515;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .code button.copy-btn:hover{
   transform:translateY(-1px);
   background:#fff1a8;
-  box-shadow:0 4px 0 #7a6515;
+  box-shadow:0 3px 0 #7a6515;
 }
 
 .code button.copy-btn:active{
@@ -289,29 +295,29 @@ body{
 .demo{
   background:#d9ead3;
   border:3px solid #6aa84f;
-  padding:16px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:16px;
+  margin-bottom:14px;
 }
 
-/* ===== DEMO BUTTONS ===== */
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
 .demo button{
   font-family:'JetBrains Mono', monospace;
   background:#00c98b;
   color:#003322;
   border:3px solid #00805c;
-  padding:10px 14px;
+  padding:8px 12px;
   border-radius:10px;
   box-shadow:
     0 3px 0 #00563f,
     0 4px 0 #001f16;
   cursor:pointer;
-  font-size:12px;
+  font-size:8px;
   font-weight:500;
   text-transform:uppercase;
-  letter-spacing:0.5px;
-  margin-top:10px;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .demo button:hover{
@@ -342,134 +348,144 @@ body{
 
 <body>
 <div class="app">
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="brand">
-    <h1>📄 Pixel HTML</h1>
-    <p>Headings & Paragraphs</p>
-  </div>
-
-  <div class="lessons-list">
-    <button data-lesson="t1" class="active"><span class="num">01</span> Headings</button>
-    <button data-lesson="t2"><span class="num">02</span> Paragraphs</button>
-    <button data-lesson="t3"><span class="num">03</span> Line Breaks</button>
-    <button data-lesson="t4"><span class="num">04</span> Challenge</button>
-  </div>
-</aside>
-
-<!-- CONTENT -->
-<main class="content">
-  <div class="content-head">
-    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-    <div class="title" id="panel-title">01 • Headings</div>
-    <div>
-      <button id="prevLesson">◀</button>
-      <button id="nextLesson">▶</button>
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>🧠 Pixel HTML</h1>
+      <p>Page Setup & Text</p>
     </div>
-  </div>
+    <div class="lessons-list">
+      <button data-lesson="topic-1" class="active"><span class="num">01</span> HTML Structure</button>
+      <button data-lesson="topic-2"><span class="num">02</span> Head & Body</button>
+      <button data-lesson="topic-3"><span class="num">03</span> Tags & Nesting</button>
+      <button data-lesson="topic-4"><span class="num">04</span> Your Challenge</button>
+    </div>
+  </aside>
 
-  <div class="panel-wrap">
+  <main class="content">
+    <div class="content-head">
+      <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+      <div class="title" id="panel-title">01 • HTML Structure</div>
+      <div>
+        <button id="prevLesson">◀</button>
+        <button id="nextLesson">▶</button>
+      </div>
+    </div>
 
-    <article id="t1" class="lesson-panel visible">
-      <h1>HTML Headings</h1>
-      <div class="meta">Lesson 2</div>
-      <div class="explain">
-        Headings structure your page. Use <strong>h1 once</strong>. h2–h6 are subsections. They help search engines understand your content hierarchy.
-      </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;h1&gt;Main Title&lt;/h1&gt;
-&lt;h2&gt;Section&lt;/h2&gt;
-&lt;h3&gt;Subsection&lt;/h3&gt;
-&lt;h4&gt;Detail&lt;/h4&gt;
-&lt;h5&gt;Small&lt;/h5&gt;
-&lt;h6&gt;Tiny&lt;/h6&gt;</pre>
-      </div>
-      <div class="demo">
-        <p>Live demo:</p>
-        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
-          <h1>Main Title</h1>
-          <h2>Section</h2>
-          <h3>Subsection</h3>
-          <h4>Detail</h4>
-          <h5>Small</h5>
-          <h6>Tiny</h6>
+    <div class="panel-wrap">
+      <!-- TOPIC 1 -->
+      <article id="topic-1" class="lesson-panel visible">
+        <h1>HTML Structure</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          HTML (HyperText Markup Language) gives structure to a web page. Every HTML file starts with a <strong>doctype</strong>, followed by <strong>html</strong>, <strong>head</strong>, and <strong>body</strong> tags.
         </div>
-      </div>
-    </article>
-
-    <article id="t2" class="lesson-panel">
-      <h1>Paragraphs</h1>
-      <div class="meta">Lesson 2</div>
-      <div class="explain">
-        Paragraphs use the <code>&lt;p&gt;</code> tag for readable text blocks. Browsers add space before/after automatically.
-      </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;p&gt;This is a paragraph.&lt;/p&gt;
-&lt;p&gt;Another paragraph.&lt;/p&gt;</pre>
-      </div>
-      <div class="demo">
-        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
-          <p>This is a paragraph.</p>
-          <p>Another paragraph.</p>
-        </div>
-      </div>
-    </article>
-
-    <article id="t3" class="lesson-panel">
-      <h1>Line Breaks</h1>
-      <div class="meta">Lesson 2</div>
-      <div class="explain">
-        <code>&lt;br&gt;</code> creates a new line <strong>without paragraph spacing</strong>. Perfect for addresses, poems, or short breaks.
-      </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;p&gt;Line 1&lt;br&gt;Line 2&lt;br&gt;Line 3&lt;/p&gt;</pre>
-      </div>
-      <div class="demo">
-        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
-          <p>Line 1<br>Line 2<br>Line 3</p>
-        </div>
-      </div>
-    </article>
-
-    <article id="t4" class="lesson-panel">
-      <h1>Your Challenge</h1>
-      <div class="meta">Lesson 2</div>
-      <div class="explain">
-        Build a mini page using headings and paragraphs. Create your own "About Me" page!
-      </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-&lt;head&gt;&lt;title&gt;About Me&lt;/title&gt;&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;[Your Name]&lt;/h1&gt;
-&lt;h2&gt;About Me&lt;/h2&gt;
-&lt;p&gt;I am learning HTML at school.&lt;/p&gt;
-&lt;p&gt;I like coding and pixel art!&lt;/p&gt;
-&lt;/body&gt;
+  &lt;head&gt;
+    &lt;title&gt;My First Webpage&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+  &lt;/body&gt;
 &lt;/html&gt;</pre>
-      </div>
-      <div class="demo">
-        <p>Replace [Your Name] with your name!</p>
-        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
-          <h1>Your Name</h1>
-          <h2>About Me</h2>
-          <p>I am learning HTML at school.</p>
-          <p>I like coding and pixel art!</p>
         </div>
-      </div>
-    </article>
+        <div class="demo">
+          <p>Try it below:</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Hello World!</h1>
+          </div>
+        </div>
+      </article>
 
-  </div>
-</main>
+      <!-- TOPIC 2 - CORRECTED -->
+      <article id="topic-2" class="lesson-panel">
+        <h1>Head & Body</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          The <strong>head</strong> contains <strong>invisible</strong> info (title, CSS links, meta). The <strong>body</strong> shows <strong>visible content only</strong>.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Webpage&lt;/title&gt;  ← Tab title only
+    &lt;link rel="stylesheet" href="style.css"&gt; ← Styles
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome!&lt;/h1&gt;  ← Visible!
+    &lt;p&gt;This shows up.&lt;/p&gt;  ← Visible!
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="demo">
+          <p><strong>Browser Result:</strong></p>
+          <div style="background:#fff;padding:12px;border-radius:8px;color:#000;border-left:4px solid #00c98b;">
+            <h1 style="margin:0 0 8px 0;">Welcome!</h1>
+            <p>This shows up.</p>
+          </div>
+          <p style="font-size:7px;color:#666;margin-top:8px;">
+            <strong>Tab shows:</strong> "My Webpage" 👆 (head works!)
+          </p>
+          <button onclick="alert('Head: Title=\'My Webpage\', CSS loaded\nBody: Welcome! + paragraph visible')">What Browser Sees</button>
+        </div>
+      </article>
+
+      <!-- TOPIC 3 -->
+      <article id="topic-3" class="lesson-panel">
+        <h1>Tags & Nesting</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          HTML uses opening and closing <strong>tags</strong>. Tags can be <strong>nested</strong> inside each other, but they must close in the correct order.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;div&gt;
+  &lt;p&gt;This is &lt;strong&gt;nested&lt;/strong&gt; text.&lt;/p&gt;
+&lt;/div&gt;</pre>
+        </div>
+        <div class="demo">
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <p>This is <strong>nested</strong> text.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- TOPIC 4 -->
+      <article id="topic-4" class="lesson-panel">
+        <h1>Your Challenge</h1>
+        <div class="meta">Lesson 1</div>
+        <div class="explain">
+          Create a simple webpage using <strong>html</strong>, <strong>head</strong>, <strong>body</strong>, and nested tags. Add your name as the title and a short introduction inside the body.
+        </div>
+        <div class="code">
+          <button class="copy-btn">Copy</button>
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;[Your Name]&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Welcome to My Page&lt;/h1&gt;
+    &lt;p&gt;Hi! I'm [Your Name] and this is my first webpage.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        </div>
+        <div class="demo">
+          <p>Replace [Your Name] with your actual name!</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Welcome to My Page</h1>
+            <p>Hi! I'm [Your Name] and this is my first webpage.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
 </div>
 
-<script src="../../../Tools/Editor/Html-Editor.js"></script>
+  <script src="../../../Tools/Editor/Html-Editor.js"></script>
 <script>
 // Lesson navigation
 const buttons = document.querySelectorAll('.lessons-list button');
@@ -497,15 +513,8 @@ document.querySelectorAll('.copy-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
         const code = btn.nextElementSibling.innerText;
         navigator.clipboard.writeText(code).then(()=>{
-            const original = btn.innerText;
             btn.innerText='✔ Copied!';
-            btn.style.background = '#00c98b';
-            btn.style.color = '#fff';
-            setTimeout(()=>{
-                btn.innerText = original;
-                btn.style.background = '';
-                btn.style.color = '';
-            }, 1500);
+            setTimeout(()=>btn.innerText='Copy',1500);
         });
     });
 });
