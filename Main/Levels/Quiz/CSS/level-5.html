@@ -144,7 +144,7 @@ button:disabled{opacity:0.5;cursor:not-allowed;}
             <div class="quiz-panel">
                 <div class="top-bar">
                     <div class="progress" id="progress">Question 1 / 10</div>
-                    <div class="timer" id="timer">05:00</div>
+                    <div class="timer" id="timer">10:00</div>
                 </div>
                 <div id="questionContainer" class="question-box"></div>
                 <div class="nav-row">
@@ -172,7 +172,7 @@ const questions = [
   { type: "fill", text: "10. This CSS property sets the style or type of font for your text.", correctText: "font-family" }
 ];
 
-let TOTAL_TIME_SECONDS = 5*60;
+let TOTAL_TIME_SECONDS = 10 * 60;
 let currentIndex=0;
 let userAnswers=new Array(questions.length).fill(null);
 let remainingSeconds=TOTAL_TIME_SECONDS;
@@ -281,3 +281,4 @@ startTimer();
 </script>
 </body>
 </html>
+
