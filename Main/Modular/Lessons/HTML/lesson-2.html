@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel HTML Lessons Dashboard</title>
+<title>Pixel HTML Lessons • Headings & Paragraphs</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Tools/Design/Html-Editor.css">
 <style>
@@ -196,7 +196,7 @@ body{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  height: 400px;
+  height: 350px;
   margin-top: 12px;
 }
 
@@ -212,6 +212,7 @@ body{
   width: 100%;
   height: 100%;
   outline: none;
+  line-height: 1.4;
 }
 
 .preview-frame {
@@ -242,12 +243,6 @@ body{
   font-size:14px;
   font-weight:700;
   margin-bottom:6px;
-}
-
-.lesson-panel h2{
-  font-size:11px;
-  font-weight:600;
-  margin-bottom:8px;
 }
 
 .meta{
@@ -372,21 +367,21 @@ body{
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <h1>🧠 Pixel HTML</h1>
-      <p>Page Setup & Text</p>
+      <h1>📄 Pixel HTML</h1>
+      <p>Headings & Paragraphs</p>
     </div>
     <div class="lessons-list">
-      <button data-lesson="topic-1" class="active"><span class="num">01</span> HTML Structure</button>
-      <button data-lesson="topic-2"><span class="num">02</span> Head & Body</button>
-      <button data-lesson="topic-3"><span class="num">03</span> Tags & Nesting</button>
-      <button data-lesson="topic-4"><span class="num">04</span> Your Challenge</button>
+      <button data-lesson="t1" class="active"><span class="num">01</span> Headings</button>
+      <button data-lesson="t2"><span class="num">02</span> Paragraphs</button>
+      <button data-lesson="t3"><span class="num">03</span> Line Breaks</button>
+      <button data-lesson="t4"><span class="num">04</span> Your Challenge</button>
     </div>
   </aside>
 
   <main class="content">
     <div class="content-head">
       <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-      <div class="title" id="panel-title">01 • HTML Structure</div>
+      <div class="title" id="panel-title">01 • Headings</div>
       <div>
         <button id="prevLesson">◀</button>
         <button id="nextLesson">▶</button>
@@ -394,116 +389,131 @@ body{
     </div>
 
     <div class="panel-wrap">
-      <!-- TOPIC 1 -->
-      <article id="topic-1" class="lesson-panel visible">
-        <h1>HTML Structure</h1>
-        <div class="meta">Lesson 1</div>
+      <!-- LESSON 1: HEADINGS -->
+      <article id="t1" class="lesson-panel visible">
+        <h1>HTML Headings</h1>
+        <div class="meta">Lesson 2 • Topic 1/4</div>
         <div class="explain">
-          HTML (HyperText Markup Language) gives structure to a web page. Every HTML file starts with a <strong>doctype</strong>, followed by <strong>html</strong>, <strong>head</strong>, and <strong>body</strong> tags.
+          Headings create page structure. Use <strong>h1 once</strong> as main title. h2-h6 create sections/subsections. Search engines read heading hierarchy.
         </div>
         <div class="code">
           <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;My First Webpage&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello World!&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;h1&gt;Main Title&lt;/h1&gt;
+&lt;h2&gt;Section Title&lt;/h2&gt;
+&lt;h3&gt;Subsection&lt;/h3&gt;
+&lt;h4&gt;Detail&lt;/h4&gt;
+&lt;h5&gt;Small&lt;/h5&gt;
+&lt;h6&gt;Tiny&lt;/h6&gt;</pre>
         </div>
         <div class="demo">
-          <p>✨ Edit & Test Live Below:</p>
+          <p>✨ Practice Headings Live:</p>
           <div class="editor-section">
-            <textarea class="editor-area" id="htmlEditor1"><h1>Hello World!</h1></textarea>
+            <textarea class="editor-area" id="htmlEditor1">
+&lt;h1&gt;My Main Title&lt;/h1&gt;
+&lt;h2&gt;My Section&lt;/h2&gt;
+&lt;h3&gt;My Subsection&lt;/h3&gt;
+&lt;h4&gt;Details&lt;/h4&gt;
+&lt;h5&gt;Small text&lt;/h5&gt;
+&lt;h6&gt;Tiny text&lt;/h6&gt;
+</textarea>
             <iframe class="preview-frame" id="preview1"></iframe>
           </div>
-          <button class="demo button" onclick="loadExample('topic-1')">Reset Example</button>
+          <button class="demo button" onclick="loadExample('t1')">Reset Example</button>
         </div>
       </article>
 
-      <!-- TOPIC 2 -->
-      <article id="topic-2" class="lesson-panel">
-        <h1>Head & Body</h1>
-        <div class="meta">Lesson 1</div>
+      <!-- LESSON 2: PARAGRAPHS -->
+      <article id="t2" class="lesson-panel">
+        <h1>Paragraphs</h1>
+        <div class="meta">Lesson 2 • Topic 2/4</div>
         <div class="explain">
-          The <strong>head</strong> contains <strong>invisible</strong> info (title, CSS links, meta). The <strong>body</strong> shows <strong>visible content only</strong>.
+          Use <code>&lt;p&gt;</code> tags for text blocks. Browsers automatically add space before/after. Perfect for articles and descriptions.
         </div>
         <div class="code">
           <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;My Webpage&lt;/title&gt;  ← Tab title only
-    &lt;link rel="stylesheet" href="style.css"&gt; ← Styles
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Welcome!&lt;/h1&gt;  ← Visible!
-    &lt;p&gt;This shows up.&lt;/p&gt;  ← Visible!
-  &lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;p&gt;First paragraph text.&lt;/p&gt;
+&lt;p&gt;Second paragraph with more content.&lt;/p&gt;
+&lt;p&gt;Third paragraph automatically spaced.&lt;/p&gt;</pre>
         </div>
         <div class="demo">
-          <p>✨ Edit & Test Live Below:</p>
+          <p>✨ Practice Paragraphs Live:</p>
           <div class="editor-section">
-            <textarea class="editor-area" id="htmlEditor2"><h1>Welcome!</h1><p>This shows up.</p></textarea>
+            <textarea class="editor-area" id="htmlEditor2">
+&lt;p&gt;This is my first paragraph.&lt;/p&gt;
+&lt;p&gt;This is my second paragraph with more text content.&lt;/p&gt;
+&lt;p&gt;Paragraphs have automatic spacing!&lt;/p&gt;
+</textarea>
             <iframe class="preview-frame" id="preview2"></iframe>
           </div>
-          <button class="demo button" onclick="loadExample('topic-2')">Reset Example</button>
+          <button class="demo button" onclick="loadExample('t2')">Reset Example</button>
         </div>
       </article>
 
-      <!-- TOPIC 3 -->
-      <article id="topic-3" class="lesson-panel">
-        <h1>Tags & Nesting</h1>
-        <div class="meta">Lesson 1</div>
+      <!-- LESSON 3: LINE BREAKS -->
+      <article id="t3" class="lesson-panel">
+        <h1>Line Breaks</h1>
+        <div class="meta">Lesson 2 • Topic 3/4</div>
         <div class="explain">
-          HTML uses opening and closing <strong>tags</strong>. Tags can be <strong>nested</strong> inside each other, but they must close in the correct order.
+          <code>&lt;br&gt;</code> creates lines <strong>without paragraph spacing</strong>. Use for addresses, poems, lyrics, or tight spacing control.
         </div>
         <div class="code">
           <button class="copy-btn">Copy</button>
-<pre>&lt;div&gt;
-  &lt;p&gt;This is &lt;strong&gt;nested&lt;/strong&gt; text.&lt;/p&gt;
-&lt;/div&gt;</pre>
+<pre>&lt;p&gt;Address:&lt;br&gt;
+John Doe&lt;br&gt;
+123 Main St&lt;br&gt;
+City, State 12345&lt;/p&gt;</pre>
         </div>
         <div class="demo">
-          <p>✨ Edit & Test Live Below:</p>
+          <p>✨ Practice Line Breaks Live:</p>
           <div class="editor-section">
-            <textarea class="editor-area" id="htmlEditor3"><div><p>This is <strong>nested</strong> text.</p></div></textarea>
+            <textarea class="editor-area" id="htmlEditor3">
+&lt;p&gt;My Address:&lt;br&gt;
+[Your Name]&lt;br&gt;
+[Your Street]&lt;br&gt;
+[City, State ZIP]&lt;/p&gt;
+</textarea>
             <iframe class="preview-frame" id="preview3"></iframe>
           </div>
-          <button class="demo button" onclick="loadExample('topic-3')">Reset Example</button>
+          <button class="demo button" onclick="loadExample('t3')">Reset Example</button>
         </div>
       </article>
 
-      <!-- TOPIC 4 -->
-      <article id="topic-4" class="lesson-panel">
+      <!-- LESSON 4: CHALLENGE -->
+      <article id="t4" class="lesson-panel">
         <h1>Your Challenge</h1>
-        <div class="meta">Lesson 1</div>
+        <div class="meta">Lesson 2 • Topic 4/4</div>
         <div class="explain">
-          Create a simple webpage using <strong>html</strong>, <strong>head</strong>, <strong>body</strong>, and nested tags. Add your name as the title and a short introduction inside the body.
+          Create your "About Me" page! Use h1 for name, h2 for sections, paragraphs for content, line breaks for addresses. Save as .html when done!
         </div>
         <div class="code">
-          <button class="copy-btn">Copy</button>
+          <button class="copy-btn">Copy Template</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
-  &lt;head&gt;
-    &lt;title&gt;[Your Name]&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Welcome to My Page&lt;/h1&gt;
-    &lt;p&gt;Hi! I'm [Your Name] and this is my first webpage.&lt;/p&gt;
-  &lt;/body&gt;
+&lt;head&gt;&lt;title&gt;About [Your Name]&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;[Your Full Name]&lt;/h1&gt;
+&lt;h2&gt;About Me&lt;/h2&gt;
+&lt;p&gt;I study at [Your School].&lt;/p&gt;
+&lt;p&gt;Address:&lt;br&gt;
+[Your Street]&lt;br&gt;
+[City, State]&lt;/p&gt;
+&lt;/body&gt;
 &lt;/html&gt;</pre>
         </div>
         <div class="demo">
-          <p>✨ Create Your Own Page:</p>
+          <p>✨ Build Your About Me Page:</p>
           <div class="editor-section">
-            <textarea class="editor-area" id="htmlEditor4"><h1>Welcome to My Page</h1><p>Hi! I'm [Your Name] and this is my first webpage.</p></textarea>
+            <textarea class="editor-area" id="htmlEditor4">
+&lt;h1&gt;[Your Full Name]&lt;/h1&gt;
+&lt;h2&gt;About Me&lt;/h2&gt;
+&lt;p&gt;I study HTML at school.&lt;/p&gt;
+&lt;p&gt;Address:&lt;br&gt;
+[Street Address]&lt;br&gt;
+[City, State ZIP]&lt;/p&gt;
+</textarea>
             <iframe class="preview-frame" id="preview4"></iframe>
           </div>
-          <button class="demo button" onclick="loadExample('topic-4')">Reset Template</button>
+          <button class="demo button" onclick="loadExample('t4')">Reset Template</button>
         </div>
       </article>
     </div>
@@ -544,12 +554,12 @@ document.querySelectorAll('.copy-btn').forEach(btn=>{
     });
 });
 
-// LIVE EDITOR FUNCTIONALITY
+// LIVE EDITOR FUNCTIONALITY - LESSON 2
 function updatePreview(editorId, previewId) {
   const editor = document.getElementById(editorId);
   const preview = document.getElementById(previewId);
   const html = editor.value;
-  preview.srcdoc = html;
+  preview.srcdoc = `<!DOCTYPE html><html><head><style>body{margin:20px;font-family:sans-serif;line-height:1.6;color:#333;}h1,h2,h3,h4,h5,h6{margin:16px 0 8px 0;}</style></head><body>${html}</body></html>`;
 }
 
 // Initialize all editors
@@ -559,6 +569,16 @@ function initEditors() {
     const preview = document.getElementById(`preview${i}`);
     
     editor.addEventListener('input', () => updatePreview(`htmlEditor${i}`, `preview${i}`));
+    editor.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch(e.key) {
+          case 'Enter':
+            e.preventDefault();
+            updatePreview(`htmlEditor${i}`, `preview${i}`);
+            break;
+        }
+      }
+    });
     
     // Initial load
     updatePreview(`htmlEditor${i}`, `preview${i}`);
@@ -567,14 +587,32 @@ function initEditors() {
 
 // Load lesson examples
 const examples = {
-  'topic-1': '<h1>Hello World!</h1>',
-  'topic-2': '<h1>Welcome!</h1><p>This shows up.</p>',
-  'topic-3': '<div><p>This is <strong>nested</strong> text.</p></div>',
-  'topic-4': '<h1>Welcome to My Page</h1><p>Hi! I\'m [Your Name] and this is my first webpage.</p>'
+  't1': `<h1>My Main Title</h1>
+<h2>My Section</h2>
+<h3>My Subsection</h3>
+<h4>Details</h4>
+<h5>Small text</h5>
+<h6>Tiny text</h6>`,
+  
+  't2': `<p>This is my first paragraph.</p>
+<p>This is my second paragraph with more text content.</p>
+<p>Paragraphs have automatic spacing!</p>`,
+  
+  't3': `<p>My Address:<br>
+[Your Name]<br>
+[Your Street]<br>
+[City, State ZIP]</p>`,
+  
+  't4': `<h1>[Your Full Name]</h1>
+<h2>About Me</h2>
+<p>I study HTML at school.</p>
+<p>Address:<br>
+[Street Address]<br>
+[City, State ZIP]</p>`
 };
 
 function loadExample(topic) {
-  const lessonNum = topic.replace('topic-', '');
+  const lessonNum = topic.replace('t', '');
   const editor = document.getElementById(`htmlEditor${lessonNum}`);
   editor.value = examples[topic];
   updatePreview(`htmlEditor${lessonNum}`, `preview${lessonNum}`);
