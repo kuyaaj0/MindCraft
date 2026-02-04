@@ -224,6 +224,75 @@ async function processXP(user, correctCount, totalCount, types) {
 }
 
 // ===============================
+// 🎉 XP Popup Display (fixed)
+// ===============================
+function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
+  const quizContainer = document.querySelector(".quiz-container");
+  if (quizContainer) {
+    quizContainer.style.transition = "opacity 0.6s ease";
+    quizContainer.style.opacity = "0";
+  }
+
+  setTimeout(() => {
+    if (quizContainer) quizContainer.style.display = "none";
+
+    // 🔧 Ensure popup exists & visible
+    xpPopup.style.display = "flex";
+    xpPopup.style.opacity = "0";
+    xpPopup.style.transition = "opacity 1s ease";
+    setTimeout(() => (xpPopup.style.opacity = "1"), 100);
+
+    const xpPercent = Math.min((currentXP / xpMax) * 100, 100).toFixed(1);
+
+    // 🎯 XP Info
+    if (alreadyCompleted) {
+      xpGain.textContent = "No XP gained — already completed!";
+      xpGain.style.color = "#ff7575";
+      xpBarFill.style.width = `${xpPercent}%`;
+      xpText.textContent = `${xpPercent}%`;
+    } else {
+      xpGain.textContent = `+${xp} XP Gained`;
+      xpGain.style.color = "#1DB954";
+      setTimeout(() => {
+        xpBarFill.style.width = `${xpPercent}%`;
+        xpText.textContent = `${xpPercent}%`;
+      }, 300);
+    }
+
+    // 🧾 Extra info below XP bar
+    const info = document.createElement("p");
+    info.id = "xpInfoText";
+    info.style.fontSize = "8px";
+    info.style.color = "#fff";
+    info.style.marginTop = "8px";
+    info.textContent = `Level ${currentLevel} • ${currentXP} / ${xpMax} XP`;
+    const oldInfo = document.getElementById("xpInfoText");
+    if (oldInfo) oldInfo.remove();
+    xpGain.insertAdjacentElement("afterend", info);
+
+    // 🌟 Level up animation
+    if (leveledUp) {
+      levelUpNotice.style.display = "block";
+      if (soundEnabled) levelUpSound.play();
+      if (vibrationEnabled && isMobile && navigator.vibrate) {
+        navigator.vibrate([250, 100, 250]);
+      }
+    } else {
+      levelUpNotice.style.display = "none";
+    }
+  }, 600);
+}
+
+// ===============================
+// 🔙 Back to Lobby (with fade-out)
+// ===============================
+backToLobby.addEventListener("click", () => {
+  xpPopup.style.transition = "opacity 0.8s ease";
+  xpPopup.style.opacity = "0";
+  setTimeout(() => (window.location.href = "../../../Webside/Student.html"), 800);
+});
+
+/*// ===============================
 // 🎉 XP Popup Display
 // ===============================
 function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
@@ -272,4 +341,4 @@ backToLobby.addEventListener("click", () => {
   xpPopup.style.transition = "opacity 1s ease";
   xpPopup.style.opacity = "0";
   setTimeout(() => (window.location.href = "../../../Webside/Student.html"), 1000);
-});
+});*/
