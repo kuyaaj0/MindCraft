@@ -13,35 +13,32 @@ html,body{height:100%}
 /* ===== WORLD BACKGROUND ===== */
 body{
   font-family:'JetBrains Mono', monospace;
-  background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:linear-gradient(#87e4ff,#c8f7b0);
   padding:20px;
   overflow:hidden;
   font-size:14px;
-  line-height:1.5;
+  line-height:1.4;
 }
 
 .exit-btn{
   position:fixed;
   top:20px;
   right:20px;
-  background:linear-gradient(145deg, #ff6b6b, #ee5a52);
+  background:#ff4d4d;
   color:#fff;
   text-decoration:none;
-  padding:12px 20px;
-  border-radius:12px;
-  box-shadow: 
-    0 8px 25px rgba(255,107,107,0.4),
-    inset 0 -3px 10px rgba(0,0,0,0.2);
+  font-family:'JetBrains Mono', monospace;
+  padding:10px 16px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 4px 0 #a30000;
   z-index:1000;
-  font-weight:500;
   font-size:13px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight:500;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 .exit-btn:hover{
-  transform: translateY(-3px);
-  box-shadow: 
-    0 12px 35px rgba(255,107,107,0.6),
-    inset 0 -3px 10px rgba(0,0,0,0.2);
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 6px 0 #a30000;
 }
 
 /* ===== MAIN APP ===== */
@@ -49,116 +46,111 @@ body{
   max-width:1200px;
   margin:0 auto;
   height:calc(100vh - 40px);
-  background:linear-gradient(145deg, #a8edea 0%, #fed6e3 100%);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
   border-radius:24px;
-  box-shadow:0 40px 80px rgba(0,0,0,0.3);
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
   display:grid;
-  grid-template-columns:280px 1fr;
-  gap:24px;
-  padding:24px;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
 }
 
 /* ===== SIDEBAR ===== */
 .sidebar{
-  background:linear-gradient(145deg, #ff9a9e 0%, #fecfef 100%);
-  border-radius:20px;
-  padding:24px;
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
   box-shadow:
-    inset -8px -8px 0 rgba(255,154,158,0.3),
-    0 12px 0 rgba(254,207,239,0.4);
-  color:#2c3e50;
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
   display:flex;
   flex-direction:column;
 }
 
 .brand h1{
-  font-size:22px;
+  font-size:18px;
   font-weight:700;
   text-align:center;
-  background:linear-gradient(45deg, #e74c3c, #f39c12);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  margin-bottom:8px;
+  text-shadow:2px 2px #000;
 }
 .brand p{
-  font-size:13px;
+  font-size:11px;
   text-align:center;
-  opacity:0.9;
+  opacity:.9;
+  margin-top:6px;
   font-weight:500;
 }
 
 /* ===== LESSON BUTTONS ===== */
 .lessons-list{
-  margin-top:24px;
+  margin-top:16px;
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:10px;
 }
 
 .lessons-list button{
-  background:linear-gradient(145deg, #f093fb 0%, #f5576c 100%);
-  border:3px solid rgba(255,255,255,0.6);
-  padding:16px 20px;
-  border-radius:16px;
+  background:#ffcc4d;
+  border:3px solid #e09c2b;
+  padding:12px 14px;
+  border-radius:10px;
   cursor:pointer;
-  color:#fff;
-  font-size:14px;
-  font-weight:600;
+  color:#3b2a15;
+  font-size:12px;
+  font-weight:500;
   display:flex;
-  gap:12px;
+  gap:8px;
   align-items:center;
   box-shadow:
-    0 8px 25px rgba(240,147,251,0.4),
-    inset 0 2px 4px rgba(255,255,255,0.3);
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
   text-transform:uppercase;
   letter-spacing:0.5px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
+  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .lessons-list button:hover{
-  transform: translateY(-4px) scale(1.02);
+  transform:translateY(-2px);
   box-shadow:
-    0 15px 35px rgba(240,147,251,0.6),
-    inset 0 2px 4px rgba(255,255,255,0.4);
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
+  background:#ffe38a;
 }
 
 .lessons-list button:active{
-  transform: translateY(-1px) scale(0.98);
+  transform:translateY(1px);
   box-shadow:
-    0 4px 15px rgba(240,147,251,0.3),
-    inset 0 2px 4px rgba(255,255,255,0.2);
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
 }
 
 .lessons-list button.active{
-  background:linear-gradient(145deg, #a8e6cf 0%, #88d8a3 100%);
-  box-shadow:
-    0 12px 30px rgba(168,230,207,0.5),
-    inset 0 2px 4px rgba(255,255,255,0.5);
+  background:#ffe89c;
+  border-color:#fff7c9;
 }
 
 .num{
-  background:linear-gradient(145deg, #667eea, #764ba2);
-  color:#fff;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:0 4px 15px rgba(102,126,234,0.4);
-  font-size:13px;
+  background:#3b2a15;
+  color:#ffd966;
+  padding:6px 9px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:11px;
   font-weight:700;
 }
 
 /* ===== CONTENT ===== */
 .content{
-  background:linear-gradient(145deg, #667eea 0%, #764ba2 100%);
-  border-radius:20px;
-  padding:24px;
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
   box-shadow:
-    inset -8px -8px 0 rgba(102,126,234,0.3),
-    0 12px 0 rgba(118,75,162,0.4);
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
   display:flex;
   flex-direction:column;
-  color:#fff;
 }
 
 /* ===== HEADER ===== */
@@ -166,43 +158,46 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:14px;
 }
 
 .content-head .title{
-  font-size:20px;
+  font-size:15px;
   font-weight:700;
-  text-shadow:0 2px 10px rgba(0,0,0,0.3);
+  text-shadow:1px 1px #fff;
 }
 
 /* ===== NAV BUTTONS ===== */
 .content-head button{
-  background:linear-gradient(145deg, #11998e, #38ef7d);
+  font-family:'JetBrains Mono', monospace;
+  background:#4e91ff;
   color:#fff;
-  border:3px solid rgba(255,255,255,0.3);
-  padding:12px 20px;
-  border-radius:12px;
+  border:3px solid #1f4fb8;
+  padding:8px 12px;
+  border-radius:8px;
   box-shadow:
-    0 8px 25px rgba(17,153,142,0.4),
-    inset 0 2px 4px rgba(255,255,255,0.2);
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
   cursor:pointer;
-  font-size:14px;
-  font-weight:600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size:12px;
+  font-weight:500;
+  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .content-head button:hover{
-  transform: translateY(-3px);
+  transform:translateY(-2px);
+  background:#6aa7ff;
   box-shadow:
-    0 15px 35px rgba(17,153,142,0.6),
-    inset 0 2px 4px rgba(255,255,255,0.3);
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
 }
 
 .content-head button:active{
-  transform: translateY(-1px);
+  transform:translateY(1px);
+  background:#3f7aed;
   box-shadow:
-    0 4px 15px rgba(17,153,142,0.3),
-    inset 0 2px 4px rgba(255,255,255,0.1);
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
 }
 
 /* ===== PANELS ===== */
@@ -214,7 +209,7 @@ body{
 .lesson-panel{
   position:absolute;
   inset:0;
-  padding:20px;
+  padding:16px;
   overflow:auto;
   display:none;
 }
@@ -222,47 +217,40 @@ body{
 .lesson-panel.visible{display:block}
 
 .lesson-panel h1{
-  font-size:26px;
+  font-size:18px;
   font-weight:700;
-  margin-bottom:12px;
-  background:linear-gradient(45deg, #fff, #f8f9fa);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  margin-bottom:8px;
 }
 
 .meta{
-  font-size:13px;
-  opacity:0.8;
-  margin-bottom:20px;
+  font-size:11px;
+  opacity:.7;
+  margin-bottom:16px;
   font-weight:500;
 }
 
 /* ===== BOXES ===== */
 .explain{
-  background:rgba(255,255,255,0.15);
-  backdrop-filter: blur(20px);
-  border:2px solid rgba(255,255,255,0.2);
-  padding:20px;
-  border-radius:20px;
-  margin-bottom:20px;
-  line-height:1.7;
-  font-size:15px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.1);
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:16px;
+  line-height:1.6;
+  font-size:13px;
 }
 
 .code{
-  background:rgba(30,30,30,0.9);
-  color:#00ff88;
-  padding:20px;
-  border-radius:20px;
-  margin-bottom:20px;
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:16px;
   overflow:auto;
   position:relative;
   font-family:'JetBrains Mono', monospace;
-  font-size:14px;
-  line-height:1.6;
-  box-shadow:0 8px 32px rgba(0,0,0,0.3);
+  font-size:12px;
+  line-height:1.5;
 }
 
 .code pre{
@@ -272,64 +260,74 @@ body{
 /* ===== COPY BUTTON ===== */
 .code button.copy-btn{
   position:absolute;
-  top:16px;
-  right:16px;
-  background:linear-gradient(145deg, #ffd23f, #ffed4e);
+  top:10px;
+  right:10px;
+  background:#ffd966;
   color:#000;
-  border:2px solid rgba(255,255,255,0.3);
-  padding:10px 16px;
-  border-radius:12px;
+  border:2px solid #b59b24;
+  padding:6px 10px;
+  border-radius:6px;
   cursor:pointer;
-  font-size:13px;
-  font-weight:600;
-  box-shadow:0 6px 20px rgba(255,210,63,0.4);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size:11px;
+  font-weight:500;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .code button.copy-btn:hover{
-  transform: translateY(-2px);
-  box-shadow:0 10px 30px rgba(255,210,63,0.6);
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 4px 0 #7a6515;
 }
 
 .code button.copy-btn:active{
-  transform: translateY(0);
-  box-shadow:0 3px 10px rgba(255,210,63,0.3);
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
 }
 
 .demo{
-  background:rgba(255,255,255,0.1);
-  backdrop-filter: blur(20px);
-  border:2px solid rgba(255,255,255,0.2);
-  padding:20px;
-  border-radius:20px;
-  margin-bottom:20px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.1);
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:16px;
 }
 
 /* ===== DEMO BUTTONS ===== */
 .demo button{
-  background:linear-gradient(145deg, #a8e6cf, #88d8a3);
-  color:#1a3c34;
-  border:3px solid rgba(255,255,255,0.4);
-  padding:14px 24px;
-  border-radius:16px;
+  font-family:'JetBrains Mono', monospace;
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:10px 14px;
+  border-radius:10px;
   box-shadow:
-    0 8px 25px rgba(168,230,207,0.4),
-    inset 0 2px 4px rgba(255,255,255,0.3);
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
   cursor:pointer;
-  font-size:14px;
-  font-weight:600;
+  font-size:12px;
+  font-weight:500;
   text-transform:uppercase;
   letter-spacing:0.5px;
-  margin-top:16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top:10px;
+  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 
 .demo button:hover{
-  transform: translateY(-3px);
+  transform:translateY(-2px);
+  background:#29e2aa;
   box-shadow:
-    0 15px 35px rgba(168,230,207,0.6),
-    inset 0 2px 4px rgba(255,255,255,0.4);
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -337,11 +335,7 @@ body{
   .app{
     grid-template-columns:1fr;
     grid-template-rows:auto 1fr;
-    gap:16px;
-    padding:16px;
   }
-  
-  body{font-size:13px;}
 }
 </style>
 </head>
@@ -379,12 +373,12 @@ body{
 
     <article id="t1" class="lesson-panel visible">
       <h1>HTML Headings</h1>
-      <div class="meta">Lesson 1 of 4</div>
+      <div class="meta">Lesson 2</div>
       <div class="explain">
-        Headings create structure for your page. Use <strong>h1 only once</strong> as your main title. Use h2–h6 for subsections. Search engines use headings to understand content hierarchy.
+        Headings structure your page. Use <strong>h1 once</strong>. h2–h6 are subsections. They help search engines understand your content hierarchy.
       </div>
       <div class="code">
-        <button class="copy-btn">Copy Code</button>
+        <button class="copy-btn">Copy</button>
 <pre>&lt;h1&gt;Main Title&lt;/h1&gt;
 &lt;h2&gt;Section&lt;/h2&gt;
 &lt;h3&gt;Subsection&lt;/h3&gt;
@@ -393,64 +387,62 @@ body{
 &lt;h6&gt;Tiny&lt;/h6&gt;</pre>
       </div>
       <div class="demo">
-        <p><strong>Live Demo:</strong></p>
-        <div style="background:rgba(255,255,255,0.95);padding:20px;border-radius:16px;color:#2c3e50;border-left:5px solid #38ef7d;">
-          <h1 style="margin:0 0 12px 0;">Main Title</h1>
-          <h2 style="margin:0 0 10px 0;">Section</h2>
-          <h3 style="margin:0 0 8px 0;">Subsection</h3>
-          <h4 style="margin:0 0 6px 0;">Detail</h4>
-          <h5 style="margin:0 0 4px 0;">Small</h5>
-          <h6 style="margin:0;">Tiny</h6>
+        <p>Live demo:</p>
+        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
+          <h1>Main Title</h1>
+          <h2>Section</h2>
+          <h3>Subsection</h3>
+          <h4>Detail</h4>
+          <h5>Small</h5>
+          <h6>Tiny</h6>
         </div>
       </div>
     </article>
 
     <article id="t2" class="lesson-panel">
       <h1>Paragraphs</h1>
-      <div class="meta">Lesson 2 of 4</div>
+      <div class="meta">Lesson 2</div>
       <div class="explain">
-        Use <code>&lt;p&gt;</code> tags for readable text blocks. Browsers automatically add space before and after paragraphs. Perfect for articles, descriptions, and content.
+        Paragraphs use the <code>&lt;p&gt;</code> tag for readable text blocks. Browsers add space before/after automatically.
       </div>
       <div class="code">
-        <button class="copy-btn">Copy Code</button>
+        <button class="copy-btn">Copy</button>
 <pre>&lt;p&gt;This is a paragraph.&lt;/p&gt;
-&lt;p&gt;Another paragraph with more text.&lt;/p&gt;</pre>
+&lt;p&gt;Another paragraph.&lt;/p&gt;</pre>
       </div>
       <div class="demo">
-        <div style="background:rgba(255,255,255,0.95);padding:20px;border-radius:16px;color:#2c3e50;border-left:5px solid #38ef7d;">
-          <p style="margin:0 0 16px 0;">This is a paragraph.</p>
-          <p style="margin:0;">Another paragraph with more text goes here.</p>
+        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
+          <p>This is a paragraph.</p>
+          <p>Another paragraph.</p>
         </div>
       </div>
     </article>
 
     <article id="t3" class="lesson-panel">
       <h1>Line Breaks</h1>
-      <div class="meta">Lesson 3 of 4</div>
+      <div class="meta">Lesson 2</div>
       <div class="explain">
-        <code>&lt;br&gt;</code> creates line breaks <strong>without paragraph spacing</strong>. Perfect for addresses, poems, song lyrics, or anywhere you need tight line control.
+        <code>&lt;br&gt;</code> creates a new line <strong>without paragraph spacing</strong>. Perfect for addresses, poems, or short breaks.
       </div>
       <div class="code">
-        <button class="copy-btn">Copy Code</button>
-<pre>&lt;p&gt;Line 1&lt;br&gt;
-Line 2&lt;br&gt;
-Line 3&lt;/p&gt;</pre>
+        <button class="copy-btn">Copy</button>
+<pre>&lt;p&gt;Line 1&lt;br&gt;Line 2&lt;br&gt;Line 3&lt;/p&gt;</pre>
       </div>
       <div class="demo">
-        <div style="background:rgba(255,255,255,0.95);padding:20px;border-radius:16px;color:#2c3e50;border-left:5px solid #38ef7d;">
-          <p style="margin:0;">Line 1<br>Line 2<br>Line 3</p>
+        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
+          <p>Line 1<br>Line 2<br>Line 3</p>
         </div>
       </div>
     </article>
 
     <article id="t4" class="lesson-panel">
       <h1>Your Challenge</h1>
-      <div class="meta">Lesson 4 of 4</div>
+      <div class="meta">Lesson 2</div>
       <div class="explain">
-        Create your own "About Me" webpage! Use h1 for your name, h2 for sections, paragraphs for content, and line breaks where needed. Save as .html and test it!
+        Build a mini page using headings and paragraphs. Create your own "About Me" page!
       </div>
       <div class="code">
-        <button class="copy-btn">Copy Template</button>
+        <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;About Me&lt;/title&gt;&lt;/head&gt;
@@ -458,17 +450,17 @@ Line 3&lt;/p&gt;</pre>
 &lt;h1&gt;[Your Name]&lt;/h1&gt;
 &lt;h2&gt;About Me&lt;/h2&gt;
 &lt;p&gt;I am learning HTML at school.&lt;/p&gt;
-&lt;p&gt;I like coding&lt;br&gt;and pixel art!&lt;/p&gt;
+&lt;p&gt;I like coding and pixel art!&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
       </div>
       <div class="demo">
-        <p><strong>Your Result:</strong></p>
-        <div style="background:rgba(255,255,255,0.95);padding:20px;border-radius:16px;color:#2c3e50;border-left:5px solid #38ef7d;">
-          <h1 style="margin:0 0 12px 0;">Your Name</h1>
-          <h2 style="margin:0 0 16px 0;">About Me</h2>
-          <p style="margin:0 0 16px 0;">I am learning HTML at school.</p>
-          <p style="margin:0;">I like coding<br>and pixel art!</p>
+        <p>Replace [Your Name] with your name!</p>
+        <div style="background:#fff;padding:16px;border-radius:12px;color:#000;">
+          <h1>Your Name</h1>
+          <h2>About Me</h2>
+          <p>I am learning HTML at school.</p>
+          <p>I like coding and pixel art!</p>
         </div>
       </div>
     </article>
@@ -500,34 +492,22 @@ const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').
 document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
 document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
 
-// Enhanced Copy buttons
+// Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const code = btn.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code).then(()=>{
-      const original = btn.innerText;
-      btn.innerText='✔ Copied!';
-      btn.style.background = 'linear-gradient(145deg, #00ff88, #00cc6a)';
-      btn.style.color = '#fff';
-      btn.style.transform = 'scale(0.95)';
-      setTimeout(()=>{
-        btn.innerText = original;
-        btn.style.background = '';
-        btn.style.color = '';
-        btn.style.transform = '';
-      }, 2000);
-    }).catch(err=>{
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = code;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      btn.innerText='✔ Copied!';
-      setTimeout(()=>btn.innerText='Copy Code', 2000);
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            const original = btn.innerText;
+            btn.innerText='✔ Copied!';
+            btn.style.background = '#00c98b';
+            btn.style.color = '#fff';
+            setTimeout(()=>{
+                btn.innerText = original;
+                btn.style.background = '';
+                btn.style.color = '';
+            }, 1500);
+        });
     });
-  });
 });
 </script>
 </body>
