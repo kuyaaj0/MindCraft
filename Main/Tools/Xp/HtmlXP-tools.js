@@ -129,6 +129,21 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
 
+    // 🧱 Ensure completedLevels exists for older accounts
+try {
+  const userRef = doc(db, "users", user.uid);
+  const snap = await getDoc(userRef);
+  if (snap.exists()) {
+    const data = snap.data();
+    if (!data.completedLevels) {
+      await updateDoc(userRef, { completedLevels: {} });
+      console.log("🆕 Added missing completedLevels for old user:", user.email);
+    }
+  }
+} catch (err) {
+  console.error("⚠️ Error ensuring completedLevels:", err);
+}
+
     console.log("✅ Authorized student:", user.email);
     attachXPSystem(user);
 
