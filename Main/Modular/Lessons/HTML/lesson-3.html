@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel HTML Lessons – Text Formatting</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<title>Pixel HTML Lessons • Text Formatting</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../Tools/Design/Html-Editor.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 
 body{
-  font-family:'Press Start 2P', cursive;
+  font-family:'JetBrains Mono', monospace;
   background:linear-gradient(#87e4ff,#c8f7b0);
   padding:20px;
   overflow:hidden;
@@ -24,12 +25,13 @@ body{
   background:#ff4d4d;
   color:#fff;
   text-decoration:none;
-  font-family:'Press Start 2P';
+  font-family:'JetBrains Mono', monospace;
   padding:6px 10px;
   border-radius:8px;
   box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
   z-index:1000;
   font-size:9px;
+  font-weight:500;
   transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 .exit-btn:hover{
@@ -64,11 +66,13 @@ body{
 
 .brand h1{
   font-size:14px;
+  font-weight:700;
   text-align:center;
   text-shadow:2px 2px #000;
 }
 .brand p{
   font-size:8px;
+  font-weight:500;
   text-align:center;
   opacity:.9;
   margin-top:6px;
@@ -89,6 +93,7 @@ body{
   cursor:pointer;
   color:#3b2a15;
   font-size:8px;
+  font-weight:500;
   display:flex;
   gap:8px;
   align-items:center;
@@ -108,6 +113,14 @@ body{
   background:#ffe38a;
 }
 
+.lessons-list button:active{
+  transform:translateY(1px);
+  box-shadow:
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
+  background:#f5b93a;
+}
+
 .lessons-list button.active{
   background:#ffe89c;
   border-color:#fff7c9;
@@ -120,6 +133,7 @@ body{
   border-radius:6px;
   box-shadow:0 2px 0 #1e1309;
   font-size:8px;
+  font-weight:700;
 }
 
 .content{
@@ -142,11 +156,12 @@ body{
 
 .content-head .title{
   font-size:12px;
+  font-weight:700;
   text-shadow:2px 2px #fff;
 }
 
 .content-head button{
-  font-family:'Press Start 2P';
+  font-family:'JetBrains Mono', monospace;
   background:#4e91ff;
   color:#fff;
   border:3px solid #1f4fb8;
@@ -157,12 +172,56 @@ body{
     0 4px 0 #0c1b3a;
   cursor:pointer;
   font-size:8px;
+  font-weight:500;
   transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .content-head button:hover{
   transform:translateY(-2px);
   background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
+
+.content-head button:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
+}
+
+.editor-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  height: 350px;
+  margin-top: 12px;
+}
+
+.editor-area {
+  background: #1e1e1e;
+  color: #00ff90;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  line-height: 1.4;
+}
+
+.preview-frame {
+  background: #fff;
+  border: 2px solid #6aa84f;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .panel-wrap{
@@ -182,11 +241,13 @@ body{
 
 .lesson-panel h1{
   font-size:14px;
+  font-weight:700;
   margin-bottom:6px;
 }
 
 .meta{
   font-size:8px;
+  font-weight:500;
   opacity:.7;
   margin-bottom:16px;
 }
@@ -194,64 +255,109 @@ body{
 .explain{
   background:#fff3cd;
   border:3px solid #c9a227;
-  padding:18px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:18px;
+  margin-bottom:14px;
   line-height:1.6;
-  font-size:9px;
+  font-size:10px;
 }
 
 .code{
   background:#1e1e1e;
   color:#00ff90;
-  padding:18px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:18px;
+  margin-bottom:14px;
   overflow:auto;
   position:relative;
+  font-family:'JetBrains Mono', monospace;
   font-size:9px;
-  line-height:1.5;
+  line-height:1.4;
+}
+
+.code pre{
+  margin:0;
 }
 
 .copy-btn{
   position:absolute;
-  top:10px;
-  right:10px;
+  top:8px;
+  right:8px;
   background:#ffd966;
   color:#000;
   border:2px solid #b59b24;
-  padding:6px 8px;
+  padding:4px 6px;
   border-radius:6px;
   cursor:pointer;
   font-size:7px;
+  font-weight:500;
   box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.copy-btn:hover{
+  transform:translateY(-1px);
+  background:#fff1a8;
+  box-shadow:0 3px 0 #7a6515;
+}
+
+.copy-btn:active{
+  transform:translateY(1px);
+  box-shadow:0 1px 0 #7a6515;
+  background:#f2c93a;
 }
 
 .demo{
   background:#d9ead3;
   border:3px solid #6aa84f;
-  padding:20px;
+  padding:14px;
   border-radius:12px;
-  margin-bottom:18px;
-  font-size:10px;
-  line-height:1.6;
+  margin-bottom:14px;
 }
 
-.demo pre {
-  background:#f0f8f0;
-  padding:12px;
-  border-radius:8px;
-  border-left:4px solid #6aa84f;
-  margin:12px 0;
-  font-size:9px;
-  white-space:pre-wrap;
-  overflow:auto;
+.demo button{
+  font-family:'JetBrains Mono', monospace;
+  background:#00c98b;
+  color:#003322;
+  border:3px solid #00805c;
+  padding:8px 12px;
+  border-radius:10px;
+  box-shadow:
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
+  cursor:pointer;
+  font-size:8px;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.demo button:hover{
+  transform:translateY(-2px);
+  background:#29e2aa;
+  box-shadow:
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
+}
+
+.demo button:active{
+  transform:translateY(1px);
+  background:#00b27a;
+  box-shadow:
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
 }
 
 @media(max-width:900px){
   .app{
     grid-template-columns:1fr;
     grid-template-rows:auto 1fr;
+  }
+  .editor-section {
+    grid-template-columns: 1fr;
+    height: 300px;
   }
 }
 </style>
@@ -262,7 +368,7 @@ body{
 <aside class="sidebar">
   <div class="brand">
     <h1>🧠 Pixel HTML</h1>
-    <p>Lesson 3</p>
+    <p>Text Formatting • Lesson 3</p>
   </div>
 
   <div class="lessons-list">
@@ -277,9 +383,7 @@ body{
 
 <main class="content">
   <div class="content-head">
-    <div class="container">
-        <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-    </div>
+    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
     <div class="title" id="panel-title">01 • Text Formatting</div>
     <div>
       <button id="prevLesson">◀</button>
@@ -292,7 +396,7 @@ body{
     <!-- TOPIC 1 -->
     <article id="topic-1" class="lesson-panel visible">
       <h1>Text Formatting</h1>
-      <div class="meta">Lesson 3</div>
+      <div class="meta">Lesson 3 • Topic 1/6</div>
       <div class="explain">
         HTML formatting tags make text <strong>BOLD</strong>, <em>ITALIC</em>, <small>small</small>, 
         add sub/superscripts like H<sub>2</sub>O, and handle <q>quotes</q> or <code>code snippets</code> perfectly!
@@ -311,16 +415,24 @@ body{
 &lt;/html&gt;</pre>
       </div>
       <div class="demo">
-        <pre>This is BOLD TEXT
-This is ITALIC TEXT
-Chemical: H₂O
-Math: x² + 2x</pre>
+        <p>✨ Practice Text Formatting:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor1">
+&lt;p&gt;This is &lt;strong&gt;BOLD TEXT&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This is &lt;em&gt;ITALIC TEXT&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Chemical: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+&lt;p&gt;Math: x&lt;sup&gt;2&lt;/sup&gt; + 2x&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview1"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-1')">Reset Example</button>
       </div>
     </article>
 
     <!-- TOPIC 2 -->
     <article id="topic-2" class="lesson-panel">
       <h1>Bold & Italic</h1>
+      <div class="meta">Lesson 3 • Topic 2/6</div>
       <div class="explain">
         <strong>&lt;strong&gt;</strong> shows importance (renders bold), 
         <em>&lt;em&gt;</em> shows emphasis (renders italic). 
@@ -328,28 +440,30 @@ Math: x² + 2x</pre>
       </div>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;body style="background:#000;color:#0f0;font-family:monospace;"&gt;
-  &lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
-  &lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
-  &lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
-  &lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
+&lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
+&lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;</pre>
       </div>
       <div class="demo">
-        <pre style="background:#000;color:#0f0;font-family:monospace;padding:15px;">
-PIXEL QUEST (BOLD)
-WARNING: Save often! (BOLD)
-I love making games! (ITALIC)
-Next level: very hard (ITALIC)</pre>
+        <p>✨ Practice Bold & Italic:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor2">
+&lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
+&lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
+&lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview2"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-2')">Reset Example</button>
       </div>
     </article>
 
     <!-- TOPIC 3 -->
     <article id="topic-3" class="lesson-panel">
       <h1>Sub/Sup Scripts</h1>
+      <div class="meta">Lesson 3 • Topic 3/6</div>
       <div class="explain">
         <sub>&lt;sub&gt;</sub> drops text below baseline, 
         <sup>&lt;sup&gt;</sup> raises it above - 
@@ -357,29 +471,31 @@ Next level: very hard (ITALIC)</pre>
       </div>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;body&gt;
-  &lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
-  &lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
-  &lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
-  &lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;
-  &lt;p&gt;Game score: Level&lt;sup&gt;5&lt;/sup&gt;&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+&lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
+&lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;
+&lt;p&gt;Game score: Level&lt;sup&gt;5&lt;/sup&gt;&lt;/p&gt;</pre>
       </div>
       <div class="demo">
-        <pre>Water: H₂O
-Carbon: CO₂
-Square: x²
-Power: 10³ = 1000
-Game score: Level⁵</pre>
+        <p>✨ Practice Sub/Sup Scripts:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor3">
+&lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
+&lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
+&lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview3"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-3')">Reset Example</button>
       </div>
     </article>
 
     <!-- TOPIC 4 -->
     <article id="topic-4" class="lesson-panel">
       <h1>Quotes & Code</h1>
+      <div class="meta">Lesson 3 • Topic 4/6</div>
       <div class="explain">
         <q>&lt;q&gt;</q> adds smart quotes automatically, 
         <code>&lt;code&gt;</code> shows monospace code text 
@@ -387,27 +503,29 @@ Game score: Level⁵</pre>
       </div>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;body&gt;
-  &lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
-  &lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
-  &lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;
-  &lt;p&gt;Code: &lt;code&gt;score += 100;&lt;/code&gt;&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
+&lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
+&lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Code: &lt;code&gt;score += 100;&lt;/code&gt;&lt;/p&gt;</pre>
       </div>
       <div class="demo">
-        <pre>Pixel says: "Code is magic!"
-Player says: "I won!"
-Try: alert("WIN!");
-Code: score += 100;</pre>
+        <p>✨ Practice Quotes & Code:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor4">
+&lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
+&lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
+&lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview4"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-4')">Reset Example</button>
       </div>
     </article>
 
     <!-- TOPIC 5 -->
     <article id="topic-5" class="lesson-panel">
       <h1>Small Text</h1>
+      <div class="meta">Lesson 3 • Topic 5/6</div>
       <div class="explain">
         <small>&lt;small&gt;</small> creates smaller text 
         for prices, timestamps, copyrights, 
@@ -415,34 +533,36 @@ Code: score += 100;</pre>
       </div>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;body&gt;
-  &lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
-  &lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
-  &lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;
-  &lt;footer&gt;&lt;small&gt;© 2026 Pixel Games PH&lt;/small&gt;&lt;/footer&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;
+&lt;footer&gt;&lt;small&gt;© 2026 Pixel Games PH&lt;/small&gt;&lt;/footer&gt;</pre>
       </div>
       <div class="demo">
-        <pre>Game Price: ₱199 + tax
-Pixels: 32x32 (small size)
-Updated: Jan 2026 (v1.2)
-© 2026 Pixel Games PH</pre>
+        <p>✨ Practice Small Text:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor5">
+&lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview5"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-5')">Reset Example</button>
       </div>
     </article>
 
     <!-- TOPIC 6 -->
     <article id="topic-6" class="lesson-panel">
       <h1>Your Challenge</h1>
+      <div class="meta">Lesson 3 • Topic 6/6</div>
       <div class="explain">
         Create YOUR pixel profile! Use <strong>name</strong>, <em>hobby</em>, 
         math formula (sub/sup), <q>quote</q>, <code>code</code>, 
         and <small>price</small> - make it 8+ lines!
       </div>
       <div class="code">
-        <button class="copy-btn">Copy</button>
+        <button class="copy-btn">Copy Template</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;&lt;title&gt;My Profile&lt;/title&gt;&lt;/head&gt;
@@ -457,13 +577,19 @@ Updated: Jan 2026 (v1.2)
 &lt;/html&gt;</pre>
       </div>
       <div class="demo">
-        <pre style="background:#111;color:#0ff;font-family:monospace;padding:20px;border-radius:8px;">
-[YOUR NAME] (BOLD)
-I LOVE CODING! (ITALIC)
-Score formula: points²
-"Pixels = Future!"
-Try: score++;
-Course: ₱299 student price</pre>
+        <p>✨ Build Your Pixel Profile:</p>
+        <div class="editor-section">
+          <textarea class="editor-area" id="htmlEditor6">
+&lt;h1&gt;&lt;strong&gt;[YOUR NAME]&lt;/strong&gt;&lt;/h1&gt;
+&lt;p&gt;I &lt;em&gt;LOVE CODING&lt;/em&gt;!&lt;/p&gt;
+&lt;p&gt;Score formula: points&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;q&gt;Pixels = Future!&lt;/q&gt;&lt;/p&gt;
+&lt;p&gt;Try: &lt;code&gt;score++;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Course: ₱299 &lt;small&gt;student price&lt;/small&gt;&lt;/p&gt;
+</textarea>
+          <iframe class="preview-frame" id="preview6"></iframe>
+        </div>
+        <button class="demo button" onclick="loadExample('topic-6')">Reset Template</button>
       </div>
     </article>
 
@@ -471,7 +597,9 @@ Course: ₱299 student price</pre>
 </main>
 </div>
 
+<script src="../../../Tools/Editor/Html-Editor.js"></script>
 <script>
+// Lesson navigation
 const buttons = document.querySelectorAll('.lessons-list button');
 const panels = document.querySelectorAll('.lesson-panel');
 const title = document.getElementById('panel-title');
@@ -482,7 +610,7 @@ function showLesson(id){
   document.getElementById(id).classList.add('visible');
   const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
   btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\\d+\\s+/, '');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
 }
 
 buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
@@ -492,6 +620,7 @@ const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').
 document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
 document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
 
+// Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
         const code = btn.nextElementSibling.innerText;
@@ -501,6 +630,70 @@ document.querySelectorAll('.copy-btn').forEach(btn=>{
         });
     });
 });
+
+// LIVE EDITOR FUNCTIONALITY - LESSON 3
+function updatePreview(editorId, previewId) {
+  const editor = document.getElementById(editorId);
+  const preview = document.getElementById(previewId);
+  const html = editor.value;
+  preview.srcdoc = `<!DOCTYPE html><html><head><style>body{margin:20px;font-family:sans-serif;line-height:1.6;color:#333;background:#f8f9fa;}h1,h2,h3,h4,h5,h6{margin:16px 0 8px 0;}pre{background:#e9ecef;padding:10px;border-radius:4px;}</style></head><body>${html}</body></html>`;
+}
+
+// Initialize all 6 editors
+function initEditors() {
+  for(let i = 1; i <= 6; i++) {
+    const editor = document.getElementById(`htmlEditor${i}`);
+    const preview = document.getElementById(`preview${i}`);
+    
+    editor.addEventListener('input', () => updatePreview(`htmlEditor${i}`, `preview${i}`));
+    
+    // Initial load
+    updatePreview(`htmlEditor${i}`, `preview${i}`);
+  }
+}
+
+// Load lesson examples
+const examples = {
+  'topic-1': `<p>This is <strong>BOLD TEXT</strong></p>
+<p>This is <em>ITALIC TEXT</em></p>
+<p>Chemical: H<sub>2</sub>O</p>
+<p>Math: x<sup>2</sup> + 2x</p>`,
+
+  'topic-2': `<h1><strong>PIXEL QUEST</strong></h1>
+<p><strong>WARNING:</strong> Save often!</p>
+<p>I <em>love</em> making games!</p>
+<p>Next level: <em>very hard</em></p>`,
+
+  'topic-3': `<p>Water: H<sub>2</sub>O</p>
+<p>Carbon: CO<sub>2</sub></p>
+<p>Square: x<sup>2</sup></p>
+<p>Power: 10<sup>3</sup> = 1000</p>`,
+
+  'topic-4': `<p>Pixel says: <q>Code is magic!</q></p>
+<p>Player says: <q>I won!</q></p>
+<p>Try: <code>alert("WIN!");</code></p>`,
+
+  'topic-5': `<p>Game Price: ₱199 <small>+ tax</small></p>
+<p>Pixels: 32x32 <small>(small size)</small></p>
+<p>Updated: Jan 2026 <small>(v1.2)</small></p>`,
+
+  'topic-6': `<h1><strong>[YOUR NAME]</strong></h1>
+<p>I <em>LOVE CODING</em>!</p>
+<p>Score formula: points<sup>2</sup></p>
+<p><q>Pixels = Future!</q></p>
+<p>Try: <code>score++;</code></p>
+<p>Course: ₱299 <small>student price</small></p>`
+};
+
+function loadExample(topic) {
+  const lessonNum = topic.replace('topic-', '');
+  const editor = document.getElementById(`htmlEditor${lessonNum}`);
+  editor.value = examples[topic];
+  updatePreview(`htmlEditor${lessonNum}`, `preview${lessonNum}`);
+}
+
+// Initialize everything when page loads
+document.addEventListener('DOMContentLoaded', initEditors);
 </script>
 </body>
 </html>
