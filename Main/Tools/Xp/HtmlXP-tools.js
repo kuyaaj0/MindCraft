@@ -1,7 +1,7 @@
 // ../../../Tools/XP/HtmlXP-tools.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===============================
 // 🔧 Firebase Configuration
@@ -24,8 +24,6 @@ const db = getFirestore(app);
 // ===============================
 const XP_MC = 5;   // XP for multiple choice
 const XP_FILL = 10; // XP for fill-in-the-blank
-
-// Detect level name from file (ex: level-2.html → "level-2")
 const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
 
 // ===============================
@@ -78,7 +76,7 @@ const backToLobby = document.getElementById("backToLobby");
 const levelUpNotice = document.getElementById("levelUpNotice");
 
 // ===============================
-// 🔊 Sound + Vibration Settings
+// 🔊 Sound + Vibration
 // ===============================
 const correctSound = new Audio("../../../Assets/Sounds/Correct.mp3");
 const wrongSound = new Audio("../../../Assets/Sounds/Incorrect.mp3");
@@ -89,7 +87,7 @@ const vibrationEnabled = localStorage.getItem("vibration") === "on";
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 // ===============================
-// 🔒 Authentication Check
+// 🔒 Authentication + Initialization
 // ===============================
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
@@ -99,14 +97,32 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   try {
-    const snap = await getDoc(doc(db, "users", user.uid));
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
     if (!snap.exists()) {
-      alert("⚠️ User data not found!");
-      window.location.href = "../../../Account/signin.html";
-      return;
+      // Create a new user document if missing
+      await setDoc(userRef, {
+        email: user.email,
+        role: "student",
+        xp: 0,
+        level: 1,
+        xpMax: 100,
+        completedLevels: {}
+      });
+      console.log("🆕 New user document created for:", user.email);
+    } else {
+      // ✅ Ensure completedLevels exists
+      const data = snap.data();
+      if (!data.completedLevels) {
+        await updateDoc(userRef, { completedLevels: {} });
+        console.log("🆕 Initialized completedLevels field for:", user.email);
+      }
     }
 
-    const role = snap.data().role || "student";
+    // Verify role
+    const updatedSnap = await getDoc(userRef);
+    const role = updatedSnap.data().role || "student";
     if (role !== "student") {
       alert("🚫 Only students can take this quiz!");
       window.location.href = "../../../Webside/Teacher.html";
@@ -124,7 +140,7 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ===============================
-// 🧩 XP System Link (Direct Trigger)
+// 🧩 XP System Link
 // ===============================
 function attachXPSystem(user) {
   window.handleQuizFinish = async ({ finalScore, totalQuestions, types }) => {
@@ -134,7 +150,7 @@ function attachXPSystem(user) {
 }
 
 // ===============================
-// 🧠 XP Processor Function
+// 🧠 XP Processor
 // ===============================
 async function processXP(user, correctCount, totalCount, types) {
   let xpEarned = 0;
@@ -156,8 +172,8 @@ async function processXP(user, correctCount, totalCount, types) {
     let xpMax = data.xpMax || 100;
     let completedLevels = data.completedLevels || {};
 
-    let alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
-    let gainedXP = alreadyCompleted ? 0 : xpEarned;
+    const alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
+    const gainedXP = alreadyCompleted ? 0 : xpEarned;
 
     if (!alreadyCompleted) {
       completedLevels[CURRENT_LEVEL] = true;
@@ -182,11 +198,8 @@ async function processXP(user, correctCount, totalCount, types) {
 
       localStorage.setItem(`${user.uid}_xp`, newXP);
       localStorage.setItem(`${user.uid}_level`, newLevel);
-
-      console.log(`✅ XP Saved: +${gainedXP} (Total: ${newXP}, Level: ${newLevel})`);
       showPopup(gainedXP, false, newXP, xpMax, newLevel, leveledUp);
     } else {
-      console.log(`🟡 XP not added — ${CURRENT_LEVEL} already completed`);
       showPopup(0, true, oldXP, xpMax, oldLevel, false);
     }
 
@@ -200,10 +213,10 @@ async function processXP(user, correctCount, totalCount, types) {
 // ===============================
 function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
   const quizContainer = document.querySelector(".quiz-container");
-  quizContainer.style.opacity = "0";
+  if (quizContainer) quizContainer.style.opacity = "0";
 
   setTimeout(() => {
-    quizContainer.style.display = "none";
+    if (quizContainer) quizContainer.style.display = "none";
     xpPopup.style.display = "flex";
 
     const xpPercent = Math.min((currentXP / xpMax) * 100, 100).toFixed(1);
@@ -238,7 +251,7 @@ function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveled
 }
 
 // ===============================
-// 🔙 Back to Lobby Button
+// 🔙 Back to Lobby
 // ===============================
 backToLobby.addEventListener("click", () => {
   xpPopup.style.transition = "opacity 1s ease";
