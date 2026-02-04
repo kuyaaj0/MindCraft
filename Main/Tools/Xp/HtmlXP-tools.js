@@ -15,7 +15,6 @@ const firebaseConfig = {
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -26,15 +25,12 @@ const db = getFirestore(app);
 const XP_MC = 5;   // XP for multiple choice
 const XP_FILL = 10; // XP for fill-in-the-blank
 
-// Auto-detect level name from the file name (e.g., level-3.html → "level-3")
+// Detect level name from file (ex: level-2.html → "level-2")
 const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
 
 // ===============================
-// 🎨 Popup Structure
+// 🎨 Popup Creation
 // ===============================
-const resultBox = document.getElementById("resultBox");
-const quizContainer = document.querySelector(".quiz-container");
-
 const popup = document.createElement("div");
 popup.id = "xpPopup";
 popup.innerHTML = `
@@ -47,8 +43,17 @@ popup.innerHTML = `
     
     <h2 style="color:#ffd966;">🎉 Level Complete!</h2>
     <p id="xpGain" style="color:#1DB954;font-size:10px;margin:8px 0;">+0 XP Gained</p>
-    <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;">
+    <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;position:relative;">
       <div id="xpBarFill" style="background:linear-gradient(90deg,#00ff90,#1DB954);width:0%;height:100%;transition:width 1.5s;"></div>
+      <span id="xpText" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:8px;color:#fff;">0%</span>
+    </div>
+    <div id="levelUpNotice" style="
+      display:none;
+      font-size:14px;
+      color:#ffd966;
+      text-shadow:2px 2px #000;
+      animation:pop 1s ease infinite alternate;">
+      🌟 LEVEL UP! 🌟
     </div>
     <button id="backToLobby" style="
       background:#ff6b35;color:#fff;border:none;
@@ -56,19 +61,29 @@ popup.innerHTML = `
       font-family:'Press Start 2P';cursor:pointer;
       margin-top:20px;">⬅ Back to Lobby</button>
   </div>
+  <style>
+    @keyframes pop {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1.2); opacity: 0.7; }
+    }
+  </style>
 `;
 document.body.appendChild(popup);
 
 const xpPopup = document.getElementById("xpPopup");
 const xpGain = document.getElementById("xpGain");
 const xpBarFill = document.getElementById("xpBarFill");
+const xpText = document.getElementById("xpText");
 const backToLobby = document.getElementById("backToLobby");
+const levelUpNotice = document.getElementById("levelUpNotice");
 
 // ===============================
-// 🔊 Sound + Vibration
+// 🔊 Sound + Vibration Settings
 // ===============================
 const correctSound = new Audio("../../../Assets/Sounds/Correct.mp3");
 const wrongSound = new Audio("../../../Assets/Sounds/Incorrect.mp3");
+const levelUpSound = new Audio("../../../Assets/Sounds/LevelUp.mp3");
+
 const soundEnabled = localStorage.getItem("sound") === "on";
 const vibrationEnabled = localStorage.getItem("vibration") === "on";
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -109,52 +124,27 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ===============================
-// 🧩 XP System Connection
+// 🧩 XP System Link (Direct Trigger)
 // ===============================
 function attachXPSystem(user) {
-  const observer = new MutationObserver((mutations) => {
-    for (let m of mutations) {
-      if (m.type === "childList" && resultBox.textContent.includes("FINAL SCORE")) {
-        handleQuizFinish(user);
-        observer.disconnect();
-        break;
-      }
-    }
-  });
-  observer.observe(resultBox, { childList: true, subtree: true });
+  window.handleQuizFinish = async ({ finalScore, totalQuestions, types }) => {
+    await processXP(user, finalScore, totalQuestions, types);
+  };
+  console.log("✅ XP system ready — waiting for quiz completion...");
 }
 
 // ===============================
-// 🧠 Handle Quiz Finish + XP
+// 🧠 XP Processor Function
 // ===============================
-async function handleQuizFinish(user) {
-  const text = resultBox.textContent;
-  const match = text.match(/FINAL SCORE:\s*(\d+)\s*\/\s*(\d+)/);
-  if (!match) return;
-
-  const correctCount = parseInt(match[1]);
-  const totalCount = parseInt(match[2]);
-
-  // Detect all question types from the quiz if available in window
-  // (It assumes your quiz defines a global `questions` array)
-  let xpEarnedRaw = 0;
-  if (window.questions && Array.isArray(window.questions)) {
-    // Use real types from your quiz array
-    const answeredCorrectly = window.questions.slice(0, correctCount);
-    for (let q of answeredCorrectly) {
-      if (q.type === "fill") xpEarnedRaw += XP_FILL;
-      else xpEarnedRaw += XP_MC;
-    }
-  } else {
-    // If we can’t detect question types, fallback evenly
-    const halfFill = Math.floor(totalCount / 2);
-    const estXP = Math.min(correctCount, halfFill) * XP_FILL + Math.max(0, correctCount - halfFill) * XP_MC;
-    xpEarnedRaw = estXP;
+async function processXP(user, correctCount, totalCount, types) {
+  let xpEarned = 0;
+  for (let i = 0; i < correctCount; i++) {
+    const qType = types[i] || "mc";
+    xpEarned += qType === "fill" ? XP_FILL : XP_MC;
   }
 
-  // Play effects
   if (soundEnabled) correctSound.play();
-  if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([150, 100, 150]);
+  if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([120, 80, 120]);
 
   try {
     const userRef = doc(db, "users", user.uid);
@@ -166,20 +156,21 @@ async function handleQuizFinish(user) {
     let xpMax = data.xpMax || 100;
     let completedLevels = data.completedLevels || {};
 
-    // 🛡 Prevent XP farming
     let alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
-    let xpEarned = alreadyCompleted ? 0 : xpEarnedRaw;
+    let gainedXP = alreadyCompleted ? 0 : xpEarned;
 
     if (!alreadyCompleted) {
       completedLevels[CURRENT_LEVEL] = true;
 
-      let newXP = oldXP + xpEarned;
+      let newXP = oldXP + gainedXP;
       let newLevel = oldLevel;
+      let leveledUp = false;
 
       while (newXP >= xpMax) {
         newXP -= xpMax;
         newLevel++;
         xpMax = Math.floor(xpMax * 1.1);
+        leveledUp = true;
       }
 
       await updateDoc(userRef, {
@@ -192,11 +183,11 @@ async function handleQuizFinish(user) {
       localStorage.setItem(`${user.uid}_xp`, newXP);
       localStorage.setItem(`${user.uid}_level`, newLevel);
 
-      console.log(`✅ XP Saved: +${xpEarned} (Total: ${newXP}, Level: ${newLevel})`);
-      showXPPopup(xpEarned, false);
+      console.log(`✅ XP Saved: +${gainedXP} (Total: ${newXP}, Level: ${newLevel})`);
+      showPopup(gainedXP, false, newXP, xpMax, newLevel, leveledUp);
     } else {
       console.log(`🟡 XP not added — ${CURRENT_LEVEL} already completed`);
-      showXPPopup(0, true);
+      showPopup(0, true, oldXP, xpMax, oldLevel, false);
     }
 
   } catch (err) {
@@ -207,24 +198,47 @@ async function handleQuizFinish(user) {
 // ===============================
 // 🎉 XP Popup Display
 // ===============================
-function showXPPopup(xpEarned, alreadyCompleted) {
+function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
+  const quizContainer = document.querySelector(".quiz-container");
   quizContainer.style.opacity = "0";
+
   setTimeout(() => {
     quizContainer.style.display = "none";
     xpPopup.style.display = "flex";
+
+    const xpPercent = Math.min((currentXP / xpMax) * 100, 100).toFixed(1);
+
     if (alreadyCompleted) {
       xpGain.textContent = "No XP gained — already completed!";
       xpGain.style.color = "#ff7575";
+      xpBarFill.style.width = `${xpPercent}%`;
+      xpText.textContent = `${xpPercent}%`;
     } else {
-      xpGain.textContent = `+${xpEarned} XP Gained`;
+      xpGain.textContent = `+${xp} XP Gained`;
       xpGain.style.color = "#1DB954";
-      setTimeout(() => (xpBarFill.style.width = "100%"), 300);
+      setTimeout(() => {
+        xpBarFill.style.width = `${xpPercent}%`;
+        xpText.textContent = `${xpPercent}%`;
+      }, 300);
+    }
+
+    const info = document.createElement("p");
+    info.style.fontSize = "8px";
+    info.style.color = "#fff";
+    info.style.marginTop = "8px";
+    info.textContent = `Level ${currentLevel} • ${currentXP} / ${xpMax} XP`;
+    xpGain.insertAdjacentElement("afterend", info);
+
+    if (leveledUp) {
+      levelUpNotice.style.display = "block";
+      if (soundEnabled) levelUpSound.play();
+      if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([250, 100, 250]);
     }
   }, 600);
 }
 
 // ===============================
-// 🔙 Back to Lobby
+// 🔙 Back to Lobby Button
 // ===============================
 backToLobby.addEventListener("click", () => {
   xpPopup.style.transition = "opacity 1s ease";
