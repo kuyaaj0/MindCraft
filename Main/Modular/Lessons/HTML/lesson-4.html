@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pixel HTML Lessons • Text Formatting</title>
+<title>Pixel HTML Lessons • Links</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -308,15 +308,15 @@ body{
 <aside class="sidebar">
   <div class="brand">
     <h1>🧠 Pixel HTML</h1>
-    <p>Text Formatting • Lesson 3</p>
+    <p>Links • Lesson 4</p>
   </div>
 
   <div class="lessons-list">
-    <button data-lesson="topic-1" class="active"><span class="num">01</span> Text Formatting</button>
-    <button data-lesson="topic-2"><span class="num">02</span> Bold & Italic</button>
-    <button data-lesson="topic-3"><span class="num">03</span> Sub/Sup Scripts</button>
-    <button data-lesson="topic-4"><span class="num">04</span> Quotes & Code</button>
-    <button data-lesson="topic-5"><span class="num">05</span> Small Text</button>
+    <button data-lesson="topic-1" class="active"><span class="num">01</span> Absolute/Relative URLs</button>
+    <button data-lesson="topic-2"><span class="num">02</span> Target Attribute</button>
+    <button data-lesson="topic-3"><span class="num">03</span> Download Links</button>
+    <button data-lesson="topic-4"><span class="num">04</span> Mailto Links</button>
+    <button data-lesson="topic-5"><span class="num">05</span> Mixed Links</button>
     <button data-lesson="topic-6"><span class="num">06</span> Your Challenge</button>
   </div>
 </aside>
@@ -324,7 +324,7 @@ body{
 <main class="content">
   <div class="content-head">
     <a href="../../../Webside/Student.html" class="exit-btn">❌ EXIT</a>
-    <div class="title" id="panel-title">01 • Text Formatting</div>
+    <div class="title" id="panel-title">01 • Absolute/Relative URLs</div>
     <div>
       <button id="prevLesson">◀</button>
       <button id="nextLesson">▶</button>
@@ -333,35 +333,34 @@ body{
 
   <div class="panel-wrap">
 
-    <!-- TOPIC 1 -->
+    <!-- TOPIC 1: Absolute/Relative URLs -->
     <article id="topic-1" class="lesson-panel visible">
-      <h1>Text Formatting</h1>
-      <div class="meta">Lesson 3 • Topic 1/6</div>
+      <h1>Absolute/Relative URLs</h1>
+      <div class="meta">Lesson 4 • Topic 1/6</div>
       <div class="explain">
-        HTML formatting tags make text <strong>BOLD</strong>, <em>ITALIC</em>, <small>small</small>, 
-        add sub/superscripts like H<sub>2</sub>O, and handle <q>quotes</q> or <code>code snippets</code> perfectly!
+        <strong>Absolute:</strong> Full URLs like <code>https://google.com</code><br>
+        <strong>Relative:</strong> Site paths like <code>about.html</code> or <code>images/logo.png</code><br>
+        Use relative for same website, absolute for external sites!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;&lt;title&gt;My Page&lt;/title&gt;&lt;/head&gt;
-&lt;body style="font-family:monospace;"&gt;
-  &lt;p&gt;This is &lt;strong&gt;BOLD TEXT&lt;/strong&gt;&lt;/p&gt;
-  &lt;p&gt;This is &lt;em&gt;ITALIC TEXT&lt;/em&gt;&lt;/p&gt;
-  &lt;p&gt;Chemical: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
-  &lt;p&gt;Math: x&lt;sup&gt;2&lt;/sup&gt; + 2x&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+<pre>&lt;!-- ABSOLUTE URLs --&gt;
+&lt;a href="https://google.com"&gt;Google&lt;/a&gt;
+&lt;a href="https://github.com"&gt;GitHub&lt;/a&gt;
+
+&lt;!-- RELATIVE URLs --&gt;
+&lt;a href="about.html"&gt;About&lt;/a&gt;
+&lt;a href="images/logo.png"&gt;Logo&lt;/a&gt;
+&lt;a href="level1.html"&gt;Level 1&lt;/a&gt;</pre>
       </div>
       <div class="demo">
         <p>✨ <strong>EDIT & TEST LIVE:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor1">
-&lt;p&gt;This is &lt;strong&gt;BOLD TEXT&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This is &lt;em&gt;ITALIC TEXT&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Chemical: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
-&lt;p&gt;Math: x&lt;sup&gt;2&lt;/sup&gt; + 2x&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://google.com"&gt;🌐 Google&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com"&gt;⭐ GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="about.html"&gt;📄 About Us&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="level1.html"&gt;▶ Level 1&lt;/a&gt;&lt;/p&gt;
 </textarea>
           <iframe class="preview-frame" id="preview1"></iframe>
         </div>
@@ -369,30 +368,36 @@ body{
       </div>
     </article>
 
-    <!-- TOPIC 2 -->
+    <!-- TOPIC 2: Target Attribute -->
     <article id="topic-2" class="lesson-panel">
-      <h1>Bold & Italic</h1>
-      <div class="meta">Lesson 3 • Topic 2/6</div>
+      <h1>Target Attribute</h1>
+      <div class="meta">Lesson 4 • Topic 2/6</div>
       <div class="explain">
-        <strong>&lt;strong&gt;</strong> shows importance (renders bold), 
-        <em>&lt;em&gt;</em> shows emphasis (renders italic). 
-        Perfect for pixel games and warnings!
+        <code>target="_blank"</code> opens link in NEW tab<br>
+        <code>target="_self"</code> opens in SAME tab (default)<br>
+        <code>target="_parent"</code> or <code>target="_top"</code> for frames!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy</button>
-<pre>&lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
-&lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
-&lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;</pre>
+<pre>&lt;a href="https://youtube.com" target="_blank"&gt;
+  YouTube (New Tab)
+&lt;/a&gt;
+
+&lt;a href="https://github.com" target="_self"&gt;
+  GitHub (Same Tab)
+&lt;/a&gt;
+
+&lt;a href="docs.html" target="_parent"&gt;
+  Documentation
+&lt;/a&gt;</pre>
       </div>
       <div class="demo">
         <p>✨ <strong>EDIT & TEST LIVE:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor2">
-&lt;h1&gt;&lt;strong&gt;PIXEL QUEST&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;WARNING:&lt;/strong&gt; Save often!&lt;/p&gt;
-&lt;p&gt;I &lt;em&gt;love&lt;/em&gt; making games!&lt;/p&gt;
-&lt;p&gt;Next level: &lt;em&gt;very hard&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://youtube.com" target="_blank"&gt;▶ YouTube (NEW TAB)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com"&gt;⭐ GitHub (SAME TAB)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="docs.html" target="_self"&gt;📚 Docs&lt;/a&gt;&lt;/p&gt;
 </textarea>
           <iframe class="preview-frame" id="preview2"></iframe>
         </div>
@@ -400,30 +405,36 @@ body{
       </div>
     </article>
 
-    <!-- TOPIC 3 -->
+    <!-- TOPIC 3: Download Links -->
     <article id="topic-3" class="lesson-panel">
-      <h1>Sub/Sup Scripts</h1>
-      <div class="meta">Lesson 3 • Topic 3/6</div>
+      <h1>Download Links</h1>
+      <div class="meta">Lesson 4 • Topic 3/6</div>
       <div class="explain">
-        <sub>&lt;sub&gt;</sub> drops text below baseline, 
-        <sup>&lt;sup&gt;</sup> raises it above - 
-        essential for math, chemistry, and game stats!
+        <code>download</code> attribute forces file DOWNLOAD instead of opening<br>
+        Works best with same-domain files: <code>game.zip</code>, <code>demo.apk</code><br>
+        Add <code>download="filename.zip"</code> to suggest name!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy</button>
-<pre>&lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
-&lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
-&lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;</pre>
+<pre>&lt;a href="game.zip" download&gt;
+  ⬇️ Download Game
+&lt;/a&gt;
+
+&lt;a href="demo.apk" download="PixelDemo.apk"&gt;
+  📱 Android Demo
+&lt;/a&gt;
+
+&lt;a href="level1.png" download&gt;
+  🖼️ Save Level Map
+&lt;/a&gt;</pre>
       </div>
       <div class="demo">
         <p>✨ <strong>EDIT & TEST LIVE:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor3">
-&lt;p&gt;Water: H&lt;sub&gt;2&lt;/sub&gt;O&lt;/p&gt;
-&lt;p&gt;Carbon: CO&lt;sub&gt;2&lt;/sub&gt;&lt;/p&gt;
-&lt;p&gt;Square: x&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;Power: 10&lt;sup&gt;3&lt;/sup&gt; = 1000&lt;/p&gt;
+&lt;p&gt;&lt;a href="game.zip" download&gt;⬇️ Download Game Demo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="demo.apk" download="PixelGame.apk"&gt;📱 Android Version&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="map.png" download="level1.png"&gt;🖼️ Game Map&lt;/a&gt;&lt;/p&gt;
 </textarea>
           <iframe class="preview-frame" id="preview3"></iframe>
         </div>
@@ -431,28 +442,36 @@ body{
       </div>
     </article>
 
-    <!-- TOPIC 4 -->
+    <!-- TOPIC 4: Mailto Links -->
     <article id="topic-4" class="lesson-panel">
-      <h1>Quotes & Code</h1>
-      <div class="meta">Lesson 3 • Topic 4/6</div>
+      <h1>Mailto Links</h1>
+      <div class="meta">Lesson 4 • Topic 4/6</div>
       <div class="explain">
-        <q>&lt;q&gt;</q> adds smart quotes automatically, 
-        <code>&lt;code&gt;</code> shows monospace code text 
-        - perfect for tutorials and game instructions!
+        <code>mailto:email@domain.com</code> opens email client<br>
+        Add params: <code>?subject=Title&cc=other@domain.com&body=Message</code><br>
+        Perfect for support, feedback, contact forms!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy</button>
-<pre>&lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
-&lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
-&lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;</pre>
+<pre>&lt;a href="mailto:support@pixelgames.ph"&gt;
+  📧 Email Support
+&lt;/a&gt;
+
+&lt;a href="mailto:bugs@pixelgames.ph?subject=Game Bug&amp;body=Describe issue..."&gt;
+  🐛 Report Bug
+&lt;/a&gt;
+
+&lt;a href="mailto:?subject=Game Feedback"&gt;
+  💬 Send Feedback
+&lt;/a&gt;</pre>
       </div>
       <div class="demo">
         <p>✨ <strong>EDIT & TEST LIVE:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor4">
-&lt;p&gt;Pixel says: &lt;q&gt;Code is magic!&lt;/q&gt;&lt;/p&gt;
-&lt;p&gt;Player says: &lt;q&gt;I won!&lt;/q&gt;&lt;/p&gt;
-&lt;p&gt;Try: &lt;code&gt;alert("WIN!");&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="mailto:support@pixelgames.ph"&gt;📧 Email Support&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="mailto:bugs@pixelgames.ph?subject=Bug Report"&gt;🐛 Report Bug&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="mailto:?subject=Game Feedback&amp;body=What do you think?"&gt;💬 Feedback&lt;/a&gt;&lt;/p&gt;
 </textarea>
           <iframe class="preview-frame" id="preview4"></iframe>
         </div>
@@ -460,28 +479,29 @@ body{
       </div>
     </article>
 
-    <!-- TOPIC 5 -->
+    <!-- TOPIC 5: Mixed Links -->
     <article id="topic-5" class="lesson-panel">
-      <h1>Small Text</h1>
-      <div class="meta">Lesson 3 • Topic 5/6</div>
+      <h1>Mixed Links</h1>
+      <div class="meta">Lesson 4 • Topic 5/6</div>
       <div class="explain">
-        <small>&lt;small&gt;</small> creates smaller text 
-        for prices, timestamps, copyrights, 
-        game disclaimers, and fine print!
+        Combine ALL link types! Use absolute/relative + target + download + mailto together.<br>
+        Real-world game websites use this mix for perfect navigation!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy</button>
-<pre>&lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;</pre>
+<pre>&lt;a href="https://github.com" target="_blank"&gt;⭐ GitHub&lt;/a&gt;
+&lt;a href="game.apk" download target="_blank"&gt;📱 APK&lt;/a&gt;
+&lt;a href="mailto:hi@pixelgames.ph?subject=Hi!"&gt;📧 Contact&lt;/a&gt;
+&lt;a href="level2.html"&gt;▶ Next Level&lt;/a&gt;</pre>
       </div>
       <div class="demo">
         <p>✨ <strong>EDIT & TEST LIVE:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor5">
-&lt;p&gt;Game Price: ₱199 &lt;small&gt;+ tax&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;Pixels: 32x32 &lt;small&gt;(small size)&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;Updated: Jan 2026 &lt;small&gt;(v1.2)&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://github.com" target="_blank"&gt;🌐 GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="game.apk" download&gt;⬇️ Download APK&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="mailto:hi@pixelgames.ph"&gt;📧 Contact&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="level2.html"&gt;▶ Level 2&lt;/a&gt;&lt;/p&gt;
 </textarea>
           <iframe class="preview-frame" id="preview5"></iframe>
         </div>
@@ -489,39 +509,51 @@ body{
       </div>
     </article>
 
-    <!-- TOPIC 6 - CHALLENGE (SAME FORMAT AS OTHERS) -->
+    <!-- TOPIC 6: CHALLENGE (SAME FORMAT) -->
     <article id="topic-6" class="lesson-panel">
       <h1>Your Challenge ★</h1>
-      <div class="meta">Lesson 3 • Topic 6/6</div>
+      <div class="meta">Lesson 4 • Topic 6/6</div>
       <div class="explain">
-        Create YOUR pixel profile using <strong>ALL</strong> formatting tags learned!<br>
-        Use: <strong>name</strong>, <em>hobby</em>, sub/superscripts, <q>quotes</q>, <code>code</code>, <small>price</small><br>
-        Make it 8+ lines and copy the final code!
+        Build COMPLETE Pixel Game Portal! Use ALL link types:<br>
+        ✅ 2x Absolute URLs<br>✅ 2x Relative URLs<br>✅ target="_blank"<br>✅ download<br>✅ mailto<br>
+        Style it pixel-perfect! Copy final code!
       </div>
       <div class="code">
         <button class="copy-btn">📋 Copy Template</button>
-<pre>&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;&lt;title&gt;My Profile&lt;/title&gt;&lt;/head&gt;
-&lt;body style="background:#111;color:#0ff;font-family:monospace;"&gt;
-  &lt;h1&gt;&lt;strong&gt;[YOUR NAME]&lt;/strong&gt;&lt;/h1&gt;
-  &lt;p&gt;I &lt;em&gt;LOVE CODING&lt;/em&gt;!&lt;/p&gt;
-  &lt;p&gt;Score: points&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
-  &lt;p&gt;&lt;q&gt;Pixels = Future!&lt;/q&gt;&lt;/p&gt;
-  &lt;p&gt;Code: &lt;code&gt;score++;&lt;/code&gt;&lt;/p&gt;
-  &lt;p&gt;₱299 &lt;small&gt;student price&lt;/small&gt;&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;</pre>
+<pre>&lt;style&gt;
+.portal-link {
+  display:block;
+  background:#4e91ff;
+  color:white;
+  padding:12px;
+  margin:8px 0;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:500;
+}
+.portal-link:hover { background:#6aa7ff; }
+&lt;/style&gt;
+
+&lt;h2&gt;🚀 Pixel Game Portal&lt;/h2&gt;
+&lt;a href="https://github.com" target="_blank" class="portal-link"&gt;⭐ GitHub&lt;/a&gt;
+&lt;a href="game.apk" download class="portal-link"&gt;⬇️ Download Game&lt;/a&gt;
+&lt;a href="mailto:support@pixelgames.ph" class="portal-link"&gt;📧 Support&lt;/a&gt;
+&lt;a href="level1.html" class="portal-link"&gt;▶ Play Level 1&lt;/a&gt;</pre>
       </div>
       <div class="demo">
-        <p>✨ <strong>EDIT & TEST LIVE - Build Your Profile!</strong></p>
+        <p>✨ <strong>BUILD YOUR GAME PORTAL:</strong></p>
         <div class="editor-section">
           <textarea class="editor-area" id="htmlEditor6">
-&lt;h1&gt;&lt;strong&gt;[YOUR NAME]&lt;/strong&gt;&lt;/h1&gt;
-&lt;p&gt;I &lt;em&gt;LOVE CODING&lt;/em&gt;!&lt;/p&gt;
-&lt;p&gt;Score formula: points&lt;sup&gt;2&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;q&gt;Pixels = Future!&lt;/q&gt;&lt;/p&gt;
-&lt;p&gt;Try: &lt;code&gt;score++;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Course: ₱299 &lt;small&gt;student price&lt;/small&gt;&lt;/p&gt;
+&lt;style&gt;
+a{display:block;background:#4e91ff;color:white;padding:12px;border-radius:8px;text-decoration:none;margin:6px 0;font-weight:500;}
+a:hover{background:#6aa7ff;}
+&lt;/style&gt;
+&lt;h2&gt;🚀 Pixel Game Portal&lt;/h2&gt;
+&lt;a href="https://github.com" target="_blank"&gt;⭐ GitHub&lt;/a&gt;
+&lt;a href="game.apk" download&gt;⬇️ Download Game&lt;/a&gt;
+&lt;a href="mailto:support@pixelgames.ph?subject=Help!"&gt;📧 Support&lt;/a&gt;
+&lt;a href="level1.html"&gt;▶ Play Game&lt;/a&gt;
+&lt;a href="about.html"&gt;ℹ️ About&lt;/a&gt;
 </textarea>
           <iframe class="preview-frame" id="preview6"></iframe>
         </div>
@@ -534,7 +566,7 @@ body{
 </div>
 
 <script>
-// Lesson navigation
+// Lesson navigation (identical to Lesson 3)
 const buttons = document.querySelectorAll('.lessons-list button');
 const panels = document.querySelectorAll('.lesson-panel');
 const title = document.getElementById('panel-title');
@@ -561,36 +593,29 @@ document.getElementById('nextLesson').onclick=()=>{
   if(i<order.length-1) showLesson(order[i+1]);
 };
 
-// LIVE EDITOR - FULLY FUNCTIONAL FOR ALL 6 LESSONS
+// LIVE EDITOR - Works for ALL 6 lessons
 function updatePreview(editorId, previewId) {
   const editor = document.getElementById(editorId);
   const preview = document.getElementById(previewId);
   preview.srcdoc = `
 <!DOCTYPE html>
 <html><head><style>
-body{margin:24px;font-family:'Segoe UI',sans-serif;line-height:1.6;
-color:#333;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);
-padding:24px;min-height:100vh;}
+body{margin:24px;font-family:'Segoe UI',sans-serif;line-height:1.6;color:#333;background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);padding:24px;min-height:100vh;}
 h1,h2,h3{color:#2c3e50;margin:24px 0 16px;font-weight:700;}
 p{margin:16px 0;}
-code{background:#e9ecef;padding:4px 8px;border-radius:6px;
-font-family:monospace;font-size:0.9em;color:#d63384;}
-strong{font-weight:700;color:#2d3748;}
-em{font-style:italic;color:#718096;}
-small{opacity:0.7;font-size:0.85em;}
-q{font-style:italic;}
+a{color:#4e91ff;text-decoration:none;font-weight:500;}
+a:hover{color:#ff6b6b;text-decoration:underline;}
+code{background:#e9ecef;padding:4px 8px;border-radius:6px;font-family:monospace;font-size:0.9em;}
 </style></head><body>${editor.value}</body></html>`;
 }
 
-// Initialize ALL 6 editors with live preview
 function initEditors() {
   for(let i=1; i<=6; i++) {
     const editor = document.getElementById(`htmlEditor${i}`);
     const preview = document.getElementById(`preview${i}`);
-    
     editor.addEventListener('input', ()=>updatePreview(`htmlEditor${i}`, `preview${i}`));
     editor.addEventListener('keydown', (e)=>{
-      if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){
+      if((e.ctrlKey||e.metaKey)&&e.key==='Enter') {
         e.preventDefault();
         updatePreview(`htmlEditor${i}`, `preview${i}`);
       }
@@ -599,14 +624,13 @@ function initEditors() {
   }
 }
 
-// Challenge examples
 const examples = {
-  'topic-1': `<p>This is <strong>BOLD TEXT</strong></p><p>This is <em>ITALIC TEXT</em></p><p>H<sub>2</sub>O</p><p>x<sup>2</sup></p>`,
-  'topic-2': `<h1><strong>PIXEL QUEST</strong></h1><p><strong>WARNING:</strong> Save!</p><p>I <em>love</em> games!</p>`,
-  'topic-3': `<p>H<sub>2</sub>O</p><p>CO<sub>2</sub></p><p>x<sup>2</sup></p><p>10<sup>3</sup>=1000</p>`,
-  'topic-4': `<p><q>Code is magic!</q></p><p><code>alert("WIN!")</code></p>`,
-  'topic-5': `<p>₱199 <small>+tax</small></p><p>32x32 <small>pixels</small></p>`,
-  'topic-6': `<h1><strong>[YOUR NAME]</strong></h1><p>I <em>LOVE CODING</em>!</p><p>points<sup>2</sup></p><p><q>Future!</q></p>`
+  'topic-1': `<p><a href="https://google.com">🌐 Google</a></p><p><a href="about.html">📄 About</a></p>`,
+  'topic-2': `<p><a href="https://youtube.com" target="_blank">▶ YouTube (NEW TAB)</a></p>`,
+  'topic-3': `<p><a href="game.apk" download>⬇️ Download APK</a></p>`,
+  'topic-4': `<p><a href="mailto:support@pixelgames.ph">📧 Support</a></p>`,
+  'topic-5': `<p><a href="https://github.com" target="_blank">🌐 GitHub</a></p><p><a href="game.apk" download>⬇️ APK</a></p>`,
+  'topic-6': `<style>a{display:block;background:#4e91ff;color:white;padding:12px;border-radius:8px;text-decoration:none;margin:6px 0;font-weight:500;}a:hover{background:#6aa7ff;}</style><h2>🚀 Pixel Game Portal</h2><a href="https://github.com" target="_blank">⭐ GitHub</a><a href="game.apk" download>⬇️ Download Game</a><a href="mailto:support@pixelgames.ph?subject=Help!">📧 Support</a><a href="level1.html">▶ Play Game</a>`
 };
 
 function loadExample(topic) {
@@ -615,7 +639,6 @@ function loadExample(topic) {
   updatePreview(`htmlEditor${num}`,`preview${num}`);
 }
 
-// Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
   btn.onclick=()=>{
     navigator.clipboard.writeText(btn.nextElementSibling.innerText).then(()=>{
