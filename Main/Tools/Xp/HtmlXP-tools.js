@@ -3,7 +3,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Firebase configuration (MindCraft project)
+// ===============================
+// 🔧 Firebase Configuration
+// ===============================
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -18,21 +20,28 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// === SETTINGS ===
-const XP_PER_CORRECT = 5;
+// ===============================
+// ⚙️ XP Settings
+// ===============================
+const XP_MC = 5;   // XP for multiple choice
+const XP_FILL = 10; // XP for fill-in-the-blank
 
-// === DOM ELEMENTS (existing from quiz) ===
+// Auto-detect level name from the file name (e.g., level-3.html → "level-3")
+const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
+
+// ===============================
+// 🎨 Popup Structure
+// ===============================
 const resultBox = document.getElementById("resultBox");
 const quizContainer = document.querySelector(".quiz-container");
 
-// Add popup overlay for XP result
 const popup = document.createElement("div");
 popup.id = "xpPopup";
 popup.innerHTML = `
   <div style="
     position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(0,0,0,0.85);display:none;
-    justify-content:center;align-items:center;
+    background:rgba(0,0,0,0.85);
+    display:none;justify-content:center;align-items:center;
     flex-direction:column;z-index:999;color:#fff;
     font-family:'Press Start 2P',cursive;text-align:center;">
     
@@ -55,14 +64,18 @@ const xpGain = document.getElementById("xpGain");
 const xpBarFill = document.getElementById("xpBarFill");
 const backToLobby = document.getElementById("backToLobby");
 
-// === SOUND + VIBRATION ===
+// ===============================
+// 🔊 Sound + Vibration
+// ===============================
 const correctSound = new Audio("../../../Assets/Sounds/Correct.mp3");
 const wrongSound = new Audio("../../../Assets/Sounds/Incorrect.mp3");
 const soundEnabled = localStorage.getItem("sound") === "on";
 const vibrationEnabled = localStorage.getItem("vibration") === "on";
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-// === AUTH CHECK ===
+// ===============================
+// 🔒 Authentication Check
+// ===============================
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("⚠️ You must be signed in to take this quiz!");
@@ -95,9 +108,10 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// === XP SYSTEM ===
+// ===============================
+// 🧩 XP System Connection
+// ===============================
 function attachXPSystem(user) {
-  // Observe when the quiz finishes (score appears)
   const observer = new MutationObserver((mutations) => {
     for (let m of mutations) {
       if (m.type === "childList" && resultBox.textContent.includes("FINAL SCORE")) {
@@ -110,19 +124,38 @@ function attachXPSystem(user) {
   observer.observe(resultBox, { childList: true, subtree: true });
 }
 
+// ===============================
+// 🧠 Handle Quiz Finish + XP
+// ===============================
 async function handleQuizFinish(user) {
   const text = resultBox.textContent;
   const match = text.match(/FINAL SCORE:\s*(\d+)\s*\/\s*(\d+)/);
   if (!match) return;
 
-  const correct = parseInt(match[1]);
-  const total = parseInt(match[2]);
-  const xpEarned = correct * XP_PER_CORRECT;
+  const correctCount = parseInt(match[1]);
+  const totalCount = parseInt(match[2]);
 
+  // Detect all question types from the quiz if available in window
+  // (It assumes your quiz defines a global `questions` array)
+  let xpEarnedRaw = 0;
+  if (window.questions && Array.isArray(window.questions)) {
+    // Use real types from your quiz array
+    const answeredCorrectly = window.questions.slice(0, correctCount);
+    for (let q of answeredCorrectly) {
+      if (q.type === "fill") xpEarnedRaw += XP_FILL;
+      else xpEarnedRaw += XP_MC;
+    }
+  } else {
+    // If we can’t detect question types, fallback evenly
+    const halfFill = Math.floor(totalCount / 2);
+    const estXP = Math.min(correctCount, halfFill) * XP_FILL + Math.max(0, correctCount - halfFill) * XP_MC;
+    xpEarnedRaw = estXP;
+  }
+
+  // Play effects
   if (soundEnabled) correctSound.play();
   if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([150, 100, 150]);
 
-  // Fetch and update XP data in Firestore
   try {
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
@@ -131,44 +164,68 @@ async function handleQuizFinish(user) {
     let oldXP = data.xp || 0;
     let oldLevel = data.level || 1;
     let xpMax = data.xpMax || 100;
+    let completedLevels = data.completedLevels || {};
 
-    let newXP = oldXP + xpEarned;
-    let newLevel = oldLevel;
+    // 🛡 Prevent XP farming
+    let alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
+    let xpEarned = alreadyCompleted ? 0 : xpEarnedRaw;
 
-    while (newXP >= xpMax) {
-      newXP -= xpMax;
-      newLevel++;
-      xpMax = Math.floor(xpMax * 1.1);
+    if (!alreadyCompleted) {
+      completedLevels[CURRENT_LEVEL] = true;
+
+      let newXP = oldXP + xpEarned;
+      let newLevel = oldLevel;
+
+      while (newXP >= xpMax) {
+        newXP -= xpMax;
+        newLevel++;
+        xpMax = Math.floor(xpMax * 1.1);
+      }
+
+      await updateDoc(userRef, {
+        xp: newXP,
+        level: newLevel,
+        xpMax: xpMax,
+        completedLevels: completedLevels
+      });
+
+      localStorage.setItem(`${user.uid}_xp`, newXP);
+      localStorage.setItem(`${user.uid}_level`, newLevel);
+
+      console.log(`✅ XP Saved: +${xpEarned} (Total: ${newXP}, Level: ${newLevel})`);
+      showXPPopup(xpEarned, false);
+    } else {
+      console.log(`🟡 XP not added — ${CURRENT_LEVEL} already completed`);
+      showXPPopup(0, true);
     }
-
-    await updateDoc(userRef, {
-      xp: newXP,
-      level: newLevel,
-      xpMax: xpMax
-    });
-
-    localStorage.setItem(`${user.uid}_xp`, newXP);
-    localStorage.setItem(`${user.uid}_level`, newLevel);
-
-    console.log(`✅ XP Saved: +${xpEarned} (Total: ${newXP}, Level: ${newLevel})`);
-    showXPPopup(xpEarned);
 
   } catch (err) {
     console.error("⚠️ Error updating XP:", err);
   }
 }
 
-// === XP POPUP ===
-function showXPPopup(xpEarned) {
+// ===============================
+// 🎉 XP Popup Display
+// ===============================
+function showXPPopup(xpEarned, alreadyCompleted) {
   quizContainer.style.opacity = "0";
   setTimeout(() => {
     quizContainer.style.display = "none";
     xpPopup.style.display = "flex";
-    xpGain.textContent = `+${xpEarned} XP Gained`;
-    setTimeout(() => (xpBarFill.style.width = "100%"), 300);
+    if (alreadyCompleted) {
+      xpGain.textContent = "No XP gained — already completed!";
+      xpGain.style.color = "#ff7575";
+    } else {
+      xpGain.textContent = `+${xpEarned} XP Gained`;
+      xpGain.style.color = "#1DB954";
+      setTimeout(() => (xpBarFill.style.width = "100%"), 300);
+    }
   }, 600);
 }
 
+// ===============================
+// 🔙 Back to Lobby
+// ===============================
 backToLobby.addEventListener("click", () => {
   xpPopup.style.transition = "opacity 1s ease";
   xpPopup.style.opacity = "0";
