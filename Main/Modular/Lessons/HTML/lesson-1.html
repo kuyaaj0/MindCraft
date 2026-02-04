@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HTML Lessons Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<title>Pixel HTML Lessons Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../Tools/Design/Html-Editor.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -12,33 +12,31 @@ html,body{height:100%}
 
 /* ===== WORLD BACKGROUND ===== */
 body{
-  font-family:'JetBrains Mono', monospace;
+  font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
   padding:20px;
   overflow:hidden;
-  font-size:14px;
-  line-height:1.4;
+  font-size:10px;
 }
 
 .exit-btn{
   position:fixed;
-  top:10px;
-  right:20px;
+  top:480px;
+  left:202px;
   background:#ff4d4d;
   color:#fff;
   text-decoration:none;
-  font-family:'JetBrains Mono', monospace;
-  padding:10px 16px;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
   border-radius:8px;
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 4px 0 #a30000;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
   z-index:1000;
-  font-weight:500;
-  font-size:13px;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 .exit-btn:hover{
   transform:translateY(-2px);
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 6px 0 #a30000;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
 }
 
 /* ===== MAIN APP ===== */
@@ -52,14 +50,14 @@ body{
   display:grid;
   grid-template-columns:260px 1fr;
   gap:18px;
-  padding:24px;
+  padding:18px;
 }
 
 /* ===== SIDEBAR ===== */
 .sidebar{
   background:#8b5a2b;
   border-radius:18px;
-  padding:24px;
+  padding:18px;
   box-shadow:
     inset -6px -6px 0 rgba(0,0,0,.25),
     0 8px 0 #5c3a1a;
@@ -69,85 +67,79 @@ body{
 }
 
 .brand h1{
-  font-size:20px;
-  font-weight:700;
+  font-size:14px;
   text-align:center;
   text-shadow:2px 2px #000;
-  margin-bottom:8px;
 }
 .brand p{
-  font-size:12px;
+  font-size:8px;
   text-align:center;
   opacity:.9;
+  margin-top:6px;
 }
 
-/* ===== LESSON BUTTONS ===== */
+/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
 .lessons-list{
-  margin-top:20px;
+  margin-top:16px;
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:10px;
 }
 
 .lessons-list button{
   background:#ffcc4d;
   border:3px solid #e09c2b;
-  padding:14px 16px;
-  border-radius:12px;
+  padding:10px 10px;
+  border-radius:10px;
   cursor:pointer;
   color:#3b2a15;
-  font-size:13px;
-  font-weight:500;
+  font-size:8px;
   display:flex;
-  gap:12px;
+  gap:8px;
   align-items:center;
   box-shadow:
-    0 4px 0 #b5741b,
-    0 6px 0 #3b2a15;
+    0 3px 0 #b5741b,
+    0 4px 0 #3b2a15;
   text-transform:uppercase;
-  letter-spacing:0.5px;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  letter-spacing:1px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .lessons-list button:hover{
   transform:translateY(-2px);
   box-shadow:
-    0 6px 0 #b5741b,
-    0 8px 0 #3b2a15;
+    0 5px 0 #b5741b,
+    0 6px 0 #3b2a15;
   background:#ffe38a;
 }
 
 .lessons-list button:active{
   transform:translateY(1px);
   box-shadow:
-    0 2px 0 #b5741b,
-    0 3px 0 #3b2a15;
+    0 1px 0 #b5741b,
+    0 2px 0 #3b2a15;
   background:#f5b93a;
 }
 
 .lessons-list button.active{
   background:#ffe89c;
   border-color:#fff7c9;
-  box-shadow:
-    0 6px 0 #b5741b,
-    0 8px 0 #3b2a15;
 }
 
 .num{
   background:#3b2a15;
   color:#ffd966;
-  padding:6px 10px;
-  border-radius:8px;
-  box-shadow:0 3px 0 #1e1309;
-  font-size:12px;
-  font-weight:700;
+  padding:4px 7px;
+  border-radius:6px;
+  box-shadow:0 2px 0 #1e1309;
+  font-size:8px;
 }
 
 /* ===== CONTENT ===== */
 .content{
   background:#e8f4ff;
   border-radius:18px;
-  padding:24px;
+  padding:16px;
   box-shadow:
     inset -6px -6px 0 rgba(0,0,0,.15),
     0 8px 0 #6fa8dc;
@@ -160,46 +152,44 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:14px;
 }
 
 .content-head .title{
-  font-size:18px;
-  font-weight:700;
-  text-shadow:1px 1px #fff;
+  font-size:12px;
+  text-shadow:2px 2px #fff;
 }
 
-/* ===== NAV BUTTONS ===== */
+/* ===== NAV BUTTONS - PIXEL STYLE ===== */
 .content-head button{
-  font-family:'JetBrains Mono', monospace;
+  font-family:'Press Start 2P';
   background:#4e91ff;
   color:#fff;
   border:3px solid #1f4fb8;
-  padding:10px 16px;
-  border-radius:10px;
+  padding:6px 10px;
+  border-radius:8px;
   box-shadow:
-    0 4px 0 #16347a,
-    0 5px 0 #0c1b3a;
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
   cursor:pointer;
-  font-size:14px;
-  font-weight:500;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .content-head button:hover{
   transform:translateY(-2px);
   background:#6aa7ff;
   box-shadow:
-    0 6px 0 #16347a,
-    0 7px 0 #0c1b3a;
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
 }
 
 .content-head button:active{
   transform:translateY(1px);
   background:#3f7aed;
   box-shadow:
-    0 2px 0 #16347a,
-    0 3px 0 #0c1b3a;
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
 }
 
 /* ===== PANELS ===== */
@@ -211,7 +201,7 @@ body{
 .lesson-panel{
   position:absolute;
   inset:0;
-  padding:20px;
+  padding:16px;
   overflow:auto;
   display:none;
 }
@@ -220,73 +210,61 @@ body{
 
 /* ===== LESSON CONTENT ===== */
 .lesson-panel h1{
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:12px;
+  font-size:14px;
+  margin-bottom:6px;
 }
 
 .lesson-panel h2{
-  font-size:18px;
-  font-weight:600;
-  margin-bottom:12px;
+  font-size:11px;
+  margin-bottom:8px;
 }
 
 .meta{
-  font-size:12px;
+  font-size:8px;
   opacity:.7;
-  margin-bottom:20px;
-  font-style:italic;
+  margin-bottom:16px;
 }
 
 /* ===== BOXES ===== */
 .explain{
   background:#fff3cd;
   border:3px solid #c9a227;
-  padding:20px;
-  border-radius:16px;
-  margin-bottom:20px;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
   line-height:1.6;
-  font-size:14px;
 }
 
 .code{
   background:#1e1e1e;
   color:#00ff90;
-  padding:20px;
-  border-radius:16px;
-  margin-bottom:20px;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
   overflow:auto;
   position:relative;
-  font-family:'JetBrains Mono', monospace;
-  font-size:13px;
-  line-height:1.5;
 }
 
-.code pre{
-  margin:0;
-}
-
-/* ===== COPY BUTTON ===== */
+/* ===== COPY BUTTON - PIXEL STYLE ===== */
 .code button.copy-btn{
   position:absolute;
-  top:12px;
-  right:12px;
+  top:8px;
+  right:8px;
   background:#ffd966;
   color:#000;
   border:2px solid #b59b24;
-  padding:8px 12px;
-  border-radius:8px;
+  padding:4px 6px;
+  border-radius:6px;
   cursor:pointer;
-  font-size:12px;
-  font-weight:500;
-  box-shadow:0 3px 0 #7a6515;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  font-size:7px;
+  box-shadow:0 2px 0 #7a6515;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .code button.copy-btn:hover{
-  transform:translateY(-2px);
+  transform:translateY(-1px);
   background:#fff1a8;
-  box-shadow:0 5px 0 #7a6515;
+  box-shadow:0 3px 0 #7a6515;
 }
 
 .code button.copy-btn:active{
@@ -298,45 +276,44 @@ body{
 .demo{
   background:#d9ead3;
   border:3px solid #6aa84f;
-  padding:20px;
-  border-radius:16px;
-  margin-bottom:20px;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
 }
 
-/* ===== DEMO BUTTONS ===== */
+/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
 .demo button{
-  font-family:'JetBrains Mono', monospace;
+  font-family:'Press Start 2P';
   background:#00c98b;
   color:#003322;
   border:3px solid #00805c;
-  padding:12px 18px;
-  border-radius:12px;
+  padding:8px 12px;
+  border-radius:10px;
   box-shadow:
-    0 4px 0 #00563f,
-    0 5px 0 #001f16;
+    0 3px 0 #00563f,
+    0 4px 0 #001f16;
   cursor:pointer;
-  font-size:13px;
-  font-weight:500;
+  font-size:8px;
   text-transform:uppercase;
-  letter-spacing:0.5px;
-  margin-top:12px;
-  transition:transform 0.15s, box-shadow 0.15s, background 0.15s;
+  letter-spacing:1px;
+  margin-top:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 .demo button:hover{
   transform:translateY(-2px);
   background:#29e2aa;
   box-shadow:
-    0 6px 0 #00563f,
-    0 7px 0 #001f16;
+    0 5px 0 #00563f,
+    0 6px 0 #001f16;
 }
 
 .demo button:active{
   transform:translateY(1px);
   background:#00b27a;
   box-shadow:
-    0 2px 0 #00563f,
-    0 3px 0 #001f16;
+    0 1px 0 #00563f,
+    0 2px 0 #001f16;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -344,18 +321,6 @@ body{
   .app{
     grid-template-columns:1fr;
     grid-template-rows:auto 1fr;
-    gap:12px;
-    padding:16px;
-  }
-  
-  body{font-size:13px;}
-  
-  .sidebar{padding:20px;}
-  .content{padding:20px;}
-  
-  .lessons-list button{
-    padding:12px 14px;
-    font-size:12px;
   }
 }
 </style>
@@ -365,7 +330,7 @@ body{
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
-      <h1>🧠 HTML Lessons</h1>
+      <h1>🧠 Pixel HTML</h1>
       <p>Page Setup & Text</p>
     </div>
     <div class="lessons-list">
@@ -390,12 +355,12 @@ body{
       <!-- TOPIC 1 -->
       <article id="topic-1" class="lesson-panel visible">
         <h1>HTML Structure</h1>
-        <div class="meta">Lesson 1 of 4</div>
+        <div class="meta">Lesson 1</div>
         <div class="explain">
-          HTML (HyperText Markup Language) gives structure to a web page. Every HTML file starts with a <strong>doctype</strong>, followed by <strong>html</strong>, <strong>head</strong>, and <strong>body</strong> tags. This is the basic skeleton every webpage needs.
+          HTML (HyperText Markup Language) gives structure to a web page. Every HTML file starts with a <strong>doctype</strong>, followed by <strong>html</strong>, <strong>head</strong>, and <strong>body</strong> tags.
         </div>
         <div class="code">
-          <button class="copy-btn">Copy Code</button>
+          <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
@@ -407,22 +372,22 @@ body{
 &lt;/html&gt;</pre>
         </div>
         <div class="demo">
-          <p><strong>Live Demo:</strong></p>
-          <div style="background:#fff;padding:20px;border-radius:12px;color:#000;border-left:5px solid #00c98b;">
-            <h1 style="margin:0 0 12px 0; color:#333;">Hello World!</h1>
+          <p>Try it below:</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Hello World!</h1>
           </div>
         </div>
       </article>
 
-      <!-- TOPIC 2 -->
+      <!-- TOPIC 2 - CORRECTED -->
       <article id="topic-2" class="lesson-panel">
         <h1>Head & Body</h1>
-        <div class="meta">Lesson 2 of 4</div>
+        <div class="meta">Lesson 1</div>
         <div class="explain">
-          The <strong>head</strong> contains <strong>invisible</strong> info like the page title (shows in browser tab) and CSS links. The <strong>body</strong> shows all <strong>visible content only</strong>. Head works behind the scenes, body is what users see.
+          The <strong>head</strong> contains <strong>invisible</strong> info (title, CSS links, meta). The <strong>body</strong> shows <strong>visible content only</strong>.
         </div>
         <div class="code">
-          <button class="copy-btn">Copy Code</button>
+          <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
@@ -437,33 +402,33 @@ body{
         </div>
         <div class="demo">
           <p><strong>Browser Result:</strong></p>
-          <div style="background:#fff;padding:20px;border-radius:12px;color:#000;border-left:5px solid #00c98b;">
-            <h1 style="margin:0 0 12px 0; color:#333;">Welcome!</h1>
-            <p style="margin:0;">This shows up.</p>
+          <div style="background:#fff;padding:12px;border-radius:8px;color:#000;border-left:4px solid #00c98b;">
+            <h1 style="margin:0 0 8px 0;">Welcome!</h1>
+            <p>This shows up.</p>
           </div>
-          <p style="font-size:12px;color:#666;margin-top:12px;">
-            <strong>Browser Tab shows:</strong> "My Webpage" 👆 (head works!)
+          <p style="font-size:7px;color:#666;margin-top:8px;">
+            <strong>Tab shows:</strong> "My Webpage" 👆 (head works!)
           </p>
-          <button onclick="alert('Head: Title=\'My Webpage\', CSS loaded\nBody: Welcome! + paragraph visible')">What Browser Sees</button>
+          <button onclick="alert('Head: Title=\\'My Webpage\\', CSS loaded\\nBody: Welcome! + paragraph visible')">What Browser Sees</button>
         </div>
       </article>
 
       <!-- TOPIC 3 -->
       <article id="topic-3" class="lesson-panel">
         <h1>Tags & Nesting</h1>
-        <div class="meta">Lesson 3 of 4</div>
+        <div class="meta">Lesson 1</div>
         <div class="explain">
-          HTML uses opening <code>&lt;tag&gt;</code> and closing <code>&lt;/tag&gt;</code> tags. Tags can be <strong>nested</strong> inside each other, but they must close in the correct order (like opening/closing brackets).
+          HTML uses opening and closing <strong>tags</strong>. Tags can be <strong>nested</strong> inside each other, but they must close in the correct order.
         </div>
         <div class="code">
-          <button class="copy-btn">Copy Code</button>
+          <button class="copy-btn">Copy</button>
 <pre>&lt;div&gt;
   &lt;p&gt;This is &lt;strong&gt;nested&lt;/strong&gt; text.&lt;/p&gt;
 &lt;/div&gt;</pre>
         </div>
         <div class="demo">
-          <div style="background:#fff;padding:20px;border-radius:12px;color:#000;border-left:5px solid #00c98b;">
-            <p style="margin:0;">This is <strong>nested</strong> text.</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <p>This is <strong>nested</strong> text.</p>
           </div>
         </div>
       </article>
@@ -471,16 +436,16 @@ body{
       <!-- TOPIC 4 -->
       <article id="topic-4" class="lesson-panel">
         <h1>Your Challenge</h1>
-        <div class="meta">Lesson 4 of 4</div>
+        <div class="meta">Lesson 1</div>
         <div class="explain">
-          Create a simple webpage using <strong>html</strong>, <strong>head</strong>, <strong>body</strong>, and nested tags. Add your name as the title and a short introduction inside the body. Test it by saving as .html and opening in browser!
+          Create a simple webpage using <strong>html</strong>, <strong>head</strong>, <strong>body</strong>, and nested tags. Add your name as the title and a short introduction inside the body.
         </div>
         <div class="code">
-          <button class="copy-btn">Copy Template</button>
+          <button class="copy-btn">Copy</button>
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;title&gt;[Your Name Here]&lt;/title&gt;
+    &lt;title&gt;[Your Name]&lt;/title&gt;
   &lt;/head&gt;
   &lt;body&gt;
     &lt;h1&gt;Welcome to My Page&lt;/h1&gt;
@@ -489,19 +454,18 @@ body{
 &lt;/html&gt;</pre>
         </div>
         <div class="demo">
-          <p><strong>Your Result Should Look Like:</strong></p>
-          <div style="background:#fff;padding:20px;border-radius:12px;color:#000;border-left:5px solid #00c98b;">
-            <h1 style="margin:0 0 12px 0; color:#333;">Welcome to My Page</h1>
-            <p style="margin:0;">Hi! I'm [Your Name] and this is my first webpage.</p>
+          <p>Replace [Your Name] with your actual name!</p>
+          <div style="background:#fff;padding:10px;border-radius:8px;color:#000;">
+            <h1>Welcome to My Page</h1>
+            <p>Hi! I'm [Your Name] and this is my first webpage.</p>
           </div>
-          <p style="font-size:12px;color:#666;">Replace [Your Name] → Save as .html → Open in browser!</p>
         </div>
       </article>
     </div>
   </main>
 </div>
 
-<script src="../../../Tools/Editor/Html-Editor.js"></script>
+  <script src="../../../Tools/Editor/Html-Editor.js"></script>
 <script>
 // Lesson navigation
 const buttons = document.querySelectorAll('.lessons-list button');
@@ -514,7 +478,7 @@ function showLesson(id){
   document.getElementById(id).classList.add('visible');
   const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
   btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '').replace(/^\[\d+\]/, '');
+  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\\d+\\s+/,'');
 }
 
 buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
@@ -524,54 +488,16 @@ const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').
 document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
 document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
 
-// Copy buttons - improved with fallback
+// Copy buttons
 document.querySelectorAll('.copy-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const codeBlock = btn.parentElement.querySelector('pre');
-    const code = codeBlock ? codeBlock.innerText : btn.parentElement.innerText;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(code).then(()=>{
-        const original = btn.innerText;
-        btn.innerText='✔ Copied!';
-        btn.style.background = '#00c98b';
-        btn.style.color = '#fff';
-        setTimeout(()=>{
-          btn.innerText = original;
-          btn.style.background = '';
-          btn.style.color = '';
-        }, 2000);
-      }).catch(()=>{
-        fallbackCopy(code, btn);
-      });
-    } else {
-      fallbackCopy(code, btn);
-    }
-  });
+    btn.addEventListener('click',()=>{
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(()=>{
+            btn.innerText='✔ Copied!';
+            setTimeout(()=>btn.innerText='Copy',1500);
+        });
+    });
 });
-
-function fallbackCopy(text, btn) {
-  const textArea = document.createElement('textarea');
-  textArea.value = text;
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-  try {
-    document.execCommand('copy');
-    const original = btn.innerText;
-    btn.innerText='✔ Copied!';
-    btn.style.background = '#00c98b';
-    btn.style.color = '#fff';
-    setTimeout(()=>{
-      btn.innerText = original;
-      btn.style.background = '';
-      btn.style.color = '';
-      document.body.removeChild(textArea);
-    }, 2000);
-  } catch(err) {
-    btn.innerText = 'Failed to copy';
-    setTimeout(()=>btn.innerText='Copy Code', 2000);
-  }
-}
 </script>
 </body>
 </html>
