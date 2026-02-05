@@ -196,6 +196,8 @@
     </div>
 </div>
 
+<script type="module" src="../../../Tools/Xp/HtmlXP-tools.js"></script>
+
 <script>
 const STORAGE_KEY = 'mindcraft_js_lesson4_quiz';
 
@@ -318,12 +320,36 @@ function updateUI(){
 
 function finishQuiz(){
     if(quizCompleted) return;
-    saveCurrentAnswer();
     quizCompleted=true;
     currentIndex=questions.length-1;
-    if(timerInterval){ clearInterval(timerInterval); timerInterval=null; }
+    saveCurrentAnswer();
+    if(timerInterval){ 
+      clearInterval(timerInterval); 
+      timerInterval=null; 
+    }
+    const total=questions.length;
+    const score=calculateScore();
+    const percentage=Math.round((score/total)*100);
+    resultBox.innerHTML=`
+      <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+      <span style="font-size:8px;">${percentage}% - HTML basics mastery logged!</span>
+    `;
     updateUI();
+    console.log("🧪 HTML Lesson 1 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+
+    // 🚀 Notify XP system that quiz is finished
+if (window.handleQuizFinish) {
+  try {
+    window.handleQuizFinish({ 
+      finalScore: score, 
+      totalQuestions: total, 
+      types: questions.map(q => q.type) 
+    });
+  } catch (err) {
+    console.error("XP system notification failed:", err);
+  }
 }
+    }
 
 nextBtn.addEventListener("click", ()=>{
     if(quizCompleted) return;
@@ -339,3 +365,4 @@ updateUI(); startTimer();
 </script>
 </body>
 </html>
+
