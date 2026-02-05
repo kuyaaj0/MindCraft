@@ -409,16 +409,50 @@ main {
   background: rgba(29,185,84,0.2);
 }
 
+.lesson-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.lesson-list {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.95);
+  border: 2px solid #1DB954;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px 4px;
+}
+.lesson-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  text-align:center;
+}
+.lesson-list button:hover {
+  background: rgba(29,185,84,0.2);
+}
+
+
 /* === Footer === */
 footer {
-  background: rgba(0, 0, 0, 0.4);
-  text-align: center;
-  font-size: 0.6rem;
-  padding: 6px 0;
-  color: #fff;
-  width: 100vw;
-  border-top: 1px solid rgba(29,185,84,0.4);
   margin-top: auto;
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(29,185,84,0.4);
+  color: #fff;
+  text-align: center;
+  padding: 6px 0;
+  width: 100%;
+  font-size: 0.6rem;
 }
 
   /* === Welcome Overlay === */
@@ -602,8 +636,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Populate HTML, CSS, JS lessons and quizzes
   ["html", "css", "js"].forEach(lang => {
-    populateOptions(lang, 20, "Lessons", lang.toUpperCase());
-    populateOptions(lang, 20, "Quizzes", lang.toUpperCase());
+    populateOptions(lang, 5, "Lessons", lang.toUpperCase());
+    populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
   });
 
   /* =========================================================
@@ -1096,10 +1130,15 @@ onAuthStateChanged(auth, (user) => {
     const welcomeOverlay = document.getElementById("welcomeOverlay");
     applyThemeToWelcomeOverlay();
     if (!sessionStorage.getItem("welcomeShown")) {
-      sessionStorage.setItem("welcomeShown", "true");
-      welcomeOverlay.style.display = "flex";
-      setTimeout(() => (welcomeOverlay.style.display = "none"), 3000);
-    }
+  sessionStorage.setItem("welcomeShown", "true");
+  welcomeOverlay.style.display = "flex";
+
+  // 🌟 Fade out smoothly after 3 seconds
+  setTimeout(() => {
+    welcomeOverlay.classList.add("fade-out");
+    setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
+  }, 3000);
+}
 
     const rankDisplay = document.getElementById("rankDisplay");
     const usersRef = collection(db, "users");
