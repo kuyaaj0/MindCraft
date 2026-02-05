@@ -17,148 +17,97 @@ html,body{
 
 body{
   font-family:'Press Start 2P', cursive;
-  background:linear-gradient(180deg,#87e4ff 0%, #bdf3ff 40%, #c8f7b0 100%);
-  overflow:hidden;
-  position:relative;
+  background:linear-gradient(180deg,#87e4ff 0%, #c8f7b0 100%);
 }
 
-/* === SOFT CLOUD BACKGROUND === */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:url('https://i.imgur.com/9QZ7Z6F.png');
-  background-size:cover;
-  opacity:.15;
-  animation:cloudMove 60s linear infinite;
-}
-
-@keyframes cloudMove{
-  from{background-position:0 0}
-  to{background-position:1000px 0}
-}
-
-/* === FULLSCREEN CONTAINER === */
+/* === TRUE FULLSCREEN === */
 .home-container{
   width:100vw;
   height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:20px;
 }
 
-/* === GLASS PANEL === */
 .home-content{
   width:100%;
-  max-width:700px;
-  height:auto;
-  min-height:500px;
-  background:linear-gradient(180deg,#8fe9ffcc,#7dd37dcc);
-  backdrop-filter:blur(10px);
-  border-radius:30px;
+  height:100%;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:flex-start;
   text-align:center;
-  padding:80px 40px 50px;
-  box-shadow:
-    0 30px 80px rgba(0,0,0,.25),
-    inset 0 0 40px rgba(255,255,255,.25);
-  border:3px solid rgba(255,255,255,.4);
+  padding-top:120px; /* pushes title higher */
 }
 
 /* === TITLE === */
 .home-title{
   font-size:22px;
   color:#065f2c;
-  text-shadow:
-    3px 3px #ffffff,
-    6px 6px rgba(0,0,0,.15);
-  margin-bottom:18px;
-  letter-spacing:2px;
+  text-shadow:3px 3px #ffffff;
+  margin-bottom:20px;
 }
 
 .home-sub{
   font-size:9px;
   margin-bottom:50px;
   color:#145214;
-  opacity:.9;
 }
 
-/* === BUTTON BASE === */
+/* === BUTTONS === */
 button{
   font-family:'Press Start 2P', cursive;
+  background:#a56b34;
+  color:#fff;
   border:none;
   padding:16px 28px;
-  border-radius:18px;
+  border-radius:16px;
   font-size:9px;
   cursor:pointer;
-  min-width:230px;
+  min-width:220px;
   margin:8px 0;
-  transition:all .15s ease;
-}
-
-/* START BUTTON */
-#getStartedBtn{
-  background:linear-gradient(#a56b34,#7a4a22);
-  color:#fff;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 8px 0 #5c3a1a,
-    0 12px 20px rgba(0,0,0,.25);
+    0 6px 0 #5c3a1a;
+  transition:transform .1s;
 }
 
-#getStartedBtn:hover{
-  transform:translateY(-3px) scale(1.03);
+button:hover{
+  transform:translateY(-2px);
 }
 
 /* SETTINGS BUTTON */
 .settings-btn{
-  background:linear-gradient(#4c7dff,#2a4ed1);
-  color:#fff;
+  background:#4c7dff;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 8px 0 #1f3ea8,
-    0 12px 20px rgba(0,0,0,.25);
+    0 6px 0 #1f3ea8;
 }
 
-.settings-btn:hover{
-  transform:translateY(-3px) scale(1.03);
-}
-
-/* AUTH BUTTONS */
+/* AUTH */
 .auth-section{
   display:none;
-  gap:18px;
-  margin-top:30px;
+  gap:16px;
+  margin-top:24px;
   flex-wrap:wrap;
   justify-content:center;
 }
 
 .auth-section button{
-  background:linear-gradient(#ffd966,#d4af37);
-  color:#3a2a00;
+  background:#d4af37;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 8px 0 #b8860b,
-    0 12px 20px rgba(0,0,0,.25);
+    0 6px 0 #b8860b;
 }
 
-.auth-section button:hover{
-  transform:translateY(-3px) scale(1.03);
-}
-
-/* === FOOTER === */
+/* FOOTER */
 footer{
   position:absolute;
-  bottom:14px;
+  bottom:12px;
   width:100%;
   text-align:center;
   font-size:6px;
   color:#145214;
-  opacity:.8;
 }
 </style>
 </head>
