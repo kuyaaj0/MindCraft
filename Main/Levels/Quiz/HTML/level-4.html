@@ -262,6 +262,8 @@
   </div>
 </div>
 
+<script type="module" src="../../../Tools/Xp/HtmlXP-tools.js"></script>
+
 <script>
   // LESSON 1 JAVASCRIPT - LESSON 4 LINKS QUESTIONS
   const TOTAL_TIME_SECONDS = 10 * 60;
@@ -413,10 +415,23 @@
     const percentage=Math.round((score/total)*100);
     resultBox.innerHTML=`
       <strong>FINAL SCORE: ${score} / ${total}</strong><br>
-      <span style="font-size:8px;">${percentage}% - Links mastery logged!</span>
+      <span style="font-size:8px;">${percentage}% - HTML basics mastery logged!</span>
     `;
     updateUI();
-    console.log("🧪 CSS Lesson 4 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+    console.log("🧪 HTML Lesson 1 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+
+    // 🚀 Notify XP system that quiz is finished
+if (window.handleQuizFinish) {
+  try {
+    window.handleQuizFinish({ 
+      finalScore: score, 
+      totalQuestions: total, 
+      types: questions.map(q => q.type) 
+    });
+  } catch (err) {
+    console.error("XP system notification failed:", err);
+  }
+}
   }
 
   // Event Listeners
@@ -442,3 +457,4 @@
 </script>
 </body>
 </html>
+
