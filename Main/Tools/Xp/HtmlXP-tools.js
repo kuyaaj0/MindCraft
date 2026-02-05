@@ -29,7 +29,7 @@ const XP_FILL = 10; // XP for fill-in-the-blank
 const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
 
 // ===============================
-// 🎨 Popup Creation
+// 🎨 Styles + Animations
 // ===============================
 const style = document.createElement("style");
 style.textContent = `
@@ -46,33 +46,53 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-const popup = document.createElement("div");
-popup.id = "xpPopup";
-popup.innerHTML = `
-  <div style="
-    position:fixed;top:0;left:0;width:100%;height:100%;
-    background:rgba(0,0,0,0.85);
-    display:none;justify-content:center;align-items:center;
-    flex-direction:column;z-index:999;color:#fff;
-    font-family:'Press Start 2P',cursive;text-align:center;">
-    
-    <h2 style="color:#ffd966;">🎉 Level Complete!</h2>
-    <p id="xpGain" style="color:#1DB954;font-size:10px;margin:8px 0;">+0 XP Gained</p>
-    <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;">
-      <div id="xpBarFill" style="background:linear-gradient(90deg,#00ff90,#1DB954);width:0%;height:100%;transition:width 1.5s;"></div>
+// ===============================
+// 🎉 Create XP Popup
+// ===============================
+function createPopup() {
+  const popup = document.createElement("div");
+  popup.id = "xpPopup";
+  popup.style.display = "none";
+  popup.innerHTML = `
+    <div style="
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.85);
+      display:flex;justify-content:center;align-items:center;
+      flex-direction:column;z-index:999;color:#fff;
+      font-family:'Press Start 2P',cursive;text-align:center;
+      animation: fadeIn 1s ease;">
+      
+      <h2 style="color:#ffd966;">🎉 Level Complete!</h2>
+      <p id="xpGain" style="color:#1DB954;font-size:10px;margin:8px 0;">+0 XP Gained</p>
+      <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;">
+        <div id="xpBarFill" style="background:linear-gradient(90deg,#00ff90,#1DB954);width:0%;height:100%;transition:width 1.5s;"></div>
+      </div>
+      <p id="xpInfoText" style="font-size:8px;color:#ccc;">Loading...</p>
+      <p id="levelUpNotice" style="display:none;color:#ffd700;font-size:9px;">⬆ Level Up!</p>
+      <button id="backToLobby" style="
+        background:#ff6b35;color:#fff;border:none;
+        border-radius:8px;padding:10px 16px;
+        font-family:'Press Start 2P';cursor:pointer;
+        margin-top:20px;">⬅ Back to Lobby</button>
     </div>
-    <p id="xpInfoText" style="font-size:8px;color:#ccc;">Loading...</p>
-    <p id="levelUpNotice" style="display:none;color:#ffd700;font-size:9px;">⬆ Level Up!</p>
-    <button id="backToLobby" style="
-      background:#ff6b35;color:#fff;border:none;
-      border-radius:8px;padding:10px 16px;
-      font-family:'Press Start 2P';cursor:pointer;
-      margin-top:20px;">⬅ Back to Lobby</button>
-  </div>
-`;
-document.body.appendChild(popup);
+  `;
+  document.body.appendChild(popup);
 
-const xpPopup = document.getElementById("xpPopup");
+  // ✅ Attach button click directly after creation
+  const backBtn = popup.querySelector("#backToLobby");
+  backBtn.addEventListener("click", () => {
+    const inner = popup.firstElementChild;
+    inner.classList.remove("fade-in");
+    inner.classList.add("fade-out");
+    setTimeout(() => {
+      window.location.href = "../../../Webside/Student.html";
+    }, 800);
+  });
+
+  return popup;
+}
+
+const xpPopup = createPopup();
 
 // ===============================
 // 🔊 Sound + Vibration Settings
@@ -119,10 +139,9 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ===============================
-// 🧩 XP System Link (Direct Trigger)
+// 🧩 XP System Link
 // ===============================
 function attachXPSystem(user) {
-  // Expose a function globally for quiz pages to call when finished
   window.handleQuizFinish = async ({ finalScore, totalQuestions, types }) => {
     await processXP(user, finalScore, totalQuestions, types);
   };
@@ -133,7 +152,6 @@ function attachXPSystem(user) {
 // 🧠 XP Processor Function
 // ===============================
 async function processXP(user, correctCount, totalCount, types) {
-  // Calculate XP earned based on question type
   let xpEarned = 0;
   for (let i = 0; i < correctCount; i++) {
     const qType = types[i] || "mc";
@@ -186,25 +204,9 @@ async function processXP(user, correctCount, totalCount, types) {
 }
 
 // ===============================
-// ⏳ Ensure Popup Ready
-// ===============================
-function ensurePopupReady() {
-  return new Promise(resolve => {
-    const check = () => {
-      const popup = document.getElementById("xpPopup");
-      if (popup) resolve(true);
-      else setTimeout(check, 100);
-    };
-    check();
-  });
-}
-
-// ===============================
-// 🎉 Show Popup
+// 🎉 Show Popup Function
 // ===============================
 async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
-  await ensurePopupReady();
-
   const quizContainer = document.querySelector(".quiz-container");
   if (quizContainer) {
     quizContainer.classList.add("fade-out");
@@ -213,11 +215,7 @@ async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, l
   setTimeout(() => {
     if (quizContainer) quizContainer.style.display = "none";
 
-    const popupInner = document.querySelector("#xpPopup > div");
-    popupInner.classList.remove("fade-out");
-    popupInner.classList.add("fade-in");
     xpPopup.style.display = "flex";
-
     const xpGain = document.getElementById("xpGain");
     const xpBarFill = document.getElementById("xpBarFill");
     const xpInfoText = document.getElementById("xpInfoText");
@@ -235,24 +233,6 @@ async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, l
 
     xpBarFill.style.width = `${xpPercent}%`;
     xpInfoText.textContent = `Level ${currentLevel} • ${currentXP} / ${xpMax} XP`;
-
     levelUpNotice.style.display = leveledUp ? "block" : "none";
   }, 600);
 }
-
-// ===============================
-// 🔙 Back to Lobby Button Handler
-// ===============================
-document.addEventListener("click", (e) => {
-  if (e.target && e.target.id === "backToLobby") {
-    const xpPopup = document.getElementById("xpPopup");
-    const popupInner = document.querySelector("#xpPopup > div");
-
-    popupInner.classList.remove("fade-in");
-    popupInner.classList.add("fade-out");
-
-    setTimeout(() => {
-      window.location.href = "../../../Webside/Student.html";
-    }, 800);
-  }
-});
