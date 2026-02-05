@@ -617,8 +617,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
   const subfolder = isLesson ? "Lessons" : "Quiz";
   const basePath = isLesson
-    ? `../Modular/${subfolder}/${folder}/lesson-`
-    : `../Levels/${subfolder}/${folder}/level-`;
+    ? `../Modular/${subfolder}/${folder}/lesson-`;
+  const baseQuizPath = isLesson
+    ? `../Levels/${subfolder}/${folder}/level-`;
 
   select.innerHTML = "";
   const placeholder = document.createElement("option");
@@ -633,6 +634,12 @@ document.addEventListener("DOMContentLoaded", () => {
     option.textContent = `Lesson Full ${i}`;
     select.appendChild(option);
   }
+  for (let t = 1; t <= count; t++) {
+    const option = document.createElement("option");
+    option.value = `${baseQuizPath}${t}.html`;
+    option.textContent = `${isLesson ? "Level"} ${t}`;
+    select.appendChild(option);
+    }
 }
 
 function populateOptions(prefix, count, type, folder) {
