@@ -1,7 +1,7 @@
 // ../../../Tools/XP/HtmlXP-tools.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===============================
 // 🔧 Firebase Configuration
@@ -29,65 +29,59 @@ const XP_FILL = 10; // XP for fill-in-the-blank
 const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
 
 // ===============================
+// 🎨 Popup Creation
+// ===============================
+const style = document.createElement("style");
+style.textContent = `
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: scale(0.98); }
+}
+.fade-in { animation: fadeIn 0.8s ease forwards; }
+.fade-out { animation: fadeOut 0.8s ease forwards; }
+`;
+document.head.appendChild(style);
+
+const popup = document.createElement("div");
+popup.id = "xpPopup";
+popup.innerHTML = `
+  <div style="
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;justify-content:center;align-items:center;
+    flex-direction:column;z-index:999;color:#fff;
+    font-family:'Press Start 2P',cursive;text-align:center;">
+    
+    <h2 style="color:#ffd966;">🎉 Level Complete!</h2>
+    <p id="xpGain" style="color:#1DB954;font-size:10px;margin:8px 0;">+0 XP Gained</p>
+    <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;">
+      <div id="xpBarFill" style="background:linear-gradient(90deg,#00ff90,#1DB954);width:0%;height:100%;transition:width 1.5s;"></div>
+    </div>
+    <p id="xpInfoText" style="font-size:8px;color:#ccc;">Loading...</p>
+    <p id="levelUpNotice" style="display:none;color:#ffd700;font-size:9px;">⬆ Level Up!</p>
+    <button id="backToLobby" style="
+      background:#ff6b35;color:#fff;border:none;
+      border-radius:8px;padding:10px 16px;
+      font-family:'Press Start 2P';cursor:pointer;
+      margin-top:20px;">⬅ Back to Lobby</button>
+  </div>
+`;
+document.body.appendChild(popup);
+
+const xpPopup = document.getElementById("xpPopup");
+
+// ===============================
 // 🔊 Sound + Vibration Settings
 // ===============================
 const correctSound = new Audio("../../../Assets/Sounds/Correct.mp3");
-const levelUpSound = new Audio("../../../Assets/Sounds/LevelUp.mp3");
+const wrongSound = new Audio("../../../Assets/Sounds/Incorrect.mp3");
 const soundEnabled = localStorage.getItem("sound") === "on";
 const vibrationEnabled = localStorage.getItem("vibration") === "on";
 const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-// ===============================
-// 🎨 Popup Creation (safe load)
-// ===============================
-document.addEventListener("DOMContentLoaded", () => {
-  const popup = document.createElement("div");
-  popup.id = "xpPopup";
-  popup.style.display = "none";
-  popup.innerHTML = `
-    <div id="xpPopupInner" style="
-      position:fixed;top:0;left:0;width:100%;height:100%;
-      background:rgba(0,0,0,0.85);
-      display:flex;flex-direction:column;
-      justify-content:center;align-items:center;
-      text-align:center;z-index:999;
-      font-family:'Press Start 2P',cursive;color:#fff;">
-      
-      <h2 style="color:#ffd966;margin-bottom:10px;">🎉 Level Complete!</h2>
-      <p id="xpGain" style="color:#1DB954;font-size:10px;margin:8px 0;">+0 XP Gained</p>
-      <div style="width:60%;background:#222;border-radius:8px;height:14px;overflow:hidden;margin:14px auto;">
-        <div id="xpBarFill" style="background:linear-gradient(90deg,#00ff90,#1DB954);width:0%;height:100%;transition:width 1.5s;"></div>
-      </div>
-      <p id="xpInfoText" style="font-size:8px;margin-top:8px;"></p>
-      <p id="levelUpNotice" style="display:none;color:#ffd966;margin-top:10px;font-size:9px;">⭐ LEVEL UP!</p>
-      <button id="backToLobby" style="
-        background:#ff6b35;color:#fff;border:none;
-        border-radius:8px;padding:10px 16px;
-        font-family:'Press Start 2P';cursor:pointer;
-        margin-top:20px;">⬅ Back to Lobby</button>
-    </div>
-  `;
-  document.body.appendChild(popup);
-});
-
-// ✅ Ensure popup references exist even if quiz finishes early
-function ensurePopupReady() {
-  return new Promise(resolve => {
-    const check = () => {
-      const popup = document.getElementById("xpPopup");
-      if (popup) resolve(true);
-      else setTimeout(check, 100);
-    };
-    check();
-  });
-}
-
-const xpPopup = document.getElementById("xpPopup");
-const xpGain = document.getElementById("xpGain");
-const xpBarFill = document.getElementById("xpBarFill");
-const xpInfoText = document.getElementById("xpInfoText");
-const levelUpNotice = document.getElementById("levelUpNotice");
-const backToLobby = document.getElementById("backToLobby");
 
 // ===============================
 // 🔒 Authentication Check
@@ -102,16 +96,12 @@ onAuthStateChanged(auth, async (user) => {
   try {
     const snap = await getDoc(doc(db, "users", user.uid));
     if (!snap.exists()) {
-      await setDoc(doc(db, "users", user.uid), {
-        xp: 0,
-        xpMax: 100,
-        level: 1,
-        completedLevels: {},
-        createdAt: new Date(),
-      });
+      alert("⚠️ User data not found!");
+      window.location.href = "../../../Account/signin.html";
+      return;
     }
 
-    const role = snap.data()?.role || "student";
+    const role = snap.data().role || "student";
     if (role !== "student") {
       alert("🚫 Only students can take this quiz!");
       window.location.href = "../../../Webside/Teacher.html";
@@ -129,9 +119,10 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 // ===============================
-// 🧩 XP System Link (Quiz trigger)
+// 🧩 XP System Link (Direct Trigger)
 // ===============================
 function attachXPSystem(user) {
+  // Expose a function globally for quiz pages to call when finished
   window.handleQuizFinish = async ({ finalScore, totalQuestions, types }) => {
     await processXP(user, finalScore, totalQuestions, types);
   };
@@ -142,27 +133,30 @@ function attachXPSystem(user) {
 // 🧠 XP Processor Function
 // ===============================
 async function processXP(user, correctCount, totalCount, types) {
+  // Calculate XP earned based on question type
   let xpEarned = 0;
   for (let i = 0; i < correctCount; i++) {
     const qType = types[i] || "mc";
     xpEarned += qType === "fill" ? XP_FILL : XP_MC;
   }
 
+  if (soundEnabled) correctSound.play();
+  if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([120, 80, 120]);
+
   try {
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
-    const data = snap.exists() ? snap.data() : {};
+    let data = snap.exists() ? snap.data() : {};
 
     let oldXP = data.xp || 0;
     let oldLevel = data.level || 1;
     let xpMax = data.xpMax || 100;
     let completedLevels = data.completedLevels || {};
 
-    // 🛡 Prevent XP farming
-    const alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
-    const gainedXP = alreadyCompleted ? 0 : xpEarned;
+    // 🛡 Prevent farming
+    let alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
+    let gainedXP = alreadyCompleted ? 0 : xpEarned;
 
-    // 🧮 Apply XP logic
     let newXP = oldXP + gainedXP;
     let newLevel = oldLevel;
     let leveledUp = false;
@@ -174,8 +168,8 @@ async function processXP(user, correctCount, totalCount, types) {
       leveledUp = true;
     }
 
-    // 🧾 Update Firestore
     completedLevels[CURRENT_LEVEL] = true;
+
     await updateDoc(userRef, {
       xp: newXP,
       level: newLevel,
@@ -183,15 +177,7 @@ async function processXP(user, correctCount, totalCount, types) {
       completedLevels: completedLevels
     });
 
-    // 💾 Cache locally too
-    localStorage.setItem(`${user.uid}_xp`, newXP);
-    localStorage.setItem(`${user.uid}_level`, newLevel);
-
-    // 🔊 Feedback
-    if (soundEnabled) correctSound.play();
-    if (vibrationEnabled && isMobile && navigator.vibrate) navigator.vibrate([120, 80, 120]);
-
-    console.log(`✅ XP Saved: +${gainedXP} (Total: ${newXP}, Level: ${newLevel})`);
+    console.log(`✅ XP Saved: +${gainedXP} XP (Level ${newLevel})`);
     showPopup(gainedXP, alreadyCompleted, newXP, xpMax, newLevel, leveledUp);
 
   } catch (err) {
@@ -200,30 +186,42 @@ async function processXP(user, correctCount, totalCount, types) {
 }
 
 // ===============================
-// 🎉 XP Popup Display (fade + fix)
+// ⏳ Ensure Popup Ready
+// ===============================
+function ensurePopupReady() {
+  return new Promise(resolve => {
+    const check = () => {
+      const popup = document.getElementById("xpPopup");
+      if (popup) resolve(true);
+      else setTimeout(check, 100);
+    };
+    check();
+  });
+}
+
+// ===============================
+// 🎉 Show Popup
 // ===============================
 async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
-  await ensurePopupReady(); // ✅ wait for popup to exist first
+  await ensurePopupReady();
 
   const quizContainer = document.querySelector(".quiz-container");
   if (quizContainer) {
-    quizContainer.style.transition = "opacity 0.6s ease";
-    quizContainer.style.opacity = "0";
+    quizContainer.classList.add("fade-out");
   }
 
   setTimeout(() => {
     if (quizContainer) quizContainer.style.display = "none";
 
-    const xpPopup = document.getElementById("xpPopup");
+    const popupInner = document.querySelector("#xpPopup > div");
+    popupInner.classList.remove("fade-out");
+    popupInner.classList.add("fade-in");
+    xpPopup.style.display = "flex";
+
     const xpGain = document.getElementById("xpGain");
     const xpBarFill = document.getElementById("xpBarFill");
     const xpInfoText = document.getElementById("xpInfoText");
     const levelUpNotice = document.getElementById("levelUpNotice");
-
-    xpPopup.style.display = "flex";
-    xpPopup.style.opacity = "0";
-    xpPopup.style.transition = "opacity 1s ease";
-    setTimeout(() => (xpPopup.style.opacity = "1"), 100);
 
     const xpPercent = Math.min((currentXP / xpMax) * 100, 100).toFixed(1);
 
@@ -238,21 +236,23 @@ async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, l
     xpBarFill.style.width = `${xpPercent}%`;
     xpInfoText.textContent = `Level ${currentLevel} • ${currentXP} / ${xpMax} XP`;
 
-    if (leveledUp) {
-      levelUpNotice.style.display = "block";
-    } else {
-      levelUpNotice.style.display = "none";
-    }
+    levelUpNotice.style.display = leveledUp ? "block" : "none";
   }, 600);
 }
 
 // ===============================
-// 🔙 Back to Lobby (fade-out)
+// 🔙 Back to Lobby Button Handler
 // ===============================
 document.addEventListener("click", (e) => {
   if (e.target && e.target.id === "backToLobby") {
-    xpPopup.style.transition = "opacity 0.8s ease";
-    xpPopup.style.opacity = "0";
-    setTimeout(() => (window.location.href = "../../../Webside/Student.html"), 800);
+    const xpPopup = document.getElementById("xpPopup");
+    const popupInner = document.querySelector("#xpPopup > div");
+
+    popupInner.classList.remove("fade-in");
+    popupInner.classList.add("fade-out");
+
+    setTimeout(() => {
+      window.location.href = "../../../Webside/Student.html";
+    }, 800);
   }
 });
