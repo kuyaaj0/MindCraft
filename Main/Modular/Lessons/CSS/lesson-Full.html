@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MindCraft — Lessons Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+
+/* ===== WORLD BACKGROUND ===== */
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  padding:20px;
+  overflow:hidden;
+  font-size:10px;
+}
+
+/* ===== MAIN APP ===== */
+.app{
+  max-width:1200px;
+  margin:0 auto;
+  height:calc(100vh - 40px);
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.45);
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+  padding:18px;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  background:#8b5a2b;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.25),
+    0 8px 0 #5c3a1a;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+
+  overflow-y: auto;   /* ✅ enables vertical scroll */
+}
+
+
+.brand h1{
+  font-size:14px;
+  text-align:center;
+  text-shadow:2px 2px #000;
+}
+.brand p{
+  font-size:8px;
+  text-align:center;
+  opacity:.9;
+  margin-top:6px;
+}
+
+/* ===== LESSON BUTTONS ===== */
+.lessons-list{
+  margin-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.lessons-list button{
+  background:#a56b34;
+  border:none;
+  padding:12px;
+  border-radius:12px;
+  cursor:pointer;
+  color:#fff;
+  font-size:9px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  box-shadow:
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 5px 0 #5c3a1a;
+}
+
+.lessons-list button:hover{
+  transform:translateY(-2px);
+}
+
+.lessons-list button.active{
+  background:#c98b4a;
+}
+
+.num{
+  background:#ffd966;
+  color:#000;
+  padding:4px 6px;
+  border-radius:6px;
+}
+
+/* ===== CONTENT ===== */
+.content{
+  background:#e8f4ff;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:
+    inset -6px -6px 0 rgba(0,0,0,.15),
+    0 8px 0 #6fa8dc;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== HEADER ===== */
+.content-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.content-head .title{
+  font-size:12px;
+  text-shadow:2px 2px #fff;
+}
+
+.content-head button{
+  font-family:'Press Start 2P';
+  background:#8b5a2b;
+  color:#fff;
+  border:none;
+  padding:8px 10px;
+  border-radius:10px;
+  box-shadow:
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 5px 0 #5c3a1a;
+  cursor:pointer;
+}
+
+/* ===== PANELS ===== */
+.panel-wrap{
+  flex:1;
+  position:relative;
+}
+
+.lesson-panel{
+  position:absolute;
+  inset:0;
+  padding:16px;
+  overflow:auto;
+  display:none;
+}
+
+.lesson-panel.visible{display:block}
+
+/* ===== LESSON CONTENT ===== */
+.lesson-panel h1{
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.lesson-panel h2{
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.meta{
+  font-size:8px;
+  opacity:.7;
+  margin-bottom:16px;
+}
+
+/* ===== BOXES ===== */
+.explain{
+  background:#fff3cd;
+  border:3px solid #c9a227;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  line-height:1.6;
+}
+
+.code{
+  background:#1e1e1e;
+  color:#00ff90;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+  overflow:auto;
+  position:relative;
+}
+
+.code pre{
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+.demo{
+  background:#d9ead3;
+  border:3px solid #6aa84f;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.examples{
+  margin-left:16px;
+}
+
+.examples li{
+  margin:6px 0;
+}
+
+/* ===== EDIT BUTTON (inside .code) ===== */
+.code .edit-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#5c3a1a;
+  color:#fff;
+  border:none;
+  padding:6px 8px;
+  border-radius:8px;
+  font-size:9px;
+  cursor:pointer;
+  box-shadow:0 4px 0 #3e2814;
+}
+
+/* ===== EDITOR MODAL ===== */
+#editorModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.5);
+  z-index:1200;
+}
+#editorModal .modal{
+  width:min(950px,95%);
+  height:min(700px,95%);
+  background:#0b1020;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  color:#e6f7ff;
+  box-shadow:0 10px 40px rgba(0,0,0,.6);
+  font-family:monospace;
+}
+#editorModal header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+#editorModal .controls{display:flex;gap:8px;align-items:center;}
+#editorModal select, #editorModal button{
+  font-family:inherit;
+}
+#editorModal textarea{
+  width:100%;
+  height:280px;
+  background:#071018;
+  color:#cfeefd;
+  border:1px solid #27455b;
+  padding:10px;
+  border-radius:8px;
+  resize:vertical;
+  font-family:monospace;
+  font-size:12px;
+  line-height:1.4;
+}
+#editorModal .bottom{
+  display:flex;
+  gap:12px;
+}
+#editorModal .preview{
+  flex:1;
+  border:1px solid #27455b;
+  border-radius:8px;
+  overflow:hidden;
+}
+#errorBox{
+  background:#3a1b1b;
+  color:#ffd6d6;
+  padding:8px;
+  border-radius:6px;
+  display:none;
+  font-size:12px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+    grid-template-rows:auto 1fr;
+  }
+  #editorModal .modal{height:86vh}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">
+    <h1>🧠 MindCraft</h1>
+    <p>CSS Lessons 01–05</p>
+  </div>
+
+  <div class="lessons-list">
+
+    <!-- ===== LESSONS 1-5 ===== -->
+    <script>
+      const lessonsData=[
+        {num:'01',title:'Cyberpunk Style Matrix',parts:['CSS Rule Anatomy','Selector Types','How CSS Works','CSS Comments','How CSS Finds HTML','Your First CSS Challenge!']},
+        {num:'02',title:'External, Internal & Inline Styles',parts:['What is CSS?','External CSS','Internal CSS','Inline CSS','When to Use Each']},
+        {num:'03',title:'Targeting Elements Efficiently',parts:['What Are CSS Selectors?','Element Selector','Class Selector (.)','ID Selector (#)','Element vs Class vs ID','YOUR CHALLENGE']},
+        {num:'04',title:'Mastering Visual Design',parts:['Why Are Colors and Backgrounds Important?','The color Property','The background-color Property','The background-image Property','The background-size Property','YOUR CHALLENGE!']},
+        {num:'05',title:'Dark Neon Typography Matrix',parts:['Font Families','Font Size','Line-height','Text-align','text-decoration','Font-weight','Google Fonts Integration','YOUR CHALLENGE!']}
+      ];
+
+      lessonsData.forEach((lesson,i)=>{
+        document.write(`<button data-lesson="lesson-${i+1}-1" style="display:flex; align-items:center; justify-content:space-between;">
+          <span><span class="num">${lesson.num}</span> ${lesson.title}</span>
+          <span id="toggleArrow${i+1}" style="cursor:pointer; font-weight:bold; user-select:none;">▶</span>
+        </button>`);
+        
+        document.write(`<div id="partsDropdown${i+1}" style="display:none; flex-direction:column; gap:8px; margin-left: 30px; margin-top: 6px;">`);
+        lesson.parts.forEach((part,j)=>{
+          document.write(`<button data-lesson="lesson-${i+1}-${j+1}" style="font-size:8px; padding:6px 12px;">${part}</button>`);
+        });
+        document.write(`</div>`);
+      });
+    </script>
+
+  </div>
+</aside>
+
+<main class="content">
+  <div class="content-head">
+    <div class="title" id="panel-title">01 • CSS Basics</div>
+    <div>
+      <button id="prevLesson">◀</button>
+      <button id="nextLesson">▶</button>
+    </div>
+  </div>
+
+  <div class="panel-wrap">
+
+    <!-- ===== LESSON PANELS (generated from lessonsData 1-5 only) ===== -->
+    <script>
+      lessonsData.forEach((lesson,i)=>{
+        lesson.parts.forEach((part,j)=>{
+          document.write(`<article id="lesson-${i+1}-${j+1}" class="lesson-panel">
+            <h1>${lesson.title}</h1>
+            <div class="meta">Lesson ${i+1} • Part ${j+1}</div>
+            <h2>${('0'+(j+1)).slice(-2)}. ${part}</h2>
+            <div class="explain"></div>
+          </article>`);
+        });
+      });
+    </script>
+
+  </div>
+</main>
+</div>
+ 
+<!-- EDITOR MODAL (in DOM, initially hidden) -->
+<div id="editorModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Code editor">
+    <header>
+      <div>
+        <strong id="modalTitle">Edit Code</strong>
+        <div id="errorBox"></div>
+      </div>
+      <div class="controls">
+        <label for="codeMode" style="font-size:11px">Mode:</label>
+        <select id="codeMode">
+          <option value="css">CSS</option>
+          <option value="html">HTML</option>
+          <option value="js">JavaScript</option>
+        </select>
+        <button id="applyBtn">Apply</button>
+        <button id="closeEditor">Close</button>
+      </div>
+    </header>
+    <textarea id="codeEditor" spellcheck="false"></textarea>
+    <div style="display:flex;gap:8px;flex:1;min-height:220px;">
+      <div style="flex:1;">
+        <strong style="font-size:12px">Live Preview</strong>
+        <div class="preview"><iframe id="previewFrame" style="width:100%;height:100%;border:0"></iframe></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===============================
+   LESSON CONTENT (kept for lessons 1–5 only)
+=============================== */
+const lessonContent = {
+  "lesson-1-1": `
+    <div class="explain">
+      CSS = <span class="highlight">SELECTOR { PROPERTY: VALUE; }</span><br>
+      <strong>Selector</strong> = HTML target (h1, .class, #id)<br>
+      <strong>Property</strong> = what to change (color, font-size)<br>
+      <strong>Value</strong> = how to change it (red, 24px)
+    </div>
+    <div class="code">
+<pre>h1 {                    /* SELECTOR */
+    color: #ff00ff;      /* PROPERTY: VALUE */
+    font-size: 48px;     /* PROPERTY: VALUE */
+}</pre>
+    </div>
+  `,
+  "lesson-1-2": `
+    <p>CSS selectors tell the browser <b>which HTML elements</b> to target.</p>
+    <ul class="examples">
+      <li><code>h1 { color: pink; }</code> → ALL h1 tags</li>
+      <li><code>.highlight { color: cyan; }</code> → class="highlight"</li>
+      <li><code>#hero { background: black; }</code> → id="hero"</li>
+    </ul>
+  `,
+  "lesson-1-3": `
+<p>Watch plain HTML transform with CSS! Same content, different styles.</p>
+
+<div class="demo" style="display:flex; gap:16px; flex-wrap:wrap;">
+
+  <!-- Plain HTML -->
+  <div class="css-plain" style="flex:1; min-width:200px; border:2px dashed #aaa; padding:12px; text-align:center;">
+    <h3>PLAIN HTML (No CSS)</h3>
+    <p>Central Mindanao University<br>BS Information Technology</p>
+  </div>
+
+  <!-- Styled with CSS -->
+  <div class="css-styled" style="flex:1; min-width:200px; border:2px solid #0ff; background:#111; color:#0ff; padding:12px; text-align:center; border-radius:12px; box-shadow:0 0 12px #0ff;">
+    <h3 style="font-family:'Press Start 2P'; color:#ff0;">✦ CSS ACTIVATED ✦</h3>
+    <p style="font-family:'Courier New', monospace; font-size:12px;">
+      Central Mindanao University<br>
+      BS Information Technology
+    </p>
+  </div>
+
+</div>
+
+<div class="code">
+<pre>
+/* CSS for the styled version */
+.css-styled {
+  border: 2px solid #0ff;
+  background: #111;
+  color: #0ff;
+  padding: 12px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 0 12px #0ff;
+}
+
+.css-styled h3 {
+  font-family: 'Press Start 2P';
+  color: #ff0;
+}
+
+.css-styled p {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+</pre>
+</div>
+  `,
+  "lesson-1-4": `
+    <p>Use <span class="highlight">/* comments */</span> to explain code. Browsers ignore everything between /* and */.</p>
+    <div class="code">
+<pre>/* This styles the main heading */
+h1 {
+    color: #ff00ff;     /* Magenta color */
+    font-size: 4em;     /* Extra large text */
+}
+
+/* Navigation menu styles */
+nav {
+    background: #000;   /* Pure black */
+}</pre>
+    </div>
+  `,
+  "lesson-1-5": `
+    <p>CSS scans HTML → finds matching <span class="highlight">selectors</span> → applies styles.<br>
+    Inline styles &gt; Internal &gt; External CSS (priority order).</p>
+    <div class="demo">
+      <p style="color: red;">RED = Inline style (highest priority)</p>
+      <p class="highlight">CYAN = CSS class style</p>
+      <p>DEFAULT = Browser style (lowest priority)</p>
+    </div>
+  `,
+  "lesson-1-6": `
+    <p>Style this CMU card! Change colors, add shadows, make it cyberpunk!</p>
+    <div class="code">
+<pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style&gt;
+/* YOUR CSS HERE! */
+.cmu-card {
+    
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class="cmu-card"&gt;
+    &lt;h2&gt;CMU IT Student&lt;/h2&gt;
+    &lt;p&gt;Learning cyberpunk CSS!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+  `,
+/* LESSON 2 */
+"lesson-2-1": `
+<p><b>CSS (Cascading Style Sheets)</b> gives color, layout, and life to a web page.
+It controls fonts, spacing, colors, animations, and responsiveness.</p>
+`,
+"lesson-2-2": `
+<p><b>External CSS</b> lives in a separate <code>.css</code> file and is linked...</p>
+<div class="code">
+<pre>
+&lt;!-- index.html --&gt;
+&lt;head&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;!-- style.css --&gt;
+body {
+  background-color: black;
+  color: cyan;
+}
+</pre>
+</div>
+<div class="demo">
+<p style="color:#00ffff;">✅ All pages share the same design file (style.css)</p>
+</div>
+`,
+"lesson-2-3": `
+<p><b>Internal CSS</b> is written inside a <code>&lt;style&gt;</code> tag
+in the HTML <code>&lt;head&gt;</code>. Great for single-page designs.</p>
+
+<div class="code">
+<pre>
+&lt;head&gt;
+&lt;style&gt;
+  body {
+    background: #000;
+    color: #ff00ff;
+  }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Internal CSS Example&lt;/h1&gt;
+&lt;/body&gt;
+</pre>
+</div>
+
+<div class="demo">
+<h1 style="color:#ff00ff;">Internal CSS Example</h1>
+</div>
+`,
+"lesson-2-4": `
+<p><b>Inline CSS</b> is written directly inside an HTML tag using
+the <code>style</code> attribute. Highest priority, but not recommended for full sites.</p>
+
+<div class="code">
+<pre>
+&lt;h1 style="color:#00ffff;background:#111;padding:10px;"&gt;
+Inline CSS Example
+&lt;/h1&gt;
+</pre>
+</div>
+
+<div class="demo">
+<h1 style="color:#00ffff;background:#111;padding:10px;">Inline CSS Example</h1>
+</div>
+`,
+"lesson-2-5": `
+<p><b>When to use each type of CSS:</b></p>
+<ul class="examples">
+  <li><b>External CSS</b> — full websites, scalable</li>
+  <li><b>Internal CSS</b> — single-page projects</li>
+  <li><b>Inline CSS</b> — testing & overrides</li>
+</ul>
+
+<p><b>Practice:</b> Build a page using all three types of CSS.</p>
+`,
+/* LESSON 3 */
+"lesson-3-1": `
+<div class="explain">
+  A <span class="highlight">CSS selector</span> tells the browser which HTML elements to style.
+  It’s how we “target” parts of a web page — like paragraphs, buttons, or titles — 
+  and apply specific designs to them.
+</div>
+`,
+"lesson-3-2": `
+<div class="explain">
+  Targets elements directly by name — for example <code>p</code>, <code>h1</code>, or <code>div</code>.
+  All matching elements will share the same style.
+</div>
+
+<div class="code">
+<pre><code>/* Applies style to ALL paragraphs */
+p {
+    color: cyan;
+    font-size: 18px;
+}</code></pre>
+</div>
+
+<div class="demo">
+<h1>Page Title</h1>
+<p>This paragraph styles every &lt;p&gt; element the same way.</p>
+<p>All paragraphs share this cyan color and font size.</p>
+</div>
+`,
+"lesson-3-3": `
+<div class="explain">
+  Classes are used when you want to style multiple elements in the same way.
+  They start with a period (<code>.</code>). Apply them in HTML using <code>class="name"</code>.
+</div>
+
+<div class="code">
+<pre><code>/* CSS */
+.special {
+    color: hotpink;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+/* HTML */
+&lt;p class="special"&gt;This text uses the "special" class.&lt;/p&gt;</code></pre>
+</div>
+
+<div class="demo">
+<p class="special">This text uses the “special” class!</p>
+</div>
+`,
+"lesson-3-4": `
+<div class="explain">
+  IDs are unique identifiers — used for <strong>one element only</strong>.
+  They start with a hash symbol (<code>#</code>). Apply them in HTML using <code>id="name"</code>.
+</div>
+
+<div class="code">
+<pre><code>/* CSS */
+#unique {
+    background-color: rgba(0,255,255,0.15);
+    border: 2px solid cyan;
+    padding: 15px;
+}
+
+/* HTML */
+&lt;div id="unique"&gt;I have a unique ID!&lt;/div&gt;</code></pre>
+</div>
+
+<div class="demo">
+<div id="unique">I have a unique ID!</div>
+</div>
+`,
+"lesson-3-5": `
+<div class="explain">
+- <span class="highlight">Element selector</span>: Styles all tags of that type.<br>
+- <span class="highlight">Class selector</span>: Styles a group of elements sharing the same class.<br>
+- <span class="highlight">ID selector</span>: Styles one specific element only.
+</div>
+
+<div class="code">
+<pre><code>/* Example CSS */
+h2 { color: cyan; }
+.special { color: hotpink; }
+#unique { color: yellow; }</code></pre>
+</div>
+
+<div class="demo">
+<h2>This is an Element Selector (h2)</h2>
+<p class="special">This is a Class Selector (.special)</p>
+<p id="unique">This is an ID Selector (#unique)</p>
+</div>
+`,
+"lesson-3-6": `
+<div class="explain">
+Create a mini personal webpage that uses:
+<ul>
+  <li>At least one <span class="highlight">element selector</span>.</li>
+  <li>Two different <span class="highlight">classes</span>.</li>
+  <li>One <span class="highlight">unique ID</span>.</li>
+</ul>
+Style them with neon colors and glowing text like this lesson!
+</div>
+
+<div class="code">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    h1 { color: cyan; }
+    .highlight-me { color: magenta; font-weight: bold; }
+    #my-info { border: 2px solid cyan; padding: 10px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;My Neon Profile&lt;/h1&gt;
+  &lt;p class="highlight-me"&gt;I love learning CSS!&lt;/p&gt;
+  &lt;p id="my-info"&gt;Student at Central Mindanao University&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+`,
+/* LESSON 4 */
+"lesson-4-1": `
+<div class="explain">
+CSS colors and backgrounds define the <span style="color:#ff00ff;">look and feel</span> of your webpage.
+They help create visual contrast, highlight sections, and enhance user experience.
+You can color text, fill elements with backgrounds, and even use images or gradients.
+</div>
+`,
+"lesson-4-2": `
+<div class="explain">
+The <span class="highlight">color</span> property changes the text color of an element.
+You can use:
+<ul>
+    <li>Color names (<code>red</code>, <code>blue</code>)</li>
+    <li>Hex codes (<code>#ff00ff</code>)</li>
+    <li>RGB/RGBA (<code>rgb(255,0,255)</code> or <code>rgba(255,0,255,0.8)</code>)</li>
+</ul>
+</div>
+
+<div class="code">
+<pre><code>h1 {
+    color: #ff00ff;  /* magenta heading */
+}
+p {
+    color: rgba(0, 255, 255, 0.9);  /* neon cyan text */
+}</code></pre>
+</div>
+
+<div class="demo">
+<h1 style="color:#ff00ff;">This heading uses magenta color</h1>
+<p style="color:rgba(0,255,255,0.9);">This paragraph is in neon cyan!</p>
+</div>
+`,
+"lesson-4-3": `
+<div class="explain">
+The <span class="highlight">background-color</span> property fills the background of an element with color.
+You can apply it to any element, such as <code>div</code>, <code>body</code>, or <code>button</code>.
+</div>
+
+<div class="code">
+<pre><code>div {
+    background-color: #111133;
+    color: #00ffff;
+    padding: 20px;
+    border-radius: 10px;
+}</code></pre>
+</div>
+
+<div class="demo">
+<div style="background-color:#111133;color:#00ffff;padding:15px;border-radius:10px;">
+This box has a dark background with cyan text.
+</div>
+</div>
+`,
+"lesson-4-4": `
+<div class="explain">
+The <span class="highlight">background-image</span> property sets an image or gradient as a background.
+</div>
+
+<div class="code">
+<pre><code>body {
+    background-image: url('neon-grid.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}</code></pre>
+</div>
+
+<div class="demo" style="background-image: linear-gradient(135deg, #ff00ff50, #00ffff50); background-size: cover; padding:15px;">
+<p style="color:#fff;">This section uses a gradient background instead of a solid color!</p>
+</div>
+`,
+"lesson-4-5": `
+<div class="explain">
+The <span class="highlight">background-size</span> property controls how the image fits the element’s area.
+Common values include:
+<ul>
+  <li><strong>cover</strong> – scales the image to fill the entire area</li>
+  <li><strong>contain</strong> – fits the image inside without cropping</li>
+  <li><strong>auto</strong> – keeps the image’s original size</li>
+</ul>
+</div>
+
+<div class="code">
+<pre><code>div {
+    background-image: url('pattern.png');
+    background-size: cover; /* fills the box fully */
+}</code></pre>
+</div>
+
+<div class="demo" style="background-image: linear-gradient(to right, #00ffff44, #ff00ff44); background-size: cover; height:100px; padding:10px;">
+<p style="color:#fff;">Background-size: cover stretches this gradient across the whole box.</p>
+</div>
+`,
+"lesson-4-6": `
+<div class="explain">
+Create your own “Neon Profile Card” using at least one:
+<ul>
+    <li><strong>color</strong> property for your text,</li>
+    <li><strong>background-color</strong> for the card,</li>
+    <li><strong>background-image</strong> for design flair,</li>
+    <li><strong>background-size</strong> to control the background behavior.</li>
+</ul>
+</div>
+
+<div class="code">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    body {
+      background-color: #000;
+      color: #00ffff;
+    }
+    .card {
+      background-image: linear-gradient(135deg, #ff00ff, #00ffff);
+      background-size: cover;
+      color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      width: 250px;
+      text-align: center;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="card"&gt;
+    &lt;h2&gt;Neon Coder&lt;/h2&gt;
+    &lt;p&gt;Loves CSS gradients and cyber themes!&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+`,
+/* LESSON 5 */
+"lesson-5-1": `
+<div class="explain">
+The <span style="color:#ff00ff;">font-family</span> property changes the typeface (style of letters) used for text.
+Always list backup fonts in case one isn’t available.
+</div>
+
+<div class="code">
+<pre><code>body {
+    font-family: 'Poppins', Arial, sans-serif;
+}</code></pre>
+</div>
+
+<div class="demo" style="font-family:'Poppins', sans-serif;">
+<p>This text uses the “Poppins” Google Font for a clean futuristic look!</p>
+</div>
+`,
+"lesson-5-2": `
+<div class="explain">
+<span style="color:#00ffff;">font-size</span> controls how large or small your text appears.
+You can use <code>px</code> (pixels), <code>em</code> (relative size), or <code>rem</code> for responsive scaling.
+</div>
+
+<div class="code">
+<pre><code>h1 { font-size: 48px; }
+p { font-size: 1.2em; }</code></pre>
+</div>
+
+<div class="demo">
+<h1 style="font-size:48px;">Large Heading Example</h1>
+<p style="font-size:1.2em;">This is a paragraph with slightly larger text.</p>
+</div>
+`,
+"lesson-5-3": `
+<div class="explain">
+<span style="color:#ff1493;">line-height</span> controls the space between lines of text.
+A higher value makes text easier to read, especially for long paragraphs.
+</div>
+
+<div class="code">
+<pre><code>p {
+    line-height: 1.8;
+}</code></pre>
+</div>
+
+<div class="demo" style="line-height:1.8;">
+<p>This paragraph has extra spacing between lines, making it more comfortable to read under neon light!</p>
+</div>
+`,
+"lesson-5-4": `
+<div class="explain">
+The <span style="color:#00ffff;">text-align</span> property sets how inline text is aligned inside its container:
+<ul>
+    <li><strong>left</strong> – default alignment</li>
+    <li><strong>center</strong> – places text in the middle</li>
+    <li><strong>right</strong> – aligns text to the right edge</li>
+</ul>
+</div>
+
+<div class="code">
+<pre><code>h2 { text-align: center; }</code></pre>
+</div>
+
+<div class="demo" style="text-align:center;">
+<h2>Centered Cyber Heading</h2>
+<p>All text inside this box is centered beautifully.</p>
+</div>
+`,
+"lesson-5-5": `
+<div class="explain">
+<span style="color:#ff00ff;">text-decoration</span> adds visual styles like underlines or strikethroughs.
+Use it for links or emphasis.
+</div>
+
+<div class="code">
+<pre><code>a {
+    text-decoration: underline;
+}
+del {
+    text-decoration: line-through;
+}</code></pre>
+</div>
+
+<div class="demo">
+<a href="#" style="color:#00ffff;text-decoration:underline;">This link is underlined</a><br>
+<del style="color:#ff1493;">This text shows a line-through effect</del>
+</div>
+`,
+"lesson-5-6": `
+<div class="explain">
+The <span style="color:#00ffff;">font-weight</span> property makes text bolder or lighter.
+Numeric values range from 100 (thin) to 900 (extra bold).
+</div>
+
+<div class="code">
+<pre><code>h1 { font-weight: 900; }
+p { font-weight: 300; }</code></pre>
+</div>
+
+<div class="demo">
+<h1 style="font-weight:900;">Bold Title (900)</h1>
+<p style="font-weight:300;">Lighter paragraph (300)</p>
+</div>
+`,
+"lesson-5-7": `
+<div class="explain">
+You can import Google Fonts to make your designs stand out.
+Simply visit <a href="https://fonts.google.com" target="_blank" style="color:#00ffff;">fonts.google.com</a>, 
+choose a font, and copy its <code>@import</code> or <code>&lt;link&gt;</code>.
+</div>
+
+<div class="code">
+<pre><code>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}</code></pre>
+</div>
+
+<div class="demo" style="font-family:'Poppins',sans-serif;">
+<p>This sentence uses a Google Font for a clean and modern neon interface look.</p>
+</div>
+`,
+"lesson-5-8": `
+<div class="explain">
+⭐ Create your own Neon Text Showcase using all font properties:
+<ul>
+    <li><strong>font-family</strong> (choose a Google Font)</li>
+    <li><strong>font-size</strong> and <strong>font-weight</strong></li>
+    <li><strong>line-height</strong> and <strong>text-align</strong></li>
+    <li><strong>text-decoration</strong> for creativity!</li>
+</ul>
+</div>
+
+<div class="code">
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        body { background:#000; color:#00ffff; font-family:'Orbitron',sans-serif; }
+        h1 { font-size:3em; text-align:center; font-weight:900; }
+        p { line-height:1.8; text-align:center; text-decoration:underline dotted magenta; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Cyber Student&lt;/h1&gt;
+    &lt;p&gt;I love playing with Neon Fonts and futuristic text effects!&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+</div>
+`
+}; /* end lessonContent */
+
+/* ===============================
+   After DOM ready: inject content, add edit buttons, wire navigation
+=============================== */
+document.addEventListener('DOMContentLoaded', () => {
+  // inject lesson content
+  const panels = document.querySelectorAll('.lesson-panel');
+  panels.forEach(panel => {
+    if (lessonContent[panel.id]) {
+      panel.querySelector('.explain').innerHTML = lessonContent[panel.id];
+    }
+  });
+
+  // add Edit buttons to each .code block
+  document.querySelectorAll('.lesson-panel').forEach(panel=>{
+    panel.querySelectorAll('.code').forEach(codeBlock=>{
+      // avoid duplicating
+      if (codeBlock.querySelector('.edit-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'edit-btn';
+      btn.textContent = 'Edit';
+      codeBlock.appendChild(btn);
+
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openEditorForBlock(panel, codeBlock);
+      });
+    });
+  });
+
+  // wire up navigation (sidebar/arrow buttons)
+  wireUpNavigation();
+
+  // show first lesson
+  showLesson('lesson-1-1');
+});
+
+/* ===============================
+   Editor logic and helpers
+=============================== */
+const modal = document.getElementById('editorModal');
+const codeEditor = document.getElementById('codeEditor');
+const codeMode = document.getElementById('codeMode');
+const applyBtn = document.getElementById('applyBtn');
+const closeEditor = document.getElementById('closeEditor');
+const previewFrame = document.getElementById('previewFrame');
+const modalTitle = document.getElementById('modalTitle');
+const errorBox = document.getElementById('errorBox');
+
+function decodeHtmlEntities(str){
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = str;
+  return textarea.value;
+}
+function findDemoHTML(panel){
+  const demo = panel.querySelector('.demo');
+  return demo ? demo.innerHTML : '<div style="padding:12px;color:#111;">Preview area</div>';
+}
+function showError(msg){
+  errorBox.style.display = 'block';
+  errorBox.textContent = msg;
+}
+function clearError(){
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+}
+
+// open editor for a code block
+function openEditorForBlock(panel, codeBlock){
+  modal.dataset.targetPanel = panel.id;
+  modalTitle.textContent = 'Edit code — ' + panel.querySelector('h2').textContent;
+  clearError();
+
+  const pre = codeBlock.querySelector('pre');
+  const codeText = pre ? pre.innerText.trim() : '';
+  // detect mode
+  let detected = 'css';
+  const t = codeText.trim();
+  if(t.startsWith('<') || /<\/?[a-z][\s\S]*>/i.test(t)) detected = 'html';
+  else if(/\bfunction\b|\bconsole\.|=>/.test(t)) detected = 'js';
+  else if(t.includes('{') && t.includes(':')) detected = 'css';
+  codeMode.value = detected;
+  codeEditor.value = decodeHtmlEntities(codeText);
+  const demoHTML = findDemoHTML(panel);
+  applyToPreview(codeMode.value, codeEditor.value, demoHTML);
+
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(()=>codeEditor.focus(),120);
+}
+
+// applyToPreview: builds iframe srcdoc and basic validation
+function applyToPreview(mode, code, demoHTML){
+  clearError();
+
+  // basic CSS braces check
+  if(mode === 'css'){
+    const open = (code.match(/{/g)||[]).length;
+    const close = (code.match(/}/g)||[]).length;
+    if(open !== close){
+      showError('CSS syntax warning: mismatched { } braces.');
+      // allow preview to render anyway
+    }
+  }
+
+  // reporter script to forward runtime errors to parent
+  const reporter = `
+    <script>
+      (function(){
+        window.addEventListener('error', function(e){
+          parent.postMessage({type:'runtime-error', message: e.message, lineno: e.lineno, colno: e.colno}, '*');
+        });
+        window.addEventListener('unhandledrejection', function(e){
+          parent.postMessage({type:'runtime-error', message: e.reason && e.reason.message ? e.reason.message : String(e.reason)}, '*');
+        });
+        const levels = ['log','warn','error','info'];
+        levels.forEach(l=>{
+          const orig = console[l];
+          console[l] = function(...args){
+            parent.postMessage({type:'console', level: l, args: args}, '*');
+            orig.apply(console, args);
+          }
+        });
+      })();
+    <\/script>
+  `;
+
+  let srcdoc = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
+  if(mode === 'css'){
+    srcdoc += `<style>${code}\n</style></head><body>${demoHTML || '<div style="padding:12px">Preview</div>'}${reporter}</body></html>`;
+  } else if(mode === 'html'){
+    srcdoc += '</head><body>' + code + reporter + '</body></html>';
+  } else { // js
+    srcdoc += '</head><body>' + demoHTML + `<script>${code}<\/script>` + reporter + '</body></html>';
+  }
+
+  previewFrame.srcdoc = srcdoc;
+}
+
+// listen for runtime errors forwarded from iframe
+window.addEventListener('message', (ev)=>{
+  if(!ev.data) return;
+  if(ev.data.type === 'runtime-error'){
+    showError('Runtime error: ' + ev.data.message + ' (line:'+ (ev.data.lineno||'n/a') +')');
+  } else if(ev.data.type === 'console'){
+    // optionally display console messages
+    // console.log('iframe:', ev.data.level, ev.data.args);
+  }
+});
+
+// editor controls
+applyBtn.addEventListener('click', ()=>{
+  const mode = codeMode.value;
+  const code = codeEditor.value;
+  const panel = document.getElementById(modal.dataset.targetPanel);
+  const demoHTML = findDemoHTML(panel);
+
+  try{
+    applyToPreview(mode, code, demoHTML);
+    // update the visible <pre> in the lesson so the change persists in UI
+    const pre = panel.querySelector('.code pre');
+    if(pre){
+      pre.innerText = code;
+    }
+  }catch(err){
+    showError('Apply failed: ' + err.message);
+  }
+});
+
+codeMode.addEventListener('change', ()=>{
+  const mode = codeMode.value;
+  const code = codeEditor.value;
+  const panel = document.getElementById(modal.dataset.targetPanel);
+  const demoHTML = findDemoHTML(panel);
+  applyToPreview(mode, code, demoHTML);
+});
+
+let liveTimer = 0;
+codeEditor.addEventListener('input', ()=>{
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(()=>{
+    const mode = codeMode.value;
+    const code = codeEditor.value;
+    const panel = document.getElementById(modal.dataset.targetPanel);
+    const demoHTML = findDemoHTML(panel);
+    applyToPreview(mode, code, demoHTML);
+  }, 350);
+});
+
+closeEditor.addEventListener('click', ()=>{
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  clearError();
+  previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+});
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal){
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    clearError();
+    previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+  }
+});
+
+/* ===============================
+   Navigation (sidebar + arrows)
+=============================== */
+const sideButtons = document.querySelectorAll('.lessons-list button');
+const panelsAll  = document.querySelectorAll('.lesson-panel');
+const titleEl   = document.getElementById('panel-title');
+const prevBtn = document.getElementById('prevLesson');
+const nextBtn = document.getElementById('nextLesson');
+
+function updateButtons() {
+  const current = document.querySelector('.lesson-panel.visible');
+  if(!current) return;
+  const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+  const totalParts = lessonsData[lessonNum - 1].parts.length;
+  prevBtn.style.display = partNum === 1 ? 'none' : 'inline-block';
+  nextBtn.style.display = partNum === totalParts ? 'none' : 'inline-block';
+}
+
+function showLesson(id) {
+  panelsAll.forEach(p => p.classList.remove('visible'));
+  sideButtons.forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(id);
+  if(!panel) return;
+  panel.classList.add('visible');
+  const mainId = id.split('-').slice(0, 2).join('-') + '-1';
+  const mainBtn = document.querySelector(`[data-lesson="${mainId}"]`);
+  if (mainBtn) mainBtn.classList.add('active');
+  const metaEl = panel.querySelector('.meta');
+  const partText = metaEl ? (metaEl.textContent.split('•')[1] || '').trim() : '';
+  titleEl.textContent = (panel.querySelector('h1') ? panel.querySelector('h1').textContent : '') + (partText ? ' • ' + partText : '');
+  updateButtons();
+}
+
+function wireUpNavigation(){
+  sideButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.lesson) {
+        showLesson(btn.dataset.lesson);
+      }
+    });
+  });
+
+  lessonsData.forEach((lesson, i) => {
+    const arrow = document.getElementById(`toggleArrow${i + 1}`);
+    const dropdown = document.getElementById(`partsDropdown${i + 1}`);
+    if(!arrow || !dropdown) return;
+    arrow.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = dropdown.style.display === 'flex';
+      dropdown.style.display = open ? 'none' : 'flex';
+      arrow.textContent = open ? '▶' : '▼';
+    });
+    dropdown.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showLesson(btn.dataset.lesson);
+      });
+    });
+  });
+
+  prevBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    if (partNum > 1) {
+      showLesson(`lesson-${lessonNum}-${partNum - 1}`);
+    }
+  };
+
+  nextBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    const totalParts = lessonsData[lessonNum - 1].parts.length;
+    if (partNum < totalParts) {
+      showLesson(`lesson-${lessonNum}-${partNum + 1}`);
+    }
+  };
+}
+
+// initial wiring (in case DOMContentLoaded already fired)
+if(document.readyState === 'complete' || document.readyState === 'interactive'){
+  wireUpNavigation();
+} else {
+  document.addEventListener('DOMContentLoaded', wireUpNavigation);
+}
+
+lessonsData.forEach((lesson, i) => {
+    const arrow = document.getElementById(`toggleArrow${i + 1}`);
+    const dropdown = document.getElementById(`partsDropdown${i + 1}`);
+  
+    arrow.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = dropdown.style.display === 'flex';
+      dropdown.style.display = open ? 'none' : 'flex';
+      arrow.textContent = open ? '▶' : '▼';
+    });
+  
+    dropdown.querySelectorAll('button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    showLesson(btn.dataset.lesson);
+    // Don't close the dropdown automatically
+      });
+    });
+  });
+  
+  /* ===============================
+     INITIAL LOAD
+  ================================ */
+  showLesson('lesson-1-1');
+
+</script>
+
+</body>
+</html>
