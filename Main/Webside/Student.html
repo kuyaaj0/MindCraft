@@ -609,32 +609,37 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =========================================================
      1️⃣ AUTO-GENERATE LESSON & QUIZ DROPDOWNS
      ========================================================= */
-  function FullpopulateOptions(prefix, count, type, folder) {
-  const select = document.getElementById(`${prefix}${type}`);
-  if (!select) return;
+  function FullpopulateOptions(prefix, folder) {
+  // ✅ LESSON dropdown → lesson-Full.html only
+  const lessonSelect = document.getElementById(`${prefix}Lessons`);
+  if (lessonSelect) {
+    lessonSelect.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.textContent = "📖 Select Lesson";
+    placeholder.value = "";
+    lessonSelect.appendChild(placeholder);
 
-  const label = "📖 Select Lesson / Quiz";
-  const lessonPath = `../Modular/Lessons/${folder}/lesson-Full.html`;
-  const quizPath = `../Levels/Quiz/${folder}/level-`;
+    const lessonOption = document.createElement("option");
+    lessonOption.value = `../Modular/Lessons/${folder}/lesson-Full.html`;
+    lessonOption.textContent = "Lesson Full";
+    lessonSelect.appendChild(lessonOption);
+  }
 
-  select.innerHTML = "";
-  const placeholder = document.createElement("option");
-  placeholder.textContent = label;
-  placeholder.value = "";
-  select.appendChild(placeholder);
+  // ✅ QUIZ dropdown → level-1 to level-5
+  const quizSelect = document.getElementById(`${prefix}Quizzes`);
+  if (quizSelect) {
+    quizSelect.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.textContent = "📝 Select Quiz";
+    placeholder.value = "";
+    quizSelect.appendChild(placeholder);
 
-  // ✅ Only one full lesson (no numbering)
-  const lessonOption = document.createElement("option");
-  lessonOption.value = lessonPath;
-  lessonOption.textContent = "Lesson Full";
-  select.appendChild(lessonOption);
-
-  // ✅ Add 5 quizzes (levels)
-  for (let t = 1; t <= 5; t++) {
-    const option = document.createElement("option");
-    option.value = `${quizPath}${t}.html`;
-    option.textContent = `Level ${t}`;
-    select.appendChild(option);
+    for (let i = 1; i <= 5; i++) {
+      const option = document.createElement("option");
+      option.value = `../Levels/Quiz/${folder}/level-${i}.html`;
+      option.textContent = `Level ${i}`;
+      quizSelect.appendChild(option);
+    }
   }
 }
 
@@ -663,10 +668,8 @@ function populateOptions(prefix, count, type, folder) {
   }
 }
 
-// ✅ Uses uppercase folders
-["css"].forEach(lang => {
-  FullpopulateOptions(lang, 1, "Lessons", lang.toUpperCase()); // add 1 if only 1 full lesson
-});
+// ✅ Uppercase folders (since your structure is uppercase)
+FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
 
 ["html", "js"].forEach(lang => {
   populateOptions(lang, 5, "Lessons", lang.toUpperCase());
