@@ -35,9 +35,9 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start; /* move content higher */
   text-align:center;
-  padding:40px 20px;
+  padding:80px 20px 40px; /* top padding pushes title higher */
 }
 
 /* === TITLE === */
@@ -69,10 +69,19 @@ button{
     inset -4px -4px 0 rgba(0,0,0,.25),
     0 6px 0 #5c3a1a;
   transition:transform 0.1s;
+  margin:6px 0;
 }
 
 button:hover{
   transform:translateY(-2px);
+}
+
+/* SETTINGS BUTTON STYLE */
+.settings-btn{
+  background:#3b6cff;
+  box-shadow:
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 6px 0 #1f3ea8;
 }
 
 /* === AUTH === */
@@ -117,6 +126,11 @@ footer{
       </div>
 
       <button id="getStartedBtn">START JOURNEY</button>
+
+      <!-- SETTINGS BUTTON ADDED -->
+      <button class="settings-btn" onclick="location.href='Main/Settings/settings.html'">
+        SETTINGS
+      </button>
 
       <div class="auth-section" id="authSection">
         <button onclick="location.href='Main/Account/signin.html'">LOGIN</button>
