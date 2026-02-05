@@ -70,6 +70,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.appendChild(popup);
 });
 
+// ✅ Ensure popup references exist even if quiz finishes early
+function ensurePopupReady() {
+  return new Promise(resolve => {
+    const check = () => {
+      const popup = document.getElementById("xpPopup");
+      if (popup) resolve(true);
+      else setTimeout(check, 100);
+    };
+    check();
+  });
+}
+
 const xpPopup = document.getElementById("xpPopup");
 const xpGain = document.getElementById("xpGain");
 const xpBarFill = document.getElementById("xpBarFill");
@@ -190,7 +202,9 @@ async function processXP(user, correctCount, totalCount, types) {
 // ===============================
 // 🎉 XP Popup Display (fade + fix)
 // ===============================
-function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
+async function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveledUp) {
+  await ensurePopupReady(); // ✅ wait for popup to exist first
+
   const quizContainer = document.querySelector(".quiz-container");
   if (quizContainer) {
     quizContainer.style.transition = "opacity 0.6s ease";
@@ -199,6 +213,12 @@ function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveled
 
   setTimeout(() => {
     if (quizContainer) quizContainer.style.display = "none";
+
+    const xpPopup = document.getElementById("xpPopup");
+    const xpGain = document.getElementById("xpGain");
+    const xpBarFill = document.getElementById("xpBarFill");
+    const xpInfoText = document.getElementById("xpInfoText");
+    const levelUpNotice = document.getElementById("levelUpNotice");
 
     xpPopup.style.display = "flex";
     xpPopup.style.opacity = "0";
@@ -220,10 +240,6 @@ function showPopup(xp, alreadyCompleted, currentXP, xpMax, currentLevel, leveled
 
     if (leveledUp) {
       levelUpNotice.style.display = "block";
-      if (soundEnabled) levelUpSound.play();
-      if (vibrationEnabled && isMobile && navigator.vibrate) {
-        navigator.vibrate([200, 100, 200]);
-      }
     } else {
       levelUpNotice.style.display = "none";
     }
