@@ -635,6 +635,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Populate HTML, CSS, JS lessons and quizzes
+  ["css"].forEach(lang => {
+    populateOptions(lang, Full, "Lessons", lang.toUpperCase());
+  });
+  
+
+  // Populate HTML, CSS, JS lessons and quizzes
   ["html", "css", "js"].forEach(lang => {
     populateOptions(lang, 5, "Lessons", lang.toUpperCase());
     populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
