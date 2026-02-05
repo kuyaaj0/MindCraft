@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - MindCraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../Design/Position.css">
+<style>
+body {
+  font-family: 'Press Start 2P', cursive;
+  text-align: center;
+  background: #203a43;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+input {
+  padding: 10px;
+  width: 70%;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+}
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #1DB954;
+  color: white;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  margin: 5px;
+  transition: background 0.3s;
+}
+button:hover { background: #1ed760; }
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+.message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
+.choice-section, .student-form, .teacher-form { display: none; }
+.choice-section { display: block; }
+.back-buttons {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.back-buttons button {
+  width: 160px;
+  background: #666;
+}
+.back-buttons button:hover { background: #888; }
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #1DB954;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 9999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: #ff5252; }
+@media (max-width: 768px) {
+  .toast { right: 50%; transform: translate(50%, 20px); }
+  .toast.show { transform: translate(50%, 0); }
+}
+</style>
+</head>
+<body>
+
+<div class="back-buttons">
+  <button id="homeBtn">🏠 Home</button>
+  <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
+</div>
+
+<div class="choice-section" id="choiceSection">
+  <h2>🧠 MindCraft - Sign Up</h2>
+  <p>Choose your role:</p>
+  <button id="studentBtn">Student</button>
+  <button id="teacherBtn">Teacher</button>
+</div>
+
+<div class="student-form" id="studentForm">
+  <h2>Student Sign Up</h2>
+  <form id="studentSignupForm">
+    <input type="text" id="studentName" placeholder="Enter your name" required><br>
+    <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
+    <input type="password" id="studentPassword" placeholder="Enter password" required><br>
+    <button type="submit">Create Account</button>
+  </form>
+  <p class="message" id="studentMessage"></p>
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+</div>
+
+<div class="teacher-form" id="teacherForm">
+  <h2>Teacher Sign Up</h2>
+  <p>Note: Only DepEd accounts can register (e.g., teacher@ed.gov).</p>
+  <form id="teacherSignupForm">
+    <input type="text" id="teacherName" placeholder="Enter your name" required><br>
+    <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
+    <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
+    <button type="submit">Create Account</button>
+  </form>
+  <p class="message" id="teacherMessage"></p>
+  <p>Already have an account? <a href="signin.html" style="color:#1DB954;">Sign in here</a>.</p>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { auth, db } from '../System/Database/firebase.js';
+import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+function showToast(message, isError = false) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast' + (isError ? ' error show' : ' show');
+  setTimeout(() => toast.classList.remove('show', 'error'), 3000);
+}
+
+// Navigation
+document.getElementById("homeBtn").addEventListener("click", () => {
+  window.location.href = "../../index.html";
+});
+
+function showStudentForm() {
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('studentForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
+}
+
+function showTeacherForm() {
+  document.getElementById('choiceSection').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'block';
+  document.getElementById('homeBtn').style.display = 'none';
+}
+
+function backToChoice() {
+  document.getElementById('studentForm').style.display = 'none';
+  document.getElementById('teacherForm').style.display = 'none';
+  document.getElementById('choiceSection').style.display = 'block';
+  document.getElementById('formBackBtn').style.display = 'none';
+  document.getElementById('homeBtn').style.display = 'block';
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("studentBtn").addEventListener("click", showStudentForm);
+  document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
+  document.getElementById("formBackBtn").addEventListener("click", backToChoice);
+});
+
+// === Student Sign Up + Firebase Verification + Leaderboard Ready ===
+document.getElementById('studentSignupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('studentName').value.trim();
+  const email = document.getElementById('studentEmail').value.trim();
+  const password = document.getElementById('studentPassword').value;
+  const msg = document.getElementById('studentMessage');
+
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+    // ✅ Updated setDoc for live leaderboard
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      name,
+      email,
+      role: "student",
+      verified: false,
+      level: 1,
+      xp: 0,
+      xpMax: 100,
+      totalXP: 0,
+      completedLessons: [],
+      completedQuizzes: [],
+      createdAt: new Date()
+    });
+
+    await sendEmailVerification(userCred.user);
+    showToast("✅ Verification link sent! Check Gmail inbox or spam folder.");
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Account created! Please verify your Gmail before signing in.";
+
+    setTimeout(() => window.location.href = "signin.html", 3000);
+  } catch (err) {
+    console.error("Signup error:", err);
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+
+// === Teacher Sign Up ===
+document.getElementById('teacherSignupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('teacherName').value.trim();
+  const email = document.getElementById('teacherEmail').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+  const msg = document.getElementById('teacherMessage');
+
+  if (!email.includes('@ed.gov') && !email.includes('@deped.gov.ph')) {
+    msg.style.color = "#ff5252";
+    msg.textContent = "❌ Invalid DepEd email.";
+    return;
+  }
+
+  try {
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db, "users", userCred.user.uid), {
+      name,
+      email,
+      role: "teacher",
+      verified: true,
+      createdAt: new Date()
+    });
+
+    showToast("✅ Teacher account created!");
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Teacher account created successfully!";
+    setTimeout(() => window.location.href = "signin.html", 2000);
+  } catch (err) {
+    console.error("Teacher signup error:", err);
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+</script>
+  <!-- backup parts for signup.html code-->
+</body>
+      </html>
