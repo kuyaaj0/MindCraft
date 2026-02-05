@@ -6,129 +6,177 @@
 <title>MindCraft</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="Main/Design/Position.css">
-<link rel="stylesheet" href="Main/Design/levels.css">
-<link rel="stylesheet" href="Main/Design/global_size-FIX.css">
 
 <style>
-/* === Global Styles === */
-body {
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-  transition: background 1s, color 1s;
-  overflow-x: hidden;
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-size:10px;}
+
+body{
+  font-family:'Press Start 2P', cursive;
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
 }
 
-/* === Landing Content === */
-.landing-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* === CONTAINER === */
+.home-container{
+  width:100%;
+  max-width:1000px;
+  height:calc(100vh - 40px);
+  padding:20px;
 }
 
-.landing-title {
-  font-size: clamp(1.5rem, 5vw, 3rem);
-  margin-bottom: 40px;
-  text-shadow: 0 0 20px #1DB954;
+/* === WOOD FRAME === */
+.wood-border{
+  width:100%;
+  height:100%;
+  background:#8b5a2b;
+  border-radius:28px;
+  padding:16px;
+  position:relative;
+  box-shadow:
+    inset -8px -8px 0 rgba(0,0,0,.3),
+    0 12px 0 #5c3a1a;
 }
 
-/* Get Started Button */
-.get-started-btn {
-  font-family: 'Press Start 2P', cursive;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 15px 30px;
-  font-size: clamp(0.8rem, 3vw, 1.2rem);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 40px;
-}
-.get-started-btn:hover { 
-  background: #1ed760; 
-  transform: scale(1.05); 
+.wood-border::before{
+  content:'MINDCRAFT';
+  position:absolute;
+  top:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#8b5a2b;
+  padding:6px 20px;
+  font-size:11px;
+  color:#ffd966;
+  text-shadow:2px 2px #000;
+  border-radius:10px;
+  box-shadow:0 4px 0 #5c3a1a;
 }
 
-/* Auth Section */
-.auth-section {
-  display: none; /* hidden initially */
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 400px;
-  flex-wrap: wrap;
+/* === INNER PANEL === */
+.home-content{
+  height:100%;
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  border-radius:16px;
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
 }
 
-.auth-section button {
-  font-family: 'Press Start 2P', cursive;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 12px 25px;
-  font-size: clamp(0.7rem, 2.5vw, 1rem);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  flex: 1;
-  min-width: 120px;
-}
-.auth-section button:hover {
-  background: #1ed760;
-  transform: scale(1.05);
+/* === TITLE === */
+.home-title{
+  font-size:18px;
+  color:#006400;
+  text-shadow:3px 3px #fff;
+  margin-bottom:24px;
 }
 
-/* Footer */
-footer {
-  position: absolute;
-  bottom: 10px;
-  text-align: center;
-  font-size: 0.6rem;
-  width: 100%;
+.home-sub{
+  font-size:9px;
+  margin-bottom:40px;
+  color:#145214;
+}
+
+/* === BUTTONS === */
+button{
+  font-family:'Press Start 2P', cursive;
+  background:#a56b34;
+  color:#fff;
+  border:none;
+  padding:14px 26px;
+  border-radius:14px;
+  font-size:9px;
+  cursor:pointer;
+  min-width:200px;
+  box-shadow:
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 6px 0 #5c3a1a;
+  transition:transform 0.1s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+/* === AUTH === */
+.auth-section{
+  display:none;
+  gap:16px;
+  margin-top:24px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.auth-section button{
+  background:#d4af37;
+  box-shadow:
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 6px 0 #b8860b;
+}
+
+/* === FOOTER === */
+footer{
+  position:absolute;
+  bottom:12px;
+  width:100%;
+  text-align:center;
+  font-size:6px;
+  color:#145214;
 }
 </style>
 </head>
+
 <body>
 
-<!-- Landing Content -->
-<div class="landing-content">
-  <h1 class="landing-title">🧠 Welcome To MindCraft</h1>
-  <button class="get-started-btn" id="getStartedBtn">Get Started</button>
-  
-  <div class="auth-section" id="authSection">
-    <button onclick="location.href='Main/Account/signin.html'">Login</button>
-    <button onclick="location.href='Main/Account/signup.html'">Sign Up</button>
+<div class="home-container">
+  <div class="wood-border">
+    <div class="home-content">
+
+      <div class="home-title">
+        🧠 MINDCRAFT
+      </div>
+
+      <div class="home-sub">
+        Learn • Play • Master Your Mind
+      </div>
+
+      <button id="getStartedBtn">START JOURNEY</button>
+
+      <div class="auth-section" id="authSection">
+        <button onclick="location.href='Main/Account/signin.html'">LOGIN</button>
+        <button onclick="location.href='Main/Account/signup.html'">SIGN UP</button>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <footer>
-  <p>© 2025 MindCraft | Created by Kuya AJ & Team</p>
+  © 2025 MindCraft | Created by Kuya AJ & Team
 </footer>
 
 <script src="Main/Design/theme.js"></script>
 
 <script>
-// === Get Started Button Behavior ===
+// === Get Started Button Behavior (UNCHANGED) ===
 document.getElementById('getStartedBtn').addEventListener('click', () => {
   document.getElementById('authSection').style.display = 'flex';
   document.getElementById('getStartedBtn').style.display = 'none';
 });
 
-// === Apply Theme on Load ===
+// === Apply Theme on Load (UNCHANGED) ===
 if (typeof window.applyTheme === 'function') {
   const currentTheme = localStorage.getItem('theme') || 'dark';
   window.applyTheme(currentTheme, false);
 }
 </script>
+
 </body>
 </html>
