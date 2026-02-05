@@ -672,7 +672,7 @@ function populateOptions(prefix, count, type, folder) {
   FullpopulateOptions(lang, 1, "Lessons", lang.toUpperCase()); // add 1 if only 1 full lesson
 });
 
-["html", "css", "js"].forEach(lang => {
+["html", "js"].forEach(lang => {
   populateOptions(lang, 5, "Lessons", lang.toUpperCase());
   populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
 });
