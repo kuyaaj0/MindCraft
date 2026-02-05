@@ -9,22 +9,22 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-size:10px;}
+html,body{
+  height:100%;
+  width:100%;
+  font-size:10px;
+}
 
 body{
   font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
-  display:flex;
-  align-items:center;
-  justify-content:center;
   overflow:hidden;
 }
 
 /* === FULLSCREEN CONTAINER === */
 .home-container{
-  width:100%;
+  width:100vw;
   height:100vh;
-  padding:20px;
 }
 
 /* === FULLSCREEN PANEL === */
@@ -32,14 +32,12 @@ body{
   width:100%;
   height:100%;
   background:linear-gradient(#8fe9ff 55%, #7dd37d);
-  border-radius:0;
-  padding:32px;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   text-align:center;
-  box-shadow:0 20px 50px rgba(0,0,0,.3);
+  padding:40px 20px;
 }
 
 /* === TITLE === */
@@ -135,13 +133,11 @@ footer{
 <script src="Main/Design/theme.js"></script>
 
 <script>
-// === Get Started Button Behavior ===
 document.getElementById('getStartedBtn').addEventListener('click', () => {
   document.getElementById('authSection').style.display = 'flex';
   document.getElementById('getStartedBtn').style.display = 'none';
 });
 
-// === Apply Theme on Load ===
 if (typeof window.applyTheme === 'function') {
   const currentTheme = localStorage.getItem('theme') || 'dark';
   window.applyTheme(currentTheme, false);
