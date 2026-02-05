@@ -25,8 +25,13 @@ const db = getFirestore(app);
 const XP_MC = 5;   // XP for multiple choice
 const XP_FILL = 10; // XP for fill-in-the-blank
 
-// Detect level name from file (ex: level-2.html → "level-2")
-const CURRENT_LEVEL = window.location.pathname.split("/").pop().replace(".html", "");
+// ===============================
+// 🧩 Detect Subject + Level
+// ===============================
+const pathParts = window.location.pathname.toLowerCase().split("/");
+const subject = pathParts.find(p => ["html", "css", "js"].includes(p)) || "html";
+const levelName = window.location.pathname.split("/").pop().replace(".html", "");
+const CURRENT_LEVEL = `${subject}-${levelName}`;
 
 // ===============================
 // 🎨 Styles + Animations
@@ -78,7 +83,7 @@ function createPopup() {
   `;
   document.body.appendChild(popup);
 
-  // ✅ Attach button click directly after creation
+  // ✅ Attach Back button with smooth fade-out
   const backBtn = popup.querySelector("#backToLobby");
   backBtn.addEventListener("click", () => {
     const inner = popup.firstElementChild;
@@ -171,7 +176,7 @@ async function processXP(user, correctCount, totalCount, types) {
     let xpMax = data.xpMax || 100;
     let completedLevels = data.completedLevels || {};
 
-    // 🛡 Prevent farming
+    // 🛡 Prevent farming (subject-aware)
     let alreadyCompleted = completedLevels[CURRENT_LEVEL] === true;
     let gainedXP = alreadyCompleted ? 0 : xpEarned;
 
