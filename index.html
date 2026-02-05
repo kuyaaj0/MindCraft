@@ -17,97 +17,148 @@ html,body{
 
 body{
   font-family:'Press Start 2P', cursive;
-  background:linear-gradient(#87e4ff,#c8f7b0);
+  background:linear-gradient(180deg,#87e4ff 0%, #bdf3ff 40%, #c8f7b0 100%);
   overflow:hidden;
+  position:relative;
+}
+
+/* === SOFT CLOUD BACKGROUND === */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('https://i.imgur.com/9QZ7Z6F.png');
+  background-size:cover;
+  opacity:.15;
+  animation:cloudMove 60s linear infinite;
+}
+
+@keyframes cloudMove{
+  from{background-position:0 0}
+  to{background-position:1000px 0}
 }
 
 /* === FULLSCREEN CONTAINER === */
 .home-container{
   width:100vw;
   height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-/* === FULLSCREEN PANEL === */
+/* === GLASS PANEL === */
 .home-content{
   width:100%;
-  height:100%;
-  background:linear-gradient(#8fe9ff 55%, #7dd37d);
+  max-width:700px;
+  height:auto;
+  min-height:500px;
+  background:linear-gradient(180deg,#8fe9ffcc,#7dd37dcc);
+  backdrop-filter:blur(10px);
+  border-radius:30px;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start; /* move content higher */
+  justify-content:flex-start;
   text-align:center;
-  padding:80px 20px 40px; /* top padding pushes title higher */
+  padding:80px 40px 50px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.25),
+    inset 0 0 40px rgba(255,255,255,.25);
+  border:3px solid rgba(255,255,255,.4);
 }
 
 /* === TITLE === */
 .home-title{
-  font-size:18px;
-  color:#006400;
-  text-shadow:3px 3px #fff;
-  margin-bottom:24px;
+  font-size:22px;
+  color:#065f2c;
+  text-shadow:
+    3px 3px #ffffff,
+    6px 6px rgba(0,0,0,.15);
+  margin-bottom:18px;
+  letter-spacing:2px;
 }
 
 .home-sub{
   font-size:9px;
-  margin-bottom:40px;
+  margin-bottom:50px;
   color:#145214;
+  opacity:.9;
 }
 
-/* === BUTTONS === */
+/* === BUTTON BASE === */
 button{
   font-family:'Press Start 2P', cursive;
-  background:#a56b34;
-  color:#fff;
   border:none;
-  padding:14px 26px;
-  border-radius:14px;
+  padding:16px 28px;
+  border-radius:18px;
   font-size:9px;
   cursor:pointer;
-  min-width:200px;
+  min-width:230px;
+  margin:8px 0;
+  transition:all .15s ease;
+}
+
+/* START BUTTON */
+#getStartedBtn{
+  background:linear-gradient(#a56b34,#7a4a22);
+  color:#fff;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 6px 0 #5c3a1a;
-  transition:transform 0.1s;
-  margin:6px 0;
+    0 8px 0 #5c3a1a,
+    0 12px 20px rgba(0,0,0,.25);
 }
 
-button:hover{
-  transform:translateY(-2px);
+#getStartedBtn:hover{
+  transform:translateY(-3px) scale(1.03);
 }
 
-/* SETTINGS BUTTON STYLE */
+/* SETTINGS BUTTON */
 .settings-btn{
-  background:#3b6cff;
+  background:linear-gradient(#4c7dff,#2a4ed1);
+  color:#fff;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 6px 0 #1f3ea8;
+    0 8px 0 #1f3ea8,
+    0 12px 20px rgba(0,0,0,.25);
 }
 
-/* === AUTH === */
+.settings-btn:hover{
+  transform:translateY(-3px) scale(1.03);
+}
+
+/* AUTH BUTTONS */
 .auth-section{
   display:none;
-  gap:16px;
-  margin-top:24px;
+  gap:18px;
+  margin-top:30px;
   flex-wrap:wrap;
   justify-content:center;
 }
 
 .auth-section button{
-  background:#d4af37;
+  background:linear-gradient(#ffd966,#d4af37);
+  color:#3a2a00;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
-    0 6px 0 #b8860b;
+    0 8px 0 #b8860b,
+    0 12px 20px rgba(0,0,0,.25);
+}
+
+.auth-section button:hover{
+  transform:translateY(-3px) scale(1.03);
 }
 
 /* === FOOTER === */
 footer{
   position:absolute;
-  bottom:12px;
+  bottom:14px;
   width:100%;
   text-align:center;
   font-size:6px;
   color:#145214;
+  opacity:.8;
 }
 </style>
 </head>
@@ -117,9 +168,7 @@ footer{
 <div class="home-container">
   <div class="home-content">
 
-      <div class="home-title">
-         MINDCRAFT
-      </div>
+      <div class="home-title">MINDCRAFT</div>
 
       <div class="home-sub">
         Learn • Play • Master Your Mind
@@ -127,7 +176,6 @@ footer{
 
       <button id="getStartedBtn">START JOURNEY</button>
 
-      <!-- SETTINGS BUTTON ADDED -->
       <button class="settings-btn" onclick="location.href='Main/Settings/settings.html'">
         SETTINGS
       </button>
