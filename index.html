@@ -17,40 +17,40 @@ html,body{
 
 body{
   font-family:'Press Start 2P', cursive;
-  background:linear-gradient(180deg,#87e4ff 0%, #c8f7b0 100%);
+  background:linear-gradient(#87e4ff,#c8f7b0);
+  overflow:hidden;
 }
 
-/* === TRUE FULLSCREEN === */
+/* === FULLSCREEN CONTAINER === */
 .home-container{
   width:100vw;
   height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
 }
 
+/* === FULLSCREEN PANEL === */
 .home-content{
   width:100%;
   height:100%;
+  background:linear-gradient(#8fe9ff 55%, #7dd37d);
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
+  justify-content:flex-start; /* move content higher */
   text-align:center;
-  padding-top:120px; /* pushes title higher */
+  padding:80px 20px 40px; /* top padding pushes title higher */
 }
 
 /* === TITLE === */
 .home-title{
-  font-size:22px;
-  color:#065f2c;
-  text-shadow:3px 3px #ffffff;
-  margin-bottom:20px;
+  font-size:18px;
+  color:#006400;
+  text-shadow:3px 3px #fff;
+  margin-bottom:24px;
 }
 
 .home-sub{
   font-size:9px;
-  margin-bottom:50px;
+  margin-bottom:40px;
   color:#145214;
 }
 
@@ -60,31 +60,31 @@ button{
   background:#a56b34;
   color:#fff;
   border:none;
-  padding:16px 28px;
-  border-radius:16px;
+  padding:14px 26px;
+  border-radius:14px;
   font-size:9px;
   cursor:pointer;
-  min-width:220px;
-  margin:8px 0;
+  min-width:200px;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
     0 6px 0 #5c3a1a;
-  transition:transform .1s;
+  transition:transform 0.1s;
+  margin:6px 0;
 }
 
 button:hover{
   transform:translateY(-2px);
 }
 
-/* SETTINGS BUTTON */
+/* SETTINGS BUTTON STYLE */
 .settings-btn{
-  background:#4c7dff;
+  background:#3b6cff;
   box-shadow:
     inset -4px -4px 0 rgba(0,0,0,.25),
     0 6px 0 #1f3ea8;
 }
 
-/* AUTH */
+/* === AUTH === */
 .auth-section{
   display:none;
   gap:16px;
@@ -100,7 +100,7 @@ button:hover{
     0 6px 0 #b8860b;
 }
 
-/* FOOTER */
+/* === FOOTER === */
 footer{
   position:absolute;
   bottom:12px;
@@ -117,7 +117,9 @@ footer{
 <div class="home-container">
   <div class="home-content">
 
-      <div class="home-title">MINDCRAFT</div>
+      <div class="home-title">
+         MINDCRAFT
+      </div>
 
       <div class="home-sub">
         Learn • Play • Master Your Mind
@@ -125,6 +127,7 @@ footer{
 
       <button id="getStartedBtn">START JOURNEY</button>
 
+      <!-- SETTINGS BUTTON ADDED -->
       <button class="settings-btn" onclick="location.href='Main/Settings/settings.html'">
         SETTINGS
       </button>
