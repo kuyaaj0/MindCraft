@@ -158,6 +158,8 @@ button:disabled{opacity:0.5;cursor:not-allowed;}
     </div>
 </div>
 
+<script type="module" src="../../../Tools/Xp/HtmlXP-tools.js"></script>
+
 <script>
 const questions = [
   { type: "mc", text: "1. Which CSS property is used to change the type of font for text?", options: ["font-size","font-family","font-weight","text-align"], correct: 1 },
@@ -265,12 +267,37 @@ function calculateScore(){
     return score;
 }
 function finishQuiz(){
-    if(quizCompleted)return;
+    if(quizCompleted) return;
     quizCompleted=true;
+    currentIndex=questions.length-1;
     saveCurrentAnswer();
-    if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+    if(timerInterval){ 
+      clearInterval(timerInterval); 
+      timerInterval=null; 
+    }
+    const total=questions.length;
+    const score=calculateScore();
+    const percentage=Math.round((score/total)*100);
+    resultBox.innerHTML=`
+      <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+      <span style="font-size:8px;">${percentage}% - HTML basics mastery logged!</span>
+    `;
     updateUI();
+    console.log("🧪 HTML Lesson 1 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+
+    // 🚀 Notify XP system that quiz is finished
+if (window.handleQuizFinish) {
+  try {
+    window.handleQuizFinish({ 
+      finalScore: score, 
+      totalQuestions: total, 
+      types: questions.map(q => q.type) 
+    });
+  } catch (err) {
+    console.error("XP system notification failed:", err);
+  }
 }
+    }
 nextBtn.addEventListener("click",()=>{if(quizCompleted)return;saveCurrentAnswer();if(currentIndex<questions.length-1){currentIndex++;updateUI();}});
 finishBtn.addEventListener("click",()=>finishQuiz());
 backBtn.addEventListener("click",()=>{window.location.href='../../../Modular/Lessons/CSS/lesson-4.html';});
@@ -281,4 +308,5 @@ startTimer();
 </script>
 </body>
 </html>
+
 
