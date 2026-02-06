@@ -23,26 +23,6 @@ body{
   overflow:hidden;
 }
 
-/* ===== FLOATING HOME BUTTON ===== */
-.home-btn{
-  position:absolute;
-  top:20px;
-  left:20px;
-  background:linear-gradient(145deg,#ffae42,#e69500);
-  color:#fff;
-  border:none;
-  padding:12px 20px;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:800;
-  cursor:pointer;
-  box-shadow:0 6px 0 #b36b00,0 12px 20px rgba(0,0,0,.3);
-  transition:.15s;
-  z-index:10;
-}
-.home-btn:hover{transform:translateY(-2px)}
-.home-btn:active{transform:translateY(4px)}
-
 /* ===== CLOUD BACKGROUND ===== */
 body::before{
   content:"";
@@ -54,6 +34,29 @@ body::before{
     radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
   opacity:.35;
 }
+
+/* ===== TOP BAR (HOME ONLY) ===== */
+.top-bar{
+  position:absolute;
+  top:20px;
+  left:20px;
+  z-index:10;
+}
+
+.home-btn{
+  background:linear-gradient(145deg,#ffae42,#e69500);
+  color:#fff;
+  border:none;
+  padding:12px 22px;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 6px 0 #b36b00,0 12px 20px rgba(0,0,0,.3);
+  transition:.15s;
+}
+.home-btn:hover{transform:translateY(-2px)}
+.home-btn:active{transform:translateY(4px)}
 
 /* ===== CARD ===== */
 .panel{
@@ -157,13 +160,15 @@ button:active{transform:translateY(4px)}
 
 <body>
 
-<!-- HOME BUTTON -->
-<button class="home-btn" onclick="location.href='../../index.html'">🏠 Home</button>
+<!-- 🔝 HOME BUTTON (COMPLETELY SEPARATE) -->
+<div class="top-bar">
+  <button class="home-btn" onclick="location.href='../../index.html'">🏠 Home</button>
+</div>
 
-<!-- ROLE CHOICE -->
+<!-- ===== ROLE SELECTION ===== -->
 <div class="panel choice-section" id="choiceSection">
   <div class="title">MindCraft</div>
-  <div class="subtitle">Choose how you want to sign in</div>
+  <div class="subtitle">Sign in to continue</div>
 
   <button class="role-btn" id="studentBtn">🎓 Student</button>
   <button class="role-btn" id="teacherBtn">👩‍🏫 Teacher</button>
@@ -173,7 +178,7 @@ button:active{transform:translateY(4px)}
   </div>
 </div>
 
-<!-- STUDENT SIGN IN -->
+<!-- ===== STUDENT SIGN IN ===== -->
 <div class="panel student-form" id="studentForm">
   <div class="title">Student Login</div>
 
@@ -193,7 +198,7 @@ button:active{transform:translateY(4px)}
   <button class="back" onclick="backToChoice()">⬅ Back</button>
 </div>
 
-<!-- TEACHER SIGN IN -->
+<!-- ===== TEACHER SIGN IN ===== -->
 <div class="panel teacher-form" id="teacherForm">
   <div class="title">Teacher Login</div>
 
@@ -213,7 +218,7 @@ button:active{transform:translateY(4px)}
   <button class="back" onclick="backToChoice()">⬅ Back</button>
 </div>
 
-<!-- ===== UI TOGGLE SCRIPT ===== -->
+<!-- ===== UI TOGGLE ===== -->
 <script>
 function showStudentForm(){
   choiceSection.style.display="none";
@@ -248,8 +253,7 @@ import { getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase
 /* STUDENT */
 studentSigninForm.addEventListener('submit', async e=>{
   e.preventDefault();
-  const msg = studentMessage;
-  msg.textContent="";
+  studentMessage.textContent="";
   resendStudent.style.display="none";
 
   try{
@@ -257,7 +261,7 @@ studentSigninForm.addEventListener('submit', async e=>{
     const user = cred.user;
 
     if(!user.emailVerified){
-      msg.textContent="Verify your email first.";
+      studentMessage.textContent="Verify your email first.";
       resendStudent.style.display="block";
       await signOut(auth);
       return;
@@ -265,17 +269,18 @@ studentSigninForm.addEventListener('submit', async e=>{
 
     const snap = await getDoc(doc(db,"users",user.uid));
     if(!snap.exists() || snap.data().role!=="student"){
-      msg.textContent="Not a student account.";
+      studentMessage.textContent="Not a student account.";
       await signOut(auth);
       return;
     }
 
-    msg.style.color="#1db954";
-    msg.textContent="Login successful!";
+    studentMessage.style.color="#1db954";
+    studentMessage.textContent="Login successful!";
     setTimeout(()=>location.href="../Startup/StartupS.html",1000);
-  }catch(err){msg.textContent=err.message}
+  }catch(err){studentMessage.textContent=err.message}
 });
 
+/* RESEND STUDENT */
 resendStudent.onclick = async()=>{
   try{
     const cred = await signInWithEmailAndPassword(auth,studentEmail.value,studentPassword.value);
@@ -288,8 +293,7 @@ resendStudent.onclick = async()=>{
 /* TEACHER */
 teacherSigninForm.addEventListener('submit', async e=>{
   e.preventDefault();
-  const msg = teacherMessage;
-  msg.textContent="";
+  teacherMessage.textContent="";
   resendTeacher.style.display="none";
 
   try{
@@ -297,7 +301,7 @@ teacherSigninForm.addEventListener('submit', async e=>{
     const user = cred.user;
 
     if(!user.emailVerified){
-      msg.textContent="Verify your email first.";
+      teacherMessage.textContent="Verify your email first.";
       resendTeacher.style.display="block";
       await signOut(auth);
       return;
@@ -305,17 +309,18 @@ teacherSigninForm.addEventListener('submit', async e=>{
 
     const snap = await getDoc(doc(db,"users",user.uid));
     if(!snap.exists() || snap.data().role!=="teacher"){
-      msg.textContent="Not a teacher account.";
+      teacherMessage.textContent="Not a teacher account.";
       await signOut(auth);
       return;
     }
 
-    msg.style.color="#1db954";
-    msg.textContent="Login successful!";
+    teacherMessage.style.color="#1db954";
+    teacherMessage.textContent="Login successful!";
     setTimeout(()=>location.href="../Startup/StartupT.html",1000);
-  }catch(err){msg.textContent=err.message}
+  }catch(err){teacherMessage.textContent=err.message}
 });
 
+/* RESEND TEACHER */
 resendTeacher.onclick = async()=>{
   try{
     const cred = await signInWithEmailAndPassword(auth,teacherEmail.value,teacherPassword.value);
