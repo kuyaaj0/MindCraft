@@ -117,7 +117,12 @@ button:hover { background: #1ed760; }
 
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
-import { signInWithEmailAndPassword, signOut, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ===== Navigation Buttons =====
@@ -158,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("formBackBtn").addEventListener("click", backToChoice);
 });
 
-// ==== Default Fields ====
+// ==== Default Student Fields ====
 const defaultStudentFields = {
   level: 1, xp: 0, xpMax: 100, totalXP: 0,
   completedLessons: [], completedQuizzes: []
@@ -208,7 +213,6 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     msg.style.color = "#1DB954";
     msg.textContent = "✅ Sign in successful! Redirecting...";
 
-    // ✅ Wait for Firebase session to stabilize before redirect
     setTimeout(async () => {
       let tries = 0;
       while (!auth.currentUser && tries < 10) {
@@ -223,7 +227,135 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     msg.textContent = `❌ ${err.message}`;
   }
 });
+
+// ==== Forgot Password (Student) ====
+const studentForgotBtn = document.createElement("button");
+studentForgotBtn.textContent = "🔑 Forgot Password?";
+studentForgotBtn.className = "resend-btn";
+studentForgotBtn.style.background = "#ffae42";
+studentForgotBtn.style.marginTop = "5px";
+studentForgotBtn.onclick = async () => {
+  const email = document.getElementById("studentEmail").value.trim();
+  const msg = document.getElementById("studentMessage");
+  if (!email) {
+    msg.textContent = "⚠️ Enter your Gmail first to reset password.";
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Password reset email sent! Check your inbox.";
+  } catch (err) {
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
+};
+document.getElementById("studentForm").appendChild(studentForgotBtn);
+
+// ==== Resend Verification (Student) ====
+document.getElementById("resendStudent").addEventListener("click", async () => {
+  const email = document.getElementById("studentEmail").value.trim();
+  const password = document.getElementById("studentPassword").value;
+  const msg = document.getElementById("studentMessage");
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+    await sendEmailVerification(user);
+    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
+    await signOut(auth);
+  } catch (err) {
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+
+// ==== Sign In (Teacher) ====
+document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('teacherEmail').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+  const msg = document.getElementById('teacherMessage');
+  const resendBtn = document.getElementById('resendTeacher');
+
+  msg.textContent = "";
+  resendBtn.style.display = "none";
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+
+    if (!user.emailVerified) {
+      msg.textContent = "⚠️ Please verify your email before signing in.";
+      resendBtn.style.display = "inline-block";
+      await signOut(auth);
+      return;
+    }
+
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+    if (!snap.exists() || snap.data().role !== "teacher") {
+      msg.textContent = "❌ This account is not a teacher.";
+      await signOut(auth);
+      return;
+    }
+
+    localStorage.setItem("currentUser", user.uid);
+    localStorage.setItem("cachedName", snap.data().name || "Teacher");
+    localStorage.setItem("currentRole", "teacher");
+
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Sign in successful! Redirecting...";
+
+    setTimeout(() => {
+      window.location.href = "../Startup/StartupT.html";
+    }, 1200);
+
+  } catch (err) {
+    console.error("Teacher sign-in error:", err);
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
+
+// ==== Forgot Password (Teacher) ====
+const teacherForgotBtn = document.createElement("button");
+teacherForgotBtn.textContent = "🔑 Forgot Password?";
+teacherForgotBtn.className = "resend-btn";
+teacherForgotBtn.style.background = "#ffae42";
+teacherForgotBtn.style.marginTop = "5px";
+teacherForgotBtn.onclick = async () => {
+  const email = document.getElementById("teacherEmail").value.trim();
+  const msg = document.getElementById("teacherMessage");
+  if (!email) {
+    msg.textContent = "⚠️ Enter your DepEd email first to reset password.";
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    msg.style.color = "#1DB954";
+    msg.textContent = "✅ Password reset email sent! Check your inbox.";
+  } catch (err) {
+    msg.style.color = "#ff5252";
+    msg.textContent = `❌ ${err.message}`;
+  }
+};
+document.getElementById("teacherForm").appendChild(teacherForgotBtn);
+
+// ==== Resend Verification (Teacher) ====
+document.getElementById("resendTeacher").addEventListener("click", async () => {
+  const email = document.getElementById("teacherEmail").value.trim();
+  const password = document.getElementById("teacherPassword").value;
+  const msg = document.getElementById("teacherMessage");
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
+    await sendEmailVerification(user);
+    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
+    await signOut(auth);
+  } catch (err) {
+    msg.textContent = `❌ ${err.message}`;
+  }
+});
 </script>
-  <!-- backup parts only and don't change it cause this is important for database stuff-->
 </body>
     </html>
