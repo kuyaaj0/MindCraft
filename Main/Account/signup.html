@@ -97,6 +97,7 @@ button{
   font-weight:700;
   cursor:pointer;
   box-shadow:0 5px 0 #6b3e1a;
+  transition:transform .15s ease;
 }
 button:hover{transform:translateY(-1px)}
 button:active{transform:translateY(3px)}
@@ -141,6 +142,7 @@ button:active{transform:translateY(3px)}
   opacity:0;
   transform:translateY(20px);
   transition:.4s;
+  z-index:9999;
 }
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.error{background:#c62828}
@@ -159,7 +161,7 @@ button:active{transform:translateY(3px)}
 <!-- ROLE CHOICE -->
 <div class="panel" id="choiceSection">
   <div class="title">MindCraft</div>
-  <div class="subtitle">Choose your role</div>
+  <div class="subtitle">Choose your role to sign up</div>
 
   <button class="role-btn" id="studentBtn">Student</button>
   <button class="role-btn" id="teacherBtn">Teacher</button>
@@ -181,7 +183,6 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="studentMessage"></p>
-
   <button class="back" onclick="backToChoice()">Back</button>
 </div>
 
@@ -198,7 +199,6 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="teacherMessage"></p>
-
   <button class="back" onclick="backToChoice()">Back</button>
 </div>
 
@@ -206,12 +206,12 @@ button:active{transform:translateY(3px)}
 
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
-import { createUserWithEmailAndPassword, sendEmailVerification } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { setDoc, doc } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { createUserWithEmailAndPassword, sendEmailVerification } 
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { setDoc, doc } 
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* UI */
+/* ==== UI Toggle ==== */
 studentBtn.onclick=()=>{
   choiceSection.style.display="none";
   studentForm.style.display="block";
@@ -226,7 +226,7 @@ function backToChoice(){
   choiceSection.style.display="block";
 }
 
-/* Toast */
+/* ==== Toast Notification ==== */
 function showToast(msg,isError=false){
   const t=document.getElementById("toast");
   t.textContent=msg;
@@ -234,51 +234,80 @@ function showToast(msg,isError=false){
   setTimeout(()=>t.className="toast",3000);
 }
 
-/* Student signup */
+/* ==== Student Signup ==== */
 studentSignupForm.addEventListener("submit",async e=>{
   e.preventDefault();
+  const name = studentName.value.trim();
+  const email = studentEmail.value.trim();
+  const password = studentPassword.value;
+  const msg = studentMessage;
+
   try{
-    const user=await createUserWithEmailAndPassword(
-      auth,studentEmail.value,studentPassword.value
-    );
+    const user=await createUserWithEmailAndPassword(auth,email,password);
+
     await setDoc(doc(db,"users",user.user.uid),{
-      name:studentName.value,
-      email:studentEmail.value,
+      name,
+      email,
       role:"student",
-      level:1,xp:0,xpMax:100,totalXP:0,
-      completedLessons:[],completedQuizzes:[],
+      verified:false,
+      level:1,
+      xp:0,
+      xpMax:100,
+      totalXP:0,
+      completedLessons:[],
+      completedQuizzes:[],
       createdAt:new Date()
     });
+
     await sendEmailVerification(user.user);
-    showToast("Verification email sent");
-    setTimeout(()=>location.href="signin.html",2500);
+    showToast("Verification email sent. Check Gmail inbox or spam folder.");
+    msg.style.color="#1db954";
+    msg.textContent="Account created! Please verify your Gmail before signing in.";
+
+    setTimeout(()=>location.href="signin.html",3000);
+
   }catch(err){
-    studentMessage.textContent=err.message;
+    console.error("Signup error:", err);
+    msg.style.color="#c62828";
+    msg.textContent=err.message;
   }
 });
 
-/* Teacher signup */
+/* ==== Teacher Signup ==== */
 teacherSignupForm.addEventListener("submit",async e=>{
   e.preventDefault();
-  if(!teacherEmail.value.includes("ed.gov") &&
-     !teacherEmail.value.includes("deped.gov.ph")){
-    teacherMessage.textContent="Invalid DepEd email";
+  const name = teacherName.value.trim();
+  const email = teacherEmail.value.trim();
+  const password = teacherPassword.value;
+  const msg = teacherMessage;
+
+  if(!email.includes("@ed.gov") && !email.includes("@deped.gov.ph")){
+    msg.style.color="#c62828";
+    msg.textContent="Invalid DepEd email address.";
     return;
   }
+
   try{
-    const user=await createUserWithEmailAndPassword(
-      auth,teacherEmail.value,teacherPassword.value
-    );
+    const user=await createUserWithEmailAndPassword(auth,email,password);
+
     await setDoc(doc(db,"users",user.user.uid),{
-      name:teacherName.value,
-      email:teacherEmail.value,
+      name,
+      email,
       role:"teacher",
+      verified:true,
       createdAt:new Date()
     });
-    showToast("Teacher account created");
-    setTimeout(()=>location.href="signin.html",2000);
+
+    showToast("Teacher account created successfully!");
+    msg.style.color="#1db954";
+    msg.textContent="Teacher account created! You can now sign in.";
+
+    setTimeout(()=>location.href="signin.html",2500);
+
   }catch(err){
-    teacherMessage.textContent=err.message;
+    console.error("Teacher signup error:", err);
+    msg.style.color="#c62828";
+    msg.textContent=err.message;
   }
 });
 </script>
