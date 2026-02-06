@@ -223,80 +223,356 @@ const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
 
-studentBtn.addEventListener("click", () => {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - MindCraft</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Press Start 2P', cursive;
+  background: #203a43;
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* ===== PANELS ===== */
+.panel {
+  background: #2a3a50;
+  padding: 36px;
+  width: 400px;
+  border-radius: 18px;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 14px;
+  margin-bottom: 24px;
+  color: #a0c4ff;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 18px;
+  border: none;
+  background: #1DB954;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: transform 0.15s ease;
+}
+
+button:hover { transform: translateY(-2px); }
+button:active { transform: translateY(2px); }
+
+.role-btn { margin-bottom: 12px; }
+
+.back-btn {
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: none;
+  background: #666;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #444;
+}
+.back-btn:hover { background: #888; transform: translateY(-1px); }
+.back-btn:active { transform: translateY(2px); }
+
+.home-btn {
+  padding: 10px 18px;
+  border-radius: 14px;
+  border: none;
+  background: #ffae42;
+  color: #5a3a1a;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 4px 0 #d8942f;
+}
+.home-btn:hover { transform: translateY(-1px); }
+.home-btn:active { transform: translateY(2px); }
+
+.auth-link {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.auth-link a {
+  color: #1DB954;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.message {
+  font-size: 12px;
+  margin-top: 8px;
+  font-weight: 700;
+  color: #ff5252;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1DB954;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s, transform 0.4s;
+  z-index: 9999;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: #ff5252; }
+
+/* Hide forms by default */
+.student-form, .teacher-form { display: none; }
+
+/* BACK BUTTON WRAP */
+.back-wrap { position: absolute; top: 24px; left: 24px; display: none; z-index: 10; }
+
+/* HOME BUTTON WRAP */
+.home-wrap { position: absolute; top: 24px; right: 24px; z-index: 10; }
+
+</style>
+</head>
+
+<body>
+
+<!-- BACK BUTTON OUTSIDE PANEL -->
+<div class="back-wrap" id="backWrap">
+  <button class="back-btn" id="backBtn">← Back</button>
+</div>
+
+<!-- HOME BUTTON VISIBLE ONLY AT ROLE CHOICE -->
+<div class="home-wrap" id="homeWrap">
+  <button class="home-btn" onclick="location.href='../../index.html'">Home</button>
+</div>
+
+<!-- ROLE CHOICE PANEL -->
+<div class="panel" id="choiceSection">
+  <div class="title">MindCraft</div>
+  <div class="subtitle">Choose your role to sign up</div>
+
+  <button class="role-btn" id="studentBtn">Student</button>
+  <button class="role-btn" id="teacherBtn">Teacher</button>
+
+  <div class="auth-link">
+    Already have an account? <a href="signin.html">Sign in here</a>
+  </div>
+</div>
+
+<!-- STUDENT SIGN UP PANEL -->
+<div class="panel student-form" id="studentForm">
+  <div class="title">Student Sign Up</div>
+
+  <form id="studentSignupForm">
+    <input type="text" id="studentName" placeholder="Full name" required>
+    <input type="email" id="studentEmail" placeholder="Gmail address" required>
+    <input type="password" id="studentPassword" placeholder="Password" required>
+    <button type="submit">Create Account</button>
+  </form>
+
+  <p class="message" id="studentMessage"></p>
+</div>
+
+<!-- TEACHER SIGN UP PANEL -->
+<div class="panel teacher-form" id="teacherForm">
+  <div class="title">Teacher Sign Up</div>
+  <div class="subtitle">DepEd email required</div>
+
+  <form id="teacherSignupForm">
+    <input type="text" id="teacherName" placeholder="Full name" required>
+    <input type="email" id="teacherEmail" placeholder="DepEd email" required>
+    <input type="password" id="teacherPassword" placeholder="Password" required>
+    <button type="submit">Create Account</button>
+  </form>
+
+  <p class="message" id="teacherMessage"></p>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<script type="module">
+import { auth, db } from '../System/Database/firebase.js';
+import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ==== UI ELEMENTS ==== */
+const studentBtn = document.getElementById("studentBtn");
+const teacherBtn = document.getElementById("teacherBtn");
+const choiceSection = document.getElementById("choiceSection");
+const studentForm = document.getElementById("studentForm");
+const teacherForm = document.getElementById("teacherForm");
+const backWrap = document.getElementById("backWrap");
+const backBtn = document.getElementById("backBtn");
+const homeWrap = document.getElementById("homeWrap");
+
+/* ==== UI TOGGLE FUNCTIONS ==== */
+function showStudentForm() {
   choiceSection.style.display = "none";
   studentForm.style.display = "block";
-});
+  backWrap.style.display = "block";
+  homeWrap.style.display = "none";
+}
 
-teacherBtn.addEventListener("click", () => {
+function showTeacherForm() {
   choiceSection.style.display = "none";
   teacherForm.style.display = "block";
-});
+  backWrap.style.display = "block";
+  homeWrap.style.display = "none";
+}
 
 function backToChoice() {
   studentForm.style.display = "none";
   teacherForm.style.display = "none";
   choiceSection.style.display = "block";
+  backWrap.style.display = "none";
+  homeWrap.style.display = "block";
 }
 
-/* ==== Toast Notification ==== */
-function showToast(msg,isError=false){
-  const t=document.getElementById("toast");
-  t.textContent=msg;
-  t.className="toast show"+(isError?" error":"");
-  setTimeout(()=>t.className="toast",3000);
+/* ==== EVENT LISTENERS FOR ROLE BUTTONS ==== */
+studentBtn.addEventListener("click", showStudentForm);
+teacherBtn.addEventListener("click", showTeacherForm);
+backBtn.addEventListener("click", backToChoice);
+
+/* ==== TOAST NOTIFICATION ==== */
+function showToast(msg, isError=false) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => toast.className = "toast", 3000);
 }
 
-/* ==== Student Signup ==== */
-studentSignupForm.addEventListener("submit",async e=>{
+/* ==== STUDENT SIGN UP ==== */
+const studentSignupForm = document.getElementById("studentSignupForm");
+const studentName = document.getElementById("studentName");
+const studentEmail = document.getElementById("studentEmail");
+const studentPassword = document.getElementById("studentPassword");
+const studentMessage = document.getElementById("studentMessage");
+
+studentSignupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const name = studentName.value.trim();
   const email = studentEmail.value.trim();
   const password = studentPassword.value;
   const msg = studentMessage;
 
-  try{
-    const user=await createUserWithEmailAndPassword(auth,email,password);
+  try {
+    const user = await createUserWithEmailAndPassword(auth, email, password);
 
-    await setDoc(doc(db,"users",user.user.uid),{
+    await setDoc(doc(db, "users", user.user.uid), {
       name,
       email,
-      role:"student",
-      verified:false,
-      level:1,
-      xp:0,
-      xpMax:100,
-      totalXP:0,
-      completedLessons:[],
-      completedQuizzes:[],
-      createdAt:new Date()
+      role: "student",
+      verified: false,
+      level: 1,
+      xp: 0,
+      xpMax: 100,
+      totalXP: 0,
+      completedLessons: [],
+      completedQuizzes: [],
+      createdAt: new Date()
     });
 
     await sendEmailVerification(user.user);
     showToast("Verification email sent. Check Gmail inbox or spam folder.");
-    msg.style.color="#1db954";
-    msg.textContent="Account created! Please verify your Gmail before signing in.";
+    msg.style.color = "#1DB954";
+    msg.textContent = "Account created! Please verify your Gmail before signing in.";
 
-    setTimeout(()=>location.href="signin.html",3000);
-
-  }catch(err){
+    setTimeout(() => location.href = "signin.html", 3000);
+  } catch (err) {
     console.error("Signup error:", err);
-    msg.style.color="#c62828";
-    msg.textContent=err.message;
+    msg.style.color = "#ff5252";
+    msg.textContent = err.message;
   }
 });
 
-/* ==== Teacher Signup ==== */
-teacherSignupForm.addEventListener("submit",async e=>{
+/* ==== TEACHER SIGN UP ==== */
+const teacherSignupForm = document.getElementById("teacherSignupForm");
+const teacherName = document.getElementById("teacherName");
+const teacherEmail = document.getElementById("teacherEmail");
+const teacherPassword = document.getElementById("teacherPassword");
+const teacherMessage = document.getElementById("teacherMessage");
+
+teacherSignupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const name = teacherName.value.trim();
   const email = teacherEmail.value.trim();
   const password = teacherPassword.value;
   const msg = teacherMessage;
 
-  if(!email.includes("@ed.gov") && !email.includes("@deped.gov.ph")){
-    msg.style.color="#c62828";
-    msg.textContent="Invalid DepEd email address.";
+  if (!email.includes("@ed.gov") && !email.includes("@deped.gov.ph")) {
+    msg.style.color = "#ff5252";
+    msg.textContent = "Invalid DepEd email address.";
+    return;
+  }
+
+  try {
+    const user = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db, "users", user.user.uid), {
+      name,
+      email,
+      role: "teacher",
+      verified: true,
+      createdAt: new Date()
+    });
+
+    showToast("Teacher account created successfully!");
+    msg.style.color = "#1DB954";
+    msg.textContent = "Teacher account created! You can now sign in.";
+
+    setTimeout(() => location.href = "signin.html", 2500);
+  } catch (err) {
+    console.error("Teacher signup error:", err);
+    msg.style.color = "#ff5252";
+    msg.textContent = err.message;
+  }
+});
+</script>
+
+</body>
+</html>
     return;
   }
 
