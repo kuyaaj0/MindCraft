@@ -32,7 +32,7 @@ body::before{
   opacity:.25;
 }
 
-/* ===== HOME BUTTON (SEPARATE BUT SOFT) ===== */
+/* home button */
 .home-wrap{
   position:absolute;
   top:24px;
@@ -53,7 +53,7 @@ body::before{
 .home-btn:hover{transform:translateY(-1px)}
 .home-btn:active{transform:translateY(2px)}
 
-/* ===== CARD ===== */
+/* card */
 .panel{
   background:white;
   width:380px;
@@ -63,7 +63,7 @@ body::before{
   box-shadow:0 14px 28px rgba(0,0,0,.2);
 }
 
-/* ===== TEXT ===== */
+/* text */
 .title{
   font-size:40px;
   font-weight:800;
@@ -76,7 +76,7 @@ body::before{
   margin-bottom:24px;
 }
 
-/* ===== INPUT ===== */
+/* inputs */
 input{
   width:100%;
   padding:13px;
@@ -87,7 +87,7 @@ input{
   margin-bottom:12px;
 }
 
-/* ===== BUTTON ===== */
+/* buttons */
 button{
   width:100%;
   background:#b8783d;
@@ -118,7 +118,7 @@ button:active{transform:translateY(3px)}
   margin-bottom:12px;
 }
 
-/* ===== LINKS ===== */
+/* links */
 .auth-link{
   margin-top:14px;
   font-size:14px;
@@ -129,7 +129,7 @@ button:active{transform:translateY(3px)}
   text-decoration:none;
 }
 
-/* ===== MESSAGE ===== */
+/* message */
 .message{
   margin-top:10px;
   font-weight:700;
@@ -144,12 +144,10 @@ button:active{transform:translateY(3px)}
 
 <body>
 
-<!-- HOME BUTTON (NOT IN CARD) -->
 <div class="home-wrap">
-  <button class="home-btn" onclick="location.href='../../index.html'">🏠 Home</button>
+  <button class="home-btn" onclick="location.href='../../index.html'">Home</button>
 </div>
 
-<!-- ROLE CHOICE -->
 <div class="panel" id="choiceSection">
   <div class="title">MindCraft</div>
   <div class="subtitle">Sign in to continue</div>
@@ -162,7 +160,6 @@ button:active{transform:translateY(3px)}
   </div>
 </div>
 
-<!-- STUDENT LOGIN -->
 <div class="panel student-form" id="studentForm">
   <div class="title">Student Login</div>
 
@@ -175,10 +172,9 @@ button:active{transform:translateY(3px)}
   <p class="message" id="studentMessage"></p>
   <button id="resendStudent" class="alt" style="display:none;">Resend Verification</button>
 
-  <button class="back" onclick="backToChoice()">⬅ Back</button>
+  <button class="back" onclick="backToChoice()">Back</button>
 </div>
 
-<!-- TEACHER LOGIN -->
 <div class="panel teacher-form" id="teacherForm">
   <div class="title">Teacher Login</div>
 
@@ -191,7 +187,7 @@ button:active{transform:translateY(3px)}
   <p class="message" id="teacherMessage"></p>
   <button id="resendTeacher" class="alt" style="display:none;">Resend Verification</button>
 
-  <button class="back" onclick="backToChoice()">⬅ Back</button>
+  <button class="back" onclick="backToChoice()">Back</button>
 </div>
 
 <script>
