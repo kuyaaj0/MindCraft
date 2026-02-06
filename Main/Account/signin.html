@@ -214,18 +214,26 @@ import {
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* UI */
-studentBtn.onclick=()=>{
-  choiceSection.style.display="none";
-  studentForm.style.display="block";
-}
-teacherBtn.onclick=()=>{
-  choiceSection.style.display="none";
-  teacherForm.style.display="block";
-}
-function backToChoice(){
-  studentForm.style.display="none";
-  teacherForm.style.display="none";
-  choiceSection.style.display="block";
+const studentBtn = document.getElementById("studentBtn");
+const teacherBtn = document.getElementById("teacherBtn");
+const choiceSection = document.getElementById("choiceSection");
+const studentForm = document.getElementById("studentForm");
+const teacherForm = document.getElementById("teacherForm");
+
+studentBtn.addEventListener("click", () => {
+  choiceSection.style.display = "none";
+  studentForm.style.display = "block";
+});
+
+teacherBtn.addEventListener("click", () => {
+  choiceSection.style.display = "none";
+  teacherForm.style.display = "block";
+});
+
+function backToChoice() {
+  studentForm.style.display = "none";
+  teacherForm.style.display = "none";
+  choiceSection.style.display = "block";
 }
 
 /* Toast */
