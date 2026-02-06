@@ -29,6 +29,8 @@ body::before{
     radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
     radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
   opacity:.25;
+  pointer-events:none; /* ✅ Make pseudo-element not block clicks */
+  z-index:0;
 }
 
 /* Home button */
@@ -36,6 +38,7 @@ body::before{
   position:absolute;
   top:24px;
   left:24px;
+  z-index:1; /* above background overlay */
 }
 .home-btn{
   background:#ffae42;
@@ -59,6 +62,8 @@ body::before{
   border-radius:26px;
   text-align:center;
   box-shadow:0 14px 28px rgba(0,0,0,.2);
+  position:relative;
+  z-index:1; /* above overlay */
 }
 
 /* Text */
@@ -217,29 +222,15 @@ const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
-const formBackBtn = document.getElementById("formBackBtn");
-const homeBtn = document.getElementById("homeBtn");
 
 studentBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   studentForm.style.display = "block";
-  formBackBtn.style.display = "block";
-  homeBtn.style.display = "none";
 });
 
 teacherBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   teacherForm.style.display = "block";
-  formBackBtn.style.display = "block";
-  homeBtn.style.display = "none";
-});
-
-formBackBtn.addEventListener("click", () => {
-  studentForm.style.display = "none";
-  teacherForm.style.display = "none";
-  choiceSection.style.display = "block";
-  formBackBtn.style.display = "none";
-  homeBtn.style.display = "block";
 });
 
 function backToChoice() {
