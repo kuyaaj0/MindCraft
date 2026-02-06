@@ -59,9 +59,12 @@ body.dark .stars{opacity:1;}
 .cloud.medium{width:220px;height:80px;top:38%;animation-duration:65s}
 .cloud.large{width:300px;height:100px;top:12%;animation-duration:95s}
 
-@keyframes cloudMove{from{left:-300px}to{left:110%}}
+@keyframes cloudMove{
+  from{left:-300px}
+  to{left:110%}
+}
 
-/* Main */
+/* Main Content */
 .home-content{
   height:100%;
   display:flex;
@@ -103,7 +106,7 @@ body.dark .home-content{
 .btn:hover{transform:translateY(-3px);}
 .btn:active{transform:translateY(6px);}
 
-/* Auth */
+/* Auth Section */
 .auth-section{
   display:none;
   flex-direction:column;
@@ -137,21 +140,21 @@ footer{
 
   <a href="#" class="btn" id="startBtn">Start Journey</a>
 
+  <!-- ✅ FIXED PATHS FOR GITHUB PAGES -->
   <div class="auth-section" id="authSection">
-    <!-- ✅ GITHUB-SAFE LINKS -->
-    <a href="./signin.html" class="btn">Login</a>
-    <a href="./signup.html" class="btn">Sign Up</a>
+    <a href="./main/account/signin.html" class="btn">Login</a>
+    <a href="./main/account/signup.html" class="btn">Sign Up</a>
   </div>
 </div>
 
 <footer>© 2025 MindCraft | Created by Group 3</footer>
 
 <script>
-document.getElementById("startBtn").onclick = (e) => {
+document.getElementById("startBtn").addEventListener("click", function(e){
   e.preventDefault();
-  document.getElementById("authSection").style.display="flex";
-  document.getElementById("startBtn").style.display="none";
-};
+  document.getElementById("authSection").style.display = "flex";
+  this.style.display = "none";
+});
 </script>
 
 </body>
