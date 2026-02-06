@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;font-size:16px;}
@@ -16,8 +17,6 @@ body{
   background:linear-gradient(#8fe9ff,#c8f7b0);
   transition:background 0.8s ease;
 }
-
-/* Dark mode background */
 body.dark{
   background:linear-gradient(#0b1d3a,#13294b);
 }
@@ -42,7 +41,7 @@ body.dark{
 body.dark #sun{opacity:0;}
 body.dark #moon{opacity:1;}
 
-/* ===== STARS NIGHT ===== */
+/* ===== STARS ===== */
 .stars{
   position:absolute;
   inset:0;
@@ -127,7 +126,10 @@ button{
   min-width:280px;
   margin:12px 0;
   cursor:pointer;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 6px 0 #4a2c12,0 12px 0 #66bb6a,0 20px 30px rgba(0,0,0,.3);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.25),
+             0 6px 0 #4a2c12,
+             0 12px 0 #66bb6a,
+             0 20px 30px rgba(0,0,0,.3);
   transition:.15s;
 }
 button:hover{transform:translateY(-3px)}
@@ -168,7 +170,6 @@ body.dark footer{color:#cfc3b2;}
   width:360px;
   border-radius:28px;
   box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35);
-  transition:background .8s ease;
 }
 body.dark .popup{background:#1c2a4a}
 .popup h2{
@@ -179,40 +180,28 @@ body.dark .popup{background:#1c2a4a}
   margin-bottom:24px;
 }
 
-/* ===== TOGGLE ROW ===== */
+/* ===== TOGGLE ===== */
 .toggle-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:18px;
   margin-bottom:24px;
 }
 .toggle-label{
   font-size:20px;
   font-weight:700;
-  color:#5a3a1a;
-  transition:color .4s;
 }
-body.dark .toggle-label{color:#e6dccf;}
-
-/* ===== SWITCH ===== */
 .switch{
   position:relative;
   width:70px;
   height:36px;
 }
-.switch input{
-  opacity:0;
-  width:0;
-  height:0;
-}
+.switch input{opacity:0;}
 .slider{
   position:absolute;
   inset:0;
   background:#b8783d;
   border-radius:30px;
-  box-shadow:inset 0 2px 4px rgba(255,255,255,.25),0 4px 0 #4a2c12,0 7px 0 #66bb6a;
-  transition:.4s;
 }
 .slider::before{
   content:"";
@@ -223,23 +212,18 @@ body.dark .toggle-label{color:#e6dccf;}
   bottom:4px;
   background:#fff;
   border-radius:50%;
-  box-shadow:0 4px 8px rgba(0,0,0,.35);
   transition:.4s;
-}
-.switch input:checked + .slider{
-  background:#3e2612;
 }
 .switch input:checked + .slider::before{
   transform:translateX(34px);
 }
 </style>
 </head>
+
 <body>
 
-<!-- SUN & MOON -->
 <div id="sun"></div>
 <div id="moon"></div>
-
 <div class="stars"></div>
 
 <div class="cloud small"></div>
@@ -253,9 +237,10 @@ body.dark .toggle-label{color:#e6dccf;}
   <button id="startBtn">Start Journey</button>
   <button id="settingsBtn">Settings</button>
 
+  <!-- AUTH BUTTONS FIXED -->
   <div class="auth-section" id="authSection">
-    <button>Login</button>
-    <button>Sign Up</button>
+    <button onclick="window.location.href='signin.html'">Login</button>
+    <button onclick="window.location.href='signup.html'">Sign Up</button>
   </div>
 </div>
 
@@ -277,35 +262,28 @@ body.dark .toggle-label{color:#e6dccf;}
 </div>
 
 <script>
-// ===== AUTH & START BUTTON =====
+// Show login/signup
 document.getElementById("startBtn").onclick = () => {
-  document.getElementById("authSection").style.display="flex";
-  document.getElementById("startBtn").style.display="none";
+  document.getElementById("authSection").style.display = "flex";
+  document.getElementById("startBtn").style.display = "none";
 };
 
-// ===== SETTINGS POPUP =====
+// Settings popup
 document.getElementById("settingsBtn").onclick = () =>
-  document.getElementById("settingsPopup").style.display="flex";
-document.getElementById("closeSettings").onclick = () =>
-  document.getElementById("settingsPopup").style.display="none";
+  document.getElementById("settingsPopup").style.display = "flex";
 
-// ===== THEME TOGGLE =====
+document.getElementById("closeSettings").onclick = () =>
+  document.getElementById("settingsPopup").style.display = "none";
+
+// Theme toggle
 const themeSwitch = document.getElementById("themeSwitch");
 const themeLabel = document.getElementById("themeLabel");
 
-// Initialize
-themeSwitch.checked = document.body.classList.contains("dark");
-updateLabel(themeSwitch.checked);
-
-// Toggle event
 themeSwitch.addEventListener("change", () => {
   document.body.classList.toggle("dark", themeSwitch.checked);
-  updateLabel(themeSwitch.checked);
+  themeLabel.textContent = themeSwitch.checked ? "Light Mode" : "Dark Mode";
 });
-
-function updateLabel(isDark){
-  themeLabel.textContent = isDark ? "Light Mode" : "Dark Mode";
-}
 </script>
+
 </body>
 </html>
