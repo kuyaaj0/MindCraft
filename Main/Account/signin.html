@@ -219,15 +219,29 @@ const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
+const formBackBtn = document.getElementById("formBackBtn");
+const homeBtn = document.getElementById("homeBtn");
 
 studentBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   studentForm.style.display = "block";
+  formBackBtn.style.display = "block";
+  homeBtn.style.display = "none";
 });
 
 teacherBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   teacherForm.style.display = "block";
+  formBackBtn.style.display = "block";
+  homeBtn.style.display = "none";
+});
+
+formBackBtn.addEventListener("click", () => {
+  studentForm.style.display = "none";
+  teacherForm.style.display = "none";
+  choiceSection.style.display = "block";
+  formBackBtn.style.display = "none";
+  homeBtn.style.display = "block";
 });
 
 function backToChoice() {
