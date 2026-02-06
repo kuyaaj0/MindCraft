@@ -3,117 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In - MindCraft</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css">
+<title>Sign In | MindCraft</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
-body { 
-  font-family: 'Press Start 2P', cursive; 
-  text-align: center; 
-  background: #203a43; 
-  color: white; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-input { 
-  padding: 10px; 
-  width: 70%; 
-  margin: 10px; 
-  border-radius: 8px; 
-  border: none; 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-}
-button { 
-  padding: 10px 20px; 
-  border: none; 
-  border-radius: 8px; 
-  background: #1DB954; 
-  color: white; 
-  cursor: pointer; 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-  margin: 5px;
-  transition: background 0.3s;
-}
-button:hover { background: #1ed760; }
-.message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
-.choice-section, .student-form, .teacher-form { display: none; }
-.choice-section { display: block; }
+*{box-sizing:border-box;margin:0;padding:0}
 
-/* Back Buttons */
-.back-buttons {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+body{
+  font-family:'Baloo 2', cursive;
+  min-height:100vh;
+  background:linear-gradient(to bottom,#8fe9ff,#c8f7b0);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
 }
-.back-buttons button {
-  width: 160px;
-  background: #666;
-}
-.back-buttons button:hover { background: #888; }
 
-.resend-btn {
-  background: #ff69b4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 0.6rem;
-  margin-top: 5px;
-  cursor: pointer;
+/* subtle stars */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, #fff 2px, transparent 3px),
+    radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
+    radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
+  opacity:.25;
 }
-.resend-btn:hover { background: #ff85c1; }
+
+/* Home + back buttons column */
+.nav-wrap{
+  position:absolute;
+  top:24px;
+  left:24px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.nav-btn{
+  background:#ffae42;
+  border:none;
+  padding:10px 18px;
+  border-radius:18px;
+  font-size:14px;
+  font-weight:700;
+  color:#5a3a1a;
+  cursor:pointer;
+  box-shadow:0 4px 0 #d8942f;
+}
+.nav-btn.secondary{
+  background:#bdbdbd;
+  box-shadow:0 4px 0 #8d8d8d;
+}
+.nav-btn:hover{transform:translateY(-1px)}
+.nav-btn:active{transform:translateY(2px)}
+
+/* Card */
+.panel{
+  background:#fff;
+  width:380px;
+  max-width:90vw;
+  padding:32px 30px 28px;
+  border-radius:26px;
+  text-align:center;
+  box-shadow:0 14px 28px rgba(0,0,0,.2);
+}
+
+/* Text */
+.title{
+  font-size:34px;
+  font-weight:800;
+  color:#5a3a1a;
+  margin-bottom:6px;
+}
+.subtitle{
+  font-size:16px;
+  color:#6d4c41;
+  margin-bottom:20px;
+}
+
+/* Inputs */
+input{
+  width:100%;
+  padding:13px;
+  border-radius:14px;
+  border:none;
+  background:#f3f3f3;
+  font-size:14px;
+  margin-bottom:10px;
+}
+
+/* Primary button inside cards */
+.panel button{
+  width:100%;
+  background:#b8783d;
+  color:#fff;
+  border:none;
+  border-radius:18px;
+  padding:12px;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 5px 0 #6b3e1a;
+}
+.panel button:hover{transform:translateY(-1px)}
+.panel button:active{transform:translateY(3px)}
+
+.role-btn{margin-bottom:10px}
+
+/* Small utility buttons in forms (resend/forgot) */
+.helper-btn{
+  background:#ff69b4;
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:6px;
+  box-shadow:0 3px 0 #c94f8a;
+  width:auto;
+}
+.helper-btn.orange{
+  background:#ffae42;
+  box-shadow:0 3px 0 #d8942f;
+}
+.helper-btn:hover{transform:translateY(-1px)}
+.helper-btn:active{transform:translateY(2px)}
+
+/* Links */
+.auth-link{
+  margin-top:14px;
+  font-size:14px;
+}
+.auth-link a{
+  color:#1db954;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* Message */
+.message{
+  margin-top:10px;
+  font-weight:700;
+  color:#c62828;
+  font-size:13px;
+  min-height:18px;
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  background:#1db954;
+  color:white;
+  padding:12px 16px;
+  border-radius:14px;
+  font-weight:700;
+  opacity:0;
+  transform:translateY(20px);
+  transition:.4s;
+  font-size:14px;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.error{background:#c62828}
+
+/* Hide sections by default */
+.student-form,.teacher-form{display:none}
 </style>
 </head>
+
 <body>
 
-<!-- Back Buttons -->
-<div class="back-buttons">
-  <button id="homeBtn">🏠 Home</button>
-  <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
+<div class="nav-wrap">
+  <button class="nav-btn" id="homeBtn">Home</button>
+  <button class="nav-btn secondary" id="formBackBtn" style="display:none;">Back to choice</button>
 </div>
 
-<!-- Role Selection -->
-<div class="choice-section" id="choiceSection">
-  <h2>🧠 MindCraft - Sign In</h2>
-  <p>Choose your role:</p>
-  <button id="studentBtn">Student</button>
-  <button id="teacherBtn">Teacher</button>
+<!-- ROLE CHOICE -->
+<div class="panel" id="choiceSection">
+  <div class="title">MindCraft</div>
+  <div class="subtitle">Sign in to continue</div>
+
+  <button class="role-btn" id="studentBtn">Student</button>
+  <button class="role-btn" id="teacherBtn">Teacher</button>
+
+  <div class="auth-link">
+    Don’t have an account? <a href="signup.html">Sign up</a>
+  </div>
 </div>
 
-<!-- Student Form -->
-<div class="student-form" id="studentForm">
-  <h2>Student Sign In</h2>
+<!-- STUDENT SIGN IN -->
+<div class="panel student-form" id="studentForm">
+  <div class="title">Student Sign In</div>
+
   <form id="studentSigninForm">
-    <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
-    <input type="password" id="studentPassword" placeholder="Enter password" required><br>
+    <input type="email" id="studentEmail" placeholder="Gmail address" required>
+    <input type="password" id="studentPassword" placeholder="Password" required>
     <button type="submit">Sign In</button>
   </form>
+
   <p class="message" id="studentMessage"></p>
-  <button id="resendStudent" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
-  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+
+  <button id="resendStudent" class="helper-btn" style="display:none;">✉️ Resend verification</button>
 </div>
 
-<!-- Teacher Form -->
-<div class="teacher-form" id="teacherForm">
-  <h2>Teacher Sign In</h2>
+<!-- TEACHER SIGN IN -->
+<div class="panel teacher-form" id="teacherForm">
+  <div class="title">Teacher Sign In</div>
+  <div class="subtitle">Use your DepEd email</div>
+
   <form id="teacherSigninForm">
-    <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
-    <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
+    <input type="email" id="teacherEmail" placeholder="DepEd email" required>
+    <input type="password" id="teacherPassword" placeholder="Password" required>
     <button type="submit">Sign In</button>
   </form>
+
   <p class="message" id="teacherMessage"></p>
-  <button id="resendTeacher" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
-  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
+
+  <button id="resendTeacher" class="helper-btn" style="display:none;">✉️ Resend verification</button>
 </div>
+
+<div id="toast" class="toast"></div>
 
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
@@ -125,51 +240,65 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ===== Navigation Buttons =====
+/* ===== Navigation Buttons ===== */
 document.getElementById("homeBtn").addEventListener("click", () => {
   window.location.href = "../../index.html";
 });
 
-// ===== UI Toggle =====
+/* ===== UI Toggle ===== */
+const choiceSection = document.getElementById('choiceSection');
+const studentFormDiv = document.getElementById('studentForm');
+const teacherFormDiv = document.getElementById('teacherForm');
+const backBtn = document.getElementById('formBackBtn');
+
 function showStudentForm() {
-  document.getElementById('choiceSection').style.display = 'none';
-  document.getElementById('studentForm').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'block';
-  document.getElementById('homeBtn').style.display = 'none';
+  choiceSection.style.display = 'none';
+  studentFormDiv.style.display = 'block';
+  teacherFormDiv.style.display = 'none';
+  backBtn.style.display = 'block';
 }
 
 function showTeacherForm() {
-  document.getElementById('choiceSection').style.display = 'none';
-  document.getElementById('teacherForm').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'block';
-  document.getElementById('homeBtn').style.display = 'none';
+  choiceSection.style.display = 'none';
+  teacherFormDiv.style.display = 'block';
+  studentFormDiv.style.display = 'none';
+  backBtn.style.display = 'block';
 }
 
 function backToChoice() {
-  document.getElementById('studentForm').style.display = 'none';
-  document.getElementById('teacherForm').style.display = 'none';
-  document.getElementById('choiceSection').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'none';
-  document.getElementById('homeBtn').style.display = 'block';
+  studentFormDiv.style.display = 'none';
+  teacherFormDiv.style.display = 'none';
+  choiceSection.style.display = 'block';
+  backBtn.style.display = 'none';
   document.getElementById('studentSigninForm').reset();
   document.getElementById('teacherSigninForm').reset();
   document.getElementById('studentMessage').textContent = '';
   document.getElementById('teacherMessage').textContent = '';
+  document.getElementById('resendStudent').style.display = 'none';
+  document.getElementById('resendTeacher').style.display = 'none';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("studentBtn").addEventListener("click", showStudentForm);
   document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
-  document.getElementById("formBackBtn").addEventListener("click", backToChoice);
+  backBtn.addEventListener("click", backToChoice);
 });
 
-// ==== Default Student Fields ====
+/* Toast */
+function showToast(msg, isError = false) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => t.className = "toast", 3000);
+}
+
+/* Default student fields */
 const defaultStudentFields = {
   level: 1, xp: 0, xpMax: 100, totalXP: 0,
   completedLessons: [], completedQuizzes: []
 };
 
-// ==== Sign In (Student) ====
+/* ==== Student Sign In ==== */
 document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('studentEmail').value.trim();
@@ -177,6 +306,7 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
   const msg = document.getElementById('studentMessage');
   const resendBtn = document.getElementById('resendStudent');
 
+  msg.style.color = "#c62828";
   msg.textContent = "";
   resendBtn.style.display = "none";
 
@@ -185,7 +315,7 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     const user = userCred.user;
 
     if (!user.emailVerified) {
-      msg.textContent = "⚠️ Please verify your email before signing in.";
+      msg.textContent = "Please verify your email before signing in.";
       resendBtn.style.display = "inline-block";
       await signOut(auth);
       return;
@@ -194,7 +324,7 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
     if (!snap.exists() || snap.data().role !== "student") {
-      msg.textContent = "❌ This account is not a student.";
+      msg.textContent = "This account is not a student.";
       await signOut(auth);
       return;
     }
@@ -210,8 +340,9 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
     localStorage.setItem("cachedName", data.name || "Student");
     localStorage.setItem("currentRole", "student");
 
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Sign in successful! Redirecting...";
+    msg.style.color = "#1db954";
+    msg.textContent = "Sign in successful! Redirecting...";
+    showToast("Welcome back, " + (data.name || "Student") + "!");
 
     setTimeout(async () => {
       let tries = 0;
@@ -224,52 +355,58 @@ document.getElementById('studentSigninForm').addEventListener('submit', async (e
 
   } catch (err) {
     console.error("Sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
+    msg.textContent = err.message;
+    showToast("Sign-in failed", true);
   }
 });
 
-// ==== Forgot Password (Student) ====
+/* ==== Forgot Password (Student) ==== */
 const studentForgotBtn = document.createElement("button");
-studentForgotBtn.textContent = "🔑 Forgot Password?";
-studentForgotBtn.className = "resend-btn";
-studentForgotBtn.style.background = "#ffae42";
-studentForgotBtn.style.marginTop = "5px";
+studentForgotBtn.textContent = "🔑 Forgot password?";
+studentForgotBtn.className = "helper-btn orange";
 studentForgotBtn.onclick = async () => {
   const email = document.getElementById("studentEmail").value.trim();
   const msg = document.getElementById("studentMessage");
+  msg.style.color = "#c62828";
   if (!email) {
-    msg.textContent = "⚠️ Enter your Gmail first to reset password.";
+    msg.textContent = "Enter your Gmail first to reset password.";
     return;
   }
   try {
     await sendPasswordResetEmail(auth, email);
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Password reset email sent! Check your inbox.";
+    msg.style.color = "#1db954";
+    msg.textContent = "Password reset email sent. Check your inbox.";
+    showToast("Reset link sent");
   } catch (err) {
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
+    msg.style.color = "#c62828";
+    msg.textContent = err.message;
+    showToast("Could not send reset link", true);
   }
 };
 document.getElementById("studentForm").appendChild(studentForgotBtn);
 
-// ==== Resend Verification (Student) ====
+/* ==== Resend Verification (Student) ==== */
 document.getElementById("resendStudent").addEventListener("click", async () => {
   const email = document.getElementById("studentEmail").value.trim();
   const password = document.getElementById("studentPassword").value;
   const msg = document.getElementById("studentMessage");
+  msg.style.color = "#c62828";
 
   try {
     const userCred = await signInWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
     await sendEmailVerification(user);
-    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
+    msg.style.color = "#1db954";
+    msg.textContent = "Verification email sent again. Check your inbox.";
+    showToast("Verification email resent");
     await signOut(auth);
   } catch (err) {
-    msg.textContent = `❌ ${err.message}`;
+    msg.textContent = err.message;
+    showToast("Could not resend verification", true);
   }
 });
 
-// ==== Sign In (Teacher) ====
+/* ==== Teacher Sign In ==== */
 document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('teacherEmail').value.trim();
@@ -277,6 +414,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
   const msg = document.getElementById('teacherMessage');
   const resendBtn = document.getElementById('resendTeacher');
 
+  msg.style.color = "#c62828";
   msg.textContent = "";
   resendBtn.style.display = "none";
 
@@ -285,7 +423,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
     const user = userCred.user;
 
     if (!user.emailVerified) {
-      msg.textContent = "⚠️ Please verify your email before signing in.";
+      msg.textContent = "Please verify your email before signing in.";
       resendBtn.style.display = "inline-block";
       await signOut(auth);
       return;
@@ -294,7 +432,7 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
     const userRef = doc(db, "users", user.uid);
     const snap = await getDoc(userRef);
     if (!snap.exists() || snap.data().role !== "teacher") {
-      msg.textContent = "❌ This account is not a teacher.";
+      msg.textContent = "This account is not a teacher.";
       await signOut(auth);
       return;
     }
@@ -303,8 +441,9 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
     localStorage.setItem("cachedName", snap.data().name || "Teacher");
     localStorage.setItem("currentRole", "teacher");
 
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Sign in successful! Redirecting...";
+    msg.style.color = "#1db954";
+    msg.textContent = "Sign in successful! Redirecting...";
+    showToast("Welcome back, " + (snap.data().name || "Teacher") + "!");
 
     setTimeout(() => {
       window.location.href = "../Startup/StartupT.html";
@@ -312,50 +451,57 @@ document.getElementById('teacherSigninForm').addEventListener('submit', async (e
 
   } catch (err) {
     console.error("Teacher sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
+    msg.textContent = err.message;
+    showToast("Sign-in failed", true);
   }
 });
 
-// ==== Forgot Password (Teacher) ====
+/* ==== Forgot Password (Teacher) ==== */
 const teacherForgotBtn = document.createElement("button");
-teacherForgotBtn.textContent = "🔑 Forgot Password?";
-teacherForgotBtn.className = "resend-btn";
-teacherForgotBtn.style.background = "#ffae42";
-teacherForgotBtn.style.marginTop = "5px";
+teacherForgotBtn.textContent = "🔑 Forgot password?";
+teacherForgotBtn.className = "helper-btn orange";
 teacherForgotBtn.onclick = async () => {
   const email = document.getElementById("teacherEmail").value.trim();
   const msg = document.getElementById("teacherMessage");
+  msg.style.color = "#c62828";
   if (!email) {
-    msg.textContent = "⚠️ Enter your DepEd email first to reset password.";
+    msg.textContent = "Enter your DepEd email first to reset password.";
     return;
   }
   try {
     await sendPasswordResetEmail(auth, email);
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Password reset email sent! Check your inbox.";
+    msg.style.color = "#1db954";
+    msg.textContent = "Password reset email sent. Check your inbox.";
+    showToast("Reset link sent");
   } catch (err) {
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
+    msg.style.color = "#c62828";
+    msg.textContent = err.message;
+    showToast("Could not send reset link", true);
   }
 };
 document.getElementById("teacherForm").appendChild(teacherForgotBtn);
 
-// ==== Resend Verification (Teacher) ====
+/* ==== Resend Verification (Teacher) ==== */
 document.getElementById("resendTeacher").addEventListener("click", async () => {
   const email = document.getElementById("teacherEmail").value.trim();
   const password = document.getElementById("teacherPassword").value;
   const msg = document.getElementById("teacherMessage");
+  msg.style.color = "#c62828";
 
   try {
     const userCred = await signInWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
     await sendEmailVerification(user);
-    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
+    msg.style.color = "#1db954";
+    msg.textContent = "Verification email sent again. Check your inbox.";
+    showToast("Verification email resent");
     await signOut(auth);
   } catch (err) {
-    msg.textContent = `❌ ${err.message}`;
+    msg.textContent = err.message;
+    showToast("Could not resend verification", true);
   }
 });
 </script>
+
 </body>
-    </html>
+</html>
