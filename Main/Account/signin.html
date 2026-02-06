@@ -20,7 +20,6 @@ body{
   position:relative;
 }
 
-/* subtle background dots */
 body::before{
   content:"";
   position:absolute;
@@ -32,13 +31,12 @@ body::before{
   opacity:.25;
 }
 
-/* home button */
+/* Home button */
 .home-wrap{
   position:absolute;
   top:24px;
   left:24px;
 }
-
 .home-btn{
   background:#ffae42;
   border:none;
@@ -53,7 +51,7 @@ body::before{
 .home-btn:hover{transform:translateY(-1px)}
 .home-btn:active{transform:translateY(2px)}
 
-/* card */
+/* Card */
 .panel{
   background:white;
   width:380px;
@@ -63,7 +61,7 @@ body::before{
   box-shadow:0 14px 28px rgba(0,0,0,.2);
 }
 
-/* text */
+/* Text */
 .title{
   font-size:40px;
   font-weight:800;
@@ -76,7 +74,7 @@ body::before{
   margin-bottom:24px;
 }
 
-/* inputs */
+/* Inputs */
 input{
   width:100%;
   padding:13px;
@@ -87,7 +85,7 @@ input{
   margin-bottom:12px;
 }
 
-/* buttons */
+/* Buttons */
 button{
   width:100%;
   background:#b8783d;
@@ -118,7 +116,7 @@ button:active{transform:translateY(3px)}
   margin-bottom:12px;
 }
 
-/* links */
+/* Links */
 .auth-link{
   margin-top:14px;
   font-size:14px;
@@ -129,7 +127,7 @@ button:active{transform:translateY(3px)}
   text-decoration:none;
 }
 
-/* message */
+/* Message */
 .message{
   margin-top:10px;
   font-weight:700;
@@ -137,7 +135,7 @@ button:active{transform:translateY(3px)}
   font-size:14px;
 }
 
-/* hide forms */
+/* Hide forms */
 .student-form,.teacher-form{display:none}
 </style>
 </head>
@@ -150,7 +148,7 @@ button:active{transform:translateY(3px)}
 
 <div class="panel" id="choiceSection">
   <div class="title">MindCraft</div>
-  <div class="subtitle">Sign in to continue</div>
+  <div class="subtitle">Choose your role</div>
 
   <button class="role-btn" id="studentBtn">Student</button>
   <button class="role-btn" id="teacherBtn">Teacher</button>
@@ -191,8 +189,14 @@ button:active{transform:translateY(3px)}
 </div>
 
 <script>
-studentBtn.onclick=()=>{choiceSection.style.display="none";studentForm.style.display="block"}
-teacherBtn.onclick=()=>{choiceSection.style.display="none";teacherForm.style.display="block"}
+studentBtn.onclick=()=>{
+  choiceSection.style.display="none";
+  studentForm.style.display="block";
+}
+teacherBtn.onclick=()=>{
+  choiceSection.style.display="none";
+  teacherForm.style.display="block";
+}
 function backToChoice(){
   studentForm.style.display="none";
   teacherForm.style.display="none";
