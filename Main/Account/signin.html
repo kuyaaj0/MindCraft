@@ -3,81 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In - MindCraft</title>
+<title>Sign In | MindCraft</title>
 
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;}
+*{box-sizing:border-box;margin:0;padding:0}
 
-/* ===== BACKGROUND ===== */
+/* ===== BODY ===== */
 body{
   font-family:'Baloo 2', cursive;
-  background:linear-gradient(#8fe9ff,#c8f7b0);
-  overflow:hidden;
-}
-body.dark{
-  background:linear-gradient(#0b1d3a,#13294b);
-}
-
-/* ===== SUN & MOON ===== */
-#sun,#moon{
-  position:absolute;
-  width:120px;height:120px;
-  border-radius:50%;
-  top:40px;right:40px;
-  transition:.8s;
-}
-#sun{background:yellow;box-shadow:0 0 50px rgba(255,255,0,.5);}
-#moon{background:#f0f0f5;opacity:0;}
-body.dark #sun{opacity:0;}
-body.dark #moon{opacity:1;}
-
-/* ===== STARS ===== */
-.stars{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-    radial-gradient(1px 1px at 70% 20%, #fff, transparent),
-    radial-gradient(1px 1px at 40% 80%, #fff, transparent);
-  opacity:0;
-}
-body.dark .stars{opacity:1;}
-
-/* ===== CLOUDS ===== */
-.cloud{
-  position:absolute;
-  background:#ffffffdd;
-  border-radius:50px;
-  animation:cloudMove linear infinite;
-}
-.cloud.small{width:140px;height:50px;top:18%;animation-duration:80s}
-.cloud.medium{width:220px;height:80px;top:35%;animation-duration:60s}
-.cloud.large{width:300px;height:100px;top:10%;animation-duration:95s}
-@keyframes cloudMove{from{left:-300px}to{left:110%}}
-
-/* ===== MAIN WRAPPER ===== */
-.wrapper{
-  position:relative;
-  height:100%;
+  min-height:100vh;
+  background:linear-gradient(to bottom,#8fe9ff,#c8f7b0);
   display:flex;
   justify-content:center;
   align-items:center;
+  position:relative;
+  overflow:hidden;
 }
 
-/* ===== PANEL ===== */
+/* ===== CLOUD BACKGROUND ===== */
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, #fff 2px, transparent 3px),
+    radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
+    radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
+  opacity:.35;
+}
+
+/* ===== CARD ===== */
 .panel{
-  background:rgba(255,255,255,.85);
-  padding:40px;
+  position:relative;
+  background:white;
   width:380px;
+  padding:40px;
   border-radius:28px;
   text-align:center;
-  box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35);
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  animation:pop .4s ease;
 }
-body.dark .panel{
-  background:rgba(20,30,60,.85);
+@keyframes pop{
+  from{transform:scale(.9);opacity:0}
+  to{transform:scale(1);opacity:1}
 }
 
 /* ===== TITLES ===== */
@@ -87,111 +58,251 @@ body.dark .panel{
   color:#5a3a1a;
 }
 .subtitle{
+  font-size:18px;
+  color:#6d4c41;
   margin-bottom:30px;
-  color:#3e2612;
 }
-body.dark .subtitle{color:#e6dccf}
 
 /* ===== INPUTS ===== */
 input{
   width:100%;
   padding:14px;
-  border-radius:14px;
+  border-radius:16px;
   border:none;
-  margin:10px 0;
-  font-family:'Baloo 2';
+  background:#f3f3f3;
   font-size:16px;
+  margin-bottom:14px;
+  font-family:'Baloo 2';
 }
 
 /* ===== BUTTONS ===== */
 button{
-  font-family:'Baloo 2';
+  width:100%;
   background:linear-gradient(145deg,#b8783d,#8a5427);
-  color:#fff;
+  color:white;
   border:none;
-  padding:14px;
-  border-radius:18px;
+  border-radius:20px;
+  padding:16px;
   font-size:18px;
   font-weight:700;
-  width:100%;
-  margin-top:12px;
   cursor:pointer;
-  box-shadow:inset 0 2px 0 rgba(255,255,255,.25),
-             0 6px 0 #4a2c12,
-             0 12px 0 #66bb6a;
-}
-button:hover{transform:translateY(-2px)}
-button:active{transform:translateY(6px)}
-
-.alt-btn{
-  background:#ffae42;
+  box-shadow:0 6px 0 #4a2c12;
+  transition:.15s;
   margin-top:8px;
 }
+button:hover{transform:translateY(-2px)}
+button:active{transform:translateY(4px)}
 
-/* ===== MESSAGES ===== */
-.message{
-  margin-top:10px;
-  font-weight:700;
-  color:#c62828;
+.alt{
+  background:#ffae42;
+  box-shadow:0 6px 0 #cc8a24;
 }
 
-/* ===== VISIBILITY ===== */
+.back{
+  background:#9e9e9e;
+  box-shadow:0 6px 0 #616161;
+}
+
+/* ===== MESSAGE ===== */
+.message{
+  margin-top:12px;
+  font-weight:700;
+  color:#c62828;
+  font-size:14px;
+}
+
+/* ===== HIDE SECTIONS ===== */
 .student-form,.teacher-form{display:none}
+
+/* ===== LINKS ===== */
+a{
+  color:#1db954;
+  font-weight:700;
+  text-decoration:none;
+}
+a:hover{text-decoration:underline}
 </style>
 </head>
 
 <body>
 
-<div id="sun"></div>
-<div id="moon"></div>
-<div class="stars"></div>
+<!-- ROLE CHOICE -->
+<div class="panel choice-section" id="choiceSection">
+  <div class="title">MindCraft</div>
+  <div class="subtitle">Choose your role</div>
 
-<div class="cloud small"></div>
-<div class="cloud medium"></div>
-<div class="cloud large"></div>
+  <button id="studentBtn">🎓 Student</button>
+  <button id="teacherBtn">👩‍🏫 Teacher</button>
 
-<div class="wrapper">
-
-  <!-- ROLE CHOICE -->
-  <div class="panel choice-section" id="choiceSection">
-    <div class="title">MindCraft</div>
-    <div class="subtitle">Sign in as</div>
-    <button id="studentBtn">Student</button>
-    <button id="teacherBtn">Teacher</button>
-    <button onclick="location.href='../../index.html'" class="alt-btn">🏠 Home</button>
-  </div>
-
-  <!-- STUDENT -->
-  <div class="panel student-form" id="studentForm">
-    <div class="title">Student Login</div>
-    <form id="studentSigninForm">
-      <input type="email" id="studentEmail" placeholder="Gmail" required>
-      <input type="password" id="studentPassword" placeholder="Password" required>
-      <button type="submit">Sign In</button>
-    </form>
-    <p class="message" id="studentMessage"></p>
-    <button id="resendStudent" class="alt-btn" style="display:none;">Resend Verification</button>
-    <button onclick="backToChoice()" class="alt-btn">⬅ Back</button>
-  </div>
-
-  <!-- TEACHER -->
-  <div class="panel teacher-form" id="teacherForm">
-    <div class="title">Teacher Login</div>
-    <form id="teacherSigninForm">
-      <input type="email" id="teacherEmail" placeholder="DepEd Email" required>
-      <input type="password" id="teacherPassword" placeholder="Password" required>
-      <button type="submit">Sign In</button>
-    </form>
-    <p class="message" id="teacherMessage"></p>
-    <button id="resendTeacher" class="alt-btn" style="display:none;">Resend Verification</button>
-    <button onclick="backToChoice()" class="alt-btn">⬅ Back</button>
-  </div>
-
+  <button class="alt" onclick="location.href='../../index.html'">🏠 Home</button>
 </div>
 
-<!-- 🔒 YOUR ORIGINAL FIREBASE SCRIPT GOES HERE (UNCHANGED) -->
+<!-- STUDENT SIGN IN -->
+<div class="panel student-form" id="studentForm">
+  <div class="title">Student Login</div>
+  <form id="studentSigninForm">
+    <input type="email" id="studentEmail" placeholder="Gmail" required>
+    <input type="password" id="studentPassword" placeholder="Password" required>
+    <button type="submit">Sign In</button>
+  </form>
+
+  <p class="message" id="studentMessage"></p>
+  <button id="resendStudent" class="alt" style="display:none;">Resend Verification</button>
+
+  <p style="margin-top:10px">
+    No account? <a href="signup.html">Sign up</a>
+  </p>
+
+  <button class="back" onclick="backToChoice()">⬅ Back</button>
+</div>
+
+<!-- TEACHER SIGN IN -->
+<div class="panel teacher-form" id="teacherForm">
+  <div class="title">Teacher Login</div>
+  <form id="teacherSigninForm">
+    <input type="email" id="teacherEmail" placeholder="DepEd Email" required>
+    <input type="password" id="teacherPassword" placeholder="Password" required>
+    <button type="submit">Sign In</button>
+  </form>
+
+  <p class="message" id="teacherMessage"></p>
+  <button id="resendTeacher" class="alt" style="display:none;">Resend Verification</button>
+
+  <p style="margin-top:10px">
+    No account? <a href="signup.html">Sign up</a>
+  </p>
+
+  <button class="back" onclick="backToChoice()">⬅ Back</button>
+</div>
+
+<!-- ===== UI TOGGLE SCRIPT ===== -->
+<script>
+function showStudentForm(){
+  choiceSection.style.display="none";
+  studentForm.style.display="block";
+}
+function showTeacherForm(){
+  choiceSection.style.display="none";
+  teacherForm.style.display="block";
+}
+function backToChoice(){
+  studentForm.style.display="none";
+  teacherForm.style.display="none";
+  choiceSection.style.display="block";
+  studentMessage.textContent="";
+  teacherMessage.textContent="";
+}
+
+studentBtn.onclick = showStudentForm;
+teacherBtn.onclick = showTeacherForm;
+</script>
+
+<!-- ===== FIREBASE AUTH (UNCHANGED) ===== -->
 <script type="module">
-/* KEEP YOUR EXISTING SCRIPT EXACTLY AS IS */
+import { auth, db } from '../System/Database/firebase.js';
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ===== STUDENT SIGN IN ===== */
+document.getElementById('studentSigninForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const email = studentEmail.value.trim();
+  const password = studentPassword.value;
+  const msg = studentMessage;
+  const resend = resendStudent;
+  msg.textContent="";
+  resend.style.display="none";
+
+  try{
+    const cred = await signInWithEmailAndPassword(auth,email,password);
+    const user = cred.user;
+
+    if(!user.emailVerified){
+      msg.textContent="Verify your email first.";
+      resend.style.display="block";
+      await signOut(auth);
+      return;
+    }
+
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists() || snap.data().role!=="student"){
+      msg.textContent="Not a student account.";
+      await signOut(auth);
+      return;
+    }
+
+    localStorage.setItem("currentUser",user.uid);
+    localStorage.setItem("currentRole","student");
+    msg.style.color="#1db954";
+    msg.textContent="Login successful!";
+    setTimeout(()=>location.href="../Startup/StartupS.html",1000);
+
+  }catch(err){msg.textContent=err.message}
+});
+
+/* ===== RESEND STUDENT ===== */
+resendStudent.onclick = async()=>{
+  try{
+    const cred = await signInWithEmailAndPassword(auth,studentEmail.value,studentPassword.value);
+    await sendEmailVerification(cred.user);
+    studentMessage.textContent="Verification email sent!";
+    await signOut(auth);
+  }catch(err){studentMessage.textContent=err.message}
+};
+
+/* ===== TEACHER SIGN IN ===== */
+document.getElementById('teacherSigninForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const email = teacherEmail.value.trim();
+  const password = teacherPassword.value;
+  const msg = teacherMessage;
+  const resend = resendTeacher;
+  msg.textContent="";
+  resend.style.display="none";
+
+  try{
+    const cred = await signInWithEmailAndPassword(auth,email,password);
+    const user = cred.user;
+
+    if(!user.emailVerified){
+      msg.textContent="Verify your email first.";
+      resend.style.display="block";
+      await signOut(auth);
+      return;
+    }
+
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists() || snap.data().role!=="teacher"){
+      msg.textContent="Not a teacher account.";
+      await signOut(auth);
+      return;
+    }
+
+    localStorage.setItem("currentUser",user.uid);
+    localStorage.setItem("currentRole","teacher");
+    msg.style.color="#1db954";
+    msg.textContent="Login successful!";
+    setTimeout(()=>location.href="../Startup/StartupT.html",1000);
+
+  }catch(err){msg.textContent=err.message}
+});
+
+/* ===== RESEND TEACHER ===== */
+resendTeacher.onclick = async()=>{
+  try{
+    const cred = await signInWithEmailAndPassword(auth,teacherEmail.value,teacherPassword.value);
+    await sendEmailVerification(cred.user);
+    teacherMessage.textContent="Verification email sent!";
+    await signOut(auth);
+  }catch(err){teacherMessage.textContent=err.message}
+};
 </script>
 
 </body>
