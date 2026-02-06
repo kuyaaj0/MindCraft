@@ -20,6 +20,7 @@ body{
   position:relative;
 }
 
+/* Background stars */
 body::before{
   content:"";
   position:absolute;
@@ -29,6 +30,7 @@ body::before{
     radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
     radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
   opacity:.25;
+  pointer-events: none; /* Fix for clickable buttons */
 }
 
 /* Home button */
@@ -59,6 +61,8 @@ body::before{
   border-radius:26px;
   text-align:center;
   box-shadow:0 14px 28px rgba(0,0,0,.2);
+  position: relative;
+  z-index:1;
 }
 
 /* Text */
@@ -154,7 +158,7 @@ button:active{transform:translateY(3px)}
 
 <!-- HOME BUTTON -->
 <div class="home-wrap">
-  <button class="home-btn" onclick="location.href='../../index.html'">Home</button>
+  <button id="homeBtn" class="home-btn">Home</button>
 </div>
 
 <!-- ROLE CHOICE -->
@@ -219,36 +223,35 @@ const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
-const formBackBtn = document.getElementById("formBackBtn");
 const homeBtn = document.getElementById("homeBtn");
 
-studentBtn.addEventListener("click", () => {
-  choiceSection.style.display = "none";
-  studentForm.style.display = "block";
-  formBackBtn.style.display = "block";
-  homeBtn.style.display = "none";
+/* ROLE SELECTION */
+studentBtn.addEventListener("click",()=>{
+  choiceSection.style.display="none";
+  studentForm.style.display="block";
+  homeBtn.style.display="none";
 });
 
-teacherBtn.addEventListener("click", () => {
-  choiceSection.style.display = "none";
-  teacherForm.style.display = "block";
-  formBackBtn.style.display = "block";
-  homeBtn.style.display = "none";
+teacherBtn.addEventListener("click",()=>{
+  choiceSection.style.display="none";
+  teacherForm.style.display="block";
+  homeBtn.style.display="none";
 });
 
-formBackBtn.addEventListener("click", () => {
-  studentForm.style.display = "none";
-  teacherForm.style.display = "none";
-  choiceSection.style.display = "block";
-  formBackBtn.style.display = "none";
-  homeBtn.style.display = "block";
-});
+function backToChoice(){
+  studentForm.style.display="none";
+  teacherForm.style.display="none";
+  choiceSection.style.display="block";
+  homeBtn.style.display="block";
 
-function backToChoice() {
-  studentForm.style.display = "none";
-  teacherForm.style.display = "none";
-  choiceSection.style.display = "block";
+  document.getElementById('studentSigninForm').reset();
+  document.getElementById('teacherSigninForm').reset();
+  document.getElementById('studentMessage').textContent='';
+  document.getElementById('teacherMessage').textContent='';
 }
+
+/* HOME NAVIGATION */
+homeBtn.addEventListener("click",()=>location.href='../../index.html');
 
 /* Toast */
 function showToast(msg,isError=false){
@@ -259,9 +262,9 @@ function showToast(msg,isError=false){
 }
 
 /* Default Student Fields */
-const defaultStudentFields = {
-  level: 1, xp: 0, xpMax: 100, totalXP: 0,
-  completedLessons: [], completedQuizzes: []
+const defaultStudentFields={
+  level:1,xp:0,xpMax:100,totalXP:0,
+  completedLessons:[],completedQuizzes:[]
 };
 
 /* ==== STUDENT SIGN IN ==== */
