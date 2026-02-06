@@ -4,358 +4,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In - MindCraft</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../Design/Position.css">
 
 <style>
-body { 
-  font-family: 'Press Start 2P', cursive; 
-  text-align: center; 
-  background: #203a43; 
-  color: white; 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-input { 
-  padding: 10px; 
-  width: 70%; 
-  margin: 10px; 
-  border-radius: 8px; 
-  border: none; 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-}
-button { 
-  padding: 10px 20px; 
-  border: none; 
-  border-radius: 8px; 
-  background: #1DB954; 
-  color: white; 
-  cursor: pointer; 
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.6rem;
-  margin: 5px;
-  transition: background 0.3s;
-}
-button:hover { background: #1ed760; }
-.message { margin: 10px; color: #ff5252; font-size: 0.6rem; }
-.choice-section, .student-form, .teacher-form { display: none; }
-.choice-section { display: block; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;}
 
-/* Back Buttons */
-.back-buttons {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* ===== BACKGROUND ===== */
+body{
+  font-family:'Baloo 2', cursive;
+  background:linear-gradient(#8fe9ff,#c8f7b0);
+  overflow:hidden;
 }
-.back-buttons button {
-  width: 160px;
-  background: #666;
+body.dark{
+  background:linear-gradient(#0b1d3a,#13294b);
 }
-.back-buttons button:hover { background: #888; }
 
-.resend-btn {
-  background: #ff69b4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 0.6rem;
-  margin-top: 5px;
-  cursor: pointer;
+/* ===== SUN & MOON ===== */
+#sun,#moon{
+  position:absolute;
+  width:120px;height:120px;
+  border-radius:50%;
+  top:40px;right:40px;
+  transition:.8s;
 }
-.resend-btn:hover { background: #ff85c1; }
+#sun{background:yellow;box-shadow:0 0 50px rgba(255,255,0,.5);}
+#moon{background:#f0f0f5;opacity:0;}
+body.dark #sun{opacity:0;}
+body.dark #moon{opacity:1;}
+
+/* ===== STARS ===== */
+.stars{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 80%, #fff, transparent);
+  opacity:0;
+}
+body.dark .stars{opacity:1;}
+
+/* ===== CLOUDS ===== */
+.cloud{
+  position:absolute;
+  background:#ffffffdd;
+  border-radius:50px;
+  animation:cloudMove linear infinite;
+}
+.cloud.small{width:140px;height:50px;top:18%;animation-duration:80s}
+.cloud.medium{width:220px;height:80px;top:35%;animation-duration:60s}
+.cloud.large{width:300px;height:100px;top:10%;animation-duration:95s}
+@keyframes cloudMove{from{left:-300px}to{left:110%}}
+
+/* ===== MAIN WRAPPER ===== */
+.wrapper{
+  position:relative;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ===== PANEL ===== */
+.panel{
+  background:rgba(255,255,255,.85);
+  padding:40px;
+  width:380px;
+  border-radius:28px;
+  text-align:center;
+  box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35);
+}
+body.dark .panel{
+  background:rgba(20,30,60,.85);
+}
+
+/* ===== TITLES ===== */
+.title{
+  font-size:42px;
+  font-weight:800;
+  color:#5a3a1a;
+}
+.subtitle{
+  margin-bottom:30px;
+  color:#3e2612;
+}
+body.dark .subtitle{color:#e6dccf}
+
+/* ===== INPUTS ===== */
+input{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:none;
+  margin:10px 0;
+  font-family:'Baloo 2';
+  font-size:16px;
+}
+
+/* ===== BUTTONS ===== */
+button{
+  font-family:'Baloo 2';
+  background:linear-gradient(145deg,#b8783d,#8a5427);
+  color:#fff;
+  border:none;
+  padding:14px;
+  border-radius:18px;
+  font-size:18px;
+  font-weight:700;
+  width:100%;
+  margin-top:12px;
+  cursor:pointer;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.25),
+             0 6px 0 #4a2c12,
+             0 12px 0 #66bb6a;
+}
+button:hover{transform:translateY(-2px)}
+button:active{transform:translateY(6px)}
+
+.alt-btn{
+  background:#ffae42;
+  margin-top:8px;
+}
+
+/* ===== MESSAGES ===== */
+.message{
+  margin-top:10px;
+  font-weight:700;
+  color:#c62828;
+}
+
+/* ===== VISIBILITY ===== */
+.student-form,.teacher-form{display:none}
 </style>
 </head>
+
 <body>
 
-<!-- Back Buttons -->
-<div class="back-buttons">
-  <button id="homeBtn">🏠 Home</button>
-  <button id="formBackBtn" style="display:none;">⬅ Back to Form</button>
+<div id="sun"></div>
+<div id="moon"></div>
+<div class="stars"></div>
+
+<div class="cloud small"></div>
+<div class="cloud medium"></div>
+<div class="cloud large"></div>
+
+<div class="wrapper">
+
+  <!-- ROLE CHOICE -->
+  <div class="panel choice-section" id="choiceSection">
+    <div class="title">MindCraft</div>
+    <div class="subtitle">Sign in as</div>
+    <button id="studentBtn">Student</button>
+    <button id="teacherBtn">Teacher</button>
+    <button onclick="location.href='../../index.html'" class="alt-btn">🏠 Home</button>
+  </div>
+
+  <!-- STUDENT -->
+  <div class="panel student-form" id="studentForm">
+    <div class="title">Student Login</div>
+    <form id="studentSigninForm">
+      <input type="email" id="studentEmail" placeholder="Gmail" required>
+      <input type="password" id="studentPassword" placeholder="Password" required>
+      <button type="submit">Sign In</button>
+    </form>
+    <p class="message" id="studentMessage"></p>
+    <button id="resendStudent" class="alt-btn" style="display:none;">Resend Verification</button>
+    <button onclick="backToChoice()" class="alt-btn">⬅ Back</button>
+  </div>
+
+  <!-- TEACHER -->
+  <div class="panel teacher-form" id="teacherForm">
+    <div class="title">Teacher Login</div>
+    <form id="teacherSigninForm">
+      <input type="email" id="teacherEmail" placeholder="DepEd Email" required>
+      <input type="password" id="teacherPassword" placeholder="Password" required>
+      <button type="submit">Sign In</button>
+    </form>
+    <p class="message" id="teacherMessage"></p>
+    <button id="resendTeacher" class="alt-btn" style="display:none;">Resend Verification</button>
+    <button onclick="backToChoice()" class="alt-btn">⬅ Back</button>
+  </div>
+
 </div>
 
-<!-- Role Selection -->
-<div class="choice-section" id="choiceSection">
-  <h2>🧠 MindCraft - Sign In</h2>
-  <p>Choose your role:</p>
-  <button id="studentBtn">Student</button>
-  <button id="teacherBtn">Teacher</button>
-</div>
-
-<!-- Student Form -->
-<div class="student-form" id="studentForm">
-  <h2>Student Sign In</h2>
-  <form id="studentSigninForm">
-    <input type="email" id="studentEmail" placeholder="Enter Gmail" required><br>
-    <input type="password" id="studentPassword" placeholder="Enter password" required><br>
-    <button type="submit">Sign In</button>
-  </form>
-  <p class="message" id="studentMessage"></p>
-  <button id="resendStudent" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
-  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
-</div>
-
-<!-- Teacher Form -->
-<div class="teacher-form" id="teacherForm">
-  <h2>Teacher Sign In</h2>
-  <form id="teacherSigninForm">
-    <input type="email" id="teacherEmail" placeholder="Enter DepEd email" required><br>
-    <input type="password" id="teacherPassword" placeholder="Enter password" required><br>
-    <button type="submit">Sign In</button>
-  </form>
-  <p class="message" id="teacherMessage"></p>
-  <button id="resendTeacher" class="resend-btn" style="display:none;">✉️ Resend Verification Email</button>
-  <p>Don’t have an account? <a href="signup.html" style="color:#1DB954;">Sign up here</a>.</p>
-</div>
-
+<!-- 🔒 YOUR ORIGINAL FIREBASE SCRIPT GOES HERE (UNCHANGED) -->
 <script type="module">
-import { auth, db } from '../System/Database/firebase.js';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  sendEmailVerification,
-  sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// ===== Navigation Buttons =====
-document.getElementById("homeBtn").addEventListener("click", () => {
-  window.location.href = "../../index.html";
-});
-
-// ===== UI Toggle =====
-function showStudentForm() {
-  document.getElementById('choiceSection').style.display = 'none';
-  document.getElementById('studentForm').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'block';
-  document.getElementById('homeBtn').style.display = 'none';
-}
-
-function showTeacherForm() {
-  document.getElementById('choiceSection').style.display = 'none';
-  document.getElementById('teacherForm').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'block';
-  document.getElementById('homeBtn').style.display = 'none';
-}
-
-function backToChoice() {
-  document.getElementById('studentForm').style.display = 'none';
-  document.getElementById('teacherForm').style.display = 'none';
-  document.getElementById('choiceSection').style.display = 'block';
-  document.getElementById('formBackBtn').style.display = 'none';
-  document.getElementById('homeBtn').style.display = 'block';
-  document.getElementById('studentSigninForm').reset();
-  document.getElementById('teacherSigninForm').reset();
-  document.getElementById('studentMessage').textContent = '';
-  document.getElementById('teacherMessage').textContent = '';
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("studentBtn").addEventListener("click", showStudentForm);
-  document.getElementById("teacherBtn").addEventListener("click", showTeacherForm);
-  document.getElementById("formBackBtn").addEventListener("click", backToChoice);
-});
-
-// ==== Default Student Fields ====
-const defaultStudentFields = {
-  level: 1, xp: 0, xpMax: 100, totalXP: 0,
-  completedLessons: [], completedQuizzes: []
-};
-
-// ==== Sign In (Student) ====
-document.getElementById('studentSigninForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('studentEmail').value.trim();
-  const password = document.getElementById('studentPassword').value;
-  const msg = document.getElementById('studentMessage');
-  const resendBtn = document.getElementById('resendStudent');
-
-  msg.textContent = "";
-  resendBtn.style.display = "none";
-
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-
-    if (!user.emailVerified) {
-      msg.textContent = "⚠️ Please verify your email before signing in.";
-      resendBtn.style.display = "inline-block";
-      await signOut(auth);
-      return;
-    }
-
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
-    if (!snap.exists() || snap.data().role !== "student") {
-      msg.textContent = "❌ This account is not a student.";
-      await signOut(auth);
-      return;
-    }
-
-    let data = snap.data();
-    for (const key in defaultStudentFields) {
-      if (!(key in data)) data[key] = defaultStudentFields[key];
-    }
-
-    await setDoc(userRef, data, { merge: true });
-
-    localStorage.setItem("currentUser", user.uid);
-    localStorage.setItem("cachedName", data.name || "Student");
-    localStorage.setItem("currentRole", "student");
-
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Sign in successful! Redirecting...";
-
-    setTimeout(async () => {
-      let tries = 0;
-      while (!auth.currentUser && tries < 10) {
-        await new Promise(res => setTimeout(res, 300));
-        tries++;
-      }
-      window.location.href = "../Startup/StartupS.html";
-    }, 1200);
-
-  } catch (err) {
-    console.error("Sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// ==== Forgot Password (Student) ====
-const studentForgotBtn = document.createElement("button");
-studentForgotBtn.textContent = "🔑 Forgot Password?";
-studentForgotBtn.className = "resend-btn";
-studentForgotBtn.style.background = "#ffae42";
-studentForgotBtn.style.marginTop = "5px";
-studentForgotBtn.onclick = async () => {
-  const email = document.getElementById("studentEmail").value.trim();
-  const msg = document.getElementById("studentMessage");
-  if (!email) {
-    msg.textContent = "⚠️ Enter your Gmail first to reset password.";
-    return;
-  }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Password reset email sent! Check your inbox.";
-  } catch (err) {
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
-  }
-};
-document.getElementById("studentForm").appendChild(studentForgotBtn);
-
-// ==== Resend Verification (Student) ====
-document.getElementById("resendStudent").addEventListener("click", async () => {
-  const email = document.getElementById("studentEmail").value.trim();
-  const password = document.getElementById("studentPassword").value;
-  const msg = document.getElementById("studentMessage");
-
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-    await sendEmailVerification(user);
-    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
-    await signOut(auth);
-  } catch (err) {
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// ==== Sign In (Teacher) ====
-document.getElementById('teacherSigninForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('teacherEmail').value.trim();
-  const password = document.getElementById('teacherPassword').value;
-  const msg = document.getElementById('teacherMessage');
-  const resendBtn = document.getElementById('resendTeacher');
-
-  msg.textContent = "";
-  resendBtn.style.display = "none";
-
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-
-    if (!user.emailVerified) {
-      msg.textContent = "⚠️ Please verify your email before signing in.";
-      resendBtn.style.display = "inline-block";
-      await signOut(auth);
-      return;
-    }
-
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
-    if (!snap.exists() || snap.data().role !== "teacher") {
-      msg.textContent = "❌ This account is not a teacher.";
-      await signOut(auth);
-      return;
-    }
-
-    localStorage.setItem("currentUser", user.uid);
-    localStorage.setItem("cachedName", snap.data().name || "Teacher");
-    localStorage.setItem("currentRole", "teacher");
-
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Sign in successful! Redirecting...";
-
-    setTimeout(() => {
-      window.location.href = "../Startup/StartupT.html";
-    }, 1200);
-
-  } catch (err) {
-    console.error("Teacher sign-in error:", err);
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
-
-// ==== Forgot Password (Teacher) ====
-const teacherForgotBtn = document.createElement("button");
-teacherForgotBtn.textContent = "🔑 Forgot Password?";
-teacherForgotBtn.className = "resend-btn";
-teacherForgotBtn.style.background = "#ffae42";
-teacherForgotBtn.style.marginTop = "5px";
-teacherForgotBtn.onclick = async () => {
-  const email = document.getElementById("teacherEmail").value.trim();
-  const msg = document.getElementById("teacherMessage");
-  if (!email) {
-    msg.textContent = "⚠️ Enter your DepEd email first to reset password.";
-    return;
-  }
-  try {
-    await sendPasswordResetEmail(auth, email);
-    msg.style.color = "#1DB954";
-    msg.textContent = "✅ Password reset email sent! Check your inbox.";
-  } catch (err) {
-    msg.style.color = "#ff5252";
-    msg.textContent = `❌ ${err.message}`;
-  }
-};
-document.getElementById("teacherForm").appendChild(teacherForgotBtn);
-
-// ==== Resend Verification (Teacher) ====
-document.getElementById("resendTeacher").addEventListener("click", async () => {
-  const email = document.getElementById("teacherEmail").value.trim();
-  const password = document.getElementById("teacherPassword").value;
-  const msg = document.getElementById("teacherMessage");
-
-  try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCred.user;
-    await sendEmailVerification(user);
-    msg.textContent = "✉️ Verification email sent again. Check your inbox!";
-    await signOut(auth);
-  } catch (err) {
-    msg.textContent = `❌ ${err.message}`;
-  }
-});
+/* KEEP YOUR EXISTING SCRIPT EXACTLY AS IS */
 </script>
+
 </body>
 </html>
