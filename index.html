@@ -1,1 +1,311 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>MindCraft</title> <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet"> <style> *{box-sizing:border-box;margin:0;padding:0;} html,body{width:100%;height:100%;font-size:16px;} /* ===== BODY DAY/NIGHT ===== */ body{ font-family:'Baloo 2', cursive; overflow:hidden; background:linear-gradient(#8fe9ff,#c8f7b0); transition:background 0.8s ease; } /* Dark mode background */ body.dark{ background:linear-gradient(#0b1d3a,#13294b); } /* ===== SUN & MOON ===== */ #sun, #moon{ position:absolute; width:120px; height:120px; border-radius:50%; top:50px; right:50px; box-shadow:0 0 50px rgba(255,255,0,.5); transition:all 0.8s ease; } #sun{background:yellow;} #moon{ background:#f0f0f5; box-shadow:0 0 30px rgba(255,255,255,.3); opacity:0; } body.dark #sun{opacity:0;} body.dark #moon{opacity:1;} /* ===== STARS NIGHT ===== */ .stars{ position:absolute; inset:0; background: radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 70% 20%, #fff, transparent), radial-gradient(1px 1px at 40% 80%, #fff, transparent), radial-gradient(1px 1px at 80% 60%, #fff, transparent), radial-gradient(1px 1px at 60% 50%, #fff, transparent); opacity:0; transition:opacity .8s ease; } body.dark .stars{opacity:1;} /* ===== CLOUDS ===== */ .cloud{ position:absolute; background:#ffffffdd; border-radius:50px; animation:cloudMove linear infinite; transition:background .8s ease, opacity .8s ease; } body.dark .cloud{ background:#5c6f91; opacity:.7; } .cloud::before,.cloud::after{ content:""; position:absolute; background:inherit; border-radius:50%; } .cloud::before{width:60%;height:60%;top:-30%;left:15%} .cloud::after{width:50%;height:50%;top:-20%;right:15%} .cloud.small{width:140px;height:50px;top:20%;animation-duration:80s} .cloud.medium{width:220px;height:80px;top:38%;animation-duration:65s} .cloud.large{width:300px;height:100px;top:12%;animation-duration:95s} @keyframes cloudMove{from{left:-300px} to{left:110%}} /* ===== MAIN PANEL ===== */ .home-content{ position:relative; height:100%; display:flex; flex-direction:column; align-items:center; padding-top:100px; text-align:center; background:rgba(255,255,255,0.4); transition:background .8s ease; } body.dark .home-content{ background:rgba(20,30,60,0.5); } /* ===== TITLE ===== */ .home-title{ font-size:72px; font-weight:800; color:#5a3a1a; text-shadow:3px 3px 0 #fff, 6px 6px 0 #81c784, 9px 9px 0 #3e2612; margin-bottom:20px; } .home-sub{ font-size:24px; font-weight:700; color:#3e2612; margin-bottom:60px; } body.dark .home-sub{color:#e6dccf;} /* ===== BUTTONS ===== */ button{ font-family:'Baloo 2', cursive; background:linear-gradient(145deg,#b8783d,#8a5427); color:#fff; border:none; padding:20px 40px; border-radius:24px; font-size:20px; font-weight:700; min-width:280px; margin:12px 0; cursor:pointer; box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 6px 0 #4a2c12,0 12px 0 #66bb6a,0 20px 30px rgba(0,0,0,.3); transition:.15s; } button:hover{transform:translateY(-3px)} button:active{transform:translateY(6px)} /* ===== AUTH ===== */ .auth-section{ display:none; margin-top:40px; gap:20px; flex-wrap:wrap; justify-content:center; } /* ===== FOOTER ===== */ footer{ position:absolute; bottom:16px; width:100%; text-align:center; font-size:14px; color:#3e2612; } body.dark footer{color:#cfc3b2;} /* ===== SETTINGS POPUP ===== */ .popup-overlay{ position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; } .popup{ background:#fff7ef; padding:36px; width:360px; border-radius:28px; box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35); transition:background .8s ease; } body.dark .popup{background:#1c2a4a} .popup h2{ font-size:28px; font-weight:800; color:#5a3a1a; text-align:center; margin-bottom:24px; } /* ===== TOGGLE ROW ===== */ .toggle-row{ display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:24px; } .toggle-label{ font-size:20px; font-weight:700; color:#5a3a1a; transition:color .4s; } body.dark .toggle-label{color:#e6dccf;} /* ===== SWITCH ===== */ .switch{ position:relative; width:70px; height:36px; } .switch input{ opacity:0; width:0; height:0; } .slider{ position:absolute; inset:0; background:#b8783d; border-radius:30px; box-shadow:inset 0 2px 4px rgba(255,255,255,.25),0 4px 0 #4a2c12,0 7px 0 #66bb6a; transition:.4s; } .slider::before{ content:""; position:absolute; width:28px; height:28px; left:4px; bottom:4px; background:#fff; border-radius:50%; box-shadow:0 4px 8px rgba(0,0,0,.35); transition:.4s; } .switch input:checked + .slider{ background:#3e2612; } .switch input:checked + .slider::before{ transform:translateX(34px); } </style> </head> <body> <!-- SUN & MOON --> <div id="sun"></div> <div id="moon"></div> <div class="stars"></div> <div class="cloud small"></div> <div class="cloud medium"></div> <div class="cloud large"></div> <div class="home-content"> <div class="home-title">MindCraft</div> <div class="home-sub">Learn • Play • Master Your Mind</div> <button id="startBtn">Start Journey</button> <button id="settingsBtn">Settings</button> <div class="auth-section" id="authSection"> <button>Login</button> <button>Sign Up</button> </div> </div> <footer>© 2025 MindCraft | Created by Group 3</footer> <!-- SETTINGS POPUP --> <div class="popup-overlay" id="settingsPopup"> <div class="popup"> <h2>Settings</h2> <div class="toggle-row"> <span class="toggle-label" id="themeLabel">Dark Mode</span> <label class="switch"> <input type="checkbox" id="themeSwitch"> <span class="slider"></span> </label> </div> <button id="closeSettings">Close</button> </div> </div> <script> // ===== AUTH & START BUTTON ===== document.getElementById("startBtn").onclick = () => { document.getElementById("authSection").style.display="flex"; document.getElementById("startBtn").style.display="none"; }; // ===== SETTINGS POPUP ===== document.getElementById("settingsBtn").onclick = () => document.getElementById("settingsPopup").style.display="flex"; document.getElementById("closeSettings").onclick = () => document.getElementById("settingsPopup").style.display="none"; // ===== THEME TOGGLE ===== const themeSwitch = document.getElementById("themeSwitch"); const themeLabel = document.getElementById("themeLabel"); // Initialize themeSwitch.checked = document.body.classList.contains("dark"); updateLabel(themeSwitch.checked); // Toggle event themeSwitch.addEventListener("change", () => { document.body.classList.toggle("dark", themeSwitch.checked); updateLabel(themeSwitch.checked); }); function updateLabel(isDark){ themeLabel.textContent = isDark ? "Light Mode" : "Dark Mode"; } </script> </body> </html>
+connect the Login button to signin.html and Sign up to signup.html so that it will automatically connect me to it once i click it <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindCraft</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;font-size:16px;}
+
+/* ===== BODY DAY/NIGHT ===== */
+body{
+  font-family:'Baloo 2', cursive;
+  overflow:hidden;
+  background:linear-gradient(#8fe9ff,#c8f7b0);
+  transition:background 0.8s ease;
+}
+
+/* Dark mode background */
+body.dark{
+  background:linear-gradient(#0b1d3a,#13294b);
+}
+
+/* ===== SUN & MOON ===== */
+#sun, #moon{
+  position:absolute;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  top:50px;
+  right:50px;
+  box-shadow:0 0 50px rgba(255,255,0,.5);
+  transition:all 0.8s ease;
+}
+#sun{background:yellow;}
+#moon{
+  background:#f0f0f5;
+  box-shadow:0 0 30px rgba(255,255,255,.3);
+  opacity:0;
+}
+body.dark #sun{opacity:0;}
+body.dark #moon{opacity:1;}
+
+/* ===== STARS NIGHT ===== */
+.stars{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 50%, #fff, transparent);
+  opacity:0;
+  transition:opacity .8s ease;
+}
+body.dark .stars{opacity:1;}
+
+/* ===== CLOUDS ===== */
+.cloud{
+  position:absolute;
+  background:#ffffffdd;
+  border-radius:50px;
+  animation:cloudMove linear infinite;
+  transition:background .8s ease, opacity .8s ease;
+}
+body.dark .cloud{
+  background:#5c6f91;
+  opacity:.7;
+}
+.cloud::before,.cloud::after{
+  content:"";
+  position:absolute;
+  background:inherit;
+  border-radius:50%;
+}
+.cloud::before{width:60%;height:60%;top:-30%;left:15%}
+.cloud::after{width:50%;height:50%;top:-20%;right:15%}
+.cloud.small{width:140px;height:50px;top:20%;animation-duration:80s}
+.cloud.medium{width:220px;height:80px;top:38%;animation-duration:65s}
+.cloud.large{width:300px;height:100px;top:12%;animation-duration:95s}
+@keyframes cloudMove{from{left:-300px} to{left:110%}}
+
+/* ===== MAIN PANEL ===== */
+.home-content{
+  position:relative;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-top:100px;
+  text-align:center;
+  background:rgba(255,255,255,0.4);
+  transition:background .8s ease;
+}
+body.dark .home-content{
+  background:rgba(20,30,60,0.5);
+}
+
+/* ===== TITLE ===== */
+.home-title{
+  font-size:72px;
+  font-weight:800;
+  color:#5a3a1a;
+  text-shadow:3px 3px 0 #fff, 6px 6px 0 #81c784, 9px 9px 0 #3e2612;
+  margin-bottom:20px;
+}
+.home-sub{
+  font-size:24px;
+  font-weight:700;
+  color:#3e2612;
+  margin-bottom:60px;
+}
+body.dark .home-sub{color:#e6dccf;}
+
+/* ===== BUTTONS ===== */
+button{
+  font-family:'Baloo 2', cursive;
+  background:linear-gradient(145deg,#b8783d,#8a5427);
+  color:#fff;
+  border:none;
+  padding:20px 40px;
+  border-radius:24px;
+  font-size:20px;
+  font-weight:700;
+  min-width:280px;
+  margin:12px 0;
+  cursor:pointer;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 6px 0 #4a2c12,0 12px 0 #66bb6a,0 20px 30px rgba(0,0,0,.3);
+  transition:.15s;
+}
+button:hover{transform:translateY(-3px)}
+button:active{transform:translateY(6px)}
+
+/* ===== AUTH ===== */
+.auth-section{
+  display:none;
+  margin-top:40px;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  position:absolute;
+  bottom:16px;
+  width:100%;
+  text-align:center;
+  font-size:14px;
+  color:#3e2612;
+}
+body.dark footer{color:#cfc3b2;}
+
+/* ===== SETTINGS POPUP ===== */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.popup{
+  background:#fff7ef;
+  padding:36px;
+  width:360px;
+  border-radius:28px;
+  box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35);
+  transition:background .8s ease;
+}
+body.dark .popup{background:#1c2a4a}
+.popup h2{
+  font-size:28px;
+  font-weight:800;
+  color:#5a3a1a;
+  text-align:center;
+  margin-bottom:24px;
+}
+
+/* ===== TOGGLE ROW ===== */
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:24px;
+}
+.toggle-label{
+  font-size:20px;
+  font-weight:700;
+  color:#5a3a1a;
+  transition:color .4s;
+}
+body.dark .toggle-label{color:#e6dccf;}
+
+/* ===== SWITCH ===== */
+.switch{
+  position:relative;
+  width:70px;
+  height:36px;
+}
+.switch input{
+  opacity:0;
+  width:0;
+  height:0;
+}
+.slider{
+  position:absolute;
+  inset:0;
+  background:#b8783d;
+  border-radius:30px;
+  box-shadow:inset 0 2px 4px rgba(255,255,255,.25),0 4px 0 #4a2c12,0 7px 0 #66bb6a;
+  transition:.4s;
+}
+.slider::before{
+  content:"";
+  position:absolute;
+  width:28px;
+  height:28px;
+  left:4px;
+  bottom:4px;
+  background:#fff;
+  border-radius:50%;
+  box-shadow:0 4px 8px rgba(0,0,0,.35);
+  transition:.4s;
+}
+.switch input:checked + .slider{
+  background:#3e2612;
+}
+.switch input:checked + .slider::before{
+  transform:translateX(34px);
+}
+</style>
+</head>
+<body>
+
+<!-- SUN & MOON -->
+<div id="sun"></div>
+<div id="moon"></div>
+
+<div class="stars"></div>
+
+<div class="cloud small"></div>
+<div class="cloud medium"></div>
+<div class="cloud large"></div>
+
+<div class="home-content">
+  <div class="home-title">MindCraft</div>
+  <div class="home-sub">Learn • Play • Master Your Mind</div>
+
+  <button id="startBtn">Start Journey</button>
+  <button id="settingsBtn">Settings</button>
+
+  <div class="auth-section" id="authSection">
+    <button>Login</button>
+    <button>Sign Up</button>
+  </div>
+</div>
+
+<footer>© 2025 MindCraft | Created by Group 3</footer>
+
+<!-- SETTINGS POPUP -->
+<div class="popup-overlay" id="settingsPopup">
+  <div class="popup">
+    <h2>Settings</h2>
+    <div class="toggle-row">
+      <span class="toggle-label" id="themeLabel">Dark Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="themeSwitch">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <button id="closeSettings">Close</button>
+  </div>
+</div>
+
+<script>
+// ===== AUTH & START BUTTON =====
+document.getElementById("startBtn").onclick = () => {
+  document.getElementById("authSection").style.display="flex";
+  document.getElementById("startBtn").style.display="none";
+};
+
+// ===== SETTINGS POPUP =====
+document.getElementById("settingsBtn").onclick = () =>
+  document.getElementById("settingsPopup").style.display="flex";
+document.getElementById("closeSettings").onclick = () =>
+  document.getElementById("settingsPopup").style.display="none";
+
+// ===== THEME TOGGLE =====
+const themeSwitch = document.getElementById("themeSwitch");
+const themeLabel = document.getElementById("themeLabel");
+
+// Initialize
+themeSwitch.checked = document.body.classList.contains("dark");
+updateLabel(themeSwitch.checked);
+
+// Toggle event
+themeSwitch.addEventListener("change", () => {
+  document.body.classList.toggle("dark", themeSwitch.checked);
+  updateLabel(themeSwitch.checked);
+});
+
+function updateLabel(isDark){
+  themeLabel.textContent = isDark ? "Light Mode" : "Dark Mode";
+}
+</script>
+</body>
+</html>
