@@ -20,6 +20,27 @@ body{
   font-size:10px;
 }
 
+/* ===== EXIT BUTTON (copied from pixel lesson design) ===== */
+.exit-btn{
+  position:fixed;
+  top:28px;
+  left:28px;
+  background:#ff4d4d;
+  color:#fff;
+  text-decoration:none;
+  font-family:'Press Start 2P';
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 3px 0 #a30000;
+  z-index:1000;
+  font-size:9px;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+.exit-btn:hover{
+  transform:translateY(-2px);
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,.25), 0 5px 0 #a30000;
+}
+
 /* ===== MAIN APP ===== */
 .app{
   max-width:1200px;
@@ -126,17 +147,43 @@ body{
   text-shadow:2px 2px #fff;
 }
 
-.content-head button{
+/* ===== NAV BUTTONS - COPIED PIXEL STYLE FOR PREV/NEXT ===== */
+.content-head .nav-buttons {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* pixel arrow button style (copied from CSS Basics 'pixel' nav design) */
+.content-head button.arrow-btn{
   font-family:'Press Start 2P';
-  background:#8b5a2b;
+  background:#4e91ff;
   color:#fff;
-  border:none;
-  padding:8px 10px;
-  border-radius:10px;
+  border:3px solid #1f4fb8;
+  padding:6px 10px;
+  border-radius:8px;
   box-shadow:
-    inset -4px -4px 0 rgba(0,0,0,.25),
-    0 5px 0 #5c3a1a;
+    0 3px 0 #16347a,
+    0 4px 0 #0c1b3a;
   cursor:pointer;
+  font-size:8px;
+  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+}
+
+.content-head button.arrow-btn:hover{
+  transform:translateY(-2px);
+  background:#6aa7ff;
+  box-shadow:
+    0 5px 0 #16347a,
+    0 6px 0 #0c1b3a;
+}
+
+.content-head button.arrow-btn:active{
+  transform:translateY(1px);
+  background:#3f7aed;
+  box-shadow:
+    0 1px 0 #16347a,
+    0 2px 0 #0c1b3a;
 }
 
 /* ===== PANELS ===== */
@@ -228,7 +275,7 @@ body{
   box-shadow:0 4px 0 #3e2814;
 }
 
-/* ===== EDITOR MODAL ===== */
+/* ===== EDITOR MODAL (MODE REMOVED) ===== */
 #editorModal{
   position:fixed;
   inset:0;
@@ -258,7 +305,7 @@ body{
   gap:8px;
 }
 #editorModal .controls{display:flex;gap:8px;align-items:center;}
-#editorModal select, #editorModal button{
+#editorModal button{
   font-family:inherit;
 }
 #editorModal textarea{
@@ -344,10 +391,11 @@ body{
 
 <main class="content">
   <div class="content-head">
+    <a href="../../../Webside/Student.html" class="exit-btn" aria-label="Exit lessons">EXIT</a>
     <div class="title" id="panel-title">01 • CSS Basics</div>
-    <div>
-      <button id="prevLesson">◀</button>
-      <button id="nextLesson">▶</button>
+    <div class="nav-buttons">
+      <button id="prevLesson" class="arrow-btn" aria-label="Previous lesson">◀</button>
+      <button id="nextLesson" class="arrow-btn" aria-label="Next lesson">▶</button>
     </div>
   </div>
 
@@ -371,7 +419,7 @@ body{
 </main>
 </div>
  
-<!-- EDITOR MODAL (in DOM, initially hidden) -->
+<!-- EDITOR MODAL (in DOM, initially hidden) - mode selector removed -->
 <div id="editorModal" aria-hidden="true">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Code editor">
     <header>
@@ -380,12 +428,6 @@ body{
         <div id="errorBox"></div>
       </div>
       <div class="controls">
-        <label for="codeMode" style="font-size:11px">Mode:</label>
-        <select id="codeMode">
-          <option value="css">CSS</option>
-          <option value="html">HTML</option>
-          <option value="js">JavaScript</option>
-        </select>
         <button id="applyBtn">Apply</button>
         <button id="closeEditor">Close</button>
       </div>
@@ -393,7 +435,7 @@ body{
     <textarea id="codeEditor" spellcheck="false"></textarea>
     <div style="display:flex;gap:8px;flex:1;min-height:220px;">
       <div style="flex:1;">
-        <strong style="font-size:12px">Live Preview</strong>
+        <strong style="font-size:12px">Live Preview (editor)</strong>
         <div class="preview"><iframe id="previewFrame" style="width:100%;height:100%;border:0"></iframe></div>
       </div>
     </div>
@@ -402,9 +444,11 @@ body{
 
 <script>
 /* ===============================
-   LESSON CONTENT (kept for lessons 1–5 only)
+   LESSON CONTENT (updated: lessons 3-5 now include example code + demo)
+   Lessons 1.4 and 1.6 keep inline previews and are synced when editing.
 =============================== */
 const lessonContent = {
+  /* Lesson 1 (kept as before) */
   "lesson-1-1": `
     <div class="explain">
       CSS = <span class="highlight">SELECTOR { PROPERTY: VALUE; }</span><br>
@@ -421,58 +465,36 @@ const lessonContent = {
   `,
   "lesson-1-2": `
     <p>CSS selectors tell the browser <b>which HTML elements</b> to target.</p>
-    <ul class="examples">
-      <li><code>h1 { color: pink; }</code> → ALL h1 tags</li>
-      <li><code>.highlight { color: cyan; }</code> → class="highlight"</li>
-      <li><code>#hero { background: black; }</code> → id="hero"</li>
-    </ul>
+    <div class="code">
+<pre>/* Element selector */
+p { color: #00aaff; }
+
+/* Class selector */
+.card { background:#111; color:#0ff; padding:12px; }
+
+/* ID selector */
+#hero { font-size:24px; color:#ff66cc; }</pre>
+    </div>
+    <div class="demo">
+      <p>Try the examples:</p>
+      <div class="card" style="margin-top:8px;padding:10px;border-radius:8px;">.card demo box</div>
+      <p id="hero" style="margin-top:8px;">#hero demo</p>
+    </div>
   `,
   "lesson-1-3": `
-<p>Watch plain HTML transform with CSS! Same content, different styles.</p>
+    <p>Watch plain HTML transform with CSS! Same content, different styles.</p>
+    <div class="code">
+<pre>/* Add neon outline to headings */
+h3 { color:#ffcc00; text-shadow:0 0 8px rgba(255,204,0,0.6); }
 
-<div class="demo" style="display:flex; gap:16px; flex-wrap:wrap;">
+/* Style paragraph */
+p.notice { color:#00ffcc; font-weight:bold; }</pre>
+    </div>
 
-  <!-- Plain HTML -->
-  <div class="css-plain" style="flex:1; min-width:200px; border:2px dashed #aaa; padding:12px; text-align:center;">
-    <h3>PLAIN HTML (No CSS)</h3>
-    <p>Central Mindanao University<br>BS Information Technology</p>
-  </div>
-
-  <!-- Styled with CSS -->
-  <div class="css-styled" style="flex:1; min-width:200px; border:2px solid #0ff; background:#111; color:#0ff; padding:12px; text-align:center; border-radius:12px; box-shadow:0 0 12px #0ff;">
-    <h3 style="font-family:'Press Start 2P'; color:#ff0;">✦ CSS ACTIVATED ✦</h3>
-    <p style="font-family:'Courier New', monospace; font-size:12px;">
-      Central Mindanao University<br>
-      BS Information Technology
-    </p>
-  </div>
-
-</div>
-
-<div class="code">
-<pre>
-/* CSS for the styled version */
-.css-styled {
-  border: 2px solid #0ff;
-  background: #111;
-  color: #0ff;
-  padding: 12px;
-  text-align: center;
-  border-radius: 12px;
-  box-shadow: 0 0 12px #0ff;
-}
-
-.css-styled h3 {
-  font-family: 'Press Start 2P';
-  color: #ff0;
-}
-
-.css-styled p {
-  font-family: 'Courier New', monospace;
-  font-size: 12px;
-}
-</pre>
-</div>
+    <div class="demo">
+      <h3>Example Heading</h3>
+      <p class="notice">This paragraph uses class "notice".</p>
+    </div>
   `,
   "lesson-1-4": `
     <p>Use <span class="highlight">/* comments */</span> to explain code. Browsers ignore everything between /* and */.</p>
@@ -488,16 +510,28 @@ nav {
     background: #000;   /* Pure black */
 }</pre>
     </div>
+
+    <div class="demo">
+      <strong style="display:block;margin-bottom:8px">Live Preview</strong>
+      <iframe class="inline-preview" style="width:100%;height:220px;border:1px solid #27455b;border-radius:8px"></iframe>
+    </div>
   `,
   "lesson-1-5": `
     <p>CSS scans HTML → finds matching <span class="highlight">selectors</span> → applies styles.<br>
     Inline styles &gt; Internal &gt; External CSS (priority order).</p>
+    <div class="code">
+<pre>/* Inline example */
+<span style="color:#ff0000">/* (in HTML) &lt;p style='color:red'&gt;... &lt;/p&gt; */</span>
+
+/* Internal CSS example (in &lt;style&gt;) */
+.box { padding:12px; background:#222; color:#0ff; }</pre>
+    </div>
     <div class="demo">
       <p style="color: red;">RED = Inline style (highest priority)</p>
-      <p class="highlight">CYAN = CSS class style</p>
-      <p>DEFAULT = Browser style (lowest priority)</p>
+      <div class="box" style="margin-top:8px;padding:8px;background:#222;color:#0ff;">Internal CSS demo</div>
     </div>
   `,
+  /* LESSON 1 - PART 6: inline preview for hands-on editing */
   "lesson-1-6": `
     <p>Style this CMU card! Change colors, add shadows, make it cyberpunk!</p>
     <div class="code">
@@ -507,7 +541,8 @@ nav {
 &lt;style&gt;
 /* YOUR CSS HERE! */
 .cmu-card {
-    
+    border-radius:10px;
+    padding:12px;
 }
 &lt;/style&gt;
 &lt;/head&gt;
@@ -519,17 +554,21 @@ nav {
 &lt;/body&gt;
 &lt;/html&gt;</pre>
     </div>
+
+    <div class="demo">
+      <strong style="display:block;margin-bottom:8px">Live Preview</strong>
+      <iframe class="inline-preview" style="width:100%;height:260px;border:1px solid #27455b;border-radius:8px"></iframe>
+    </div>
   `,
-/* LESSON 2 */
-"lesson-2-1": `
+
+  /* LESSON 2 (kept) */
+  "lesson-2-1": `
 <p><b>CSS (Cascading Style Sheets)</b> gives color, layout, and life to a web page.
 It controls fonts, spacing, colors, animations, and responsiveness.</p>
-`,
-"lesson-2-2": `
-<p><b>External CSS</b> lives in a separate <code>.css</code> file and is linked...</p>
+  `,
+  "lesson-2-2": `
 <div class="code">
-<pre>
-&lt;!-- index.html --&gt;
+<pre>&lt;!-- index.html --&gt;
 &lt;head&gt;
   &lt;link rel="stylesheet" href="style.css"&gt;
 &lt;/head&gt;
@@ -537,472 +576,303 @@ It controls fonts, spacing, colors, animations, and responsiveness.</p>
 body {
   background-color: black;
   color: cyan;
-}
-</pre>
+}</pre>
 </div>
-<div class="demo">
-<p style="color:#00ffff;">✅ All pages share the same design file (style.css)</p>
-</div>
-`,
-"lesson-2-3": `
-<p><b>Internal CSS</b> is written inside a <code>&lt;style&gt;</code> tag
-in the HTML <code>&lt;head&gt;</code>. Great for single-page designs.</p>
-
+<div class="demo"><p style="color:#00ffff;margin-top:8px">✅ External CSS example shown</p></div>
+  `,
+  "lesson-2-3": `
 <div class="code">
-<pre>
-&lt;head&gt;
+<pre>&lt;head&gt;
 &lt;style&gt;
-  body {
-    background: #000;
-    color: #ff00ff;
-  }
+  body { background:#000;color:#ff00ff; }
 &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;Internal CSS Example&lt;/h1&gt;
-&lt;/body&gt;
-</pre>
+&lt;/head&gt;</pre>
 </div>
-
-<div class="demo">
-<h1 style="color:#ff00ff;">Internal CSS Example</h1>
-</div>
-`,
-"lesson-2-4": `
-<p><b>Inline CSS</b> is written directly inside an HTML tag using
-the <code>style</code> attribute. Highest priority, but not recommended for full sites.</p>
-
+<div class="demo"><h1 style="color:#ff00ff">Internal CSS demo</h1></div>
+  `,
+  "lesson-2-4": `
 <div class="code">
-<pre>
-&lt;h1 style="color:#00ffff;background:#111;padding:10px;"&gt;
-Inline CSS Example
-&lt;/h1&gt;
-</pre>
+<pre>&lt;h1 style="color:#00ffff;background:#111;padding:10px;"&gt;Inline CSS Example&lt;/h1&gt;</pre>
 </div>
-
-<div class="demo">
-<h1 style="color:#00ffff;background:#111;padding:10px;">Inline CSS Example</h1>
-</div>
-`,
-"lesson-2-5": `
-<p><b>When to use each type of CSS:</b></p>
-<ul class="examples">
-  <li><b>External CSS</b> — full websites, scalable</li>
-  <li><b>Internal CSS</b> — single-page projects</li>
-  <li><b>Inline CSS</b> — testing & overrides</li>
-</ul>
-
-<p><b>Practice:</b> Build a page using all three types of CSS.</p>
-`,
-/* LESSON 3 */
-"lesson-3-1": `
+<div class="demo"><h1 style="color:#00ffff;background:#111;padding:10px;">Inline CSS Example</h1></div>
+  `,
+  "lesson-2-5": `
 <div class="explain">
-  A <span class="highlight">CSS selector</span> tells the browser which HTML elements to style.
-  It’s how we “target” parts of a web page — like paragraphs, buttons, or titles — 
-  and apply specific designs to them.
+<p>When to use each:</p>
+<ul class="examples"><li>External — best for whole sites</li><li>Internal — single page</li><li>Inline — quick overrides</li></ul>
 </div>
-`,
-"lesson-3-2": `
-<div class="explain">
-  Targets elements directly by name — for example <code>p</code>, <code>h1</code>, or <code>div</code>.
-  All matching elements will share the same style.
-</div>
+  `,
 
-<div class="code">
-<pre><code>/* Applies style to ALL paragraphs */
-p {
-    color: cyan;
-    font-size: 18px;
-}</code></pre>
-</div>
+  /* ===== LESSON 3 — UPDATED with examples ===== */
+  "lesson-3-1": `
+  <div class="explain">CSS selectors let you target elements on the page to style them. Here are examples for element, class and ID selectors.</div>
+  <div class="code">
+  <pre>/* Element selector */
+h2 { color:#00ccff; }
 
-<div class="demo">
-<h1>Page Title</h1>
-<p>This paragraph styles every &lt;p&gt; element the same way.</p>
-<p>All paragraphs share this cyan color and font size.</p>
-</div>
-`,
-"lesson-3-3": `
-<div class="explain">
-  Classes are used when you want to style multiple elements in the same way.
-  They start with a period (<code>.</code>). Apply them in HTML using <code>class="name"</code>.
-</div>
+/* Class selector */
+.note { background:#111;color:#0ff;padding:8px;border-radius:6px; }
 
-<div class="code">
-<pre><code>/* CSS */
-.special {
-    color: hotpink;
-    text-shadow: 0 0 10px #ff00ff;
-}
+/* ID selector */
+#welcome { font-size:20px; color:#ff66aa; }</pre>
+  </div>
+  <div class="demo">
+    <h2>Element selector example</h2>
+    <div class="note">.note example box</div>
+    <p id="welcome" style="margin-top:10px;">#welcome example</p>
+  </div>
+  `,
+  "lesson-3-2": `
+  <div class="explain">Element selectors select HTML tags by name. Use them for broad changes like typography.</div>
+  <div class="code">
+  <pre>/* Select all paragraph tags */
+p { line-height:1.6; color:#004466; }</pre>
+  </div>
+  <div class="demo">
+    <p>This paragraph is styled by the element selector example above.</p>
+    <p>Another paragraph to show consistent styling.</p>
+  </div>
+  `,
+  "lesson-3-3": `
+  <div class="explain">Classes are reusable. Add the same class to many elements.</div>
+  <div class="code">
+  <pre>/* class used for highlight */
+.highlight { background:linear-gradient(90deg,#ffdd57,#ff9a57); color:#111; padding:6px; border-radius:6px; }</pre>
+  </div>
+  <div class="demo">
+    <p class="highlight">This text uses the .highlight class</p>
+    <button onclick="this.classList.toggle('highlight')">Toggle highlight on button</button>
+  </div>
+  `,
+  "lesson-3-4": `
+  <div class="explain">IDs identify a single element and are useful for unique items on the page.</div>
+  <div class="code">
+  <pre>#hero { background:#001122; color:#00ffcc; padding:12px; border-radius:8px; }</pre>
+  </div>
+  <div class="demo">
+    <div id="hero">Hero section — unique styling</div>
+    <p style="margin-top:8px">IDs should be used once per page.</p>
+  </div>
+  `,
+  "lesson-3-5": `
+  <div class="explain">Compare element, class and ID together.</div>
+  <div class="code">
+  <pre>/* element */
+li { margin-bottom:6px; }
 
-/* HTML */
-&lt;p class="special"&gt;This text uses the "special" class.&lt;/p&gt;</code></pre>
-</div>
+/* class */
+.menu-item { color:#ffcc00; }
 
-<div class="demo">
-<p class="special">This text uses the “special” class!</p>
-</div>
-`,
-"lesson-3-4": `
-<div class="explain">
-  IDs are unique identifiers — used for <strong>one element only</strong>.
-  They start with a hash symbol (<code>#</code>). Apply them in HTML using <code>id="name"</code>.
-</div>
+/* id */
+#main-item { font-weight:700; }</pre>
+  </div>
+  <div class="demo">
+    <ul>
+      <li class="menu-item">Menu A</li>
+      <li class="menu-item" id="main-item">Menu B (main)</li>
+      <li class="menu-item">Menu C</li>
+    </ul>
+  </div>
+  `,
+  "lesson-3-6": `
+  <div class="explain">Challenge: create a small profile using element, class and id selectors. Example provided.</div>
+  <div class="code">
+  <pre>&lt;div id="profile"&gt;
+  &lt;h3&gt;Student&lt;/h3&gt;
+  &lt;p class="bio"&gt;Loves neon CSS.&lt;/p&gt;
+&lt;/div&gt;
 
-<div class="code">
-<pre><code>/* CSS */
-#unique {
-    background-color: rgba(0,255,255,0.15);
-    border: 2px solid cyan;
-    padding: 15px;
-}
+#profile { border:2px solid #00ffff; padding:10px; border-radius:8px; }
+.bio { color:#ff77aa; }</pre>
+  </div>
+  <div class="demo">
+    <div id="profile" style="border:2px solid #00ffff;padding:10px;border-radius:8px;">
+      <h3>Student</h3>
+      <p class="bio" style="color:#ff77aa;margin:0">Loves neon CSS.</p>
+    </div>
+  </div>
+  `,
 
-/* HTML */
-&lt;div id="unique"&gt;I have a unique ID!&lt;/div&gt;</code></pre>
-</div>
+  /* ===== LESSON 4 — UPDATED with examples ===== */
+  "lesson-4-1": `
+  <div class="explain">Colors and backgrounds set mood. Use hex, rgb, or named values. Example below demonstrates color + gradient.</div>
+  <div class="code">
+  <pre>/* Background gradient + text color */
+.hero {
+  background: linear-gradient(135deg,#ff0080,#00d0ff);
+  color:white;
+  padding:16px;
+  border-radius:10px;
+}</pre>
+  </div>
+  <div class="demo">
+    <div class="hero" style="background:linear-gradient(135deg,#ff0080,#00d0ff);color:#fff;padding:16px;border-radius:10px;">
+      Gradient hero example
+    </div>
+  </div>
+  `,
+  "lesson-4-2": `
+  <div class="explain">color property controls text color. Examples with hex and rgba.</div>
+  <div class="code">
+  <pre>h4 { color: #ff00ff; }
+p.info { color: rgba(0,255,255,0.9); }</pre>
+  </div>
+  <div class="demo">
+    <h4>Magenta heading</h4>
+    <p class="info">Cyan-ish paragraph using rgba.</p>
+  </div>
+  `,
+  "lesson-4-3": `
+  <div class="explain">background-color fills element area. Use for cards, sections, buttons.</div>
+  <div class="code">
+  <pre>.card { background-color:#111133; color:#00ffff; padding:12px; border-radius:8px; }</pre>
+  </div>
+  <div class="demo">
+    <div class="card" style="background:#111133;color:#00ffff;padding:12px;border-radius:8px;">
+      Card with background-color
+    </div>
+  </div>
+  `,
+  "lesson-4-4": `
+  <div class="explain">background-image can be an image or gradient. Example uses radial gradient.</div>
+  <div class="code">
+  <pre>.pattern { background-image: radial-gradient(circle at 20% 20%, #ff9 0%, transparent 20%), linear-gradient(90deg,#00f,#0ff); padding:12px; color:#fff; }</pre>
+  </div>
+  <div class="demo">
+    <div class="pattern" style="background-image:radial-gradient(circle at 20% 20%, #ff9 0%, transparent 20%),linear-gradient(90deg,#00f,#0ff);padding:12px;color:#fff;border-radius:8px;">
+      Pattern background demo
+    </div>
+  </div>
+  `,
+  "lesson-4-5": `
+  <div class="explain">background-size controls image scaling. 'cover' fills, 'contain' fits.</div>
+  <div class="code">
+  <pre>.bg-cover { background-image:linear-gradient(45deg,#f06,#09f); background-size:cover; padding:14px; }</pre>
+  </div>
+  <div class="demo">
+    <div class="bg-cover" style="background:linear-gradient(45deg,#f06,#09f);background-size:cover;padding:14px;border-radius:8px;color:#fff;">
+      Background-size: cover demo
+    </div>
+  </div>
+  `,
+  "lesson-4-6": `
+  <div class="explain">Challenge: combine colors, background-image and background-size to build a neon card. Example provided.</div>
+  <div class="code">
+  <pre>.neon-card {
+  width:220px;
+  padding:16px;
+  background:linear-gradient(135deg,#330033 0%,#001133 100%);
+  border:2px solid #00ffff;
+  box-shadow:0 0 20px #00ffff66;
+  color:#fff;
+  border-radius:10px;
+}</pre>
+  </div>
+  <div class="demo">
+    <div class="neon-card" style="width:220px;padding:16px;background:linear-gradient(135deg,#330033,#001133);border:2px solid #00ffff;box-shadow:0 0 20px #00ffff66;color:#fff;border-radius:10px;">
+      Neon card example
+    </div>
+  </div>
+  `,
 
-<div class="demo">
-<div id="unique">I have a unique ID!</div>
-</div>
-`,
-"lesson-3-5": `
-<div class="explain">
-- <span class="highlight">Element selector</span>: Styles all tags of that type.<br>
-- <span class="highlight">Class selector</span>: Styles a group of elements sharing the same class.<br>
-- <span class="highlight">ID selector</span>: Styles one specific element only.
-</div>
-
-<div class="code">
-<pre><code>/* Example CSS */
-h2 { color: cyan; }
-.special { color: hotpink; }
-#unique { color: yellow; }</code></pre>
-</div>
-
-<div class="demo">
-<h2>This is an Element Selector (h2)</h2>
-<p class="special">This is a Class Selector (.special)</p>
-<p id="unique">This is an ID Selector (#unique)</p>
-</div>
-`,
-"lesson-3-6": `
-<div class="explain">
-Create a mini personal webpage that uses:
-<ul>
-  <li>At least one <span class="highlight">element selector</span>.</li>
-  <li>Two different <span class="highlight">classes</span>.</li>
-  <li>One <span class="highlight">unique ID</span>.</li>
-</ul>
-Style them with neon colors and glowing text like this lesson!
-</div>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;style&gt;
-    h1 { color: cyan; }
-    .highlight-me { color: magenta; font-weight: bold; }
-    #my-info { border: 2px solid cyan; padding: 10px; }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;My Neon Profile&lt;/h1&gt;
-  &lt;p class="highlight-me"&gt;I love learning CSS!&lt;/p&gt;
-  &lt;p id="my-info"&gt;Student at Central Mindanao University&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-`,
-/* LESSON 4 */
-"lesson-4-1": `
-<div class="explain">
-CSS colors and backgrounds define the <span style="color:#ff00ff;">look and feel</span> of your webpage.
-They help create visual contrast, highlight sections, and enhance user experience.
-You can color text, fill elements with backgrounds, and even use images or gradients.
-</div>
-`,
-"lesson-4-2": `
-<div class="explain">
-The <span class="highlight">color</span> property changes the text color of an element.
-You can use:
-<ul>
-    <li>Color names (<code>red</code>, <code>blue</code>)</li>
-    <li>Hex codes (<code>#ff00ff</code>)</li>
-    <li>RGB/RGBA (<code>rgb(255,0,255)</code> or <code>rgba(255,0,255,0.8)</code>)</li>
-</ul>
-</div>
-
-<div class="code">
-<pre><code>h1 {
-    color: #ff00ff;  /* magenta heading */
-}
-p {
-    color: rgba(0, 255, 255, 0.9);  /* neon cyan text */
-}</code></pre>
-</div>
-
-<div class="demo">
-<h1 style="color:#ff00ff;">This heading uses magenta color</h1>
-<p style="color:rgba(0,255,255,0.9);">This paragraph is in neon cyan!</p>
-</div>
-`,
-"lesson-4-3": `
-<div class="explain">
-The <span class="highlight">background-color</span> property fills the background of an element with color.
-You can apply it to any element, such as <code>div</code>, <code>body</code>, or <code>button</code>.
-</div>
-
-<div class="code">
-<pre><code>div {
-    background-color: #111133;
-    color: #00ffff;
-    padding: 20px;
-    border-radius: 10px;
-}</code></pre>
-</div>
-
-<div class="demo">
-<div style="background-color:#111133;color:#00ffff;padding:15px;border-radius:10px;">
-This box has a dark background with cyan text.
-</div>
-</div>
-`,
-"lesson-4-4": `
-<div class="explain">
-The <span class="highlight">background-image</span> property sets an image or gradient as a background.
-</div>
-
-<div class="code">
-<pre><code>body {
-    background-image: url('neon-grid.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-}</code></pre>
-</div>
-
-<div class="demo" style="background-image: linear-gradient(135deg, #ff00ff50, #00ffff50); background-size: cover; padding:15px;">
-<p style="color:#fff;">This section uses a gradient background instead of a solid color!</p>
-</div>
-`,
-"lesson-4-5": `
-<div class="explain">
-The <span class="highlight">background-size</span> property controls how the image fits the element’s area.
-Common values include:
-<ul>
-  <li><strong>cover</strong> – scales the image to fill the entire area</li>
-  <li><strong>contain</strong> – fits the image inside without cropping</li>
-  <li><strong>auto</strong> – keeps the image’s original size</li>
-</ul>
-</div>
-
-<div class="code">
-<pre><code>div {
-    background-image: url('pattern.png');
-    background-size: cover; /* fills the box fully */
-}</code></pre>
-</div>
-
-<div class="demo" style="background-image: linear-gradient(to right, #00ffff44, #ff00ff44); background-size: cover; height:100px; padding:10px;">
-<p style="color:#fff;">Background-size: cover stretches this gradient across the whole box.</p>
-</div>
-`,
-"lesson-4-6": `
-<div class="explain">
-Create your own “Neon Profile Card” using at least one:
-<ul>
-    <li><strong>color</strong> property for your text,</li>
-    <li><strong>background-color</strong> for the card,</li>
-    <li><strong>background-image</strong> for design flair,</li>
-    <li><strong>background-size</strong> to control the background behavior.</li>
-</ul>
-</div>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;style&gt;
-    body {
-      background-color: #000;
-      color: #00ffff;
-    }
-    .card {
-      background-image: linear-gradient(135deg, #ff00ff, #00ffff);
-      background-size: cover;
-      color: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      width: 250px;
-      text-align: center;
-    }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div class="card"&gt;
-    &lt;h2&gt;Neon Coder&lt;/h2&gt;
-    &lt;p&gt;Loves CSS gradients and cyber themes!&lt;/p&gt;
-  &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-`,
-/* LESSON 5 */
-"lesson-5-1": `
-<div class="explain">
-The <span style="color:#ff00ff;">font-family</span> property changes the typeface (style of letters) used for text.
-Always list backup fonts in case one isn’t available.
-</div>
-
-<div class="code">
-<pre><code>body {
-    font-family: 'Poppins', Arial, sans-serif;
-}</code></pre>
-</div>
-
-<div class="demo" style="font-family:'Poppins', sans-serif;">
-<p>This text uses the “Poppins” Google Font for a clean futuristic look!</p>
-</div>
-`,
-"lesson-5-2": `
-<div class="explain">
-<span style="color:#00ffff;">font-size</span> controls how large or small your text appears.
-You can use <code>px</code> (pixels), <code>em</code> (relative size), or <code>rem</code> for responsive scaling.
-</div>
-
-<div class="code">
-<pre><code>h1 { font-size: 48px; }
-p { font-size: 1.2em; }</code></pre>
-</div>
-
-<div class="demo">
-<h1 style="font-size:48px;">Large Heading Example</h1>
-<p style="font-size:1.2em;">This is a paragraph with slightly larger text.</p>
-</div>
-`,
-"lesson-5-3": `
-<div class="explain">
-<span style="color:#ff1493;">line-height</span> controls the space between lines of text.
-A higher value makes text easier to read, especially for long paragraphs.
-</div>
-
-<div class="code">
-<pre><code>p {
-    line-height: 1.8;
-}</code></pre>
-</div>
-
-<div class="demo" style="line-height:1.8;">
-<p>This paragraph has extra spacing between lines, making it more comfortable to read under neon light!</p>
-</div>
-`,
-"lesson-5-4": `
-<div class="explain">
-The <span style="color:#00ffff;">text-align</span> property sets how inline text is aligned inside its container:
-<ul>
-    <li><strong>left</strong> – default alignment</li>
-    <li><strong>center</strong> – places text in the middle</li>
-    <li><strong>right</strong> – aligns text to the right edge</li>
-</ul>
-</div>
-
-<div class="code">
-<pre><code>h2 { text-align: center; }</code></pre>
-</div>
-
-<div class="demo" style="text-align:center;">
-<h2>Centered Cyber Heading</h2>
-<p>All text inside this box is centered beautifully.</p>
-</div>
-`,
-"lesson-5-5": `
-<div class="explain">
-<span style="color:#ff00ff;">text-decoration</span> adds visual styles like underlines or strikethroughs.
-Use it for links or emphasis.
-</div>
-
-<div class="code">
-<pre><code>a {
-    text-decoration: underline;
-}
-del {
-    text-decoration: line-through;
-}</code></pre>
-</div>
-
-<div class="demo">
-<a href="#" style="color:#00ffff;text-decoration:underline;">This link is underlined</a><br>
-<del style="color:#ff1493;">This text shows a line-through effect</del>
-</div>
-`,
-"lesson-5-6": `
-<div class="explain">
-The <span style="color:#00ffff;">font-weight</span> property makes text bolder or lighter.
-Numeric values range from 100 (thin) to 900 (extra bold).
-</div>
-
-<div class="code">
-<pre><code>h1 { font-weight: 900; }
-p { font-weight: 300; }</code></pre>
-</div>
-
-<div class="demo">
-<h1 style="font-weight:900;">Bold Title (900)</h1>
-<p style="font-weight:300;">Lighter paragraph (300)</p>
-</div>
-`,
-"lesson-5-7": `
-<div class="explain">
-You can import Google Fonts to make your designs stand out.
-Simply visit <a href="https://fonts.google.com" target="_blank" style="color:#00ffff;">fonts.google.com</a>, 
-choose a font, and copy its <code>@import</code> or <code>&lt;link&gt;</code>.
-</div>
-
-<div class="code">
-<pre><code>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
-body {
-    font-family: 'Poppins', sans-serif;
-}</code></pre>
-</div>
-
-<div class="demo" style="font-family:'Poppins',sans-serif;">
-<p>This sentence uses a Google Font for a clean and modern neon interface look.</p>
-</div>
-`,
-"lesson-5-8": `
-<div class="explain">
-⭐ Create your own Neon Text Showcase using all font properties:
-<ul>
-    <li><strong>font-family</strong> (choose a Google Font)</li>
-    <li><strong>font-size</strong> and <strong>font-weight</strong></li>
-    <li><strong>line-height</strong> and <strong>text-align</strong></li>
-    <li><strong>text-decoration</strong> for creativity!</li>
-</ul>
-</div>
-
-<div class="code">
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;style&gt;
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
-        body { background:#000; color:#00ffff; font-family:'Orbitron',sans-serif; }
-        h1 { font-size:3em; text-align:center; font-weight:900; }
-        p { line-height:1.8; text-align:center; text-decoration:underline dotted magenta; }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Cyber Student&lt;/h1&gt;
-    &lt;p&gt;I love playing with Neon Fonts and futuristic text effects!&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-</div>
-`
+  /* ===== LESSON 5 — UPDATED with examples ===== */
+  "lesson-5-1": `
+  <div class="explain">font-family sets the typeface. Use fallbacks. Example uses monospace and a Google font import suggestion.</div>
+  <div class="code">
+  <pre>body { font-family:'Press Start 2P', monospace; }
+.heading { font-family: 'Orbitron', sans-serif; }</pre>
+  </div>
+  <div class="demo">
+    <p style="font-family:'Press Start 2P',monospace">Press Start text (if loaded)</p>
+    <h3 style="font-family:'Orbitron',sans-serif">Orbitron heading (example)</h3>
+  </div>
+  `,
+  "lesson-5-2": `
+  <div class="explain">font-size controls size. Use px, em, rem. Example shows scalable text.</div>
+  <div class="code">
+  <pre>.big { font-size:24px; }
+.small { font-size:12px; }</pre>
+  </div>
+  <div class="demo">
+    <p class="big" style="font-size:24px">Big text example</p>
+    <p class="small" style="font-size:12px">Small text example</p>
+  </div>
+  `,
+  "lesson-5-3": `
+  <div class="explain">line-height adjusts spacing between lines. Good for readability.</div>
+  <div class="code">
+  <pre>.readable { line-height:1.8; max-width:36rem; }</pre>
+  </div>
+  <div class="demo">
+    <p class="readable" style="line-height:1.8;">
+      This paragraph demonstrates increased line-height which improves readability, especially with neon-styled text.
+    </p>
+  </div>
+  `,
+  "lesson-5-4": `
+  <div class="explain">text-align positions inline text inside its container.</div>
+  <div class="code">
+  <pre>.centered { text-align:center; }</pre>
+  </div>
+  <div class="demo">
+    <div class="centered" style="text-align:center">
+      <h2>Centered heading</h2>
+      <p>All text in this box is centered.</p>
+    </div>
+  </div>
+  `,
+  "lesson-5-5": `
+  <div class="explain">text-decoration for underlines, overlines, and strikethroughs.</div>
+  <div class="code">
+  <pre>a { text-decoration:underline; color:#00f; }</pre>
+  </div>
+  <div class="demo">
+    <a href="#" style="text-decoration:underline;color:#00f">Underlined link sample</a>
+    <p><del>Strikethrough sample</del></p>
+  </div>
+  `,
+  "lesson-5-6": `
+  <div class="explain">font-weight makes text bolder. Numeric values 100-900. Example below.</div>
+  <div class="code">
+  <pre>.light { font-weight:300; } .bold { font-weight:900; }</pre>
+  </div>
+  <div class="demo">
+    <p class="light" style="font-weight:300">Light text example</p>
+    <p class="bold" style="font-weight:900">Bold text example</p>
+  </div>
+  `,
+  "lesson-5-7": `
+  <div class="explain">Import Google Fonts to enhance typography. Example import shown in code.</div>
+  <div class="code">
+  <pre>@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+h1 { font-family: 'Orbitron', sans-serif; }</pre>
+  </div>
+  <div class="demo">
+    <h1 style="font-family:'Orbitron',sans-serif">Orbitron demo (if loaded)</h1>
+  </div>
+  `,
+  "lesson-5-8": `
+  <div class="explain">Combine font properties to make a Neon Text Showcase. Example provided.</div>
+  <div class="code">
+  <pre>.neon-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size:20px;
+  color:#0ff;
+  text-shadow: 0 0 8px #0ff, 0 0 20px #ff00ff;
+}</pre>
+  </div>
+  <div class="demo">
+    <p class="neon-text" style="font-family:'Press Start 2P',monospace;font-size:20px;color:#0ff;text-shadow:0 0 8px #0ff,0 0 20px #ff00ff;">
+      Neon Text Showcase
+    </p>
+  </div>
+  `
 }; /* end lessonContent */
 
 /* ===============================
    After DOM ready: inject content, add edit buttons, wire navigation
+   - Editor mode selector removed (simplified: editor treats code as HTML/snippet)
+   - Lessons 1.4 and 1.6 include inline preview iframes that are synced when editing
 =============================== */
 document.addEventListener('DOMContentLoaded', () => {
   // inject lesson content
@@ -1010,6 +880,16 @@ document.addEventListener('DOMContentLoaded', () => {
   panels.forEach(panel => {
     if (lessonContent[panel.id]) {
       panel.querySelector('.explain').innerHTML = lessonContent[panel.id];
+    }
+  });
+
+  // after injecting, initialize inline previews (for panels that include .inline-preview)
+  panels.forEach(panel => {
+    const pre = panel.querySelector('.code pre');
+    const inline = panel.querySelector('.inline-preview');
+    if (inline && pre) {
+      const codeText = pre.innerText || '';
+      inline.srcdoc = buildSrcdocFromCode(codeText);
     }
   });
 
@@ -1038,11 +918,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ===============================
-   Editor logic and helpers
+   Editor logic and helpers (mode removed; editor treats content as HTML/snippet)
 =============================== */
 const modal = document.getElementById('editorModal');
 const codeEditor = document.getElementById('codeEditor');
-const codeMode = document.getElementById('codeMode');
 const applyBtn = document.getElementById('applyBtn');
 const closeEditor = document.getElementById('closeEditor');
 const previewFrame = document.getElementById('previewFrame');
@@ -1054,10 +933,7 @@ function decodeHtmlEntities(str){
   textarea.innerHTML = str;
   return textarea.value;
 }
-function findDemoHTML(panel){
-  const demo = panel.querySelector('.demo');
-  return demo ? demo.innerHTML : '<div style="padding:12px;color:#111;">Preview area</div>';
-}
+
 function showError(msg){
   errorBox.style.display = 'block';
   errorBox.textContent = msg;
@@ -1067,45 +943,11 @@ function clearError(){
   errorBox.textContent = '';
 }
 
-// open editor for a code block
-function openEditorForBlock(panel, codeBlock){
-  modal.dataset.targetPanel = panel.id;
-  modalTitle.textContent = 'Edit code — ' + panel.querySelector('h2').textContent;
-  clearError();
-
-  const pre = codeBlock.querySelector('pre');
-  const codeText = pre ? pre.innerText.trim() : '';
-  // detect mode
-  let detected = 'css';
-  const t = codeText.trim();
-  if(t.startsWith('<') || /<\/?[a-z][\s\S]*>/i.test(t)) detected = 'html';
-  else if(/\bfunction\b|\bconsole\.|=>/.test(t)) detected = 'js';
-  else if(t.includes('{') && t.includes(':')) detected = 'css';
-  codeMode.value = detected;
-  codeEditor.value = decodeHtmlEntities(codeText);
-  const demoHTML = findDemoHTML(panel);
-  applyToPreview(codeMode.value, codeEditor.value, demoHTML);
-
-  modal.style.display = 'flex';
-  modal.setAttribute('aria-hidden', 'false');
-  setTimeout(()=>codeEditor.focus(),120);
-}
-
-// applyToPreview: builds iframe srcdoc and basic validation
-function applyToPreview(mode, code, demoHTML){
-  clearError();
-
-  // basic CSS braces check
-  if(mode === 'css'){
-    const open = (code.match(/{/g)||[]).length;
-    const close = (code.match(/}/g)||[]).length;
-    if(open !== close){
-      showError('CSS syntax warning: mismatched { } braces.');
-      // allow preview to render anyway
-    }
-  }
-
-  // reporter script to forward runtime errors to parent
+// Build srcdoc from code text.
+// - If code contains full HTML, return it (with reporter).
+// - If code looks like CSS only (contains { and : and no '<'), wrap into <style> and append a simple demo HTML so the preview shows the styles.
+// - Otherwise wrap into a basic HTML document.
+function buildSrcdocFromCode(code){
   const reporter = `
     <script>
       (function(){
@@ -1126,67 +968,90 @@ function applyToPreview(mode, code, demoHTML){
       })();
     <\/script>
   `;
+  const trimmed = (code || '').trim();
 
-  let srcdoc = '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">';
-  if(mode === 'css'){
-    srcdoc += `<style>${code}\n</style></head><body>${demoHTML || '<div style="padding:12px">Preview</div>'}${reporter}</body></html>`;
-  } else if(mode === 'html'){
-    srcdoc += '</head><body>' + code + reporter + '</body></html>';
-  } else { // js
-    srcdoc += '</head><body>' + demoHTML + `<script>${code}<\/script>` + reporter + '</body></html>';
+  // Full html detection
+  if (/<\/?html|<!doctype|<head|<body/i.test(trimmed)) {
+    // ensure reporter appended inside body
+    if (/<\/body>/i.test(trimmed)) {
+      return trimmed.replace(/<\/body>/i, reporter + '</body>');
+    }
+    return trimmed + reporter;
   }
 
-  previewFrame.srcdoc = srcdoc;
+  // CSS-only detection: contains braces and colons but no tags
+  const looksLikeCSS = /\{[^}]*:[^}]*\}/.test(trimmed) && !/<[a-z]/i.test(trimmed);
+  if (looksLikeCSS) {
+    // Build a small demo with sample markup to show the CSS effect
+    return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>${trimmed}</style>
+      <style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style>
+      </head><body>
+      <h1>Preview Heading</h1>
+      <p>This is a sample paragraph to show your CSS styles.</p>
+      <div class="example-box" style="padding:12px;border:1px dashed #999;margin-top:12px;">Example box</div>
+      ${reporter}
+      </body></html>`;
+  }
+
+  // Default: treat as HTML fragment
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style></head><body>${trimmed}${reporter}</body></html>`;
 }
 
-// listen for runtime errors forwarded from iframe
-window.addEventListener('message', (ev)=>{
-  if(!ev.data) return;
-  if(ev.data.type === 'runtime-error'){
-    showError('Runtime error: ' + ev.data.message + ' (line:'+ (ev.data.lineno||'n/a') +')');
-  } else if(ev.data.type === 'console'){
-    // optionally display console messages
-    // console.log('iframe:', ev.data.level, ev.data.args);
-  }
-});
+// open editor for a code block (no mode selection)
+function openEditorForBlock(panel, codeBlock){
+  modal.dataset.targetPanel = panel.id;
+  modalTitle.textContent = 'Edit code — ' + (panel.querySelector('h2') ? panel.querySelector('h2').textContent : panel.id);
+  clearError();
 
-// editor controls
+  const pre = codeBlock.querySelector('pre');
+  const codeText = pre ? pre.innerText.trim() : '';
+  codeEditor.value = decodeHtmlEntities(codeText);
+
+  // preview inside modal
+  try {
+    previewFrame.srcdoc = buildSrcdocFromCode(codeEditor.value);
+  } catch (err) {
+    showError('Preview failed: ' + err.message);
+  }
+
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(()=>codeEditor.focus(),120);
+}
+
+// apply changes from editor: update the lesson pre (so the code is persisted in UI),
+// update the modal preview, and update inline preview iframe if present in the lesson panel
 applyBtn.addEventListener('click', ()=>{
-  const mode = codeMode.value;
   const code = codeEditor.value;
-  const panel = document.getElementById(modal.dataset.targetPanel);
-  const demoHTML = findDemoHTML(panel);
+  const panelId = modal.dataset.targetPanel;
+  if (!panelId) return;
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const pre = panel.querySelector('.code pre');
+  if (pre) pre.innerText = code;
 
-  try{
-    applyToPreview(mode, code, demoHTML);
-    // update the visible <pre> in the lesson so the change persists in UI
-    const pre = panel.querySelector('.code pre');
-    if(pre){
-      pre.innerText = code;
-    }
-  }catch(err){
-    showError('Apply failed: ' + err.message);
+  // update modal preview
+  try {
+    const srcdoc = buildSrcdocFromCode(code);
+    previewFrame.srcdoc = srcdoc;
+    clearError();
+  } catch (err) {
+    showError('Apply preview failed: ' + err.message);
   }
-});
 
-codeMode.addEventListener('change', ()=>{
-  const mode = codeMode.value;
-  const code = codeEditor.value;
-  const panel = document.getElementById(modal.dataset.targetPanel);
-  const demoHTML = findDemoHTML(panel);
-  applyToPreview(mode, code, demoHTML);
-});
+  // if the lesson panel contains an inline preview iframe (e.g., lesson-1-4 or lesson-1-6), update it too
+  const inline = panel.querySelector('.inline-preview');
+  if (inline) {
+    try {
+      inline.srcdoc = buildSrcdocFromCode(code);
+    } catch (err) {
+      // non-blocking
+      console.error('Inline preview update failed', err);
+    }
+  }
 
-let liveTimer = 0;
-codeEditor.addEventListener('input', ()=>{
-  clearTimeout(liveTimer);
-  liveTimer = setTimeout(()=>{
-    const mode = codeMode.value;
-    const code = codeEditor.value;
-    const panel = document.getElementById(modal.dataset.targetPanel);
-    const demoHTML = findDemoHTML(panel);
-    applyToPreview(mode, code, demoHTML);
-  }, 350);
+  // keep modal open so user can re-apply
 });
 
 closeEditor.addEventListener('click', ()=>{
@@ -1205,11 +1070,24 @@ modal.addEventListener('click', (e)=>{
   }
 });
 
+// listen for runtime errors forwarded from iframe
+window.addEventListener('message', (ev)=>{
+  if(!ev.data) return;
+  if(ev.data.type === 'runtime-error'){
+    showError('Runtime error: ' + ev.data.message + ' (line:'+ (ev.data.lineno||'n/a') +')');
+  } else if(ev.data.type === 'console'){
+    // optionally display console messages; currently ignored
+  }
+});
+
 /* ===============================
    Navigation (sidebar + arrows)
 =============================== */
-const sideButtons = document.querySelectorAll('.lessons-list button');
-const panelsAll  = document.querySelectorAll('.lesson-panel');
+function queryAll(selector){ return Array.from(document.querySelectorAll(selector)); }
+
+// we must re-query because lessons-list buttons were document.write'd earlier
+const sideButtons = () => queryAll('.lessons-list > button');
+const panelsAll  = () => queryAll('.lesson-panel');
 const titleEl   = document.getElementById('panel-title');
 const prevBtn = document.getElementById('prevLesson');
 const nextBtn = document.getElementById('nextLesson');
@@ -1217,15 +1095,17 @@ const nextBtn = document.getElementById('nextLesson');
 function updateButtons() {
   const current = document.querySelector('.lesson-panel.visible');
   if(!current) return;
-  const [_, lessonNum, partNum] = current.id.split('-').map(Number);
-  const totalParts = lessonsData[lessonNum - 1].parts.length;
+  const ids = current.id.split('-').map(Number);
+  const lessonNum = ids[1];
+  const partNum = ids[2];
+  const parts = lessonsData[lessonNum - 1].parts.length;
   prevBtn.style.display = partNum === 1 ? 'none' : 'inline-block';
-  nextBtn.style.display = partNum === totalParts ? 'none' : 'inline-block';
+  nextBtn.style.display = partNum === parts ? 'none' : 'inline-block';
 }
 
 function showLesson(id) {
-  panelsAll.forEach(p => p.classList.remove('visible'));
-  sideButtons.forEach(b => b.classList.remove('active'));
+  panelsAll().forEach(p => p.classList.remove('visible'));
+  sideButtons().forEach(b => b.classList.remove('active'));
   const panel = document.getElementById(id);
   if(!panel) return;
   panel.classList.add('visible');
@@ -1239,7 +1119,7 @@ function showLesson(id) {
 }
 
 function wireUpNavigation(){
-  sideButtons.forEach(btn => {
+  sideButtons().forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.dataset.lesson) {
         showLesson(btn.dataset.lesson);
@@ -1285,35 +1165,38 @@ function wireUpNavigation(){
 }
 
 // initial wiring (in case DOMContentLoaded already fired)
+// wireUpNavigation is called in DOMContentLoaded above, but call again safely to ensure listeners are attached
 if(document.readyState === 'complete' || document.readyState === 'interactive'){
   wireUpNavigation();
 } else {
   document.addEventListener('DOMContentLoaded', wireUpNavigation);
 }
 
+// attach dropdown handlers and lesson-item click listeners
 lessonsData.forEach((lesson, i) => {
     const arrow = document.getElementById(`toggleArrow${i + 1}`);
     const dropdown = document.getElementById(`partsDropdown${i + 1}`);
-  
+    if (!arrow || !dropdown) return;
+
     arrow.addEventListener('click', e => {
       e.stopPropagation();
       const open = dropdown.style.display === 'flex';
       dropdown.style.display = open ? 'none' : 'flex';
       arrow.textContent = open ? '▶' : '▼';
     });
-  
+
     dropdown.querySelectorAll('button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    showLesson(btn.dataset.lesson);
-    // Don't close the dropdown automatically
+      btn.addEventListener('click', () => {
+        showLesson(btn.dataset.lesson);
+        // Do not auto-close the dropdown for convenience
       });
     });
   });
-  
-  /* ===============================
-     INITIAL LOAD
-  ================================ */
-  showLesson('lesson-1-1');
+
+/* ===============================
+   INITIAL LOAD
+=============================== */
+showLesson('lesson-1-1');
 
 </script>
 
