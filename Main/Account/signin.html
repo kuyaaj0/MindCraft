@@ -33,13 +33,14 @@ body::before{
   pointer-events: none;
 }
 
-/* Home button */
-.home-wrap{
+/* Home & Back buttons */
+.home-wrap, .back-wrap{
   position:absolute;
   top:24px;
   left:24px;
+  z-index:10;
 }
-.home-btn{
+.home-btn, .back-btn{
   background:#ffae42;
   border:none;
   padding:10px 18px;
@@ -50,8 +51,8 @@ body::before{
   cursor:pointer;
   box-shadow:0 4px 0 #d8942f;
 }
-.home-btn:hover{transform:translateY(-1px)}
-.home-btn:active{transform:translateY(2px)}
+.home-btn:hover, .back-btn:hover{transform:translateY(-1px)}
+.home-btn:active, .back-btn:active{transform:translateY(2px)}
 
 /* Card */
 .panel{
@@ -107,11 +108,6 @@ button:hover{transform:translateY(-1px)}
 button:active{transform:translateY(3px)}
 
 .role-btn{margin-bottom:12px}
-.back{
-  margin-top:14px;
-  background:#bdbdbd;
-  box-shadow:0 5px 0 #8d8d8d;
-}
 
 /* Links */
 .auth-link{
@@ -152,14 +148,22 @@ button:active{transform:translateY(3px)}
 
 /* Hide sections */
 .student-form,.teacher-form{display:none}
+
+/* Position resend/forgot buttons inside panel */
+.inner-btn{margin-bottom:12px}
 </style>
 </head>
 
 <body>
 
-<!-- HOME BUTTON -->
+<!-- Home button (only on choice) -->
 <div class="home-wrap">
   <button id="homeBtn" class="home-btn">Home</button>
+</div>
+
+<!-- Back button (outside panels, left top) -->
+<div class="back-wrap" style="display:none;">
+  <button id="backBtn" class="back-btn">Back</button>
 </div>
 
 <!-- ROLE CHOICE -->
@@ -186,9 +190,8 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="studentMessage"></p>
-  <button id="studentForgot" class="back" style="background:#ffae42;">Forgot Password?</button>
-  <button id="resendStudent" class="back" style="background:#ff69b4;">Resend Verification</button>
-  <button class="back" onclick="backToChoice()">Back</button>
+  <button id="studentForgot" class="inner-btn">Forgot Password?</button>
+  <button id="resendStudent" class="inner-btn" style="background:#ff69b4;">Resend Verification</button>
 </div>
 
 <!-- TEACHER SIGN IN -->
@@ -203,102 +206,104 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="teacherMessage"></p>
-  <button id="teacherForgot" class="back" style="background:#ffae42;">Forgot Password?</button>
-  <button id="resendTeacher" class="back" style="background:#ff69b4;">Resend Verification</button>
-  <button class="back" onclick="backToChoice()">Back</button>
+  <button id="teacherForgot" class="inner-btn">Forgot Password?</button>
+  <button id="resendTeacher" class="inner-btn" style="background:#ff69b4;">Resend Verification</button>
 </div>
 
+<!-- Toast -->
 <div id="toast" class="toast"></div>
 
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  sendEmailVerification,
-  sendPasswordResetEmail
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ==== UI ELEMENTS ==== */
+/* UI Elements */
 const studentBtn = document.getElementById("studentBtn");
 const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
 const homeBtn = document.getElementById("homeBtn");
+const backWrap = document.querySelector(".back-wrap");
+const backBtn = document.getElementById("backBtn");
+const studentMessage = document.getElementById("studentMessage");
+const teacherMessage = document.getElementById("teacherMessage");
 
-/* ==== ROLE SELECTION ==== */
+/* Show role forms */
 studentBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   studentForm.style.display = "block";
   homeBtn.style.display = "none";
+  backWrap.style.display = "block";
 });
+
 teacherBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   teacherForm.style.display = "block";
   homeBtn.style.display = "none";
+  backWrap.style.display = "block";
 });
 
-/* ==== BACK TO ROLE CHOICE ==== */
-function backToChoice() {
+/* Back button outside panel */
+backBtn.addEventListener("click", () => {
   studentForm.style.display = "none";
   teacherForm.style.display = "none";
   choiceSection.style.display = "block";
   homeBtn.style.display = "block";
+  backWrap.style.display = "none";
 
   studentSigninForm.reset();
   teacherSigninForm.reset();
-  studentMessage.textContent = '';
-  teacherMessage.textContent = '';
-}
+  studentMessage.textContent = "";
+  teacherMessage.textContent = "";
+});
 
-/* ==== HOME NAVIGATION ==== */
+/* Home button */
 homeBtn.addEventListener("click", () => location.href='../../index.html');
 
-/* ==== TOAST FUNCTION ==== */
-function showToast(msg, isError=false) {
+/* Toast */
+function showToast(msg, isError=false){
   const t = document.getElementById("toast");
   t.textContent = msg;
   t.className = "toast show" + (isError ? " error" : "");
   setTimeout(() => t.className = "toast", 3000);
 }
 
-/* ==== DEFAULT STUDENT DATA ==== */
+/* Default Student Fields */
 const defaultStudentFields = {
   level:1, xp:0, xpMax:100, totalXP:0,
   completedLessons:[], completedQuizzes:[]
 };
 
-/* ==== STUDENT SIGN IN ==== */
-studentSigninForm.addEventListener("submit", async e => {
+/* STUDENT SIGN IN */
+studentSigninForm.addEventListener("submit", async e=>{
   e.preventDefault();
   const email = studentEmail.value.trim();
   const password = studentPassword.value;
-  const msg = studentMessage;
+  studentMessage.textContent = "";
 
-  msg.textContent = "";
-  try {
+  try{
     const userCred = await signInWithEmailAndPassword(auth,email,password);
     const user = userCred.user;
 
-    if (!user.emailVerified) {
-      msg.textContent = "Please verify your email before signing in.";
+    if(!user.emailVerified){
+      studentMessage.textContent = "Please verify your email before signing in.";
       await signOut(auth);
       return;
     }
 
     const ref = doc(db,"users",user.uid);
     const snap = await getDoc(ref);
-    if (!snap.exists() || snap.data().role !== "student") {
-      msg.textContent = "This account is not a student.";
+    if(!snap.exists() || snap.data().role !== "student"){
+      studentMessage.textContent = "This account is not a student.";
       await signOut(auth);
       return;
     }
 
     let data = snap.data();
-    for (const key in defaultStudentFields) {
-      if (!(key in data)) data[key] = defaultStudentFields[key];
+    for(const key in defaultStudentFields){
+      if(!(key in data)) data[key] = defaultStudentFields[key];
     }
     await setDoc(ref,data,{merge:true});
 
@@ -309,56 +314,30 @@ studentSigninForm.addEventListener("submit", async e => {
     showToast("Login successful");
     setTimeout(()=>location.href="../Startup/StartupS.html",1200);
 
-  } catch(err) {
-    showToast(err.message,true);
-  }
+  }catch(err){ showToast(err.message,true); }
 });
 
-/* ==== STUDENT FORGOT PASSWORD ==== */
-document.getElementById("studentForgot").addEventListener("click", async () => {
-  const email = studentEmail.value.trim();
-  if (!email){ showToast("Enter your Gmail first.",true); return; }
-  try {
-    await sendPasswordResetEmail(auth,email);
-    showToast("Password reset email sent.");
-  } catch(err){ showToast(err.message,true); }
-});
-
-/* ==== STUDENT RESEND VERIFICATION ==== */
-resendStudent.addEventListener("click", async () => {
-  const email = studentEmail.value.trim();
-  const password = studentPassword.value;
-  try {
-    const userCred = await signInWithEmailAndPassword(auth,email,password);
-    const user = userCred.user;
-    await sendEmailVerification(user);
-    showToast("Verification email sent again.");
-    await signOut(auth);
-  } catch(err){ showToast(err.message,true); }
-});
-
-/* ==== TEACHER SIGN IN ==== */
-teacherSigninForm.addEventListener("submit", async e => {
+/* TEACHER SIGN IN */
+teacherSigninForm.addEventListener("submit", async e=>{
   e.preventDefault();
   const email = teacherEmail.value.trim();
   const password = teacherPassword.value;
-  const msg = teacherMessage;
+  teacherMessage.textContent = "";
 
-  msg.textContent = "";
-  try {
+  try{
     const userCred = await signInWithEmailAndPassword(auth,email,password);
     const user = userCred.user;
 
-    if (!user.emailVerified) {
-      msg.textContent = "Please verify your email before signing in.";
+    if(!user.emailVerified){
+      teacherMessage.textContent = "Please verify your email before signing in.";
       await signOut(auth);
       return;
     }
 
     const ref = doc(db,"users",user.uid);
     const snap = await getDoc(ref);
-    if (!snap.exists() || snap.data().role !== "teacher") {
-      msg.textContent = "This account is not a teacher.";
+    if(!snap.exists() || snap.data().role !== "teacher"){
+      teacherMessage.textContent = "This account is not a teacher.";
       await signOut(auth);
       return;
     }
@@ -370,34 +349,46 @@ teacherSigninForm.addEventListener("submit", async e => {
     showToast("Login successful");
     setTimeout(()=>location.href="../Startup/StartupT.html",1200);
 
-  } catch(err) {
-    showToast(err.message,true);
-  }
+  }catch(err){ showToast(err.message,true); }
 });
 
-/* ==== TEACHER FORGOT PASSWORD ==== */
-document.getElementById("teacherForgot").addEventListener("click", async () => {
-  const email = teacherEmail.value.trim();
-  if (!email){ showToast("Enter your DepEd email first.",true); return; }
-  try {
-    await sendPasswordResetEmail(auth,email);
-    showToast("Password reset email sent.");
-  } catch(err){ showToast(err.message,true); }
+/* STUDENT FORGOT PASSWORD */
+studentForgot.addEventListener("click", async ()=>{
+  const email = studentEmail.value.trim();
+  if(!email){ showToast("Enter Gmail first.",true); return; }
+  try{ await sendPasswordResetEmail(auth,email); showToast("Password reset email sent."); }
+  catch(err){ showToast(err.message,true); }
 });
 
-/* ==== TEACHER RESEND VERIFICATION ==== */
-resendTeacher.addEventListener("click", async () => {
+/* TEACHER FORGOT PASSWORD */
+teacherForgot.addEventListener("click", async ()=>{
   const email = teacherEmail.value.trim();
-  const password = teacherPassword.value;
-  try {
-    const userCred = await signInWithEmailAndPassword(auth,email,password);
-    const user = userCred.user;
-    await sendEmailVerification(user);
+  if(!email){ showToast("Enter DepEd email first.",true); return; }
+  try{ await sendPasswordResetEmail(auth,email); showToast("Password reset email sent."); }
+  catch(err){ showToast(err.message,true); }
+});
+
+/* STUDENT RESEND VERIFICATION */
+resendStudent.addEventListener("click", async ()=>{
+  const email = studentEmail.value.trim();
+  try{
+    const userCred = await signInWithEmailAndPassword(auth,email,studentPassword.value);
+    await sendEmailVerification(userCred.user);
     showToast("Verification email sent again.");
     await signOut(auth);
-  } catch(err){ showToast(err.message,true); }
+  }catch(err){ showToast(err.message,true); }
+});
+
+/* TEACHER RESEND VERIFICATION */
+resendTeacher.addEventListener("click", async ()=>{
+  const email = teacherEmail.value.trim();
+  try{
+    const userCred = await signInWithEmailAndPassword(auth,email,teacherPassword.value);
+    await sendEmailVerification(userCred.user);
+    showToast("Verification email sent again.");
+    await signOut(auth);
+  }catch(err){ showToast(err.message,true); }
 });
 </script>
-
 </body>
 </html>
