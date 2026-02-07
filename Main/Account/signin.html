@@ -30,7 +30,7 @@ body::before{
     radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
     radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
   opacity:.25;
-  pointer-events: none; /* Fix for clickable buttons */
+  pointer-events: none;
 }
 
 /* Home button */
@@ -145,6 +145,7 @@ button:active{transform:translateY(3px)}
   opacity:0;
   transform:translateY(20px);
   transition:.4s;
+  z-index:9999;
 }
 .toast.show{opacity:1;transform:translateY(0)}
 .toast.error{background:#c62828}
@@ -185,6 +186,7 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="studentMessage"></p>
+  <button id="studentForgot" class="back" style="background:#ffae42;">Forgot Password?</button>
   <button id="resendStudent" class="back" style="background:#ff69b4;">Resend Verification</button>
   <button class="back" onclick="backToChoice()">Back</button>
 </div>
@@ -201,6 +203,7 @@ button:active{transform:translateY(3px)}
   </form>
 
   <p class="message" id="teacherMessage"></p>
+  <button id="teacherForgot" class="back" style="background:#ffae42;">Forgot Password?</button>
   <button id="resendTeacher" class="back" style="background:#ff69b4;">Resend Verification</button>
   <button class="back" onclick="backToChoice()">Back</button>
 </div>
@@ -217,7 +220,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* UI */
+/* ==== UI ELEMENTS ==== */
 const studentBtn = document.getElementById("studentBtn");
 const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
@@ -225,77 +228,77 @@ const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
 const homeBtn = document.getElementById("homeBtn");
 
-/* ROLE SELECTION */
-studentBtn.addEventListener("click",()=>{
-  choiceSection.style.display="none";
-  studentForm.style.display="block";
-  homeBtn.style.display="none";
+/* ==== ROLE SELECTION ==== */
+studentBtn.addEventListener("click", () => {
+  choiceSection.style.display = "none";
+  studentForm.style.display = "block";
+  homeBtn.style.display = "none";
+});
+teacherBtn.addEventListener("click", () => {
+  choiceSection.style.display = "none";
+  teacherForm.style.display = "block";
+  homeBtn.style.display = "none";
 });
 
-teacherBtn.addEventListener("click",()=>{
-  choiceSection.style.display="none";
-  teacherForm.style.display="block";
-  homeBtn.style.display="none";
-});
+/* ==== BACK TO ROLE CHOICE ==== */
+function backToChoice() {
+  studentForm.style.display = "none";
+  teacherForm.style.display = "none";
+  choiceSection.style.display = "block";
+  homeBtn.style.display = "block";
 
-function backToChoice(){
-  studentForm.style.display="none";
-  teacherForm.style.display="none";
-  choiceSection.style.display="block";
-  homeBtn.style.display="block";
-
-  document.getElementById('studentSigninForm').reset();
-  document.getElementById('teacherSigninForm').reset();
-  document.getElementById('studentMessage').textContent='';
-  document.getElementById('teacherMessage').textContent='';
+  studentSigninForm.reset();
+  teacherSigninForm.reset();
+  studentMessage.textContent = '';
+  teacherMessage.textContent = '';
 }
 
-/* HOME NAVIGATION */
-homeBtn.addEventListener("click",()=>location.href='../../index.html');
+/* ==== HOME NAVIGATION ==== */
+homeBtn.addEventListener("click", () => location.href='../../index.html');
 
-/* Toast */
-function showToast(msg,isError=false){
-  const t=document.getElementById("toast");
-  t.textContent=msg;
-  t.className="toast show"+(isError?" error":"");
-  setTimeout(()=>t.className="toast",3000);
+/* ==== TOAST FUNCTION ==== */
+function showToast(msg, isError=false) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => t.className = "toast", 3000);
 }
 
-/* Default Student Fields */
-const defaultStudentFields={
-  level:1,xp:0,xpMax:100,totalXP:0,
-  completedLessons:[],completedQuizzes:[]
+/* ==== DEFAULT STUDENT DATA ==== */
+const defaultStudentFields = {
+  level:1, xp:0, xpMax:100, totalXP:0,
+  completedLessons:[], completedQuizzes:[]
 };
 
 /* ==== STUDENT SIGN IN ==== */
-studentSigninForm.addEventListener("submit",async e=>{
+studentSigninForm.addEventListener("submit", async e => {
   e.preventDefault();
-  const email=studentEmail.value.trim();
-  const password=studentPassword.value;
-  const msg=studentMessage;
+  const email = studentEmail.value.trim();
+  const password = studentPassword.value;
+  const msg = studentMessage;
 
-  msg.textContent="";
-  try{
-    const userCred=await signInWithEmailAndPassword(auth,email,password);
-    const user=userCred.user;
+  msg.textContent = "";
+  try {
+    const userCred = await signInWithEmailAndPassword(auth,email,password);
+    const user = userCred.user;
 
-    if(!user.emailVerified){
-      msg.textContent="Please verify your email before signing in.";
+    if (!user.emailVerified) {
+      msg.textContent = "Please verify your email before signing in.";
       await signOut(auth);
       return;
     }
 
-    const ref=doc(db,"users",user.uid);
-    const snap=await getDoc(ref);
-    if(!snap.exists()||snap.data().role!=="student"){
-      msg.textContent="This account is not a student.";
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().role !== "student") {
+      msg.textContent = "This account is not a student.";
       await signOut(auth);
       return;
     }
 
-    let data=snap.data();
-    for(const key in defaultStudentFields){
-      if(!(key in data)) data[key]=defaultStudentFields[key];
+    let data = snap.data();
+    for (const key in defaultStudentFields) {
+      if (!(key in data)) data[key] = defaultStudentFields[key];
     }
     await setDoc(ref,data,{merge:true});
 
@@ -306,61 +309,56 @@ studentSigninForm.addEventListener("submit",async e=>{
     showToast("Login successful");
     setTimeout(()=>location.href="../Startup/StartupS.html",1200);
 
-  }catch(err){
+  } catch(err) {
     showToast(err.message,true);
   }
 });
 
 /* ==== STUDENT FORGOT PASSWORD ==== */
-const studentForgot=document.createElement("button");
-studentForgot.textContent="Forgot Password?";
-studentForgot.className="back";
-studentForgot.style.background="#ffae42";
-studentForgot.onclick=async()=>{
-  const email=studentEmail.value.trim();
-  if(!email){showToast("Enter your Gmail first.",true);return;}
-  try{
+document.getElementById("studentForgot").addEventListener("click", async () => {
+  const email = studentEmail.value.trim();
+  if (!email){ showToast("Enter your Gmail first.",true); return; }
+  try {
     await sendPasswordResetEmail(auth,email);
     showToast("Password reset email sent.");
-  }catch(err){showToast(err.message,true);}
-};
-studentForm.appendChild(studentForgot);
+  } catch(err){ showToast(err.message,true); }
+});
 
 /* ==== STUDENT RESEND VERIFICATION ==== */
-resendStudent.addEventListener("click",async()=>{
-  const email=studentEmail.value.trim();
-  const password=studentPassword.value;
-  try{
-    const userCred=await signInWithEmailAndPassword(auth,email,password);
-    const user=userCred.user;
+resendStudent.addEventListener("click", async () => {
+  const email = studentEmail.value.trim();
+  const password = studentPassword.value;
+  try {
+    const userCred = await signInWithEmailAndPassword(auth,email,password);
+    const user = userCred.user;
     await sendEmailVerification(user);
     showToast("Verification email sent again.");
     await signOut(auth);
-  }catch(err){showToast(err.message,true);}
+  } catch(err){ showToast(err.message,true); }
 });
 
 /* ==== TEACHER SIGN IN ==== */
-teacherSigninForm.addEventListener("submit",async e=>{
+teacherSigninForm.addEventListener("submit", async e => {
   e.preventDefault();
-  const email=teacherEmail.value.trim();
-  const password=teacherPassword.value;
-  const msg=teacherMessage;
+  const email = teacherEmail.value.trim();
+  const password = teacherPassword.value;
+  const msg = teacherMessage;
 
-  msg.textContent="";
-  try{
-    const userCred=await signInWithEmailAndPassword(auth,email,password);
-    const user=userCred.user;
+  msg.textContent = "";
+  try {
+    const userCred = await signInWithEmailAndPassword(auth,email,password);
+    const user = userCred.user;
 
-    if(!user.emailVerified){
-      msg.textContent="Please verify your email before signing in.";
+    if (!user.emailVerified) {
+      msg.textContent = "Please verify your email before signing in.";
       await signOut(auth);
       return;
     }
 
-    const ref=doc(db,"users",user.uid);
-    const snap=await getDoc(ref);
-    if(!snap.exists()||snap.data().role!=="teacher"){
-      msg.textContent="This account is not a teacher.";
+    const ref = doc(db,"users",user.uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists() || snap.data().role !== "teacher") {
+      msg.textContent = "This account is not a teacher.";
       await signOut(auth);
       return;
     }
@@ -372,37 +370,32 @@ teacherSigninForm.addEventListener("submit",async e=>{
     showToast("Login successful");
     setTimeout(()=>location.href="../Startup/StartupT.html",1200);
 
-  }catch(err){
+  } catch(err) {
     showToast(err.message,true);
   }
 });
 
 /* ==== TEACHER FORGOT PASSWORD ==== */
-const teacherForgot=document.createElement("button");
-teacherForgot.textContent="Forgot Password?";
-teacherForgot.className="back";
-teacherForgot.style.background="#ffae42";
-teacherForgot.onclick=async()=>{
-  const email=teacherEmail.value.trim();
-  if(!email){showToast("Enter your DepEd email first.",true);return;}
-  try{
+document.getElementById("teacherForgot").addEventListener("click", async () => {
+  const email = teacherEmail.value.trim();
+  if (!email){ showToast("Enter your DepEd email first.",true); return; }
+  try {
     await sendPasswordResetEmail(auth,email);
     showToast("Password reset email sent.");
-  }catch(err){showToast(err.message,true);}
-};
-teacherForm.appendChild(teacherForgot);
+  } catch(err){ showToast(err.message,true); }
+});
 
 /* ==== TEACHER RESEND VERIFICATION ==== */
-resendTeacher.addEventListener("click",async()=>{
-  const email=teacherEmail.value.trim();
-  const password=teacherPassword.value;
-  try{
-    const userCred=await signInWithEmailAndPassword(auth,email,password);
-    const user=userCred.user;
+resendTeacher.addEventListener("click", async () => {
+  const email = teacherEmail.value.trim();
+  const password = teacherPassword.value;
+  try {
+    const userCred = await signInWithEmailAndPassword(auth,email,password);
+    const user = userCred.user;
     await sendEmailVerification(user);
     showToast("Verification email sent again.");
     await signOut(auth);
-  }catch(err){showToast(err.message,true);}
+  } catch(err){ showToast(err.message,true); }
 });
 </script>
 
