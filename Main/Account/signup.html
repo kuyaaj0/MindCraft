@@ -54,11 +54,12 @@ body::before {
 .back-btn:hover { background: #888; transform: translateY(-1px); }
 .back-btn:active { transform: translateY(2px); }
 
-/* HOME BUTTON */
+/* HOME BUTTON (LEFT) */
 .home-wrap {
   position: absolute;
   top: 24px;
-  right: 24px;
+  left: 24px; /* same left as back button */
+  display: block;
   z-index: 10;
 }
 .home-btn {
@@ -151,12 +152,12 @@ button:active { transform: translateY(3px); }
 <body>
 
 <!-- BACK BUTTON -->
-<div class="back-wrap">
+<div class="back-wrap" id="backWrap">
   <button class="back-btn" id="backBtn">← Back</button>
 </div>
 
-<!-- HOME BUTTON -->
-<div class="home-wrap">
+<!-- HOME BUTTON (VISIBLE ONLY ON ROLE CHOICE) -->
+<div class="home-wrap" id="homeWrap">
   <button class="home-btn" onclick="location.href='../../index.html'">Home</button>
 </div>
 
@@ -216,9 +217,9 @@ const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
 const teacherForm = document.getElementById("teacherForm");
-const backWrap = document.querySelector(".back-wrap");
+const backWrap = document.getElementById("backWrap");
 const backBtn = document.getElementById("backBtn");
-const homeWrap = document.querySelector(".home-wrap");
+const homeWrap = document.getElementById("homeWrap");
 
 /* ==== UI TOGGLE ==== */
 function showStudentForm() {
@@ -291,8 +292,7 @@ studentSignupForm.addEventListener("submit", async (e) => {
       createdAt: new Date()
     });
 
-    // ✅ Send verification email
-    await sendEmailVerification(user.user);
+    await sendEmailVerification(user.user); // ✅ Gmail verification
 
     showToast("Verification email sent. Check Gmail inbox/spam.");
     studentMessage.style.color = "#1DB954";
