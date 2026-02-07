@@ -573,34 +573,4 @@ teacherSignupForm.addEventListener("submit", async (e) => {
 
 </body>
 </html>
-    return;
-  }
-
-  try{
-    const user=await createUserWithEmailAndPassword(auth,email,password);
-
-    await setDoc(doc(db,"users",user.user.uid),{
-      name,
-      email,
-      role:"teacher",
-      verified:true,
-      createdAt:new Date()
-    });
-
-    showToast("Teacher account created successfully!");
-    msg.style.color="#1db954";
-    msg.textContent="Teacher account created! You can now sign in.";
-
-    setTimeout(()=>location.href="signin.html",2500);
-
-  }catch(err){
-    console.error("Teacher signup error:", err);
-    msg.style.color="#c62828";
-    msg.textContent=err.message;
-  }
-});
-</script>
-
-</body>
-</html>
 <!--fixed and needs to be tested so it would be my backup plan-->
