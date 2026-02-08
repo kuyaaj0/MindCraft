@@ -513,6 +513,49 @@ footer {
   .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
+
+/* === Responsive Arrow Fix for Portrait & Landscape === */
+@media (max-width: 400px) {
+  .nav-arrow {
+    font-size: 0.35rem;
+    padding: 4px 5px;
+  }
+
+  .nav-arrow.left {
+    left: -10px;
+  }
+  .nav-arrow.right {
+    right: -10px;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 600px) {
+  .nav-arrow {
+    font-size: 0.4rem;
+    padding: 5px 7px;
+  }
+
+  .nav-arrow.left {
+    left: -20px;
+  }
+  .nav-arrow.right {
+    right: -20px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .nav-arrow {
+    font-size: 0.45rem;
+    padding: 6px 8px;
+  }
+
+  .nav-arrow.left {
+    left: -30px;
+  }
+  .nav-arrow.right {
+    right: -30px;
+  }
+}
 </style>
 </head>
 <body>
