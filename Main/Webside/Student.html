@@ -235,7 +235,7 @@ main {
 }
 
 /* === Navigation Arrows (OUTSIDE language selector) === */
-.nav-arrow {
+/*.nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -249,7 +249,22 @@ main {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.2s ease;
   z-index: 15;
+}*/
+
+/* === Fix stretched arrow buttons === */
+.nav-arrow {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* make them round */
+  padding: 0;         /* remove horizontal stretch */
+  background: rgba(29,185,84,0.9);
+  box-shadow: 0 0 6px rgba(29,185,84,0.5);
+  border: 2px solid #1DB954;
 }
+  
 .nav-arrow.left {
   left: -45px;
 }
@@ -514,12 +529,21 @@ footer {
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
 
-/* === Responsive Arrow Fix for Portrait & Landscape === */
+/* Slight shrink for small screens */
 @media (max-width: 400px) {
   .nav-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 0.35rem;
+  }
+}
+  
+/* === Responsive Arrow Fix for Portrait & Landscape === */
+@media (max-width: 400px) {
+  /*.nav-arrow {
     font-size: 0.35rem;
     padding: 4px 5px;
-  }
+  }*/
 
   .nav-arrow.left {
     left: -10px;
