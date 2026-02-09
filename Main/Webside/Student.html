@@ -690,74 +690,74 @@ document.addEventListener("DOMContentLoaded", () => {
      1️⃣ AUTO-GENERATE LESSON & QUIZ DROPDOWNS
      ========================================================= */
   function FullpopulateOptions(prefix, folder) {
-  // ✅ LESSON dropdown → lesson-Full.html only
-  const lessonSelect = document.getElementById(`${prefix}Lessons`);
-  if (lessonSelect) {
-    lessonSelect.innerHTML = "";
-    const placeholder = document.createElement("option");
-    placeholder.textContent = "📖 Select Lesson";
-    placeholder.value = "";
-    lessonSelect.appendChild(placeholder);
+    // ✅ LESSON dropdown → lesson-Full.html only
+    const lessonSelect = document.getElementById(`${prefix}Lessons`);
+    if (lessonSelect) {
+      lessonSelect.innerHTML = "";
+      const placeholder = document.createElement("option");
+      placeholder.textContent = "📖 Select Lesson";
+      placeholder.value = "";
+      lessonSelect.appendChild(placeholder);
 
-    const lessonOption = document.createElement("option");
-    lessonOption.value = `../Modular/Lessons/${folder}/lesson-Full.html`;
-    lessonOption.textContent = "Lesson Full";
-    lessonSelect.appendChild(lessonOption);
-  }
+      const lessonOption = document.createElement("option");
+      lessonOption.value = `../Modular/Lessons/${folder}/lesson-Full.html`;
+      lessonOption.textContent = "Lesson Full";
+      lessonSelect.appendChild(lessonOption);
+    }
 
-  // ✅ QUIZ dropdown → level-1 to level-5
-  const quizSelect = document.getElementById(`${prefix}Quizzes`);
-  if (quizSelect) {
-    quizSelect.innerHTML = "";
-    const placeholder = document.createElement("option");
-    placeholder.textContent = "📝 Select Quiz";
-    placeholder.value = "";
-    quizSelect.appendChild(placeholder);
+    // ✅ QUIZ dropdown → level-1 to level-5
+    const quizSelect = document.getElementById(`${prefix}Quizzes`);
+    if (quizSelect) {
+      quizSelect.innerHTML = "";
+      const placeholder = document.createElement("option");
+      placeholder.textContent = "📝 Select Quiz";
+      placeholder.value = "";
+      quizSelect.appendChild(placeholder);
 
-    for (let i = 1; i <= 5; i++) {
-      const option = document.createElement("option");
-      option.value = `../Levels/Quiz/${folder}/level-${i}.html`;
-      option.textContent = `Level ${i}`;
-      quizSelect.appendChild(option);
+      for (let i = 1; i <= 5; i++) {
+        const option = document.createElement("option");
+        option.value = `../Levels/Quiz/${folder}/level-${i}.html`;
+        option.textContent = `Level ${i}`;
+        quizSelect.appendChild(option);
+      }
     }
   }
-}
 
-function populateOptions(prefix, count, type, folder) {
-  const select = document.getElementById(`${prefix}${type}`);
-  if (!select) return;
+  function populateOptions(prefix, count, type, folder) {
+    const select = document.getElementById(`${prefix}${type}`);
+    if (!select) return;
 
-  const isLesson = type === "Lessons";
-  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
-  const subfolder = isLesson ? "Lessons" : "Quiz";
-  const basePath = isLesson
-    ? `../Modular/${subfolder}/${folder}/lesson-`
-    : `../Levels/${subfolder}/${folder}/level-`;
+    const isLesson = type === "Lessons";
+    const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+    const subfolder = isLesson ? "Lessons" : "Quiz";
+    const basePath = isLesson
+      ? `../Modular/${subfolder}/${folder}/lesson-`
+      : `../Levels/${subfolder}/${folder}/level-`;
 
-  select.innerHTML = "";
-  const placeholder = document.createElement("option");
-  placeholder.textContent = label;
-  placeholder.value = "";
-  select.appendChild(placeholder);
+    select.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.textContent = label;
+    placeholder.value = "";
+    select.appendChild(placeholder);
 
-  for (let i = 1; i <= count; i++) {
-    const option = document.createElement("option");
-    option.value = `${basePath}${i}.html`;
-    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
-    select.appendChild(option);
+    for (let i = 1; i <= count; i++) {
+      const option = document.createElement("option");
+      option.value = `${basePath}${i}.html`;
+      option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+      select.appendChild(option);
+    }
   }
-}
 
-// ✅ Uppercase folders (since your structure is uppercase)
-FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
+  // ✅ Uppercase folders (since your structure is uppercase)
+  FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
 
-["html", "js"].forEach(lang => {
-  populateOptions(lang, 5, "Lessons", lang.toUpperCase());
-  populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
-});
+  ["html", "js"].forEach(lang => {
+    populateOptions(lang, 5, "Lessons", lang.toUpperCase());
+    populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
+  });
 
   /* =========================================================
-     2️⃣ LANGUAGE CARD NAVIGATION + PANEL INITIAL SETUP
+     2️⃣ LANGUAGE CARD NAVIGATION + PANEL INITIAL SETUP (LOOP ENABLED)
      ========================================================= */
   const cards = Array.from(document.querySelectorAll(".language-card"));
   const lessonContainer = document.querySelector(".lesson-container");
@@ -781,22 +781,29 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
     lessonContainer.appendChild(right);
   }
 
-  // Navigation logic
+  // ✅ Navigation logic (LOOPING VERSION)
   let idx = 0;
   function setActive(i) {
-    idx = Math.max(0, Math.min(i, cards.length - 1));
+    // wrap-around loop logic using modulo
+    idx = (i + cards.length) % cards.length;
     cards.forEach((c, ii) => {
       c.classList.toggle("active", ii === idx);
       c.setAttribute("aria-hidden", ii === idx ? "false" : "true");
     });
-    left.disabled = idx === 0;
-    right.disabled = idx === cards.length - 1;
   }
   setActive(0);
+
+  // Left/right click handlers with looping
   left.onclick = () => setActive(idx - 1);
   right.onclick = () => setActive(idx + 1);
 
-  // Create backdrop (blur layer)
+  // Remove disabled behavior (since now it loops infinitely)
+  left.disabled = false;
+  right.disabled = false;
+
+  /* =========================================================
+     3️⃣ OPEN LANGUAGE PANEL (with dropdown quizzes)
+     ========================================================= */
   let backdrop = document.getElementById("panelBackdrop");
   if (!backdrop) {
     backdrop = document.createElement("div");
@@ -804,7 +811,6 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
     document.body.appendChild(backdrop);
   }
 
-  // Create main panel container
   let panel = document.querySelector(".language-panel");
   if (!panel) {
     panel = document.createElement("div");
@@ -819,7 +825,6 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
     document.body.appendChild(panel);
   }
 
-  // Helper: get key (html, css, js)
   function getLangKeyFromCard(card) {
     const data = (card.dataset && card.dataset.lang)
       ? card.dataset.lang.toLowerCase()
@@ -828,108 +833,103 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
   }
 
   /* =========================================================
-     3️⃣ OPEN LANGUAGE PANEL (with dropdown quizzes)
+     4️⃣ OPEN LANGUAGE PANEL (with dropdown quizzes)
      ========================================================= */
   function openLanguagePanel(card) {
-  const langKey = getLangKeyFromCard(card);
+    const langKey = getLangKeyFromCard(card);
 
-  // Update panel title and icon
-  const iconEl = panel.querySelector(".panel-title img");
-  const titleText = panel.querySelector(".panel-title .titleText");
-  const cardImg = card.querySelector("img");
-  iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
-  titleText.textContent =
-    card.querySelector("p")?.textContent || langKey.toUpperCase();
+    const iconEl = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    const cardImg = card.querySelector("img");
+    iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
+    titleText.textContent =
+      card.querySelector("p")?.textContent || langKey.toUpperCase();
 
-  // Set up lesson & quiz UI (both with dropdowns)
-  const pc = panel.querySelector(".panel-content");
-  pc.innerHTML = `
-    <div class="lesson-dropdown">
-      <button class="lessons-btn">📖 Lessons ▾</button>
-      <div class="lesson-list"></div>
-    </div>
+    const pc = panel.querySelector(".panel-content");
+    pc.innerHTML = `
+      <div class="lesson-dropdown">
+        <button class="lessons-btn">📖 Lessons ▾</button>
+        <div class="lesson-list"></div>
+      </div>
 
-    <div class="quiz-dropdown">
-      <button class="quiz-btn">📝 Quiz ▾</button>
-      <div class="quiz-list"></div>
-    </div>
-  `;
+      <div class="quiz-dropdown">
+        <button class="quiz-btn">📝 Quiz ▾</button>
+        <div class="quiz-list"></div>
+      </div>
+    `;
 
-  // === LESSON DROPDOWN ===
-  const lessonList = pc.querySelector(".lesson-list");
-  const lessonSelect = document.getElementById(`${langKey}Lessons`);
-  lessonList.innerHTML = "";
-  if (lessonSelect && lessonSelect.options.length > 1) {
-    Array.from(lessonSelect.options)
-      .slice(1)
-      .forEach(opt => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = opt.textContent;
-        b.addEventListener("click", () => {
-          if (opt.value) window.location.href = opt.value;
+    // === LESSON DROPDOWN ===
+    const lessonList = pc.querySelector(".lesson-list");
+    const lessonSelect = document.getElementById(`${langKey}Lessons`);
+    lessonList.innerHTML = "";
+    if (lessonSelect && lessonSelect.options.length > 1) {
+      Array.from(lessonSelect.options)
+        .slice(1)
+        .forEach(opt => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = opt.textContent;
+          b.addEventListener("click", () => {
+            if (opt.value) window.location.href = opt.value;
+          });
+          lessonList.appendChild(b);
         });
-        lessonList.appendChild(b);
-      });
-  } else {
-    lessonList.innerHTML = '<button disabled>No lessons found</button>';
-  }
+    } else {
+      lessonList.innerHTML = '<button disabled>No lessons found</button>';
+    }
 
-  const lessonBtn = pc.querySelector(".lessons-btn");
-  lessonBtn.addEventListener("click", ev => {
-    ev.stopPropagation();
-    lessonList.style.display =
-      lessonList.style.display === "flex" ? "none" : "flex";
-  });
+    const lessonBtn = pc.querySelector(".lessons-btn");
+    lessonBtn.addEventListener("click", ev => {
+      ev.stopPropagation();
+      lessonList.style.display =
+        lessonList.style.display === "flex" ? "none" : "flex";
+    });
 
-  // === QUIZ DROPDOWN ===
-  const quizList = pc.querySelector(".quiz-list");
-  const quizSelect = document.getElementById(`${langKey}Quizzes`);
-  quizList.innerHTML = "";
-  if (quizSelect && quizSelect.options.length > 1) {
-    Array.from(quizSelect.options)
-      .slice(1)
-      .forEach(opt => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.textContent = opt.textContent;
-        b.addEventListener("click", () => {
-          if (opt.value) window.location.href = opt.value;
+    // === QUIZ DROPDOWN ===
+    const quizList = pc.querySelector(".quiz-list");
+    const quizSelect = document.getElementById(`${langKey}Quizzes`);
+    quizList.innerHTML = "";
+    if (quizSelect && quizSelect.options.length > 1) {
+      Array.from(quizSelect.options)
+        .slice(1)
+        .forEach(opt => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = opt.textContent;
+          b.addEventListener("click", () => {
+            if (opt.value) window.location.href = opt.value;
+          });
+          quizList.appendChild(b);
         });
-        quizList.appendChild(b);
-      });
-  } else {
-    quizList.innerHTML = '<button disabled>No quizzes found</button>';
+    } else {
+      quizList.innerHTML = '<button disabled>No quizzes found</button>';
+    }
+
+    const quizBtn = pc.querySelector(".quiz-btn");
+    quizBtn.addEventListener("click", ev => {
+      ev.stopPropagation();
+      quizList.style.display =
+        quizList.style.display === "flex" ? "none" : "flex";
+    });
+
+    // === BACK BUTTON INSIDE PANEL ===
+    const backBtn = panel.querySelector(".panel-back");
+    backBtn.addEventListener("click", closeLanguagePanel);
+
+    // === Activate Blur and Panel ===
+    backdrop.style.display = "block";
+    panel.style.display = "flex";
+    document.body.classList.add("blur-active");
+    document.body.style.overflow = "hidden";
   }
-
-  const quizBtn = pc.querySelector(".quiz-btn");
-  quizBtn.addEventListener("click", ev => {
-    ev.stopPropagation();
-    quizList.style.display =
-      quizList.style.display === "flex" ? "none" : "flex";
-  });
-
-  // === BACK BUTTON INSIDE PANEL ===
-  const backBtn = panel.querySelector(".panel-back");
-  backBtn.addEventListener("click", closeLanguagePanel);
-
-  // === Activate Blur and Panel ===
-  backdrop.style.display = "block";
-  panel.style.display = "flex";
-  document.body.classList.add("blur-active");
-  document.body.style.overflow = "hidden";
-}
-
 
   /* =========================================================
-     4️⃣ CLOSE LANGUAGE PANEL (bug-free reset)
+     5️⃣ CLOSE LANGUAGE PANEL (bug-free reset)
      ========================================================= */
   function closeLanguagePanel() {
-    // Hide panel
     panel.style.display = "none";
     panel.classList.remove("opening");
 
-    // Clear quiz list & lesson buttons
     const quizLists = panel.querySelectorAll(".quiz-list");
     quizLists.forEach(list => {
       list.style.display = "none";
@@ -939,20 +939,18 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
     const content = panel.querySelector(".panel-content");
     if (content) content.innerHTML = "";
 
-    // Reset title image/text
     const titleImg = panel.querySelector(".panel-title img");
     const titleText = panel.querySelector(".panel-title .titleText");
     if (titleImg) titleImg.src = "";
     if (titleText) titleText.textContent = "";
 
-    // Hide blur & enable background again
     backdrop.style.display = "none";
     document.body.classList.remove("blur-active");
     document.body.style.overflow = "";
   }
 
   /* =========================================================
-     5️⃣ SAFETY: DISABLE BACKDROP CLICK
+     6️⃣ SAFETY: DISABLE BACKDROP CLICK
      ========================================================= */
   backdrop.addEventListener("click", e => {
     e.stopPropagation();
@@ -960,7 +958,7 @@ FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
   });
 
   /* =========================================================
-     6️⃣ CARD CLICK OPEN HANDLER
+     7️⃣ CARD CLICK OPEN HANDLER
      ========================================================= */
   cards.forEach((card, i) => {
     card.addEventListener("click", () => {
