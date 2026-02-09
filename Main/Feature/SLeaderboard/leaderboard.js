@@ -1,6 +1,5 @@
 // ===============================================
-// 🏆 MindCraft Live Leaderboard System
-// (with Smart Cleanup + Keep Newest Account)
+// 🏆 MindCraft Live Leaderboard System (Responsive + Smart Cleanup)
 // ===============================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
@@ -30,27 +29,23 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 // ===============================================
-// 🧹 Smart Cleanup Function (Keeps the Newest Account)
+// 🧹 Smart Cleanup — Keeps Newest Account by createdAt
 // ===============================================
 async function cleanupGhostUsers() {
   const snap = await getDocs(collection(db, "users"));
   const usersByEmail = new Map();
 
-  // Step 1: Group by email, and choose the newest doc
   for (const userDoc of snap.docs) {
     const data = userDoc.data();
     const email = data.email || "";
     const name = data.name || "";
     const createdAt = data.createdAt ? new Date(data.createdAt) : new Date(0);
 
-    // Skip clearly invalid data
     if (!email.includes("@") || !name) continue;
 
-    // If email already seen, compare which is newer
     if (usersByEmail.has(email)) {
       const existing = usersByEmail.get(email);
       if (createdAt > existing.createdAt) {
-        // Replace with the newer one
         usersByEmail.set(email, { id: userDoc.id, createdAt });
       }
     } else {
@@ -58,38 +53,27 @@ async function cleanupGhostUsers() {
     }
   }
 
-  // Step 2: Delete invalid or duplicate ones (keep newest)
   const deletions = [];
   for (const userDoc of snap.docs) {
     const data = userDoc.data();
     const email = data.email || "";
     const name = data.name || "";
     const isValid = email.includes("@") && name;
-
     if (!isValid) {
-      console.log("🧹 Removing ghost user:", userDoc.id, email);
       deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
       continue;
     }
-
-    // If this doc is not the newest by email, delete it
     const keepInfo = usersByEmail.get(email);
     if (keepInfo && userDoc.id !== keepInfo.id) {
-      console.log("🧹 Removing duplicate (older):", userDoc.id, email);
       deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
     }
   }
 
-  if (deletions.length > 0) {
-    await Promise.all(deletions);
-    console.log(`✅ Cleanup complete — removed ${deletions.length} old/ghost entries.`);
-  } else {
-    console.log("✅ No ghost or duplicate users found.");
-  }
+  if (deletions.length > 0) await Promise.all(deletions);
 }
 
 // ===============================================
-// 🧩 Create Leaderboard Popup
+// 🧩 Create Leaderboard Popup (Responsive)
 // ===============================================
 function createLeaderboardPopup(currentUID) {
   if (document.getElementById("leaderboardOverlay")) return;
@@ -103,7 +87,7 @@ function createLeaderboardPopup(currentUID) {
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
     color: #fff; font-family: 'Press Start 2P', cursive;
-    z-index: 1000; padding: 20px;
+    z-index: 1000; padding: 10px;
   `;
 
   const container = document.createElement("div");
@@ -111,7 +95,7 @@ function createLeaderboardPopup(currentUID) {
     background: rgba(25,25,25,0.9);
     border: 2px solid #1DB954;
     border-radius: 12px;
-    padding: 20px;
+    padding: 18px;
     width: 95%;
     max-width: 650px;
     box-shadow: 0 0 12px #1DB95433;
@@ -146,15 +130,15 @@ function createLeaderboardPopup(currentUID) {
     width: 100%;
     border-collapse: collapse;
     color: #1DB954;
-    font-size: clamp(0.5rem, 1.8vw, 0.7rem);
+    font-size: clamp(0.45rem, 1.8vw, 0.7rem);
   `;
   table.innerHTML = `
     <thead>
       <tr style="color:#1DB954; border-bottom:1px solid #1DB954">
-        <th style="padding:8px;">Rank</th>
-        <th style="padding:8px;">Username</th>
-        <th style="padding:8px;">Level</th>
-        <th style="padding:8px;">XP</th>
+        <th style="padding:6px;">Rank</th>
+        <th style="padding:6px;">Username</th>
+        <th style="padding:6px;">Level</th>
+        <th style="padding:6px;">XP</th>
       </tr>
     </thead>
     <tbody id="leaderboardBody">
@@ -167,15 +151,15 @@ function createLeaderboardPopup(currentUID) {
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "Close";
   closeBtn.style.cssText = `
-    margin-top:20px;
+    margin-top: 14px;
     background: #ff4d4d;
-    border:none;
-    border-radius:8px;
-    color:white;
-    padding:8px 16px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 20px;
     font-family: 'Press Start 2P', cursive;
-    cursor:pointer;
-    font-size:clamp(0.5rem,2vw,0.7rem);
+    cursor: pointer;
+    font-size: clamp(0.6rem, 2.5vw, 0.8rem);
     transition: transform 0.3s;
   `;
   closeBtn.onmouseenter = () => (closeBtn.style.transform = "scale(1.05)");
@@ -188,11 +172,44 @@ function createLeaderboardPopup(currentUID) {
   overlay.appendChild(container);
   document.body.appendChild(overlay);
 
+  // Add responsive styles for small mobile screens
+  if (!document.getElementById("leaderboardResponsive")) {
+    const style = document.createElement("style");
+    style.id = "leaderboardResponsive";
+    style.textContent = `
+      @media (max-width: 400px) {
+        #leaderboardOverlay h2 {
+          font-size: 0.8rem !important;
+        }
+        #leaderboardOverlay table {
+          font-size: 0.45rem !important;
+        }
+        #leaderboardOverlay button {
+          padding: 8px 14px !important;
+          font-size: 0.6rem !important;
+        }
+      }
+      @media (min-width: 401px) and (max-width: 600px) {
+        #leaderboardOverlay h2 {
+          font-size: 0.9rem !important;
+        }
+        #leaderboardOverlay table {
+          font-size: 0.55rem !important;
+        }
+        #leaderboardOverlay button {
+          padding: 9px 16px !important;
+          font-size: 0.7rem !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   liveLeaderboard(currentUID);
 }
 
 // ===============================================
-// 📊 Live Leaderboard (Real-Time Updates)
+// 📊 Live Leaderboard (Real-Time)
 // ===============================================
 function liveLeaderboard(currentUID) {
   const leaderboardRef = collection(db, "users");
@@ -205,7 +222,7 @@ function liveLeaderboard(currentUID) {
       const users = [];
       snapshot.forEach((doc) => {
         const data = doc.data();
-        if (!data.name || !data.email) return; // Skip ghosts
+        if (!data.name || !data.email) return;
         users.push({
           uid: doc.id,
           name: data.name,
@@ -262,13 +279,13 @@ function liveLeaderboard(currentUID) {
 }
 
 // ===============================================
-// 🚀 Trigger Leaderboard Button
+// 🚀 Leaderboard Button Trigger
 // ===============================================
 onAuthStateChanged(auth, (user) => {
   const btn = document.getElementById("leaderboardBtn");
   if (btn) {
     btn.addEventListener("click", async () => {
-      await cleanupGhostUsers(); // 🧹 Smart cleanup first
+      await cleanupGhostUsers();
       createLeaderboardPopup(user ? user.uid : null);
     });
   }
