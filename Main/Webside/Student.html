@@ -251,29 +251,42 @@ main {
   z-index: 15;
 }*/
 
-/* === Fix stretched arrow buttons === */
+/* === Center and position arrow buttons correctly === */
 .nav-arrow {
+  position: absolute;
+  top: 50%;                       /* vertically center */
+  transform: translateY(-50%);    /* fix centering */
   width: 34px;
   height: 34px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%; /* make them round */
-  padding: 0;         /* remove horizontal stretch */
+  border-radius: 50%;
+  padding: 0;
   background: rgba(29,185,84,0.9);
-  box-shadow: 0 0 6px rgba(29,185,84,0.5);
   border: 2px solid #1DB954;
+  box-shadow: 0 0 8px rgba(29,185,84,0.5);
+  cursor: pointer;
+  font-size: 0.45rem;
+  transition: all 0.2s ease;
+  z-index: 20;                    /* make sure they’re above card */
 }
-  
+
+/* position them correctly on each side */
 .nav-arrow.left {
-  left: -45px;
+  left: -40px;
 }
 .nav-arrow.right {
-  right: -45px;
+  right: -40px;
 }
+
+/* hover and active feedback */
 .nav-arrow:hover {
   background: #1ed760;
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
+}
+.nav-arrow:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 /* === BACKGROUND BLUR (outside container only) === */
