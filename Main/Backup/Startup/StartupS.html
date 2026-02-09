@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MindCraft — Realistic Night</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky-top:#5fa8e8;
+  --sky-mid:#9fd3f6;
+  --sky-bottom:#eef9ff;
+  --grass:#5fbf66;
+  --grass-dark:#3f8f4c;
+  --ui:#8b5a2b;
+  --ui-dark:#6f4320;
+  --cloud:#fff;
+}
+body.dark{
+  --sky-top:#000010;
+  --sky-mid:#00001a;
+  --sky-bottom:#00001a;
+  --cloud:rgba(255,255,255,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;font-family:"Press Start 2P";overflow:hidden;transition:.8s;}
+.scene{
+  position:fixed;inset:0;
+  background:linear-gradient(to bottom,var(--sky-top),var(--sky-mid) 45%,var(--sky-bottom));
+  transition:.8s;
+  overflow:hidden;
+}
+
+/* ================= SUN ================= */
+.sun{position:absolute;top:50px;left:60px;width:180px;height:180px;animation:sunFloat 6s ease-in-out infinite;z-index:3;}
+.sun-core{width:100%;height:100%;border-radius:50%;
+  background:radial-gradient(circle,#fff7b0 35%,#ffd34d 65%);
+  box-shadow:0 0 40px rgba(255,211,77,.8);position:relative;}
+.sun-rays{position:absolute;width:100%;height:100%;top:0;left:0;transform-origin:center center;animation:rayRotate 20s linear infinite;}
+.sun-rays span{position:absolute;width:6px;height:28px;background:#ffd34d;top:-30px;left:50%;transform-origin:50% 120px;border-radius:4px;}
+.sun-rays span:nth-child(odd){height:36px;background:#ffe066;}
+.sun-rays span:nth-child(even){height:20px;background:#fff3b0;}
+.sun-rays span:nth-child(1){transform:rotate(0deg);}
+.sun-rays span:nth-child(2){transform:rotate(30deg);}
+.sun-rays span:nth-child(3){transform:rotate(60deg);}
+.sun-rays span:nth-child(4){transform:rotate(90deg);}
+.sun-rays span:nth-child(5){transform:rotate(120deg);}
+.sun-rays span:nth-child(6){transform:rotate(150deg);}
+.sun-rays span:nth-child(7){transform:rotate(180deg);}
+.sun-rays span:nth-child(8){transform:rotate(210deg);}
+.sun-rays span:nth-child(9){transform:rotate(240deg);}
+.sun-rays span:nth-child(10){transform:rotate(270deg);}
+.sun-rays span:nth-child(11){transform:rotate(300deg);}
+.sun-rays span:nth-child(12){transform:rotate(330deg);}
+@keyframes rayRotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes sunFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+body.dark .sun{opacity:0}
+
+/* ================= MOON ================= */
+.moon{
+  position:absolute;
+  top:60px; right:80px;
+  width:160px; height:160px;
+  border-radius:50%;
+  background:radial-gradient(circle at 40% 50%,#f5f7ff,#cfd8ff 85%);
+  animation:moonFloat 8s ease-in-out infinite;
+  opacity:0; overflow:hidden;
+  z-index:4;
+}
+body.dark .moon{opacity:1}
+@keyframes moonFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.moon::before{
+  content:"";
+  position:absolute;
+  top:0; left:40px;
+  width:160px; height:160px;
+  border-radius:50%;
+  background:var(--sky-top);
+}
+.moon .crater{position:absolute;border-radius:50%;background:rgba(255,255,255,0.25);}
+.moon .crater1{width:18px;height:18px;top:35px;left:30px;}
+.moon .crater2{width:12px;height:12px;top:70px;left:60px;}
+.moon .crater3{width:10px;height:10px;top:50px;left:100px;}
+.moon .crater4{width:6px;height:6px;top:90px;left:40px;}
+.moon .crater5{width:8px;height:8px;top:60px;left:120px;}
+.moon .crater6{width:10px;height:10px;top:110px;left:80px;}
+.moon .crater7{width:6px;height:6px;top:40px;left:120px;}
+.moon .crater8{width:8px;height:8px;top:90px;left:130px;}
+.moon::after{
+  content:"";
+  position:absolute;
+  top:-15px; left:-15px;
+  width:190px; height:190px;
+  border-radius:50%;
+  box-shadow:0 0 40px rgba(207,216,255,0.3);
+}
+
+/* ================= STARS ================= */
+.star{
+  position:absolute;
+  border-radius:50%;
+  background:white;
+  opacity:0.8;
+  animation:twinkle linear infinite;
+  pointer-events:none;
+  z-index:2;
+}
+@keyframes twinkle{
+  0%{opacity:0.3}
+  50%{opacity:1}
+  100%{opacity:0.3}
+}
+
+/* ================= SHOOTING STAR ================= */
+.shooting-star{
+  position:absolute;
+  width:2px;height:2px;
+  background:white;border-radius:50%;
+  box-shadow:0 0 6px white;
+  top:20%;left:-10%;
+  transform:rotate(45deg);
+  animation:shoot 2s linear infinite;
+  opacity:0;z-index:3;
+}
+body.dark .shooting-star{opacity:1;}
+@keyframes shoot{
+  0%{transform:translateX(0) translateY(0) rotate(45deg);opacity:1;}
+  100%{transform:translateX(1000px) translateY(500px) rotate(45deg);opacity:0;}
+}
+
+/* Ground */
+.ground{
+  position:absolute;
+  bottom:0;width:100%;height:220px;
+  background:linear-gradient(var(--grass),var(--grass-dark));
+  z-index:5;
+}
+
+/* UI */
+.title{position:absolute;top:20px;left:50%;transform:translateX(-50%);
+background:linear-gradient(var(--ui),var(--ui-dark));color:#fff;padding:18px 40px;border-radius:16px;box-shadow:0 8px 0 #000;z-index:10;}
+.menu{position:absolute;right:40px;top:50%;transform:translateY(-50%);
+display:flex;flex-direction:column;gap:16px;z-index:10;}
+.menu button{background:linear-gradient(var(--ui),var(--ui-dark));color:#fff;border:none;padding:14px 30px;border-radius:14px;cursor:pointer;box-shadow:0 6px 0 #000;}
+.menu button:active{transform:translateY(4px);box-shadow:0 2px 0 #000}
+
+/* SETTINGS POPUP */
+.popup{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;}
+.popup-box{background:#222;padding:30px;border-radius:18px;text-align:center;color:#fff;}
+.popup-box button{margin:10px;padding:12px 24px;border:none;border-radius:12px;font-family:"Press Start 2P";cursor:pointer;}
+.light-btn{background:#ffd966} .dark-btn{background:#8fa3ff} .close-btn{background:#ff6f61}
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+  <!-- Sun -->
+  <div class="sun">
+    <div class="sun-rays">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="sun-core"></div>
+  </div>
+
+  <!-- Moon -->
+  <div class="moon">
+    <div class="crater crater1"></div>
+    <div class="crater crater2"></div>
+    <div class="crater crater3"></div>
+    <div class="crater crater4"></div>
+    <div class="crater crater5"></div>
+    <div class="crater crater6"></div>
+    <div class="crater crater7"></div>
+    <div class="crater crater8"></div>
+  </div>
+
+  <!-- Shooting Star -->
+  <div class="shooting-star"></div>
+
+  <div class="title">🧠 MindCraft</div>
+  <nav class="menu">
+    <button onclick="startGame()">PLAY 🎮</button>
+    <button onclick="openSettings()">SETTINGS ⚙️</button>
+    <button>LEADERBOARD 🏆</button>
+  </nav>
+
+  <div class="ground"></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="popup" id="settings">
+  <div class="popup-box">
+    <h3>MODE</h3><br>
+    <button class="light-btn" onclick="setLight()">☀️ LIGHT</button>
+    <button class="dark-btn" onclick="setDark()">🌙 DARK</button><br><br>
+    <button class="close-btn" onclick="closeSettings()">CLOSE</button>
+  </div>
+</div>
+
+<script>
+const settings = document.getElementById("settings");
+const scene = document.getElementById("scene");
+
+// 🎮 PLAY → fade-out + go to Student.html
+function startGame(){
+  document.body.style.transition = "opacity 1s";
+  document.body.style.opacity = "0";
+
+  // ✅ Correct path for your folder system:
+  // (from /Main/Startup/ → go up → /Main/Webside/)
+  setTimeout(() => {
+    window.location.href = "../Webside/Student.html";
+  }, 1000);
+}
+
+// ⚙️ SETTINGS POPUP
+function openSettings(){ settings.style.display="flex"; }
+function closeSettings(){ settings.style.display="none"; }
+
+// ☀️ / 🌙 MODE — now saves to localStorage and syncs globally
+function setLight(){
+  document.body.classList.remove("dark");
+  removeStars();
+  localStorage.setItem('theme', 'light'); // ✅ store preference
+}
+
+function setDark(){
+  document.body.classList.add("dark");
+  createStars();
+  localStorage.setItem('theme', 'dark'); // ✅ store preference
+}
+
+// ⭐ STAR MANAGEMENT — keep stars in sky only
+function createStars(){
+  removeStars();
+  for(let i=0;i<180;i++){
+    const star=document.createElement('div');
+    star.className='star';
+    const size=Math.random()*2+1;
+    star.style.width=size+'px';
+    star.style.height=size+'px';
+    star.style.top=Math.random()*70+'%'; // top 70% = sky area
+    star.style.left=Math.random()*100+'%';
+    star.style.animationDuration=(Math.random()*2+2)+'s';
+    scene.insertBefore(star, document.querySelector('.ground'));
+  }
+}
+function removeStars(){
+  document.querySelectorAll('.star').forEach(star=>star.remove());
+}
+
+// 🌗 Load previous theme (connected to Settings.html & Student.html)
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if(savedTheme === 'dark'){
+  document.body.classList.add("dark");
+  createStars();
+}else{
+  document.body.classList.remove("dark");
+  removeStars();
+}
+</script>
+</body>
+  </html>
