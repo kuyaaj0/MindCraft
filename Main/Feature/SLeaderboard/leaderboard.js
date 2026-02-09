@@ -1,12 +1,21 @@
 // ===============================================
-// 🏆 MindCraft Live Leaderboard System (Optimized + Scrollable + Live Updates)
+// 🏆 MindCraft Live Leaderboard System
+// (with Smart Cleanup + Keep Newest Account)
 // ===============================================
-//fixed
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// ✅ Firebase Configs
+// ✅ Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -16,13 +25,71 @@ const firebaseConfig = {
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
 // ===============================================
-// 🧩 Create Leaderboard Popup Dynamically
+// 🧹 Smart Cleanup Function (Keeps the Newest Account)
+// ===============================================
+async function cleanupGhostUsers() {
+  const snap = await getDocs(collection(db, "users"));
+  const usersByEmail = new Map();
+
+  // Step 1: Group by email, and choose the newest doc
+  for (const userDoc of snap.docs) {
+    const data = userDoc.data();
+    const email = data.email || "";
+    const name = data.name || "";
+    const createdAt = data.createdAt ? new Date(data.createdAt) : new Date(0);
+
+    // Skip clearly invalid data
+    if (!email.includes("@") || !name) continue;
+
+    // If email already seen, compare which is newer
+    if (usersByEmail.has(email)) {
+      const existing = usersByEmail.get(email);
+      if (createdAt > existing.createdAt) {
+        // Replace with the newer one
+        usersByEmail.set(email, { id: userDoc.id, createdAt });
+      }
+    } else {
+      usersByEmail.set(email, { id: userDoc.id, createdAt });
+    }
+  }
+
+  // Step 2: Delete invalid or duplicate ones (keep newest)
+  const deletions = [];
+  for (const userDoc of snap.docs) {
+    const data = userDoc.data();
+    const email = data.email || "";
+    const name = data.name || "";
+    const isValid = email.includes("@") && name;
+
+    if (!isValid) {
+      console.log("🧹 Removing ghost user:", userDoc.id, email);
+      deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
+      continue;
+    }
+
+    // If this doc is not the newest by email, delete it
+    const keepInfo = usersByEmail.get(email);
+    if (keepInfo && userDoc.id !== keepInfo.id) {
+      console.log("🧹 Removing duplicate (older):", userDoc.id, email);
+      deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
+    }
+  }
+
+  if (deletions.length > 0) {
+    await Promise.all(deletions);
+    console.log(`✅ Cleanup complete — removed ${deletions.length} old/ghost entries.`);
+  } else {
+    console.log("✅ No ghost or duplicate users found.");
+  }
+}
+
+// ===============================================
+// 🧩 Create Leaderboard Popup
 // ===============================================
 function createLeaderboardPopup(currentUID) {
   if (document.getElementById("leaderboardOverlay")) return;
@@ -55,7 +122,7 @@ function createLeaderboardPopup(currentUID) {
   `;
 
   const title = document.createElement("h2");
-  title.textContent = "🏆 MindCraft Leaderboard";
+  title.textContent = "MindCraft Leaderboard";
   title.style.cssText = `
     color: #1DB954;
     margin-bottom: 15px;
@@ -63,7 +130,6 @@ function createLeaderboardPopup(currentUID) {
     text-shadow: 0 0 6px #1DB95455;
   `;
 
-  // Scrollable leaderboard container
   const scrollArea = document.createElement("div");
   scrollArea.style.cssText = `
     overflow-y: auto;
@@ -99,7 +165,7 @@ function createLeaderboardPopup(currentUID) {
   scrollArea.appendChild(table);
 
   const closeBtn = document.createElement("button");
-  closeBtn.textContent = "❌ Close";
+  closeBtn.textContent = "Close";
   closeBtn.style.cssText = `
     margin-top:20px;
     background: #ff4d4d;
@@ -112,8 +178,8 @@ function createLeaderboardPopup(currentUID) {
     font-size:clamp(0.5rem,2vw,0.7rem);
     transition: transform 0.3s;
   `;
-  closeBtn.onmouseenter = () => closeBtn.style.transform = "scale(1.05)";
-  closeBtn.onmouseleave = () => closeBtn.style.transform = "scale(1)";
+  closeBtn.onmouseenter = () => (closeBtn.style.transform = "scale(1.05)");
+  closeBtn.onmouseleave = () => (closeBtn.style.transform = "scale(1)");
   closeBtn.onclick = () => overlay.remove();
 
   container.appendChild(title);
@@ -126,82 +192,83 @@ function createLeaderboardPopup(currentUID) {
 }
 
 // ===============================================
-// 📊 Live Leaderboard (Firestore onSnapshot)
+// 📊 Live Leaderboard (Real-Time Updates)
 // ===============================================
 function liveLeaderboard(currentUID) {
   const leaderboardRef = collection(db, "users");
   const q = query(leaderboardRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-
   const body = document.getElementById("leaderboardBody");
 
-  // Real-time snapshot
-  onSnapshot(q, (snapshot) => {
-    const users = [];
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      users.push({
-        uid: doc.id,
-        name: data.name || "Unknown",
-        level: data.level || 1,
-        xp: data.xp || 0
+  onSnapshot(
+    q,
+    (snapshot) => {
+      const users = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (!data.name || !data.email) return; // Skip ghosts
+        users.push({
+          uid: doc.id,
+          name: data.name,
+          level: data.level ?? 1,
+          xp: data.xp ?? 0
+        });
       });
-    });
 
-    if (users.length === 0) {
-      body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
-      return;
+      if (users.length === 0) {
+        body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
+        return;
+      }
+
+      const rows = users.slice(0, 100).map((u, i) => {
+        const rank = i + 1;
+        const isCurrentUser = u.uid === currentUID;
+        let glow = "";
+        if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
+        else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
+        else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
+
+        return `
+          <tr style="background:rgba(255,255,255,0.02); box-shadow:${glow}; ${
+          isCurrentUser ? "animation: glowPulse 1.7s infinite alternate;" : ""
+        }">
+            <td style="padding:6px;">#${rank}</td>
+            <td style="padding:6px;">${u.name}</td>
+            <td style="padding:6px;">${u.level}</td>
+            <td style="padding:6px;">${u.xp}</td>
+          </tr>
+        `;
+      }).join("");
+
+      body.innerHTML = rows;
+
+      if (!document.getElementById("glowAnimation")) {
+        const style = document.createElement("style");
+        style.id = "glowAnimation";
+        style.textContent = `
+          @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px #fff; }
+            50% { box-shadow: 0 0 12px #fff; }
+            100% { box-shadow: 0 0 5px #fff; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    },
+    (err) => {
+      console.error("⚠️ Live leaderboard error:", err);
+      body.innerHTML = `<tr><td colspan="4" style="padding:10px;">Error loading leaderboard.</td></tr>`;
     }
-
-    // Render only top 100 for performance
-    const rows = users.slice(0, 100).map((u, i) => {
-      const rank = i + 1;
-      let glow = "";
-      if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
-      else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
-      else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
-
-      const isCurrentUser = u.uid === currentUID;
-      const pulseClass = isCurrentUser ? "rank-top" : "";
-
-      return `
-        <tr class="${pulseClass}" style="background:rgba(255,255,255,0.02); box-shadow:${glow}; transition:0.3s;">
-          <td style="padding:6px;">#${rank}</td>
-          <td style="padding:6px;">${u.name}</td>
-          <td style="padding:6px;">${u.level}</td>
-          <td style="padding:6px;">${u.xp}</td>
-        </tr>
-      `;
-    }).join("");
-
-    body.innerHTML = rows;
-
-    // Add glow animation once
-    if (!document.getElementById("glowAnimation")) {
-      const style = document.createElement("style");
-      style.id = "glowAnimation";
-      style.textContent = `
-        .rank-top { animation: glowPulse 1.7s infinite alternate; }
-        @keyframes glowPulse {
-          0% { box-shadow: 0 0 5px #fff; }
-          50% { box-shadow: 0 0 12px #fff; }
-          100% { box-shadow: 0 0 5px #fff; }
-        }
-      `;
-      document.head.appendChild(style);
-    }
-  }, (err) => {
-    console.error("⚠️ Live leaderboard error:", err);
-    body.innerHTML = `<tr><td colspan="4" style="padding:10px;">Error loading leaderboard.</td></tr>`;
-  });
+  );
 }
 
 // ===============================================
-// 🚀 Leaderboard Button Trigger
+// 🚀 Trigger Leaderboard Button
 // ===============================================
 onAuthStateChanged(auth, (user) => {
   const btn = document.getElementById("leaderboardBtn");
   if (btn) {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
+      await cleanupGhostUsers(); // 🧹 Smart cleanup first
       createLeaderboardPopup(user ? user.uid : null);
     });
   }
