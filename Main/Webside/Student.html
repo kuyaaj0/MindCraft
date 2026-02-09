@@ -252,32 +252,34 @@ main {
 }*/
 
 /* === Center and position arrow buttons correctly === */
+/* === Adjust arrow position OUTSIDE the card === */
 .nav-arrow {
   position: absolute;
-  top: 50%;                       /* vertically center */
-  transform: translateY(-50%);    /* fix centering */
-  width: 34px;
-  height: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(29,185,84,0.9);
+  border: 2px solid #1DB954;
+  box-shadow: 0 0 10px rgba(29,185,84,0.5);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  padding: 0;
-  background: rgba(29,185,84,0.9);
-  border: 2px solid #1DB954;
-  box-shadow: 0 0 8px rgba(29,185,84,0.5);
+  font-size: 0.5rem;
   cursor: pointer;
-  font-size: 0.45rem;
-  transition: all 0.2s ease;
-  z-index: 20;                    /* make sure they’re above card */
+  transition: all 0.3s ease;
+  z-index: 50; /* ensure it's above the card */
 }
 
-/* position them correctly on each side */
+/* push them slightly outside the container */
 .nav-arrow.left {
-  left: -40px;
+  left: -55px;  /* move more left (was inside before) */
 }
+
 .nav-arrow.right {
-  right: -40px;
+  right: -55px; /* move more right */
 }
 
 /* hover and active feedback */
