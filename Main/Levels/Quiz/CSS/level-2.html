@@ -1,4 +1,519 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindCraft CSS Quiz - Lesson 2</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;font-size:10px;overflow:hidden;}
+
+        body{
+            font-family:'Press Start 2P', cursive;
+            background:linear-gradient(#87e4ff,#c8f7b0);
+            padding:20px;
+            margin:0;
+        }
+
+        .quiz-container{
+            max-width:1000px;
+            margin:0 auto;
+            height:calc(100vh - 40px);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+        }
+
+        .wood-border{
+            width:100%;
+            max-width:900px;
+            height:90vh;
+            position:relative;
+            background:#8b5a2b;
+            border-radius:28px;
+            padding:16px;
+            box-shadow:
+                inset -8px -8px 0 rgba(0,0,0,.3),
+                0 12px 0 #5c3a1a;
+        }
+
+        .wood-border::before{
+            content:'MINDCRAFT CSS QUIZ';
+            position:absolute;
+            top:-14px;
+            left:50%;
+            transform:translateX(-50%);
+            background:#8b5a2b;
+            padding:6px 20px;
+            font-size:11px;
+            color:#ffd966;
+            text-shadow:2px 2px #000;
+            border-radius:10px;
+            box-shadow:0 4px 0 #5c3a1a;
+        }
+
+        .wood-brand{display:none;}
+
+        .quiz-content{
+            height:100%;
+            width:100%;
+            background:linear-gradient(#8fe9ff 55%, #7dd37d);
+            border-radius:16px;
+            padding:24px;
+            box-shadow:0 20px 50px rgba(0,0,0,.3);
+            display:flex;
+            flex-direction:column;
+            position:relative;
+            z-index:2;
+        }
+
+        .main-title{
+            text-align:center;
+            font-size:16px;
+            text-shadow:3px 3px #fff;
+            margin-bottom:20px;
+            color:#006400;
+        }
+
+        .quiz-panel{
+            flex:1;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            padding:16px;
+            overflow:auto;
+        }
+
+        .top-bar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+            font-size:9px;
+        }
+
+        .progress{ color:#006400; font-weight:bold; }
+        .timer{ color:#b8860b; font-weight:bold; }
+
+        .question-box{
+            background:#fff3cd;
+            border:3px solid #c9a227;
+            padding:20px;
+            border-radius:12px;
+            margin-bottom:24px;
+            line-height:1.6;
+            box-shadow:0 6px 0 #c9a227;
+            max-height:300px;
+        }
+
+        .question-text{
+            font-size:11px;
+            margin-bottom:16px;
+            font-weight:bold;
+        }
+
+        .options label{
+            display:block;
+            margin:10px 0;
+            cursor:pointer;
+            font-size:9px;
+        }
+
+        .options input{
+            margin-right:10px;
+            transform:scale(1.3);
+            accent-color:#006400;
+        }
+
+        .fill-input{
+            width:100%;
+            max-width:380px;
+            padding:12px;
+            border:3px solid #c9a227;
+            background:#fff;
+            border-radius:10px;
+            font-family:'Press Start 2P', cursive;
+            font-size:9px;
+            color:#000;
+            box-shadow:0 4px 0 #c9a227;
+        }
+
+        .nav-row{
+            display:flex;
+            justify-content:center;
+            gap:16px;
+            margin-top:20px;
+        }
+
+        button{
+            font-family:'Press Start 2P', cursive;
+            background:#a56b34;
+            color:#fff;
+            border:none;
+            padding:12px 20px;
+            border-radius:12px;
+            box-shadow:
+                inset -4px -4px 0 rgba(0,0,0,.25),
+                0 6px 0 #5c3a1a;
+            cursor:pointer;
+            font-size:8px;
+            transition:transform 0.1s;
+            min-width:120px;
+        }
+
+        button:hover:not(:disabled){
+            transform:translateY(-2px);
+        }
+
+        button:disabled{
+            opacity:0.5;
+            cursor:not-allowed;
+            transform:none;
+            box-shadow: inset -4px -4px 0 rgba(0,0,0,.25), 0 2px 0 #5c3a1a;
+        }
+
+        #nextBtn{ background:#a56b34; }
+        #finishBtn{
+            background:#d4af37;
+            box-shadow:
+                inset -4px -4px 0 rgba(0,0,0,.25),
+                0 6px 0 #b8860b;
+            display:none;
+        }
+
+        #backBtn{
+            background:#ff6b35;
+            box-shadow:
+                inset -4px -4px 0 rgba(0,0,0,.25),
+                0 6px 0 #cc5533;
+            display:none;
+        }
+
+        #resultBox{
+            margin-top:24px;
+            padding:20px;
+            border-radius:12px;
+            font-size:10px;
+            text-align:center;
+            display:none;
+            box-shadow:0 6px 0 #6aa84f;
+        }
+
+        .result-success{
+            background:#d9ead3 !important;
+            border:4px solid #6aa84f !important;
+            color:#006400 !important;
+            display:block !important;
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-container">
+    <div class="wood-border">
+        <div class="wood-brand">
+            MindCraft<br>
+            <span style="font-size:6px;">CSS Lesson 2 • How to Add CSS Quiz</span>
+        </div>
+
+        <div class="quiz-content">
+            <div class="main-title">
+                LESSON 2<br>
+                <span style="font-size:12px; font-weight:normal;">HOW TO ADD CSS QUIZ</span>
+            </div>
+
+            <div class="quiz-panel">
+                <div class="top-bar">
+                    <div class="progress" id="progress">Question 1 / 10</div>
+                    <div class="timer" id="timer">10:00</div>
+                </div>
+
+                <div id="questionContainer" class="question-box"></div>
+
+                <div class="nav-row">
+                    <button id="nextBtn">NEXT →</button>
+                    <button id="finishBtn">FINISH & SCORE</button>
+                    <button id="backBtn">← BACK</button>
+                </div>
+
+                <div id="resultBox">Complete all questions for your score!</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="../../../Tools/Xp/HtmlXP-tools.js"></script>
+    
+<script>
+    // ✅ CSS Lesson 2 QUIZ QUESTIONS
+    const questions = [
+        {
+            type: "mc",
+            text: "1. Which of the following is the correct way to add external CSS to an HTML file?",
+            options: [
+                "&lt;style src=\"style.css\"&gt;&lt;/style&gt;",
+                "&lt;link rel=\"stylesheet\" href=\"style.css\"&gt;",
+                "&lt;script src=\"style.css\"&gt;&lt;/script&gt;",
+                "&lt;css link=\"style.css\"&gt;"
+            ],
+            correct: 1
+        },
+        {
+            type: "mc",
+            text: "2. Where is internal CSS placed in an HTML document?",
+            options: [
+                "Inside the &lt;head&gt; section within &lt;style&gt; tags",
+                "Inside the &lt;body&gt; section",
+                "In a separate .css file",
+                "In the &lt;title&gt; tag"
+            ],
+            correct: 0
+        },
+        {
+            type: "mc",
+            text: "3. Which of the following is inline CSS?",
+            options: [
+                "&lt;p style=\"color: blue;\"&gt;Hello&lt;/p&gt;",
+                "&lt;style&gt;p {color: blue;}&lt;/style&gt;",
+                "&lt;link rel=\"stylesheet\" href=\"style.css\"&gt;",
+                "p {color: blue;}"
+            ],
+            correct: 0
+        },
+        {
+            type: "mc",
+            text: "4. When is it best to use external CSS?",
+            options: [
+                "For small, one-page websites",
+                "When you want to style multiple pages consistently",
+                "When you want to style a single element only",
+                "For adding comments in code"
+            ],
+            correct: 1
+        },
+        {
+            type: "fill",
+            text: "5. CSS added directly to an HTML element using the style attribute is called ________.",
+            correctText: "inline"
+        },
+        {
+            type: "fill",
+            text: "6. CSS written inside &lt;style&gt; tags in the &lt;head&gt; of an HTML document is called ________.",
+            correctText: "internal"
+        },
+        {
+            type: "fill",
+            text: "7. CSS stored in a separate .css file and linked to an HTML document is called ________.",
+            correctText: "external"
+        },
+        {
+            type: "fill",
+            text: "8. Look at this code: &lt;p style=\"font-size:16px;\"&gt;Hello&lt;/p&gt;. What type of CSS is used here?",
+            correctText: "inline"
+        },
+        {
+            type: "fill",
+            text: "9. This type of CSS is written inside the &lt;head&gt; section of an HTML document and applies styles to the page without using a separate file.",
+            correctText: "internal"
+        },
+        {
+            type: "fill",
+            text: "10. Look at this code: &lt;link rel=\"stylesheet\" href=\"style.css\"&gt;. What type of CSS is used here?",
+            correctText: "external"
+        }
+    ];
+
+    // ⏱ adjust total time if you want (seconds)
+    const TOTAL_TIME_SECONDS = 10 * 60;
+
+    let currentIndex = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let remainingSeconds = TOTAL_TIME_SECONDS;
+    let quizCompleted = false;
+    let timerInterval = null;
+
+    const questionContainer = document.getElementById("questionContainer");
+    const progress = document.getElementById("progress");
+    const timerDisplay = document.getElementById("timer");
+    const nextBtn = document.getElementById("nextBtn");
+    const finishBtn = document.getElementById("finishBtn");
+    const backBtn = document.getElementById("backBtn");
+    const resultBox = document.getElementById("resultBox");
+
+    function formatTime(secs) {
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+    }
+
+    function updateTimerDisplay() {
+        timerDisplay.textContent = formatTime(remainingSeconds);
+    }
+
+    function startTimer() {
+        if (timerInterval !== null || quizCompleted || remainingSeconds <= 0) return;
+        timerInterval = setInterval(() => {
+            remainingSeconds--;
+            updateTimerDisplay();
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                if (!quizCompleted) finishQuiz();
+            }
+        }, 1000);
+    }
+
+    function loadQuestion(index) {
+        const q = questions[index];
+        questionContainer.innerHTML = `<div class="question-text">${q.text}</div>`;
+
+        if (q.type === "mc") {
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            q.options.forEach((opt, i) => {
+                const label = document.createElement("label");
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "mc";
+                radio.value = i;
+                if (userAnswers[index] === i) radio.checked = true;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(` ${opt}`));
+                optionsDiv.appendChild(label);
+            });
+            questionContainer.appendChild(optionsDiv);
+        } else {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.id = "fillInput";
+            input.className = "fill-input";
+            input.placeholder = "Type your answer here...";
+            if (userAnswers[index]) input.value = userAnswers[index];
+            questionContainer.appendChild(input);
+        }
+    }
+
+    function updateUI() {
+        loadQuestion(currentIndex);
+
+        if (quizCompleted) {
+            progress.textContent = `Quiz Complete!`;
+            timerDisplay.textContent = `00:00`;
+            nextBtn.style.display = "none";
+            finishBtn.style.display = "none";
+            backBtn.style.display = "inline-block";
+
+            const score = calculateScore();
+            const percentage = Math.round((score / questions.length) * 100);
+            resultBox.innerHTML = `
+                <strong>FINAL SCORE: ${score} / ${questions.length}</strong><br>
+                <span style="font-size:8px;">${percentage}% - Lesson mastery logged!</span>
+            `;
+            resultBox.className = "result-success";
+            resultBox.style.display = "block";
+        } else {
+            progress.textContent = `Question ${currentIndex + 1} / ${questions.length}`;
+
+            if (currentIndex === questions.length - 1) {
+                nextBtn.style.display = "none";
+                finishBtn.style.display = "inline-block";
+            } else {
+                nextBtn.style.display = "inline-block";
+                finishBtn.style.display = "none";
+            }
+
+            backBtn.style.display = "none";
+            resultBox.style.display = "none";
+        }
+    }
+
+    function saveCurrentAnswer() {
+        if (quizCompleted) return;
+        const q = questions[currentIndex];
+        if (q.type === "mc") {
+            const checked = document.querySelector('input[name="mc"]:checked');
+            userAnswers[currentIndex] = checked ? parseInt(checked.value) : null;
+        } else {
+            const input = document.getElementById("fillInput");
+            userAnswers[currentIndex] = input ? input.value.trim() : "";
+        }
+    }
+
+    function calculateScore() {
+        let score = 0;
+        questions.forEach((q, i) => {
+            if (q.type === "mc") {
+                if (userAnswers[i] === q.correct) score++;
+            } else {
+                const user = (userAnswers[i] || "").trim().toLowerCase();
+                const correct = q.correctText.toLowerCase();
+                if (user === correct) score++;
+            }
+        });
+        return score;
+    }
+
+    function finishQuiz(){
+        if(quizCompleted) return;
+        quizCompleted=true;
+        currentIndex=questions.length-1;
+        saveCurrentAnswer();
+        if(timerInterval){ 
+          clearInterval(timerInterval); 
+          timerInterval=null; 
+        }
+        const total=questions.length;
+        const score=calculateScore();
+        const percentage=Math.round((score/total)*100);
+        resultBox.innerHTML=`
+          <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+          <span style="font-size:8px;">${percentage}% - CSS Lesson 2 mastery logged!</span>
+        `;
+        updateUI();
+        console.log("🧪 CSS Lesson 2 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+
+        // 🚀 Notify XP system that quiz is finished
+        if (window.handleQuizFinish) {
+          try {
+            window.handleQuizFinish({ 
+              finalScore: score, 
+              totalQuestions: total, 
+              types: questions.map(q => q.type) 
+            });
+          } catch (err) {
+            console.error("XP system notification failed:", err);
+          }
+        }
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener("click", () => {
+        if (quizCompleted) return;
+        saveCurrentAnswer();
+        if (currentIndex < questions.length - 1) {
+            currentIndex++;
+            updateUI();
+        }
+    });
+
+    finishBtn.addEventListener("click", () => finishQuiz());
+
+    backBtn.addEventListener("click", () => {
+        // Go back to Lesson 1
+        window.location.href = "../../../Modular/Lessons/CSS/lesson-1.html";
+    });
+
+    // Start fresh
+    updateTimerDisplay();
+    updateUI();
+    startTimer();
+</script>
+</body>
+</html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -224,6 +739,7 @@ footer {
 </div>
 </body>
 </html>
+
 
 
 
