@@ -36,6 +36,19 @@ body.dark {
 body.dark #sun{opacity:0;}
 body.dark #moon{opacity:1;}
 
+/* ===== STARS FROM REFERENCE ===== */
+.stars {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+    radial-gradient(1px 1px at 70% 20%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 80% 60%, #fff, transparent),
+    radial-gradient(1px 1px at 60% 50%, #fff, transparent);
+  opacity: 0; transition: opacity .8s ease;
+}
+body.dark .stars { opacity: 1; }
+
 /* ===== CLOUDS ===== */
 .cloud{
   position:absolute;background:#ffffffdd;
