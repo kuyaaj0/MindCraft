@@ -111,50 +111,52 @@ body.dark .cloud{background:#5c6f91;opacity:.7;}
   box-shadow:inset 0 2px 0 rgba(255,255,255,.25),0 3px 0 #4a2c12,0 6px 0 #66bb6a;
 }
 
-/* ===== BB8 SETTINGS POPUP (COMPLETED) ===== */
-.popup-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.5); display: none;
-  align-items: center; justify-content: center; z-index: 100;
+
+/* ===== SETTINGS POPUP ===== */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.popup{
+  background:#fff7ef;
+  padding:36px;
+  width:360px;
+  border-radius:28px;
+  box-shadow:0 8px 0 #81c784,0 18px 32px rgba(0,0,0,.35);
+  transition:background .8s ease;
+}
+body.dark .popup{background:#1c2a4a}
+.popup h2{
+  font-size:28px;
+  font-weight:800;
+  color:#5a3a1a;
+  text-align:center;
+  margin-bottom:24px;
 }
 
-.popup {
-  background: #fff7ef; padding: 36px; width: 90%; max-width: 420px;
-  border-radius: 28px; box-shadow: 0 8px 0 #81c784, 0 18px 32px rgba(0,0,0,.35);
-  text-align: center;
-  transition: background .8s ease;
+/* ===== TOGGLE ROW ===== */
+.toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:24px;
 }
-
-body.dark .popup { background: #1c2a4a; }
-
-.popup h2 {
+.toggle-label{
   font-family: "Baloo 2", cursive;
-  font-size: 28px;
-  font-weight: 800;
-  color: #5a3a1a;
-  text-align: center;
-  margin-bottom: 24px;
+  font-size:20px;
+  font-weight:700;
+  color:#5a3a1a;
+  transition:color .4s;
 }
+body.dark .toggle-label{color:#e6dccf;}
 
-body.dark .popup h2 { color: #e6dccf; }
-
-.toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 24px;
-}
-
-.toggle-label {
-  font-family: "Baloo 2", cursive;
-  font-size: 20px;
-  font-weight: 700;
-  color: #5a3a1a;
-  transition: color .4s;
-}
-
-body.dark .toggle-label { color: #e6dccf; }
+/* ===== LEGACY SWITCH (kept hidden) ===== */
+.switch{ display:none; }
 
 #closeSettings {
   font-family: "Baloo 2", cursive;
