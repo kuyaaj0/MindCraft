@@ -952,9 +952,11 @@ body.dark .toggle-label{color:#e6dccf;}
       
       <div class="toggle-row">
         <span class="toggle-label">Night Mode</span>
-        <label class="bb8-toggle">
-          <input type="checkbox" class="bb8-toggle__checkbox" id="darkToggle">
-          <div class="bb8-toggle__container">
+        <label class="bb8-toggle" title="Toggle theme">
+        <!-- keep class for CSS; add id for scripting -->
+        <input class="bb8-toggle__checkbox" id="themeSwitch" type="checkbox">
+        <div class="bb8-toggle__container">
+          <div class="bb8-toggle__scenery">
             <div class="bb8-toggle__star"></div>
             <div class="bb8-toggle__star"></div>
             <div class="bb8-toggle__star"></div>
