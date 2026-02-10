@@ -72,7 +72,7 @@ body.dark .cloud { background: #5c6f91; opacity: .7; }
 .cloud.large { width: 300px; height: 100px; top: 12%; animation-duration: 95s; }
 @keyframes cloudMove { from { left: -300px; } to { left: 110%; } }
 
-/* ===== YOUR ORIGINAL UI ELEMENTS ===== */
+/* ===== UI ELEMENTS (UNCHANGED) ===== */
 .home-content {
   position: relative; height: 100%;
   display: flex; flex-direction: column;
@@ -109,7 +109,7 @@ body.dark .cloud { background: #5c6f91; opacity: .7; }
 
 .menu {
   position: absolute;
-  top: 55%;  /* Perfect gap spacing */
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex; 
@@ -142,102 +142,310 @@ body.dark .cloud { background: #5c6f91; opacity: .7; }
   box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 3px 0 #4a2c12, 0 6px 0 #66bb6a; 
 }
 
-/* ===== SETTINGS POPUP ===== */
+/* ===== BB8 SETTINGS POPUP (COMPLETED) ===== */
 .popup-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.5); display: none;
   align-items: center; justify-content: center; z-index: 100;
 }
+
 .popup {
-  background: #fff7ef; padding: 36px; width: 90%; max-width: 360px;
+  background: #fff7ef; padding: 36px; width: 90%; max-width: 420px;
   border-radius: 28px; box-shadow: 0 8px 0 #81c784, 0 18px 32px rgba(0,0,0,.35);
   text-align: center;
+  transition: background .8s ease;
 }
+
 body.dark .popup { background: #1c2a4a; }
-.popup h3 {
-  font-family: "Press Start 2P"; font-size: 20px; color: #5a3a1a;
-  margin-bottom: 24px; text-shadow: 2px 2px 0 #81c784;
+
+.popup h2 {
+  font-family: "Baloo 2", cursive;
+  font-size: 28px;
+  font-weight: 800;
+  color: #5a3a1a;
+  text-align: center;
+  margin-bottom: 24px;
 }
-body.dark .popup h3 { color: #e6dccf; }
-.popup button {
-  margin: 10px; padding: 12px 24px; border: none; border-radius: 12px;
-  font-family: "Press Start 2P"; cursor: pointer; font-size: 14px;
-  box-shadow: 0 4px 0 #4a2c12, 0 2px 10px rgba(0,0,0,.3);
-  transition: all .2s ease;
+
+body.dark .popup h2 { color: #e6dccf; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
 }
-.popup button:active {
-  transform: translateY(2px); box-shadow: 0 2px 0 #4a2c12;
+
+.toggle-label {
+  font-family: "Baloo 2", cursive;
+  font-size: 20px;
+  font-weight: 700;
+  color: #5a3a1a;
+  transition: color .4s;
 }
-.light-btn { background: #ffd966; }
-.dark-btn { background: #8fa3ff; }
-.close-btn { background: #ff6f61; }
+
+body.dark .toggle-label { color: #e6dccf; }
+
+#closeSettings {
+  font-family: "Baloo 2", cursive;
+  background: linear-gradient(145deg, #b8783d, #8a5427);
+  color: #fff; border: none;
+  padding: 16px 32px; border-radius: 24px;
+  font-size: 18px; font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 6px 0 #4a2c12, 0 12px 0 #66bb6a;
+  transition: all .15s ease;
+  min-width: 200px;
+}
+
+#closeSettings:hover { transform: translateY(-3px); }
+#closeSettings:active { 
+  transform: translateY(3px); 
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 3px 0 #4a2c12, 0 6px 0 #66bb6a; 
+}
+
+/* ===== BB8 TOGGLE COMPLETE ===== */
+.bb8-toggle {
+  --toggle-size: 12px;
+  --margin-top-for-head: 0;
+  --toggle-width: 10.625em;
+  --toggle-height: 5.625em;
+  --toggle-offset: calc((var(--toggle-height) - var(--bb8-diameter)) / 2);
+  --toggle-bg: linear-gradient(#2c4770, #070e2b 35%, #628cac 50% 70%, #a6c5d4) no-repeat;
+  --bb8-diameter: 4.375em;
+  --radius: 99em;
+  --transition: 0.4s;
+  --accent: #de7d2f;
+  --bb8-bg: #fff;
+}
+
+.bb8-toggle,
+.bb8-toggle *,
+.bb8-toggle *::before,
+.bb8-toggle *::after {
+  box-sizing: border-box;
+}
+
+.bb8-toggle {
+  cursor: pointer;
+  margin-top: var(--margin-top-for-head);
+  font-size: var(--toggle-size);
+}
+
+.bb8-toggle__checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+.bb8-toggle__container {
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  background: var(--toggle-bg);
+  background-size: 100% 11.25em;
+  background-position-y: -5.625em;
+  border-radius: var(--radius);
+  position: relative;
+  transition: var(--transition);
+}
+
+.bb8 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: calc(var(--toggle-offset) - 1.688em + 0.188em);
+  left: var(--toggle-offset);
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.bb8__head-container {
+  position: relative;
+  transition: var(--transition);
+  z-index: 2;
+  transform-origin: 1.25em 3.75em;
+}
+
+.bb8__head {
+  overflow: hidden;
+  margin-bottom: -0.188em;
+  width: 2.5em;
+  height: 1.688em;
+  background: 
+    linear-gradient(transparent 0.063em, dimgray 0.063em 0.313em, transparent 0.313em 0.375em, var(--accent) 0.375em 0.5em, transparent 0.5em 1.313em, silver 1.313em 1.438em, transparent 1.438em),
+    linear-gradient(45deg, transparent 0.188em, var(--bb8-bg) 0.188em 1.25em, transparent 1.25em),
+    linear-gradient(-45deg, transparent 0.188em, var(--bb8-bg) 0.188em 1.25em, transparent 1.25em),
+    linear-gradient(var(--bb8-bg) 1.25em, transparent 1.25em);
+  border-radius: var(--radius) var(--radius) 0 0;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0.063em 0.125em gray);
+}
+
+.bb8__head::before {
+  content: "";
+  position: absolute;
+  width: 0.563em;
+  height: 0.563em;
+  background: 
+    radial-gradient(0.125em circle at 0.25em 0.375em, red, transparent),
+    radial-gradient(0.063em circle at 0.375em 0.188em, var(--bb8-bg) 50%, transparent 100%),
+    linear-gradient(45deg, #000 0.188em, dimgray 0.313em 0.375em, #000 0.5em);
+  border-radius: var(--radius);
+  top: 0.413em;
+  left: 50%;
+  transform: translate(-50%);
+  box-shadow: 0 0 0 0.089em lightgray, 0.563em 0.281em 0 -0.148em, 0.563em 0.281em 0 -0.1em var(--bb8-bg), 0.563em 0.281em 0.188em rotate(90deg);
+}
+
+.bb8__body {
+  width: var(--bb8-diameter);
+  height: var(--bb8-diameter);
+  background: 
+    radial-gradient(ellipse 65% 55% at 40% 40%, #e6e6e6 0%, #d9d9d9 50%, #b8b8b8 100%),
+    radial-gradient(ellipse 30% 20% at 50% 50%, #f0f0f0 0%, transparent 70%),
+    radial-gradient(circle 8% at 25% 25%, #333 0%, transparent 50%),
+    radial-gradient(circle 6% at 75% 75%, #333 0%, transparent 50%);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 
+    0 0.125em 0.25em rgba(0,0,0,0.3),
+    inset 0 0.063em 0.125em rgba(255,255,255,0.8);
+}
+
+.bb8__body::before {
+  content: "";
+  position: absolute;
+  width: 1.5em;
+  height: 1.5em;
+  background: radial-gradient(circle, #444 20%, transparent 50%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 1em 0 0 #444;
+}
+
+.bb8__body::after {
+  content: "";
+  position: absolute;
+  width: 0.75em;
+  height: 2em;
+  background: linear-gradient(90deg, transparent 20%, #666 50%, transparent 80%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.bb8__legs {
+  display: flex;
+  gap: 0.25em;
+  margin-top: 0.5em;
+}
+
+.bb8__leg {
+  width: 0.375em;
+  height: 1.125em;
+  background: linear-gradient(#666, #444);
+  border-radius: 0.188em;
+  box-shadow: 0 0.063em 0.125em rgba(0,0,0,0.4);
+}
+
+.bb8__leg:nth-child(2) { height: 0.875em; }
+.bb8__leg:nth-child(3) { height: 1em; }
+
+.bb8-toggle__checkbox:checked ~ .bb8-toggle__container {
+  background-position-y: 0;
+}
+
+.bb8-toggle__checkbox:checked ~ .bb8-toggle__container .bb8 {
+  left: calc(100% - var(--bb8-diameter) - var(--toggle-offset));
+}
+
+.bb8-toggle__checkbox:checked ~ .bb8-toggle__container .bb8__head-container {
+  transform: rotate(-15deg);
+}
 </style>
 </head>
 <body>
-
-<!-- ===== EXACT REFERENCE BACKGROUND ELEMENTS ===== -->
-<div id="sun"></div>
-<div id="moon"></div>
-<div class="stars"></div>
-<div class="cloud small"></div>
-<div class="cloud medium"></div>
-<div class="cloud large"></div>
-
-<div class="home-content">
-  <div class="title">MINDCRAFT</div>
+  <!-- Clouds -->
+  <div class="cloud small"></div>
+  <div class="cloud medium"></div>
+  <div class="cloud large"></div>
   
-  <nav class="menu">
-    <button onclick="startGame()">PLAY </button>
-    <button onclick="openSettings()">SETTINGS </button>
-    <button id="leaderboardBtn">LEADERBOARD </button>
-  </nav>
-</div>
-
-<!-- SETTINGS POPUP -->
-<div class="popup-overlay" id="settings">
-  <div class="popup">
-    <h3>MODE</h3>
-    <button class="light-btn" onclick="setLight()">☀️ LIGHT</button>
-    <button class="dark-btn" onclick="setDark()">🌙 DARK</button>
-    <button class="close-btn" onclick="closeSettings()">CLOSE</button>
+  <!-- Stars -->
+  <div class="stars"></div>
+  
+  <!-- Sun/Moon -->
+  <div id="sun"></div>
+  <div id="moon"></div>
+  
+  <!-- Main Content -->
+  <div class="home-content">
+    <div class="title">MindCraft</div>
+    
+    <div class="menu">
+      <button>Play</button>
+      <button>Settings</button>
+      <button>Quit</button>
+    </div>
   </div>
-</div>
 
-<script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
+  <!-- Settings Popup -->
+  <div class="popup-overlay" id="settingsPopup">
+    <div class="popup">
+      <h2>Game Settings</h2>
+      
+      <div class="toggle-row">
+        <span class="toggle-label">Night Mode</span>
+        <label class="bb8-toggle">
+          <input type="checkbox" class="bb8-toggle__checkbox" id="darkToggle">
+          <div class="bb8-toggle__container">
+            <div class="bb8">
+              <div class="bb8__head-container">
+                <div class="bb8__head"></div>
+              </div>
+              <div class="bb8__body"></div>
+              <div class="bb8__legs">
+                <div class="bb8__leg"></div>
+                <div class="bb8__leg"></div>
+                <div class="bb8__leg"></div>
+              </div>
+            </div>
+          </div>
+        </label>
+      </div>
+      
+      <button id="closeSettings">Close</button>
+    </div>
+  </div>
+
 <script>
-const settingsPopup = document.getElementById("settings");
-
-// 🎮 PLAY
-function startGame() {
-  fadeOutTo("../Webside/Student.html");
-}
-
-// ⚙️ SETTINGS
-function openSettings() { settingsPopup.style.display = "flex"; }
-function closeSettings() { settingsPopup.style.display = "none"; }
-
-// ☀️ / 🌙 MODE
-function setLight() {
-  document.body.classList.remove("dark");
-  localStorage.setItem('theme', 'light');
-}
-function setDark() {
-  document.body.classList.add("dark");
-  localStorage.setItem('theme', 'dark');
-}
-
-// 🔄 FADE TRANSITION
-function fadeOutTo(url) {
-  document.body.style.transition = "opacity 1s";
-  document.body.style.opacity = "0";
-  setTimeout(() => window.location.href = url, 1000);
-}
-
-// 🌗 LOAD THEME
-const savedTheme = localStorage.getItem('theme') || 'dark';
-if (savedTheme === 'dark') {
-  document.body.classList.add("dark");
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const settingsBtn = document.querySelector('.menu button:nth-child(2)');
+  const popup = document.getElementById('settingsPopup');
+  const closeBtn = document.getElementById('closeSettings');
+  const darkToggle = document.getElementById('darkToggle');
+  
+  settingsBtn.addEventListener('click', () => {
+    popup.style.display = 'flex';
+  });
+  
+  closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+  });
+  
+  popup.addEventListener('click', (e) => {
+    if (e.target === popup) popup.style.display = 'none';
+  });
+  
+  darkToggle.addEventListener('change', (e) => {
+    document.body.classList.toggle('dark', e.target.checked);
+  });
+});
 </script>
 </body>
 </html>
