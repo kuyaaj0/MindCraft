@@ -457,23 +457,23 @@
     }
 
     function finishQuiz(){
-        if(quizCompleted) return;
-        quizCompleted=true;
-        currentIndex=questions.length-1;
-        saveCurrentAnswer();
-        if(timerInterval){ 
-          clearInterval(timerInterval); 
-          timerInterval=null; 
-        }
-        const total=questions.length;
-        const score=calculateScore();
-        const percentage=Math.round((score/total)*100);
-        resultBox.innerHTML=`
-          <strong>FINAL SCORE: ${score} / ${total}</strong><br>
-          <span style="font-size:8px;">${percentage}% - CSS Lesson 2 mastery logged!</span>
-        `;
-        updateUI();
-        console.log("🧪 CSS Lesson 2 Quiz Complete:",score,"/",total,`(${percentage}%)`);
+    if(quizCompleted) return;
+    quizCompleted=true;
+    currentIndex=questions.length-1;
+    saveCurrentAnswer();
+    if(timerInterval){ 
+      clearInterval(timerInterval); 
+      timerInterval=null; 
+    }
+    const total=questions.length;
+    const score=calculateScore();
+    const percentage=Math.round((score/total)*100);
+    resultBox.innerHTML=`
+      <strong>FINAL SCORE: ${score} / ${total}</strong><br>
+      <span style="font-size:8px;">${percentage}% - CSS basics mastery logged!</span>
+    `;
+    updateUI();
+    console.log("🧪 CSS Lesson 2 Quiz Complete:",score,"/",total,`(${percentage}%)`);
 
         // 🚀 Notify XP system that quiz is finished
         if (window.handleQuizFinish) {
@@ -513,233 +513,3 @@
 </script>
 </body>
 </html>
-
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindCraft CSS Quiz - Lesson 2</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-<style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: 'Press Start 2P', cursive;
-  background: radial-gradient(circle at top, #f3fcff, #bfeaff, #67c2ff);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 20px;
-}
-
-.scene {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  min-height: 92vh;
-  background: linear-gradient(120deg, #eafcff, #c6f0ff, #a4e2c1, #74cfa0);
-  background-size: 300% 300%;
-  animation: bgShift 12s ease infinite;
-  border-radius: 28px;
-  box-shadow: 0 50px 100px rgba(0,0,0,.35);
-  overflow: hidden;
-  padding: 20px 40px;
-}
-
-@keyframes bgShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: .25;
-}
-
-.title {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 24px 64px;
-  background: linear-gradient(#c97a36, #8b4d1a);
-  color: white;
-  font-size: 1.6rem;
-  border-radius: 24px;
-  text-shadow: 4px 4px 0 black;
-  z-index: 5;
-  text-align: center;
-}
-
-.menu {
-  position: relative;
-  margin-top: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  z-index: 5;
-}
-
-.menu .question {
-  background: rgba(255,255,255,.15);
-  backdrop-filter: blur(10px);
-  padding: 18px 24px;
-  border-radius: 18px;
-  color: #000;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.menu .question label {
-  cursor: pointer;
-  background: linear-gradient(#ffe08a, #f2a933);
-  padding: 12px 16px;
-  border-radius: 12px;
-  display: block;
-  transition: .2s;
-}
-
-.menu .question label:hover {
-  transform: translateX(6px);
-}
-
-.menu .question input[type="text"] {
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-}
-
-.nav-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-button.next {
-  background: linear-gradient(#46b46b, #2e7d4a);
-  color: white;
-  font-size: .7rem;
-  padding: 14px 28px;
-  border: none;
-  border-radius: 18px;
-  cursor: pointer;
-  box-shadow: 0 6px 0 rgba(0,0,0,.25);
-}
-
-button.next:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 0 rgba(0,0,0,.35);
-}
-
-.ground {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 120px;
-  background: linear-gradient(#46b46b, #2e7d4a);
-  box-shadow: inset 0 12px 0 rgba(255,255,255,.25);
-}
-
-footer {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  text-align: center;
-  font-size: .5rem;
-  color: white;
-  text-shadow: 1px 1px 0 black;
-}
-</style>
-</head>
-
-<body>
-<div class="scene">
-  <div class="grid"></div>
-
-  <div class="title">Lesson 2: How to Add CSS</div><br>
-
-  <div class="menu">
-
-    <div class="question">
-      <strong>1. Which of the following is the correct way to add external CSS to an HTML file?</strong>
-      <label><input type="radio" name="q1"> A. &lt;style src="style.css"&gt;&lt;/style&gt;</label>
-      <label><input type="radio" name="q1"> B. &lt;link rel="stylesheet" href="style.css"&gt;</label>
-      <label><input type="radio" name="q1"> C. &lt;script src="style.css"&gt;&lt;/script&gt;</label>
-      <label><input type="radio" name="q1"> D. &lt;css link="style.css"&gt;</label>
-    </div>
-
-    <div class="question">
-      <strong>2. Where is internal CSS placed in an HTML document?</strong>
-      <label><input type="radio" name="q2"> A. Inside the &lt;head&gt; section within &lt;style&gt; tags</label>
-      <label><input type="radio" name="q2"> B. Inside the &lt;body&gt; section</label>
-      <label><input type="radio" name="q2"> C. In a separate .css file</label>
-      <label><input type="radio" name="q2"> D. In the &lt;title&gt; tag</label>
-    </div>
-
-    <div class="question">
-      <strong>3. Which of the following is inline CSS?</strong>
-      <label><input type="radio" name="q3"> A. &lt;p style="color: blue;"&gt;Hello&lt;/p&gt;</label>
-      <label><input type="radio" name="q3"> B. &lt;style&gt;p {color: blue;}&lt;/style&gt;</label>
-      <label><input type="radio" name="q3"> C. &lt;link rel="stylesheet" href="style.css"&gt;</label>
-      <label><input type="radio" name="q3"> D. p {color: blue;}</label>
-    </div>
-
-    <div class="question">
-      <strong>4. When is it best to use external CSS?</strong>
-      <label><input type="radio" name="q4"> A. For small, one-page websites</label>
-      <label><input type="radio" name="q4"> B. When you want to style multiple pages consistently</label>
-      <label><input type="radio" name="q4"> C. When you want to style a single element only</label>
-      <label><input type="radio" name="q4"> D. For adding comments in code</label>
-    </div>
-
-    <div class="question">
-      <strong>5. CSS added directly to an HTML element using the style attribute is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>6. CSS written inside &lt;style&gt; tags in the &lt;head&gt; of an HTML document is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>7. CSS stored in a separate .css file and linked to an HTML document is called ________.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>8. Look at this code: &lt;p style="font-size:16px;"&gt;Hello&lt;/p&gt;. What type of CSS is used here?</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>9. This type of CSS is written inside the &lt;head&gt; section of an HTML document and applies styles to the page without using a separate file.</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="question">
-      <strong>10. Look at this code: &lt;link rel="stylesheet" href="style.css"&gt;. What type of CSS is used here?</strong>
-      <input type="text" placeholder="Your answer here">
-    </div>
-
-    <div class="nav-buttons">
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-1.html'">⬅ Prev Lesson</button>
-      <button class="next" onclick="location.href='../../../Modular/Lessons/CSS/lesson-3.html'">Next Lesson ➤</button>
-    </div>
-</div>
-</body>
-</html>
-
-
-
-
