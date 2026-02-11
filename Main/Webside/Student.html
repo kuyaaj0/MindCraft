@@ -13,30 +13,25 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-/* =========================
-   Cleaned & Updated CSS
-   - Based on teammate design
-   - Removed neon green
-   - Minor design tweaks for modern, smooth look
-   ========================= */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { width: 100%; height: 100%; }
+* { box-sizing: border-box; }
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
 
-/* ===== BODY / BACKGROUND ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  background: linear-gradient(160deg, #a0c4ff 0%, #d4edc4 100%);
-  color: #3b2a15;
+  color: #fff;
+  transition: background 1s, color 1s;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  padding: 20px;
-  font-size: 10px;
-  transition: background 1s, color 1s;
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
 }
 
-/* ===== HEADER ===== */
+/* ===== Header ===== */
 header {
   width: 100vw;
   display: flex;
@@ -44,9 +39,8 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0;
-  background: #836047;
-  border-bottom: 2px solid #5c3a15;
-  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.1), 0 3px 0 #3b2a15;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #6a9e6a;
 }
 
 .xp-group {
@@ -72,43 +66,60 @@ header {
   min-width: 120px;
 }
 
-/* XP value and bar */
 #xpValue {
   display: inline-block;
   min-width: 60px;
   text-align: right;
   font-size: 0.6rem;
   line-height: 1;
-  color: #b8a454;
-  font-weight: bold;
-  text-shadow: 1px 1px #3b2a15;
+  color: #fff;
   transition: font-size 0.25s ease, transform 0.25s ease;
   word-break: keep-all;
   max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
-  cursor: pointer;
+}
+
+/* Shrinks when big numbers appear */
+@media (max-width: 480px) {
+  #xpValue {
+    font-size: 0.45rem;
+    max-width: 100px;
+  }
+}
+
+/* Tooltip styling for hover/long-press display */
+#xpTooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.85);
+  color: #6a9e6a;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.45rem;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: scale(0.9);
+}
+
+#xpTooltip.show {
+  opacity: 1;
+  transform: scale(1);
 }
 
 #xpBar {
-  width: 100px;
-  height: 12px;
-  appearance: none;
-  background: #3b2a15;
-  border: 2px solid #b8a454;
-  border-radius: 8px;
-  transition: width 0.4s ease;
+  width: 80px;
+  height: 10px;
 }
 
-/* level display */
 .level-display {
   font-size: 0.6rem;
   text-align: center;
-  color: #b8a454;
 }
 
-/* user actions buttons */
 .user-actions {
   display: flex;
   gap: 10px;
@@ -118,52 +129,42 @@ header {
   width: 100%;
 }
 
-/* ===== BUTTONS (general) ===== */
 button {
   font-family: 'Press Start 2P', cursive;
-  background: #d9b16c;
-  color: #3b2a15;
-  border: 3px solid #a97c4b;
+  background: #6a9e6a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
   padding: 6px 10px;
-  border-radius: 8px;
   cursor: pointer;
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 2px 0 #a97c4b, 0 3px 0 #3b2a15;
-  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  font-size: 0.5rem;
+  transition: all 0.3s ease;
 }
+button:hover { background: #8bb68b; transform: scale(1.05); }
 
-button:hover {
-  transform: translateY(-2px);
-  background: #e5c890;
-  box-shadow: 0 4px 0 #a97c4b, 0 5px 0 #3b2a15;
-}
-
-button:active {
-  transform: translateY(1px);
-  background: #cfa356;
-  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
-}
-
-/* rank display */
+/* === Rank Display Button Glow === */
 #rankDisplay {
-  background: #e3d5a2;
-  border: 2px solid #ddd3b2;
-  color: #3b2a15;
+  font-family: 'Press Start 2P', cursive;
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 8px;
+  cursor: default;
+  font-size: 0.5rem;
   text-align: center;
+  min-width: 60px;
 }
-.rank-top { animation: glowPulse 1.7s infinite alternate; }
+.rank-top {
+  animation: glowPulse 1.7s infinite alternate;
+}
 @keyframes glowPulse {
-  0% { box-shadow: 0 0 5px #b8a454; }
-  50% { box-shadow: 0 0 12px #b8a454; }
-  100% { box-shadow: 0 0 5px #b8a454; }
+  0% { box-shadow: 0 0 5px #fff; }
+  50% { box-shadow: 0 0 12px #fff; }
+  100% { box-shadow: 0 0 5px #fff; }
 }
 
-/* ===== MAIN CONTENT ===== */
+/* === Main Content === */
 main {
   text-align: center;
   padding: 30px 20px;
@@ -172,29 +173,24 @@ main {
   flex-direction: column;
   align-items: center;
 }
-main h1 {
-  color: #3b2a15;
-  text-shadow: 2px 2px #b8a454;
-  margin-bottom: 20px;
-}
 
-/* ===== LESSON CONTAINER ===== */
+/* === Lesson Container === */
 .lesson-container {
   position: relative;
   text-align: center;
   padding: 20px;
-  background: #d4e0c7;
-  border: 3px solid #5c915c;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(106,158,106,0.4);
   border-radius: 12px;
   max-width: 600px;
   margin: 20px auto;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #5c915c;
+  box-shadow: 0 0 15px rgba(106,158,106,0.25);
   overflow: visible;
   z-index: 10;
   transition: all 0.3s ease;
 }
 
-/* language view */
+/* === Language View (Card Selector) === */
 #languageView {
   display: flex;
   justify-content: center;
@@ -204,188 +200,270 @@ main h1 {
   min-height: 200px;
 }
 
-/* language cards */
 .language-card {
   display: none;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: #c3d8b5;
-  border: 2px solid #4a7d4a;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid transparent;
   border-radius: 12px;
-  padding: 22px;
+  padding: 20px;
   width: 240px;
-  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
   opacity: 0;
   transform: translateX(30px);
-  transition: all 0.35s ease, transform 0.35s ease;
+  transition: all 0.5s ease;
   cursor: pointer;
 }
 .language-card.active {
   display: flex;
   opacity: 1;
   transform: translateX(0) scale(1.05);
-  border-color: #3e763e;
-  box-shadow: 3px 3px 8px rgba(0,0,0,0.25);
+  border-color: #6a9e6a;
+  box-shadow: 0 0 20px #6a9e6a;
   animation: fadeSlideIn 0.4s ease;
 }
-.language-card img { width: 70px; height: 70px; }
-.language-card p { margin-top: 10px; font-size: 0.6rem; color: #3b2a15; }
-
+.language-card img {
+  width: 70px;
+  height: 70px;
+}
+.language-card p {
+  margin-top: 10px;
+  font-size: 0.6rem;
+}
 @keyframes fadeSlideIn {
   0% { opacity: 0; transform: translateX(40px); }
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* ===== NAV ARROWS ===== */
+/* === Navigation Arrows === */
 .nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: #d9b16c;
-  border: 2px solid #a97c4b;
-  color: #3b2a15;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(106,158,106,0.9);
+  border: 2px solid #6a9e6a;
+  box-shadow: 0 0 10px rgba(106,158,106,0.5);
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   cursor: pointer;
-  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
-  transition: all 0.15s ease;
+  transition: all 0.3s ease;
   z-index: 50;
 }
 .nav-arrow.left { left: -45px; }
 .nav-arrow.right { right: -45px; }
+.nav-arrow:hover { background: #8bb68b; transform: translateY(-50%) scale(1.1); }
+.nav-arrow:active { transform: translateY(-50%) scale(0.95); }
 
-.nav-arrow:hover { transform: translateY(-2px); background: #e5c890; box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15; }
-.nav-arrow:active { transform: translateY(1px); background: #cfa356; box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15; }
-
-/* ===== PANEL BACKDROP ===== */
+/* === BACKGROUND BLUR (outside container only) === */
 #panelBackdrop {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   background: rgba(0,0,0,0.3);
   z-index: 998;
   display: none;
   pointer-events: auto;
-  animation: fadeBackdrop 0.25s ease;
+  animation: fadeBackdrop 0.3s ease;
 }
-@keyframes fadeBackdrop { from { opacity: 0 } to { opacity: 1 } }
-.blur-active header, .blur-active main, .blur-active footer { pointer-events: none; user-select: none; }
+@keyframes fadeBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.blur-active header,
+.blur-active main,
+.blur-active footer {
+  pointer-events: none;
+  user-select: none;
+}
 
-/* ===== LANGUAGE PANEL ===== */
+/* === Language Panel === */
 .language-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #d4e0c7;
-  border: 3px solid #5c915c;
+  background: rgba(0, 0, 0, 0.95);
+  border: 3px solid #6a9e6a;
   border-radius: 12px;
   padding: 25px;
   width: 90%;
   max-width: 520px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 0 32px #6a9e6a66;
   z-index: 999;
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: fadeInPanel 0.25s ease;
+  animation: fadeInPanel 0.3s ease;
 }
-@keyframes fadeInPanel { from { opacity: 0; transform: translate(-50%, -55%) scale(0.98) } to { opacity:1; transform: translate(-50%, -50%) scale(1) } }
+@keyframes fadeInPanel {
+  from { opacity: 0; transform: translate(-50%, -55%) scale(0.9); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
 
-.language-panel .panel-title { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; }
-.language-panel .panel-title img { width:70px; height:70px; object-fit:contain; }
-.language-panel .panel-title .titleText { font-size:0.7rem; color:#3e763e; text-align:center; }
-
-.language-panel .panel-content { display:flex; flex-direction:column; gap:15px; margin-bottom:12px; width:100%; align-items:center; }
-
-.lesson-dropdown, .quiz-dropdown { position: relative; display:inline-block; width:100%; max-width:320px; }
-.lessons-btn, .quiz-btn {
+/* Option Buttons */
+.language-panel .option-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-top: 10px;
+}
+.language-panel .option-buttons button {
   font-family: 'Press Start 2P', cursive;
   font-size: 0.55rem;
   padding: 8px 12px;
-  background: #d9b16c;
-  color: #3b2a15;
-  border: 3px solid #a97c4b;
+  background: #6a9e6a;
+  color: #fff;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
-  width:100%;
-  text-align:left;
+  transition: all 0.3s ease;
 }
-.lessons-btn:hover, .quiz-btn:hover { background:#e5c890; transform: translateY(-2px); }
+.language-panel .option-buttons button:hover {
+  background: #8bb68b;
+  transform: scale(1.05);
+}
 
-.quiz-list, .lesson-list {
-  position: absolute;
-  top: 120%;
-  left: 0; right: 0;
-  background: #d4e0c7;
-  border-radius: 8px;
-  border: 2px solid #5c915c;
-  padding: 6px;
-  display: none;
-  flex-direction: column;
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 1000;
-}
-.quiz-list button, .lesson-list button {
-  font-size: 0.45rem;
-  font-family: 'Press Start 2P', cursive;
-  color: #3b2a15;
-  background: none; border: none; padding: 8px 10px; text-align:center; cursor:pointer;
-}
-.quiz-list button:hover, .lesson-list button:hover { background:#c3d8b5; }
-
-.language-panel .panel-back {
+/* Back Button */
+.language-panel .back-btn {
   margin-top: 18px;
-  background: #d9b16c;
-  color: #3b2a15;
-  border: 3px solid #a97c4b;
+  background: #6a9e6a;
+  color: white;
+  border: none;
   border-radius: 8px;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.5rem;
   padding: 8px 12px;
   cursor: pointer;
-  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  transition: transform 0.2s ease;
+}
+.language-panel .back-btn:hover { transform: scale(1.05); }
+
+/* Panel Title */
+.language-panel .panel-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.language-panel .panel-title img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+.language-panel .panel-title .titleText {
+  font-size: 0.7rem;
+  color: #6a9e6a;
+  text-align: center;
 }
 
-/* ===== WELCOME OVERLAY ===== */
+/* Quiz & Lesson Dropdowns */
+.quiz-list, .lesson-list {
+  position: absolute;
+  top: 120%;
+  left: 0; right: 0;
+  background: rgba(0,0,0,0.95);
+  border: 2px solid #6a9e6a;
+  border-radius: 8px;
+  display: none;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 6px 4px;
+}
+.quiz-list button, .lesson-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #fff;
+  background: none;
+  border: none;
+  padding: 8px 10px;
+  text-align:center;
+}
+.quiz-list button:hover, .lesson-list button:hover {
+  background: rgba(106,158,106,0.2);
+}
+
+/* Footer */
+footer {
+  margin-top: auto;
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(106,158,106,0.4);
+  color: #fff;
+  text-align: center;
+  padding: 6px 0;
+  width: 100%;
+  font-size: 0.6rem;
+}
+
+/* Welcome Overlay */
 #welcomeOverlay {
   position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  display: none; justify-content: center; align-items: center;
-  background: rgba(0,0,0,0.75);
-  color: #b8a454;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.85);
+  color: #6a9e6a;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.7rem;
   z-index: 2000;
   text-align: center;
   flex-direction: column;
-  animation: welcomeFadeIn 0.4s ease forwards;
+  animation: welcomeFadeIn 0.5s ease forwards;
 }
 #welcomeOverlay p {
-  margin: 0; padding: 12px 24px; background: rgba(0,0,0,0.55);
-  border: 2px solid #b8a454; border-radius: 10px; box-shadow: 0 0 20px #b8a45455; opacity: 0;
-  animation: textFadeIn 0.6s ease forwards 0.1s;
+  margin: 0;
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #6a9e6a;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #6a9e6a55;
+  opacity: 0;
+  animation: textFadeIn 0.8s ease forwards 0.2s;
 }
-@keyframes welcomeFadeIn { from { opacity: 0; transform: scale(0.95) } to { opacity: 1; transform: scale(1) } }
-@keyframes textFadeIn { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
-@keyframes welcomeFadeOut { from { opacity: 1; transform: scale(1) } to { opacity: 0; transform: scale(0.95) } }
+@keyframes welcomeFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes textFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes welcomeFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
 #welcomeOverlay.fade-out { animation: welcomeFadeOut 0.6s ease forwards; }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 400px) {
-  .nav-arrow { width: 28px; height: 28px; font-size: 7px; }
-  .nav-arrow.left { left: -35px; }
-  .nav-arrow.right { right: -35px; }
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .language-card img { width: 55px; height: 55px; }
+  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; }
+  .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
+}
+@media (max-width: 400px) {
+  .nav-arrow { width: 28px; height: 28px; font-size: 0.35rem; }
+}
+@media (max-width: 400px) {
+  .nav-arrow.left { left: -40px; }
+  .nav-arrow.right { right: -40px; }
 }
 @media (min-width: 401px) and (max-width: 600px) {
   .nav-arrow { font-size: 0.4rem; padding: 5px 7px; }
