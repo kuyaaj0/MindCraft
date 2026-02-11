@@ -403,9 +403,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ Uppercase folders (since your structure is uppercase)
-  FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
+  //FullpopulateOptions("css", "CSS"); // CSS → Full lesson + 5 levels
 
-  ["html", "js"].forEach(lang => {
+  ["html", "css", "js"].forEach(lang => {
     populateOptions(lang, 5, "Lessons", lang.toUpperCase());
     populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
   });
