@@ -1,1116 +1,906 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MindCraft | Code Lessons</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<!-- External CSS files you already use (keep them) -->
 <link rel="stylesheet" href="../Design/Position.css">
 <link rel="stylesheet" href="../Design/level.css">
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
+/* =========================
+   Complete merged CSS
+   (teammate 'new' visual + missing pieces from original)
+   ========================= */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; }
 
 /* ===== BODY / BACKGROUND ===== */
 body {
-font-family: 'Press Start 2P', cursive;
-background: linear-gradient(#a0c4ff, #d4edc4); /* softer sky to grass */
-color: #3b2a15;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-overflow-x: hidden;
-padding: 20px;
-font-size: 10px;
-transition: background 1s, color 1s;
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(#a0c4ff, #d4edc4); /* softer sky to grass */
+  color: #3b2a15;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  padding: 20px;
+  font-size: 10px;
+  transition: background 1s, color 1s;
 }
 
 /* ===== HEADER ===== */
 header {
-width: 100vw;
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-padding: 10px 0;
-background: #7a4f2f; /* muted earthy brown */
-border-bottom: 3px solid #5c3a1a;
-box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0;
+  background: #7a4f2f;
+  border-bottom: 3px solid #5c3a1a;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
 }
 
 .xp-group {
-display: flex;
-justify-content: space-between;
-align-items: center;
-width: 100%;
-max-width: 400px;
-margin-bottom: 5px;
-padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 5px;
+  padding: 0 10px;
 }
 
 .xp-status {
-display: flex;
-align-items: center;
-gap: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .xp-bar-container {
-display: flex;
-align-items: center;
-gap: 3px;
-min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 120px;
 }
 
+/* XP value and bar */
 #xpValue {
-display: inline-block;
-min-width: 60px;
-text-align: right;
-font-size: 0.6rem;
-line-height: 1;
-color: #b8a454; /* softer gold */
-font-weight: bold;
-text-shadow: 1px 1px #3b2a15;
-transition: font-size 0.25s ease, transform 0.25s ease;
-word-break: keep-all;
-max-width: 130px;
-overflow: hidden;
-text-overflow: ellipsis;
-vertical-align: middle;
-cursor: pointer;
-}
-
-@media (max-width: 480px) {
-#xpValue {
-font-size: 0.45rem;
-max-width: 100px;
-}
-}
-
-/* Tooltip styling for hover/long-press display */
-#xpTooltip {
-position: fixed;
-background: rgba(0, 0, 0, 0.85);
-color: #b8a454;
-padding: 6px 10px;
-border-radius: 6px;
-font-family: 'Press Start 2P', cursive;
-font-size: 0.45rem;
-pointer-events: none;
-opacity: 0;
-z-index: 9999;
-transition: opacity 0.2s ease, transform 0.2s ease;
-transform: scale(0.9);
-}
-
-#xpTooltip.show {
-opacity: 1;
-transform: scale(1);
+  display: inline-block;
+  min-width: 60px;
+  text-align: right;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #b8a454;
+  font-weight: bold;
+  text-shadow: 1px 1px #3b2a15;
+  transition: font-size 0.25s ease, transform 0.25s ease;
+  word-break: keep-all;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 #xpBar {
-width: 80px;
-height: 10px;
-background: #3b2a15;
-border: 2px solid #b8a454;
+  width: 80px; height: 10px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #3b2a15;
+  border: 2px solid #b8a454;
+  border-radius: 6px;
 }
 
+/* level display */
 .level-display {
-font-size: 0.6rem;
-text-align: center;
-color: #b8a454;
+  font-size: 0.6rem;
+  text-align: center;
+  color: #b8a454;
 }
 
+/* user actions buttons */
 .user-actions {
-display: flex;
-gap: 10px;
-margin-top: 5px;
-justify-content: center;
-flex-wrap: wrap;
-width: 100%;
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-/* ===== BUTTONS ===== */
+/* ===== BUTTONS (general) ===== */
 button {
-font-family: 'Press Start 2P', cursive;
-background: #d9b16c; /* muted yellow/gold */
-color: #3b2a15;
-border: 3px solid #a97c4b;
-padding: 6px 10px;
-border-radius: 8px;
-cursor: pointer;
-font-size: 8px;
-text-transform: uppercase;
-letter-spacing: 1px;
-box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
-transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+  font-family: 'Press Start 2P', cursive;
+  background: #d9b16c;
+  color: #3b2a15;
+  border: 3px solid #a97c4b;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 button:hover {
-transform: translateY(-2px);
-background: #e5c890; /* softer hover */
-box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
+  transform: translateY(-2px);
+  background: #e5c890;
+  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
 }
 
 button:active {
-transform: translateY(1px);
-background: #cfa356;
-box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
+  transform: translateY(1px);
+  background: #cfa356;
+  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
 }
 
-/* ===== RANK DISPLAY ===== */
+/* rank display */
 #rankDisplay {
-background: #e3d5a2;
-border: 2px solid #ddd3b2;
-color: #3b2a15;
-padding: 6px 10px;
-border-radius: 6px;
-font-size: 8px;
-text-align: center;
+  background: #e3d5a2;
+  border: 2px solid #ddd3b2;
+  color: #3b2a15;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 8px;
+  text-align: center;
 }
-
-.rank-top {
-animation: glowPulse 1.7s infinite alternate;
-}
-
+.rank-top { animation: glowPulse 1.7s infinite alternate; }
 @keyframes glowPulse {
-0% { box-shadow: 0 0 5px #b8a454; }
-50% { box-shadow: 0 0 12px #b8a454; }
-100% { box-shadow: 0 0 5px #b8a454; }
+  0% { box-shadow: 0 0 5px #b8a454; }
+  50% { box-shadow: 0 0 12px #b8a454; }
+  100% { box-shadow: 0 0 5px #b8a454; }
 }
 
 /* ===== MAIN CONTENT ===== */
 main {
-text-align: center;
-padding: 30px 20px;
-flex-grow: 1;
-display: flex;
-flex-direction: column;
-align-items: center;
+  text-align: center;
+  padding: 30px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
 main h1 {
-color: #3b2a15;
-text-shadow: 2px 2px #b8a454;
-margin-bottom: 20px;
+  color: #3b2a15;
+  text-shadow: 2px 2px #b8a454;
+  margin-bottom: 20px;
 }
 
 /* ===== LESSON CONTAINER ===== */
 .lesson-container {
-position: relative;
-text-align: center;
-padding: 20px;
-background: #d4e0c7; /* muted grass block */
-border: 3px solid #5c915c;
-border-radius: 12px;
-max-width: 600px;
-margin: 20px auto;
-box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #5c915c;
-overflow: visible;
-z-index: 10;
-transition: all 0.3s ease;
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  background: #d4e0c7;
+  border: 3px solid #5c915c;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #5c915c;
+  overflow: visible;
+  z-index: 10;
+  transition: all 0.3s ease;
 }
 
-/* ===== LANGUAGE VIEW (Card Selector) ===== */
+/* language view */
 #languageView {
-display: flex;
-justify-content: center;
-align-items: center;
-transition: transform 0.4s ease, opacity 0.4s ease;
-position: relative;
-min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  position: relative;
+  min-height: 200px;
 }
 
-/* ===== LANGUAGE CARDS ===== */
+/* language cards */
 .language-card {
-display: none;
-flex-direction: column;
-align-items: center;
-text-align: center;
-background: #c3d8b5;
-border: 2px solid #4a7d4a;
-border-radius: 12px;
-padding: 20px;
-width: 240px;
-box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-opacity: 0;
-transform: translateX(30px);
-transition: all 0.5s ease;
-cursor: pointer;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #c3d8b5;
+  border: 2px solid #4a7d4a;
+  border-radius: 12px;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s ease;
+  cursor: pointer;
 }
-
 .language-card.active {
-display: flex;
-opacity: 1;
-transform: translateX(0) scale(1.03);
-border-color: #3e763e;
-box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-animation: fadeSlideIn 0.4s ease;
+  display: flex;
+  opacity: 1;
+  transform: translateX(0) scale(1.03);
+  border-color: #3e763e;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  animation: fadeSlideIn 0.4s ease;
 }
-
-.language-card img {
-width: 70px;
-height: 70px;
-}
-
-.language-card p {
-margin-top: 10px;
-font-size: 0.6rem;
-color: #3b2a15;
-}
+.language-card img { width: 70px; height: 70px; }
+.language-card p { margin-top: 10px; font-size: 0.6rem; color: #3b2a15; }
 
 @keyframes fadeSlideIn {
-0% { opacity: 0; transform: translateX(40px); }
-100% { opacity: 1; transform: translateX(0); }
+  0% { opacity: 0; transform: translateX(40px); }
+  100% { opacity: 1; transform: translateX(0); }
 }
 
-/* ===== NAV ARROWS ===== */
+/* ===== NAV ARROWS (outside panel) ===== */
 .nav-arrow {
-position: absolute;
-top: 50%;
-transform: translateY(-50%);
-width: 36px;
-height: 36px;
-border-radius: 6px;
-background: #d9b16c;
-border: 2px solid #a97c4b;
-color: #3b2a15;
-display: flex;
-justify-content: center;
-align-items: center;
-font-size: 8px;
-cursor: pointer;
-box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
-transition: all 0.1s ease;
-z-index: 50;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #d9b16c;
+  border: 2px solid #a97c4b;
+  color: #3b2a15;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  transition: all 0.1s ease;
+  z-index: 50;
 }
-
 .nav-arrow.left { left: -45px; }
 .nav-arrow.right { right: -45px; }
 
-.nav-arrow:hover {
-transform: translateY(-2px);
-background: #e5c890;
-box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
-}
+.nav-arrow:hover { transform: translateY(-2px); background: #e5c890; box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15; }
+.nav-arrow:active { transform: translateY(1px); background: #cfa356; box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15; }
 
-.nav-arrow:active {
-transform: translateY(1px);
-background: #cfa356;
-box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
-}
-
-/* ===== BACKGROUND BLUR (outside container only) ===== */
+/* ===== BACKDROP for panel (blur + dark overlay) ===== */
 #panelBackdrop {
-position: fixed;
-top: 0; left: 0;
-width: 100vw; height: 100vh;
-backdrop-filter: blur(4px);
--webkit-backdrop-filter: blur(4px);
-background: rgba(0,0,0,0.3);
-z-index: 998;
-display: none;
-pointer-events: auto;
-animation: fadeBackdrop 0.3s ease;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.3);
+  z-index: 998;
+  display: none;
+  pointer-events: auto;
+  animation: fadeBackdrop 0.25s ease;
 }
+@keyframes fadeBackdrop { from { opacity: 0 } to { opacity: 1 } }
 
-@keyframes fadeBackdrop {
-from { opacity: 0; }
-to { opacity: 1; }
-}
+/* disable clicks when blur-active */
+.blur-active header, .blur-active main, .blur-active footer { pointer-events: none; user-select: none; }
 
-.blur-active header,
-.blur-active main,
-.blur-active footer {
-pointer-events: none;
-user-select: none;
-}
-
-/* ===== LANGUAGE PANEL ===== */
+/* ===== LANGUAGE PANEL (content when card clicked) ===== */
 .language-panel {
-position: fixed;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background: #d4e0c7;
-border: 3px solid #5c915c;
-border-radius: 12px;
-padding: 25px;
-width: 90%;
-max-width: 520px;
-box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-z-index: 999;
-display: none;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-animation: fadeInPanel 0.3s ease;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #d4e0c7;
+  border: 3px solid #5c915c;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInPanel 0.25s ease;
 }
+@keyframes fadeInPanel { from { opacity: 0; transform: translate(-50%, -55%) scale(0.98) } to { opacity:1; transform: translate(-50%, -50%) scale(1) } }
 
-@keyframes fadeInPanel {
-from { opacity: 0; transform: translate(-50%, -55%) scale(0.9); }
-to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.language-panel .panel-title { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; margin-bottom:12px; }
+.language-panel .panel-title img { width:70px; height:70px; object-fit:contain; }
+.language-panel .panel-title .titleText { font-size:0.7rem; color:#3e763e; text-align:center; }
+
+.language-panel .panel-content { display:flex; flex-direction:column; gap:15px; margin-bottom:12px; width:100%; align-items:center; }
+
+.lesson-dropdown, .quiz-dropdown { position: relative; display:inline-block; width:100%; max-width:320px; }
+.lessons-btn, .quiz-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  padding: 8px 12px;
+  background: #d9b16c;
+  color: #3b2a15;
+  border: 3px solid #a97c4b;
+  border-radius: 6px;
+  cursor: pointer;
+  width:100%;
+  text-align:left;
 }
+.lessons-btn:hover, .quiz-btn:hover { background:#e5c890; transform: translateY(-2px); }
 
-/* ===== Panel Title Fix (icon on top, text below) ===== */
-.language-panel .panel-title {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 8px;
-margin-bottom: 12px;
+/* drop lists inside panel */
+.quiz-list, .lesson-list {
+  position: absolute;
+  top: 120%;
+  left: 0; right: 0;
+  background: #d4e0c7;
+  border-radius: 8px;
+  border: 2px solid #5c915c;
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 1000;
 }
-
-.language-panel .panel-title img {
-width: 70px;
-height: 70px;
-object-fit: contain;
+.quiz-list button, .lesson-list button {
+  font-size: 0.45rem;
+  font-family: 'Press Start 2P', cursive;
+  color: #3b2a15;
+  background: none; border: none; padding: 8px 10px; text-align:center; cursor:pointer;
 }
+.quiz-list button:hover, .lesson-list button:hover { background:#c3d8b5; }
 
-.language-panel .panel-title .titleText {
-font-size: 0.7rem;
-color: #3e763e;
-text-align: center;
-}
-
-/* ===== Panel Content ===== */
-.language-panel .panel-content {
-display: flex;
-flex-direction: column;
-gap: 15px;
-margin-bottom: 12px;
-}
-
-.lesson-dropdown,
-.quiz-dropdown {
-position: relative;
-display: inline-block;
-}
-
-.lessons-btn,
-.quiz-btn {
-font-family: 'Press Start 2P', cursive;
-font-size: 0.55rem;
-padding: 8px 12px;
-background: #d9b16c;
-color: #3b2a15;
-border: 3px solid #a97c4b;
-border-radius: 6px;
-cursor: pointer;
-transition: all 0.3s ease;
-}
-
-.lessons-btn:hover,
-.quiz-btn:hover {
-background: #e5c890;
-transform: translateY(-2px);
-box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
-}
-
-/* ===== DROPDOWNS ===== */
-.quiz-list,
-.lesson-list {
-position: absolute;
-top: 120%;
-left: 0;
-right: 0;
-background: #d4e0c7;
-border-radius: 8px;
-border: 2px solid #5c915c;
-padding: 6px;
-display: none;
-flex-direction: column;
-max-height: 220px;
-overflow-y: auto;
-z-index: 1000;
-}
-
-.quiz-list button,
-.lesson-list button {
-font-size: 0.45rem;
-font-family: 'Press Start 2P', cursive;
-color: #3b2a15;
-background: none;
-border: none;
-padding: 8px 10px;
-text-align: center;
-cursor: pointer;
-transition: background 0.2s ease;
-}
-
-.quiz-list button:hover,
-.lesson-list button:hover {
-background: #c3d8b5;
-}
-
-/* ===== Back Button (center bottom) ===== */
+/* panel back button */
 .language-panel .panel-back {
-margin-top: 18px;
-background: #d9b16c;
-color: #3b2a15;
-border: 3px solid #a97c4b;
-border-radius: 8px;
-font-family: 'Press Start 2P', cursive;
-font-size: 0.5rem;
-padding: 8px 12px;
-cursor: pointer;
-box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
-transition: transform 0.1s, box-shadow 0.1s;
+  margin-top: 18px;
+  background: #d9b16c;
+  color: #3b2a15;
+  border: 3px solid #a97c4b;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.5rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
 }
 
-.language-panel .panel-back:hover {
-transform: translateY(-2px);
-box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
-}
-
-.language-panel .panel-back:active {
-transform: translateY(1px);
-box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
-}
-
-/* ===== FOOTER ===== */
-footer {
-margin-top: auto;
-background: #7a4f2f;
-border-top: 3px solid #5c3a1a;
-color: #3b2a15;
-text-align: center;
-padding: 6px 0;
-font-size: 8px;
-box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), 0 2px 0 #3b2a15;
-}
-
-/* ===== Welcome Overlay ===== */
+/* ===== WELCOME OVERLAY (center message) ===== */
 #welcomeOverlay {
-position: fixed;
-top: 0;
-left: 0;
-width: 100vw;
-height: 100vh;
-display: none;
-justify-content: center;
-align-items: center;
-background: rgba(0, 0, 0, 0.85);
-color: #b8a454;
-font-family: 'Press Start 2P', cursive;
-font-size: 0.7rem;
-z-index: 2000;
-text-align: center;
-flex-direction: column;
-animation: welcomeFadeIn 0.5s ease forwards;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  display: none; justify-content: center; align-items: center;
+  background: rgba(0,0,0,0.85);
+  color: #b8a454;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  z-index: 2000;
+  text-align: center;
+  flex-direction: column;
+  animation: welcomeFadeIn 0.4s ease forwards;
 }
-
 #welcomeOverlay p {
-margin: 0;
-padding: 10px 20px;
-background: rgba(0, 0, 0, 0.6);
-border: 2px solid #b8a454;
-border-radius: 10px;
-box-shadow: 0 0 20px #b8a45455;
-opacity: 0;
-animation: textFadeIn 0.8s ease forwards 0.2s;
+  margin: 0; padding: 10px 20px; background: rgba(0,0,0,0.6);
+  border: 2px solid #b8a454; border-radius: 10px; box-shadow: 0 0 20px #b8a45455; opacity: 0;
+  animation: textFadeIn 0.6s ease forwards 0.1s;
 }
+@keyframes welcomeFadeIn { from { opacity: 0; transform: scale(0.95) } to { opacity: 1; transform: scale(1) } }
+@keyframes textFadeIn { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes welcomeFadeOut { from { opacity: 1; transform: scale(1) } to { opacity: 0; transform: scale(0.95) } }
+#welcomeOverlay.fade-out { animation: welcomeFadeOut 0.6s ease forwards; }
 
-@keyframes welcomeFadeIn {
-from { opacity: 0; transform: scale(0.9); }
-to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes textFadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes welcomeFadeOut {
-from { opacity: 1; transform: scale(1); }
-to { opacity: 0; transform: scale(0.95); }
-}
-
-#welcomeOverlay.fade-out {
-animation: welcomeFadeOut 0.6s ease forwards;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 600px) {
-.language-card img { width: 55px; height: 55px; }
-.nav-arrow { font-size: 0.5rem; padding: 5px 8px; }
-.nav-arrow.left { left: -35px; }
-.nav-arrow.right { right: -35px; }
-.language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
-#xpValue { font-size: 0.45rem; max-width: 100px; }
-}
-
+/* ===== RESPONSIVE tweaks for mobile (portrait ~300-400, landscape ~600) ===== */
 @media (max-width: 400px) {
-.nav-arrow { width: 28px; height: 28px; font-size: 7px; }
-.nav-arrow.left { left: -40px; }
-.nav-arrow.right { right: -40px; }
+  .nav-arrow { width: 28px; height: 28px; font-size: 7px; }
+  .nav-arrow.left { left: -35px; }
+  .nav-arrow.right { right: -35px; }
+  #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
 
 @media (min-width: 401px) and (max-width: 600px) {
-.nav-arrow { font-size: 0.4rem; padding: 5px 7px; }
-.nav-arrow.left { left: -20px; }
-.nav-arrow.right { right: -20px; }
+  .nav-arrow { font-size: 0.4rem; padding: 5px 7px; }
+  .nav-arrow.left { left: -20px; }
+  .nav-arrow.right { right: -20px; }
 }
 
 @media (min-width: 601px) and (max-width: 900px) {
-.nav-arrow { font-size: 0.45rem; padding: 6px 8px; }
-.nav-arrow.left { left: -30px; }
-.nav-arrow.right { right: -30px; }
+  .nav-arrow { font-size: 0.45rem; padding: 6px 8px; }
+  .nav-arrow.left { left: -30px; }
+  .nav-arrow.right { right: -30px; }
 }
 </style>
 </head>
+
 <body>
 
-<!-- ✅ Welcome Popup -->
+<!-- Welcome overlay -->
 <div id="welcomeOverlay" style="display:none;">
-<p>🎉 Welcome, <span id="studentName">Student</span>!</p>
+  <p>🎉 Welcome, <span id="studentName">Student</span>!</p>
 </div>
 
 <header>
-<div class="xp-group">
-<div class="xp-status">
-<span>XP:</span>
-<div class="xp-bar-container">
-<progress id="xpBar" value="0" max="100"></progress>
-<span id="xpValue">0</span>
-</div>
-</div>
-<div class="level-display">
-Level <span id="levelValue">1</span>
-</div>
-</div>
+  <div class="xp-group">
+    <div class="xp-status">
+      <span>XP:</span>
+      <div class="xp-bar-container">
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
+      </div>
+    </div>
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
+  </div>
 
-<div class="user-actions">
-<button onclick="location.href='../Account/account.html'">👤 Account</button>
-<button id="leaderboardBtn">🏆 Leaderboard</button>
-<button id="rankDisplay">Rank: #--</button>
-<button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-</div>
+  <div class="user-actions">
+    <button onclick="location.href='../Account/account.html'">👤 Account</button>
+    <button id="leaderboardBtn">🏆 Leaderboard</button>
+    <button id="rankDisplay">Rank: #--</button>
+    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  </div>
 </header>
 
 <main>
-<h1>CHOOSE A CODE LANGUAGE</h1>
+  <h1>CHOOSE A CODE LANGUAGE</h1>
 
-<div class="lesson-container">
-<button class="nav-arrow left" id="prevLang">⬅</button>
-<button class="nav-arrow right" id="nextLang">➡</button>
+  <div class="lesson-container">
+    <button class="nav-arrow left" id="prevLang">⬅</button>
+    <button class="nav-arrow right" id="nextLang">➡</button>
 
-<div id="languageView">
-<div class="language-card active" data-lang="HTML">
-<img src="../Assets/Icons/html.png" alt="HTML">
-<p>HTML</p>
-</div>
+    <div id="languageView">
+      <div class="language-card active" data-lang="html">
+        <img src="../Assets/Icons/html.png" alt="HTML">
+        <p>HTML</p>
+      </div>
 
-<div class="language-card" data-lang="CSS">
-<img src="../Assets/Icons/css.png" alt="CSS">
-<p>CSS</p>
-</div>
+      <div class="language-card" data-lang="css">
+        <img src="../Assets/Icons/css.png" alt="CSS">
+        <p>CSS</p>
+      </div>
 
-<div class="language-card" data-lang="JS">
-<img src="../Assets/Icons/js.png" alt="JavaScript">
-<p>JavaScript</p>
-</div>
-</div>
-</div>
+      <div class="language-card" data-lang="js">
+        <img src="../Assets/Icons/js.png" alt="JavaScript">
+        <p>JavaScript</p>
+      </div>
+    </div>
+  </div>
 
-<!-- ✅ Hidden selects for internal data -->
-<select id="htmlLessons" style="display:none;"></select>
-<select id="htmlQuizzes" style="display:none;"></select>
-<select id="cssLessons" style="display:none;"></select>
-<select id="cssQuizzes" style="display:none;"></select>
-<select id="jsLessons" style="display:none;"></select>
-<select id="jsQuizzes" style="display:none;"></select>
+  <!-- hidden selects (data sources) -->
+  <select id="htmlLessons" style="display:none"></select>
+  <select id="htmlQuizzes" style="display:none"></select>
+  <select id="cssLessons" style="display:none"></select>
+  <select id="cssQuizzes" style="display:none"></select>
+  <select id="jsLessons" style="display:none"></select>
+  <select id="jsQuizzes" style="display:none"></select>
 </main>
 
 <footer>
-<p>© 2025 MindCraft | Created by Group 3</p>
+  <p>© 2025 MindCraft | Created by Group 3</p>
 </footer>
 
+<!-- Keep your external scripts (if used by other parts) -->
 <script src="../Design/theme.js"></script>
 <script>window.useFirestoreXP = true;</script>
 <script src="../Exp/levels.js"></script>
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 
-<!-- ===================== -->
-<!-- ✅ Full Combined Populate + Blur Panel Script -->
-<!-- ===================== -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-/* =========================================================
-1️⃣ AUTO-GENERATE LESSON & QUIZ DROPDOWNS
-========================================================= */
-function populateOptions(prefix, count, type, folder) {
-const select = document.getElementById(`${prefix}${type}`);
-if (!select) return;
-
-const isLesson = type === "Lessons";
-const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
-const subfolder = isLesson ? "Lessons" : "Quiz";
-const basePath = isLesson
-? `../Modular/${subfolder}/${folder}/lesson-`
-: `../Levels/${subfolder}/${folder}/level-`;
-
-select.innerHTML = "";
-const placeholder = document.createElement("option");
-placeholder.textContent = label;
-placeholder.value = "";
-select.appendChild(placeholder);
-
-for (let i = 1; i <= count; i++) {
-const option = document.createElement("option");
-option.value = `${basePath}${i}.html`;
-option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
-select.appendChild(option);
-}
-}
-
-["html", "css", "js"].forEach(lang => {
-populateOptions(lang, 5, "Lessons", lang.toUpperCase());
-populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
-});
-
-/* =========================================================
-2️⃣ LANGUAGE CARD NAVIGATION + PANEL INITIAL SETUP (LOOP ENABLED)
-========================================================= */
-const cards = Array.from(document.querySelectorAll(".language-card"));
-const lessonContainer = document.querySelector(".lesson-container");
-if (!lessonContainer || cards.length === 0) return;
-
-let left = lessonContainer.querySelector(".nav-arrow.left");
-let right = lessonContainer.querySelector(".nav-arrow.right");
-
-let idx = 0;
-function setActive(i) {
-idx = (i + cards.length) % cards.length;
-cards.forEach((c, ii) => {
-c.classList.toggle("active", ii === idx);
-c.setAttribute("aria-hidden", ii === idx ? "false" : "true");
-});
-}
-setActive(0);
-
-left.onclick = () => setActive(idx - 1);
-right.onclick = () => setActive(idx + 1);
-
-/* =========================================================
-3️⃣ LANGUAGE PANEL SETUP
-========================================================= */
-let backdrop = document.getElementById("panelBackdrop");
-if (!backdrop) {
-backdrop = document.createElement("div");
-backdrop.id = "panelBackdrop";
-document.body.appendChild(backdrop);
-}
-
-let panel = document.querySelector(".language-panel");
-if (!panel) {
-panel = document.createElement("div");
-panel.className = "language-panel";
-panel.innerHTML = `
-<div class="panel-title">
-<img src="" alt="icon"><span class="titleText"></span>
-</div>
-<div class="panel-content"></div>
-<button class="panel-back">⬇ Back</button>
-`;
-document.body.appendChild(panel);
-}
-
-function getLangKeyFromCard(card) {
-const data = (card.dataset && card.dataset.lang)
-? card.dataset.lang.toLowerCase()
-: (card.id || card.querySelector("p")?.textContent || "html").toLowerCase();
-return data.replace(/\s+/g, "");
-}
-
-/* =========================================================
-4️⃣ OPEN LANGUAGE PANEL
-========================================================= */
-function openLanguagePanel(card) {
-const langKey = getLangKeyFromCard(card);
-
-const iconEl = panel.querySelector(".panel-title img");
-const titleText = panel.querySelector(".panel-title .titleText");
-const cardImg = card.querySelector("img");
-iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
-titleText.textContent =
-card.querySelector("p")?.textContent || langKey.toUpperCase();
-
-const pc = panel.querySelector(".panel-content");
-pc.innerHTML = `
-<div class="lesson-dropdown">
-<button class="lessons-btn">📖 Lessons ▾</button>
-<div class="lesson-list"></div>
-</div>
-
-<div class="quiz-dropdown">
-<button class="quiz-btn">📝 Quiz ▾</button>
-<div class="quiz-list"></div>
-</div>
-`;
-
-// === LESSON DROPDOWN ===
-const lessonList = pc.querySelector(".lesson-list");
-const lessonSelect = document.getElementById(`${langKey}Lessons`);
-lessonList.innerHTML = "";
-if (lessonSelect && lessonSelect.options.length > 1) {
-Array.from(lessonSelect.options)
-.slice(1)
-.forEach(opt => {
-const b = document.createElement("button");
-b.type = "button";
-b.textContent = opt.textContent;
-b.addEventListener("click", () => {
-if (opt.value) window.location.href = opt.value;
-});
-lessonList.appendChild(b);
-});
-} else {
-lessonList.innerHTML = '<button disabled>No lessons found</button>';
-}
-
-const lessonBtn = pc.querySelector(".lessons-btn");
-lessonBtn.addEventListener("click", ev => {
-ev.stopPropagation();
-lessonList.style.display =
-lessonList.style.display === "flex" ? "none" : "flex";
-});
-
-// === QUIZ DROPDOWN ===
-const quizList = pc.querySelector(".quiz-list");
-const quizSelect = document.getElementById(`${langKey}Quizzes`);
-quizList.innerHTML = "";
-if (quizSelect && quizSelect.options.length > 1) {
-Array.from(quizSelect.options)
-.slice(1)
-.forEach(opt => {
-const b = document.createElement("button");
-b.type = "button";
-b.textContent = opt.textContent;
-b.addEventListener("click", () => {
-if (opt.value) window.location.href = opt.value;
-});
-quizList.appendChild(b);
-});
-} else {
-quizList.innerHTML = '<button disabled>No quizzes found</button>';
-}
-
-const quizBtn = pc.querySelector(".quiz-btn");
-quizBtn.addEventListener("click", ev => {
-ev.stopPropagation();
-quizList.style.display =
-quizList.style.display === "flex" ? "none" : "flex";
-});
-
-// === BACK BUTTON ===
-const backBtn = panel.querySelector(".panel-back");
-backBtn.addEventListener("click", closeLanguagePanel);
-
-// === Activate Blur and Panel ===
-backdrop.style.display = "block";
-panel.style.display = "flex";
-document.body.classList.add("blur-active");
-document.body.style.overflow = "hidden";
-}
-
-/* =========================================================
-5️⃣ CLOSE LANGUAGE PANEL
-========================================================= */
-function closeLanguagePanel() {
-panel.style.display = "none";
-panel.classList.remove("opening");
-
-const quizLists = panel.querySelectorAll(".quiz-list");
-quizLists.forEach(list => {
-list.style.display = "none";
-list.innerHTML = "";
-});
-
-const content = panel.querySelector(".panel-content");
-if (content) content.innerHTML = "";
-
-const titleImg = panel.querySelector(".panel-title img");
-const titleText = panel.querySelector(".panel-title .titleText");
-if (titleImg) titleImg.src = "";
-if (titleText) titleText.textContent = "";
-
-backdrop.style.display = "none";
-document.body.classList.remove("blur-active");
-document.body.style.overflow = "";
-}
-
-/* =========================================================
-6️⃣ CARD CLICK HANDLER
-========================================================= */
-backdrop.addEventListener("click", e => {
-e.stopPropagation();
-e.preventDefault();
-});
-
-cards.forEach((card, i) => {
-card.addEventListener("click", () => {
-if (!card.classList.contains("active")) {
-setActive(i);
-setTimeout(() => openLanguagePanel(card), 160);
-} else {
-openLanguagePanel(card);
-}
-});
-
-card.addEventListener("keydown", ev => {
-if (ev.key === "Enter" || ev.key === " ") {
-ev.preventDefault();
-openLanguagePanel(card);
-}
-});
-});
-});
-</script>
-
-<!-- ===================== -->
-<!-- ✅ Firebase Auth / XP / Rank / Welcome Overlay -->
-<!-- ===================== -->
+<!-- =========================
+   Main JS: populate options, looped arrows, panel, welcome overlay, xp display, firebase
+   ========================= -->
 <script type="module">
+/* =========================================================
+   Populate lesson & quiz selects (keeps same structure)
+   ========================================================= */
+function populateOptions(prefix, count, type, folder) {
+  const select = document.getElementById(`${prefix}${type}`);
+  if (!select) return;
+  const isLesson = type === "Lessons";
+  const label = isLesson ? "📖 Select Lesson" : "📝 Select Quiz";
+  const subfolder = isLesson ? "Lessons" : "Quiz";
+  const basePath = isLesson
+    ? `../Modular/${subfolder}/${folder}/lesson-`
+    : `../Levels/${subfolder}/${folder}/level-`;
+  select.innerHTML = "";
+  const placeholder = document.createElement("option");
+  placeholder.textContent = label;
+  placeholder.value = "";
+  select.appendChild(placeholder);
+  for (let i = 1; i <= count; i++) {
+    const option = document.createElement("option");
+    option.value = `${basePath}${i}.html`;
+    option.textContent = `${isLesson ? "Lesson" : "Level"} ${i}`;
+    select.appendChild(option);
+  }
+}
+
+["html","css","js"].forEach(lang => {
+  populateOptions(lang, 5, "Lessons", lang.toUpperCase());
+  populateOptions(lang, 5, "Quizzes", lang.toUpperCase());
+});
+
+/* =========================================================
+   Card navigation + panel setup (looping arrows)
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = Array.from(document.querySelectorAll(".language-card"));
+  const lessonContainer = document.querySelector(".lesson-container");
+  if (!lessonContainer || cards.length === 0) return;
+
+  // arrows (should exist in markup, but create if missing)
+  let left = lessonContainer.querySelector(".nav-arrow.left");
+  let right = lessonContainer.querySelector(".nav-arrow.right");
+  if (!left) {
+    left = document.createElement("button");
+    left.className = "nav-arrow left";
+    left.textContent = "◀";
+    lessonContainer.appendChild(left);
+  }
+  if (!right) {
+    right = document.createElement("button");
+    right.className = "nav-arrow right";
+    right.textContent = "▶";
+    lessonContainer.appendChild(right);
+  }
+
+  let idx = 0;
+  function setActive(i) {
+    idx = (i + cards.length) % cards.length;
+    cards.forEach((c, ii) => {
+      c.classList.toggle("active", ii === idx);
+      c.setAttribute("aria-hidden", ii === idx ? "false" : "true");
+    });
+  }
+  setActive(0);
+
+  left.onclick = () => setActive(idx - 1);
+  right.onclick = () => setActive(idx + 1);
+
+  // create backdrop if missing
+  let backdrop = document.getElementById("panelBackdrop");
+  if (!backdrop) {
+    backdrop = document.createElement("div");
+    backdrop.id = "panelBackdrop";
+    document.body.appendChild(backdrop);
+  }
+
+  // create panel if missing
+  let panel = document.querySelector(".language-panel");
+  if (!panel) {
+    panel = document.createElement("div");
+    panel.className = "language-panel";
+    panel.innerHTML = `
+      <div class="panel-title"><img src="" alt="icon"><span class="titleText"></span></div>
+      <div class="panel-content"></div>
+      <button class="panel-back">⬇ Back</button>
+    `;
+    document.body.appendChild(panel);
+  }
+
+  function getLangKeyFromCard(card) {
+    const data = (card.dataset && card.dataset.lang) ? card.dataset.lang.toLowerCase()
+               : (card.id || card.querySelector("p")?.textContent || "html").toLowerCase();
+    return data.replace(/\s+/g, "");
+  }
+
+  function openLanguagePanel(card) {
+    const langKey = getLangKeyFromCard(card);
+    const iconEl = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    const cardImg = card.querySelector("img");
+    iconEl.src = cardImg ? cardImg.src : "../Assets/Icons/html.png";
+    titleText.textContent = card.querySelector("p")?.textContent || langKey.toUpperCase();
+
+    const pc = panel.querySelector(".panel-content");
+    pc.innerHTML = `
+      <div class="lesson-dropdown">
+        <button class="lessons-btn">📖 Lessons ▾</button>
+        <div class="lesson-list"></div>
+      </div>
+
+      <div class="quiz-dropdown">
+        <button class="quiz-btn">📝 Quiz ▾</button>
+        <div class="quiz-list"></div>
+      </div>
+    `;
+
+    // LESSON LIST
+    const lessonList = pc.querySelector(".lesson-list");
+    const lessonSelect = document.getElementById(`${langKey}Lessons`);
+    lessonList.innerHTML = "";
+    if (lessonSelect && lessonSelect.options.length > 1) {
+      Array.from(lessonSelect.options).slice(1).forEach(opt => {
+        const b = document.createElement("button");
+        b.type = "button"; b.textContent = opt.textContent;
+        b.addEventListener("click", () => { if (opt.value) window.location.href = opt.value; });
+        lessonList.appendChild(b);
+      });
+    } else {
+      lessonList.innerHTML = '<button disabled>No lessons found</button>';
+    }
+    const lessonBtn = pc.querySelector(".lessons-btn");
+    lessonBtn.addEventListener("click", ev => { ev.stopPropagation(); lessonList.style.display = lessonList.style.display === "flex" ? "none" : "flex"; });
+
+    // QUIZ LIST
+    const quizList = pc.querySelector(".quiz-list");
+    const quizSelect = document.getElementById(`${langKey}Quizzes`);
+    quizList.innerHTML = "";
+    if (quizSelect && quizSelect.options.length > 1) {
+      Array.from(quizSelect.options).slice(1).forEach(opt => {
+        const b = document.createElement("button");
+        b.type = "button"; b.textContent = opt.textContent;
+        b.addEventListener("click", () => { if (opt.value) window.location.href = opt.value; });
+        quizList.appendChild(b);
+      });
+    } else {
+      quizList.innerHTML = '<button disabled>No quizzes found</button>';
+    }
+    const quizBtn = pc.querySelector(".quiz-btn");
+    quizBtn.addEventListener("click", ev => { ev.stopPropagation(); quizList.style.display = quizList.style.display === "flex" ? "none" : "flex"; });
+
+    // back
+    const backBtn = panel.querySelector(".panel-back");
+    backBtn.addEventListener("click", closeLanguagePanel);
+
+    // show backdrop + panel
+    backdrop.style.display = "block";
+    panel.style.display = "flex";
+    document.body.classList.add("blur-active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeLanguagePanel() {
+    panel.style.display = "none";
+    panel.classList.remove("opening");
+
+    // clear lists
+    panel.querySelectorAll(".quiz-list, .lesson-list").forEach(list => {
+      list.style.display = "none"; list.innerHTML = "";
+    });
+    const content = panel.querySelector(".panel-content");
+    if (content) content.innerHTML = "";
+    const titleImg = panel.querySelector(".panel-title img");
+    const titleText = panel.querySelector(".panel-title .titleText");
+    if (titleImg) titleImg.src = "";
+    if (titleText) titleText.textContent = "";
+    backdrop.style.display = "none";
+    document.body.classList.remove("blur-active");
+    document.body.style.overflow = "";
+  }
+
+  // prevent backdrop click from closing (safety)
+  backdrop.addEventListener("click", e => { e.stopPropagation(); e.preventDefault(); });
+
+  // attach click handlers to cards
+  cards.forEach((card, i) => {
+    card.addEventListener("click", () => {
+      if (!card.classList.contains("active")) {
+        setActive(i);
+        setTimeout(() => openLanguagePanel(card), 160);
+      } else {
+        openLanguagePanel(card);
+      }
+    });
+    card.addEventListener("keydown", ev => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault(); openLanguagePanel(card);
+      }
+    });
+  });
+});
+
+/* =========================================================
+   XP display helpers (smart formatting, tooltip, sizing)
+   ========================================================= */
+function formatNumberSmart(value) {
+  const abs = Math.abs(value);
+  const units = [
+    { v: 1e18, s: "T" }, { v: 1e15, s: "B" }, { v: 1e12, s: "M" },
+    { v: 1e9, s: "K" }
+  ];
+  for (const u of units) {
+    if (abs >= u.v) {
+      const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
+      return shortened.replace(/\.00$|\.0$/, "") + u.s;
+    }
+  }
+  return value.toString();
+}
+function formatNumberFull(value) { return value.toLocaleString("en-US"); }
+
+function adjustXPFont(xpValueElement, xpMax) {
+  if (!xpValueElement) return;
+  const len = xpMax.toString().length;
+  let newSize = 0.6;
+  if (len > 6 && len <= 9) newSize = 0.55;
+  else if (len > 9 && len <= 12) newSize = 0.5;
+  else if (len > 12 && len <= 18) newSize = 0.45;
+  else if (len > 18) newSize = 0.42;
+  xpValueElement.style.fontSize = `${newSize}rem`;
+  xpValueElement.style.transition = "font-size 0.3s ease";
+}
+
+let xpShortMode = true, tooltipTimeout = null;
+function updateXPDisplay(xp, xpMax) {
+  const xpValue = document.getElementById("xpValue");
+  if (!xpValue) return;
+  const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
+  const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
+  xpValue.textContent = xpShortMode ? shortForm : fullForm;
+  adjustXPFont(xpValue, xpMax);
+}
+
+// tooltip
+function showXPTooltip(fullXPText) {
+  let tooltip = document.getElementById("xpTooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.id = "xpTooltip";
+    Object.assign(tooltip.style, {
+      position: "fixed", padding: "6px 10px", borderRadius: "6px",
+      background: "rgba(0,0,0,0.8)", color: "#b8a454",
+      fontFamily: "'Press Start 2P', cursive", fontSize: "0.45rem",
+      zIndex: "9999", pointerEvents: "none", transition: "opacity 0.2s ease", opacity: "0"
+    });
+    document.body.appendChild(tooltip);
+  }
+  tooltip.textContent = fullXPText;
+  tooltip.style.opacity = "1";
+  document.addEventListener("mousemove", e => {
+    tooltip.style.left = e.pageX + 10 + "px";
+    tooltip.style.top = e.pageY - 20 + "px";
+  }, { once: false });
+}
+function hideXPTooltip() { const t = document.getElementById("xpTooltip"); if (t) t.style.opacity = "0"; }
+
+function toggleXPFormat() {
+  xpShortMode = !xpShortMode;
+  const xpBar = document.getElementById("xpBar");
+  const xp = parseFloat(xpBar?.value || 0);
+  const xpMax = parseFloat(xpBar?.max || 100);
+  updateXPDisplay(xp, xpMax);
+}
+
+/* attach xp UI events */
+document.addEventListener("DOMContentLoaded", () => {
+  const xpValue = document.getElementById("xpValue");
+  const xpBar = document.getElementById("xpBar");
+  if (!xpValue || !xpBar) return;
+  xpValue.addEventListener("click", toggleXPFormat);
+  xpBar.addEventListener("click", toggleXPFormat);
+
+  xpValue.addEventListener("touchstart", e => {
+    e.preventDefault();
+    tooltipTimeout = setTimeout(() => {
+      const xp = parseFloat(xpBar.value || 0), xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }, 400);
+  });
+  xpValue.addEventListener("touchend", () => { clearTimeout(tooltipTimeout); hideXPTooltip(); });
+
+  xpValue.addEventListener("mouseenter", () => {
+    if (xpShortMode) {
+      const xp = parseFloat(xpBar.value || 0), xpMax = parseFloat(xpBar.max || 100);
+      showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
+    }
+  });
+  xpValue.addEventListener("mouseleave", hideXPTooltip);
+});
+
+/* =========================================================
+   Firebase: initialize + onAuthStateChanged + xp listener
+   NOTE: uses modular firebase v10 import earlier in original file.
+   ========================================================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, onSnapshot, collection, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// paste your config (keeps the one you supplied earlier)
 const firebaseConfig = {
-apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-authDomain: "mindcraft-83f81.firebaseapp.com",
-projectId: "mindcraft-83f81",
-storageBucket: "mindcraft-83f81.firebasestorage.app",
-messagingSenderId: "483019456762",
-appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// smooth xp bar animation helper
 function animateXPBar(bar, startValue, endValue, duration = 600) {
-if (!bar) return;
-const startTime = performance.now();
-function update(currentTime) {
-const elapsed = currentTime - startTime;
-const progress = Math.min(elapsed / duration, 1);
-const currentValue = startValue + (endValue - startValue) * progress;
-bar.value = currentValue;
-if (progress < 1) requestAnimationFrame(update);
-}
-requestAnimationFrame(update);
+  if (!bar) return;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = startValue + (endValue - startValue) * progress;
+    bar.value = currentValue;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
 }
 
 let lastXP = 0;
 let lastLevel = 0;
 
-function formatNumberSmart(value) {
-const abs = Math.abs(value);
-const units = [
-{ v: 1e99, s: "Ce" }, { v: 1e96, s: "NoCe" }, { v: 1e93, s: "OcCe" },
-{ v: 1e90, s: "SeCe" }, { v: 1e87, s: "SxCe" }, { v: 1e84, s: "QiCe" },
-{ v: 1e81, s: "QdCe" }, { v: 1e78, s: "TrCe" }, { v: 1e75, s: "DuCe" },
-{ v: 1e72, s: "UnCe" }, { v: 1e69, s: "Vi" }, { v: 1e66, s: "Nv" },
-{ v: 1e63, s: "Oc" }, { v: 1e60, s: "Spt" }, { v: 1e57, s: "Sxd" },
-{ v: 1e54, s: "Qid" }, { v: 1e51, s: "Qad" }, { v: 1e48, s: "Td" },
-{ v: 1e45, s: "Dd" }, { v: 1e42, s: "Und" }, { v: 1e39, s: "Dc" },
-{ v: 1e36, s: "Nn" }, { v: 1e33, s: "Oc" }, { v: 1e30, s: "Sp" },
-{ v: 1e27, s: "Sx" }, { v: 1e24, s: "Qi" }, { v: 1e21, s: "Qd" },
-{ v: 1e18, s: "T" }, { v: 1e15, s: "B" }, { v: 1e12, s: "M" }, { v: 1e9, s: "K" }
-];
-for (const u of units) {
-if (abs >= u.v) {
-const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
-return shortened.replace(/\.00$|\.0$/, "") + u.s;
-}
-}
-return value.toString();
+function applyThemeToWelcomeOverlay() {
+  const overlay = document.getElementById("welcomeOverlay");
+  const theme = localStorage.getItem("theme") || "dark";
+  overlay.style.background = theme === "light"
+    ? "rgba(255,255,255,0.9)"
+    : "rgba(0,0,0,0.85)";
+  overlay.style.color = theme === "light" ? "#000" : "#b8a454";
 }
 
-function formatNumberFull(value) {
-return value.toLocaleString("en-US");
-}
-
-function adjustXPFont(xpValueElement, xpMax) {
-if (!xpValueElement) return;
-const len = xpMax.toString().length;
-let newSize = 0.6;
-if (len > 6 && len <= 9) newSize = 0.55;
-else if (len > 9 && len <= 12) newSize = 0.5;
-else if (len > 12 && len <= 18) newSize = 0.45;
-else if (len > 18 && len <= 25) newSize = 0.42;
-else if (len > 25 && len <= 35) newSize = 0.4;
-else if (len > 35 && len <= 50) newSize = 0.38;
-else if (len > 50 && len <= 65) newSize = 0.36;
-else if (len > 65) newSize = 0.34;
-xpValueElement.style.fontSize = `${newSize}rem`;
-xpValueElement.style.transition = "font-size 0.3s ease";
-}
-
-let xpShortMode = true;
-let tooltipTimeout = null;
-
-function updateXPDisplay(xp, xpMax) {
-const xpValue = document.getElementById("xpValue");
-if (!xpValue) return;
-const shortForm = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
-const fullForm = `${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`;
-xpValue.textContent = xpShortMode ? shortForm : fullForm;
-adjustXPFont(xpValue, xpMax);
-}
-
-function showXPTooltip(fullXPText) {
-let tooltip = document.getElementById("xpTooltip");
-if (!tooltip) {
-tooltip = document.createElement("div");
-tooltip.id = "xpTooltip";
-Object.assign(tooltip.style, {
-position: "fixed",
-padding: "6px 10px",
-borderRadius: "6px",
-background: "rgba(0,0,0,0.8)",
-color: "#b8a454",
-fontFamily: "'Press Start 2P', cursive",
-fontSize: "0.45rem",
-zIndex: "9999",
-pointerEvents: "none",
-transition: "opacity 0.2s ease",
-opacity: "0"
-});
-document.body.appendChild(tooltip);
-}
-tooltip.textContent = fullXPText;
-tooltip.style.opacity = "1";
-document.addEventListener("mousemove", e => {
-tooltip.style.left = e.pageX + 10 + "px";
-tooltip.style.top = e.pageY - 20 + "px";
-});
-}
-
-function hideXPTooltip() {
-const tooltip = document.getElementById("xpTooltip");
-if (tooltip) tooltip.style.opacity = "0";
-}
-
-function toggleXPFormat() {
-xpShortMode = !xpShortMode;
-const xpBar = document.getElementById("xpBar");
-const xp = parseFloat(xpBar?.value || 0);
-const xpMax = parseFloat(xpBar?.max || 100);
-updateXPDisplay(xp, xpMax);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-const xpValue = document.getElementById("xpValue");
-const xpBar = document.getElementById("xpBar");
-if (!xpValue || !xpBar) return;
-
-xpValue.addEventListener("click", toggleXPFormat);
-xpBar.addEventListener("click", toggleXPFormat);
-
-xpValue.addEventListener("touchstart", e => {
-e.preventDefault();
-tooltipTimeout = setTimeout(() => {
-const xp = parseFloat(xpBar.value || 0);
-const xpMax = parseFloat(xpBar.max || 100);
-showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
-}, 400);
-});
-
-xpValue.addEventListener("touchend", () => {
-clearTimeout(tooltipTimeout);
-hideXPTooltip();
-});
-
-xpValue.addEventListener("mouseenter", () => {
-if (xpShortMode) {
-const xp = parseFloat(xpBar.value || 0);
-const xpMax = parseFloat(xpBar.max || 100);
-showXPTooltip(`${formatNumberFull(xp)} / ${formatNumberFull(xpMax)}`);
-}
-});
-xpValue.addEventListener("mouseleave", hideXPTooltip);
-});
-
+/* Auth listener */
 onAuthStateChanged(auth, (user) => {
-if (!user) {
-alert("⚠️ Please sign in first!");
-window.location.href = "../Account/signin.html";
-return;
-}
+  if (!user) {
+    // not signed in -> go to signin
+    window.location.href = "../Account/signin.html";
+    return;
+  }
 
-const userRef = doc(db, "users", user.uid);
-onSnapshot(userRef, async (snap) => {
-if (!snap.exists()) {
-alert("⚠️ No user data found.");
-window.location.href = "../Account/signin.html";
-return;
-}
+  const userRef = doc(db, "users", user.uid);
+  onSnapshot(userRef, async (snap) => {
+    if (!snap.exists()) {
+      alert("⚠️ No user data found.");
+      window.location.href = "../Account/signin.html";
+      return;
+    }
+    const data = snap.data();
+    if (data.role && data.role !== "student") {
+      window.location.href = "Teacher.html";
+      return;
+    }
 
-const data = snap.data();
-if (data.role !== "student") {
-window.location.href = "Teacher.html";
-return;
-}
+    const xp = data.xp ?? 0;
+    const level = data.level ?? 1;
+    let xpMax = data.xpMax ?? Math.floor(100 * Math.pow(1.1, (level-1)));
+    // ensure xpMax consistent
+    const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
+    if (Math.abs(xpMax - expectedXpMax) > 5) {
+      xpMax = expectedXpMax;
+      try { await updateDoc(userRef, { xpMax }); } catch(e) { /* ignore update failure */ }
+    }
 
-const xp = data.xp ?? 0;
-const level = data.level ?? 1;
-let xpMax = data.xpMax ?? 100;
+    // update xp bar & UI
+    const xpBar = document.getElementById("xpBar");
+    const xpValue = document.getElementById("xpValue");
+    const levelValue = document.getElementById("levelValue");
+    if (xpBar) { xpBar.max = xpMax; animateXPBar(xpBar, lastXP, xp); lastXP = xp; }
+    updateXPDisplay(xp, xpMax);
+    if (levelValue) levelValue.textContent = level;
+    if (level > lastLevel && levelValue) {
+      levelValue.classList.add("level-up-glow");
+      setTimeout(() => levelValue.classList.remove("level-up-glow"), 1000);
+    }
+    lastLevel = level;
 
-const expectedXpMax = Math.floor(100 * Math.pow(1.1, level - 1));
-if (Math.abs(xpMax - expectedXpMax) > 5) {
-xpMax = expectedXpMax;
-try { await updateDoc(userRef, { xpMax }); }
-catch { alert("⚠️ Unable to update xpMax."); }
-}
+    // name on overlay
+    const name = user.displayName || data.name || user.email.split("@")[0];
+    document.getElementById("studentName").textContent = name;
 
-const xpBar = document.getElementById("xpBar");
-const xpValue = document.getElementById("xpValue");
-const levelValue = document.getElementById("levelValue");
-xpBar.max = xpMax;
-animateXPBar(xpBar, lastXP, xp);
-lastXP = xp;
+    // welcome overlay
+    applyThemeToWelcomeOverlay();
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    if (!sessionStorage.getItem("welcomeShown")) {
+      sessionStorage.setItem("welcomeShown", "true");
+      welcomeOverlay.style.display = "flex";
+      setTimeout(() => {
+        welcomeOverlay.classList.add("fade-out");
+        setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
+      }, 3000);
+    }
 
-updateXPDisplay(xp, xpMax);
-levelValue.textContent = level;
-
-if (level > lastLevel) {
-levelValue.classList.add("level-up-glow");
-setTimeout(() => levelValue.classList.remove("level-up-glow"), 1000);
-}
-lastLevel = level;
-
-const name = user.displayName || data.name || user.email.split("@")[0];
-document.getElementById("studentName").textContent = name;
-const welcomeOverlay = document.getElementById("welcomeOverlay");
-if (!sessionStorage.getItem("welcomeShown")) {
-sessionStorage.setItem("welcomeShown", "true");
-welcomeOverlay.style.display = "flex";
-setTimeout(() => {
-welcomeOverlay.classList.add("fade-out");
-setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
-}, 3000);
-}
-
-const rankDisplay = document.getElementById("rankDisplay");
-const usersRef = collection(db, "users");
-const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-onSnapshot(q, (snapshot) => {
-let rank = 1, found = false;
-snapshot.forEach((docSnap) => {
-if (docSnap.id === user.uid && !found) { found = true; return; }
-if (!found) rank++;
-});
-rankDisplay.textContent = `Rank: #${rank}`;
-if (rank <= 3) rankDisplay.classList.add("rank-top");
-else rankDisplay.classList.remove("rank-top");
-});
-});
+    // rank calculation
+    const rankDisplay = document.getElementById("rankDisplay");
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, orderBy("level", "desc"), orderBy("xp", "desc"));
+    onSnapshot(q, (snapshot) => {
+      let rank = 1, found = false;
+      snapshot.forEach((docSnap) => {
+        if (!found && docSnap.id === user.uid) found = true;
+        else if (!found) rank++;
+      });
+      if (rankDisplay) { rankDisplay.textContent = `Rank: #${rank}`; if (rank <= 3) rankDisplay.classList.add("rank-top"); else rankDisplay.classList.remove("rank-top"); }
+    });
+  });
 });
 </script>
+
 </body>
 </html>
