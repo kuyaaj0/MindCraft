@@ -17,7 +17,7 @@ html, body { width: 100%; height: 100%; }
 /* ===== BODY / BACKGROUND ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  background: linear-gradient(#a0c4ff, #d4edc4); /* softer sky to grass */
+  background: linear-gradient(#8ea9d6, #c2d7ae); /* less neon */
   color: #3b2a15;
   min-height: 100vh;
   display: flex;
@@ -35,9 +35,9 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0;
-  background: #7a4f2f; /* muted earthy brown */
-  border-bottom: 3px solid #5c3a1a;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
+  background: #6e4b32; /* grayer brown */
+  border-bottom: 3px solid #4d3622;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.15), 0 2px 0 #3b2a15;
 }
 
 .xp-group {
@@ -55,7 +55,7 @@ header {
   min-width: 60px;
   text-align: right;
   font-size: 0.6rem;
-  color: #b8a454; /* softer gold */
+  color: #d2c18a; /* duller gold */
   font-weight: bold;
   text-shadow: 1px 1px #3b2a15;
 }
@@ -63,35 +63,35 @@ header {
 /* ===== BUTTONS ===== */
 button {
   font-family: 'Press Start 2P', cursive;
-  background: #d9b16c; /* muted yellow/gold */
+  background: #c7a366; /* softer brownish yellow */
   color: #3b2a15;
-  border: 3px solid #a97c4b;
+  border: 2px solid #947249;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  box-shadow: 0 2px 0 #83633f, 0 3px 0 #3b2a15;
   transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 button:hover {
   transform: translateY(-2px);
-  background: #e5c890; /* softer hover */
-  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
+  background: #d5b57a;
+  box-shadow: 0 3px 0 #83633f, 0 4px 0 #3b2a15;
 }
 
 button:active {
   transform: translateY(1px);
-  background: #cfa356;
-  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
+  background: #b58c54;
+  box-shadow: 0 1px 0 #83633f, 0 2px 0 #3b2a15;
 }
 
 /* ===== RANK DISPLAY ===== */
 #rankDisplay {
-  background: #e3d5a2;
-  border: 2px solid #ddd3b2;
+  background: #d9cfb0;
+  border: 2px solid #c7bfa3;
   color: #3b2a15;
   padding: 6px 10px;
   border-radius: 6px;
@@ -114,12 +114,12 @@ main {
   position: relative;
   text-align: center;
   padding: 20px;
-  background: #d4e0c7; /* muted grass block */
-  border: 3px solid #5c915c;
+  background: #d0dbc2; /* softer, less green */
+  border: 2px solid #4e7a4e;
   border-radius: 12px;
   max-width: 600px;
   margin: 20px auto;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #5c915c;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.1), 0 6px 0 #4e7a4e;
   transition: all 0.3s ease;
 }
 
@@ -129,8 +129,8 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: #c3d8b5;
-  border: 2px solid #4a7d4a;
+  background: #c6d2b9;
+  border: 2px solid #4b6f4b;
   border-radius: 12px;
   padding: 20px;
   width: 240px;
@@ -145,7 +145,7 @@ main {
   display: flex;
   opacity: 1;
   transform: translateX(0) scale(1.03);
-  border-color: #3e763e;
+  border-color: #3f6640;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
@@ -157,15 +157,15 @@ main {
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  background: #d9b16c;
-  border: 2px solid #a97c4b;
+  background: #c7a366;
+  border: 2px solid #947249;
   color: #3b2a15;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 8px;
   cursor: pointer;
-  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  box-shadow: 0 2px 0 #83633f, 0 3px 0 #3b2a15;
   transition: all 0.1s ease;
   z-index: 50;
 }
@@ -174,15 +174,15 @@ main {
 .nav-arrow.right { right: -45px; }
 
 .nav-arrow:hover {
-  transform: translateY(-2px);
-  background: #e5c890;
-  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
+  transform: translateY(-50%) translateY(-2px);
+  background: #d5b57a;
+  box-shadow: 0 3px 0 #83633f, 0 4px 0 #3b2a15;
 }
 
 .nav-arrow:active {
-  transform: translateY(1px);
-  background: #cfa356;
-  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
+  transform: translateY(-50%) translateY(1px);
+  background: #b58c54;
+  box-shadow: 0 1px 0 #83633f, 0 2px 0 #3b2a15;
 }
 
 /* ===== LANGUAGE PANEL ===== */
@@ -191,13 +191,13 @@ main {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #d4e0c7;
-  border: 3px solid #5c915c;
+  background: #d0dbc2;
+  border: 2px solid #4e7a4e;
   border-radius: 12px;
   padding: 25px;
   width: 90%;
   max-width: 520px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
   display: none;
   flex-direction: column;
   align-items: center;
@@ -207,30 +207,30 @@ main {
 
 .language-panel .panel-title .titleText {
   font-size: 8px;
-  color: #3e763e;
+  color: #3f6640;
   text-align: center;
 }
 
 /* ===== DROPDOWNS ===== */
 .quiz-list,
 .lesson-list {
-  background: #d4e0c7;
+  background: #d0dbc2;
   border-radius: 8px;
-  border: 2px solid #5c915c;
+  border: 2px solid #4e7a4e;
   padding: 6px;
 }
 
 .quiz-list button:hover,
 .lesson-list button:hover {
-  background: #c3d8b5;
+  background: #c6d2b9;
 }
 
 /* ===== FOOTER ===== */
 footer {
   margin-top: auto;
-  background: #7a4f2f;
-  border-top: 3px solid #5c3a1a;
-  color: #3b2a15;
+  background: #6e4b32;
+  border-top: 3px solid #4d3622;
+  color: #f1e6d4;
   text-align: center;
   padding: 6px 0;
   font-size: 8px;
@@ -325,6 +325,7 @@ footer {
 <footer>
   <p>© 2025 MindCraft | Created by Group 3</p>
 </footer>
+  
 <script src="../Design/theme.js"></script>
 <script>window.useFirestoreXP = true;</script>
 <script src="../Exp/levels.js"></script>
