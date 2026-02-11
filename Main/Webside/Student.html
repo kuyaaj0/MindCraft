@@ -14,8 +14,10 @@
 
 <style>
 /* =========================
-   Complete merged CSS
-   (teammate 'new' visual + missing pieces from original)
+   Cleaned & Updated CSS
+   - Based on teammate design
+   - Removed neon green
+   - Minor design tweaks for modern, smooth look
    ========================= */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 100%; height: 100%; }
@@ -23,7 +25,7 @@ html, body { width: 100%; height: 100%; }
 /* ===== BODY / BACKGROUND ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  background: linear-gradient(#a0c4ff, #d4edc4); /* softer sky to grass */
+  background: linear-gradient(160deg, #a0c4ff 0%, #d4edc4 100%);
   color: #3b2a15;
   min-height: 100vh;
   display: flex;
@@ -42,9 +44,9 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0;
-  background: #7a4f2f;
-  border-bottom: 3px solid #5c3a1a;
-  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
+  background: #836047;
+  border-bottom: 2px solid #5c3a15;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.1), 0 3px 0 #3b2a15;
 }
 
 .xp-group {
@@ -90,12 +92,13 @@ header {
 }
 
 #xpBar {
-  width: 80px; height: 10px;
-  -webkit-appearance: none;
+  width: 100px;
+  height: 12px;
   appearance: none;
   background: #3b2a15;
   border: 2px solid #b8a454;
-  border-radius: 6px;
+  border-radius: 8px;
+  transition: width 0.4s ease;
 }
 
 /* level display */
@@ -127,14 +130,14 @@ button {
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  box-shadow: 0 2px 0 #a97c4b, 0 3px 0 #3b2a15;
   transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
 button:hover {
   transform: translateY(-2px);
   background: #e5c890;
-  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
+  box-shadow: 0 4px 0 #a97c4b, 0 5px 0 #3b2a15;
 }
 
 button:active {
@@ -210,20 +213,20 @@ main h1 {
   background: #c3d8b5;
   border: 2px solid #4a7d4a;
   border-radius: 12px;
-  padding: 20px;
+  padding: 22px;
   width: 240px;
   box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
   opacity: 0;
   transform: translateX(30px);
-  transition: all 0.5s ease;
+  transition: all 0.35s ease, transform 0.35s ease;
   cursor: pointer;
 }
 .language-card.active {
   display: flex;
   opacity: 1;
-  transform: translateX(0) scale(1.03);
+  transform: translateX(0) scale(1.05);
   border-color: #3e763e;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.25);
   animation: fadeSlideIn 0.4s ease;
 }
 .language-card img { width: 70px; height: 70px; }
@@ -234,24 +237,24 @@ main h1 {
   100% { opacity: 1; transform: translateX(0); }
 }
 
-/* ===== NAV ARROWS (outside panel) ===== */
+/* ===== NAV ARROWS ===== */
 .nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: #d9b16c;
   border: 2px solid #a97c4b;
   color: #3b2a15;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 8px;
+  font-size: 0.55rem;
   cursor: pointer;
   box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
-  transition: all 0.1s ease;
+  transition: all 0.15s ease;
   z-index: 50;
 }
 .nav-arrow.left { left: -45px; }
@@ -260,13 +263,12 @@ main h1 {
 .nav-arrow:hover { transform: translateY(-2px); background: #e5c890; box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15; }
 .nav-arrow:active { transform: translateY(1px); background: #cfa356; box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15; }
 
-/* ===== BACKDROP for panel (blur + dark overlay) ===== */
+/* ===== PANEL BACKDROP ===== */
 #panelBackdrop {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   background: rgba(0,0,0,0.3);
   z-index: 998;
   display: none;
@@ -274,11 +276,9 @@ main h1 {
   animation: fadeBackdrop 0.25s ease;
 }
 @keyframes fadeBackdrop { from { opacity: 0 } to { opacity: 1 } }
-
-/* disable clicks when blur-active */
 .blur-active header, .blur-active main, .blur-active footer { pointer-events: none; user-select: none; }
 
-/* ===== LANGUAGE PANEL (content when card clicked) ===== */
+/* ===== LANGUAGE PANEL ===== */
 .language-panel {
   position: fixed;
   top: 50%;
@@ -321,7 +321,6 @@ main h1 {
 }
 .lessons-btn:hover, .quiz-btn:hover { background:#e5c890; transform: translateY(-2px); }
 
-/* drop lists inside panel */
 .quiz-list, .lesson-list {
   position: absolute;
   top: 120%;
@@ -344,7 +343,6 @@ main h1 {
 }
 .quiz-list button:hover, .lesson-list button:hover { background:#c3d8b5; }
 
-/* panel back button */
 .language-panel .panel-back {
   margin-top: 18px;
   background: #d9b16c;
@@ -358,12 +356,12 @@ main h1 {
   box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
 }
 
-/* ===== WELCOME OVERLAY (center message) ===== */
+/* ===== WELCOME OVERLAY ===== */
 #welcomeOverlay {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
   display: none; justify-content: center; align-items: center;
-  background: rgba(0,0,0,0.85);
+  background: rgba(0,0,0,0.75);
   color: #b8a454;
   font-family: 'Press Start 2P', cursive;
   font-size: 0.7rem;
@@ -373,7 +371,7 @@ main h1 {
   animation: welcomeFadeIn 0.4s ease forwards;
 }
 #welcomeOverlay p {
-  margin: 0; padding: 10px 20px; background: rgba(0,0,0,0.6);
+  margin: 0; padding: 12px 24px; background: rgba(0,0,0,0.55);
   border: 2px solid #b8a454; border-radius: 10px; box-shadow: 0 0 20px #b8a45455; opacity: 0;
   animation: textFadeIn 0.6s ease forwards 0.1s;
 }
@@ -382,20 +380,18 @@ main h1 {
 @keyframes welcomeFadeOut { from { opacity: 1; transform: scale(1) } to { opacity: 0; transform: scale(0.95) } }
 #welcomeOverlay.fade-out { animation: welcomeFadeOut 0.6s ease forwards; }
 
-/* ===== RESPONSIVE tweaks for mobile (portrait ~300-400, landscape ~600) ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 400px) {
   .nav-arrow { width: 28px; height: 28px; font-size: 7px; }
   .nav-arrow.left { left: -35px; }
   .nav-arrow.right { right: -35px; }
   #xpValue { font-size: 0.45rem; max-width: 100px; }
 }
-
 @media (min-width: 401px) and (max-width: 600px) {
   .nav-arrow { font-size: 0.4rem; padding: 5px 7px; }
   .nav-arrow.left { left: -20px; }
   .nav-arrow.right { right: -20px; }
 }
-
 @media (min-width: 601px) and (max-width: 900px) {
   .nav-arrow { font-size: 0.45rem; padding: 6px 8px; }
   .nav-arrow.left { left: -30px; }
