@@ -6,332 +6,325 @@
 <title>MindCraft | Code Lessons</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../Design/Position.css">
+<link rel="stylesheet" href="../Design/level.css">
+<link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
 
-/* WORLD BACKGROUND */
-body{
-  font-family:'Press Start 2P',cursive;
-  background:linear-gradient(#87e4ff,#c8f7b0);
-  padding:20px;
-  overflow:hidden;
-  font-size:10px;
-}
-
-/* MAIN APP LAYOUT (like reference) */
-.app{
-  max-width:1200px;
-  margin:0 auto;
-  height:calc(100vh - 40px);
-  background:linear-gradient(#8fe9ff 55%, #7dd37d);
-  border-radius:24px;
-  box-shadow:0 30px 70px rgba(0,0,0,.45);
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:18px;
-  padding:18px;
+/* ===== BODY / BACKGROUND ===== */
+body {
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(#a0c4ff, #d4edc4); /* softer sky to grass */
+  color: #3b2a15;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  padding: 20px;
+  font-size: 10px;
 }
 
-/* SIDEBAR (XP + nav moved here) */
-.sidebar{
-  background:#8b5a2b;
-  border-radius:18px;
-  padding:18px;
-  box-shadow:inset -6px -6px 0 rgba(0,0,0,.25),0 8px 0 #5c3a1a;
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-.brand h1{
-  font-size:14px;
-  text-align:center;
-  text-shadow:2px 2px #000;
-}
-.brand p{
-  font-size:8px;
-  text-align:center;
-  opacity:.9;
-  margin-top:6px;
+/* ===== HEADER ===== */
+header {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 0;
+  background: #7a4f2f; /* muted earthy brown */
+  border-bottom: 3px solid #5c3a1a;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
 }
 
-/* SIMPLE XP GROUP INSIDE SIDEBAR */
-.xp-group{
-  font-size:8px;
-  margin-top:12px;
-}
-#xpValue{
-  font-size:8px;
-}
-
-/* SMALL NAV BUTTONS IN SIDEBAR */
-.user-actions{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-top:16px;
-}
-.user-actions button{
-  font-family:'Press Start 2P',cursive;
-  background:#ffcc4d;
-  color:#3b2a15;
-  border:3px solid #e09c2b;
-  padding:6px 8px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  box-shadow:0 3px 0 #b5741b,0 4px 0 #3b2a15;
-  transition:transform .1s,box-shadow .1s,background .1s;
-}
-.user-actions button:hover{
-  transform:translateY(-2px);
-  background:#ffe38a;
-  box-shadow:0 5px 0 #b5741b,0 6px 0 #3b2a15;
-}
-.user-actions button:active{
-  transform:translateY(1px);
-  background:#f5b93a;
-  box-shadow:0 1px 0 #b5741b,0 2px 0 #3b2a15;
+.xp-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 5px;
+  padding: 0 10px;
 }
 
-/* MAIN CONTENT */
-.content{
-  background:#e8f4ff;
-  border-radius:18px;
-  padding:16px;
-  box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 8px 0 #6fa8dc;
-  display:flex;
-  flex-direction:column;
+#xpValue {
+  display: inline-block;
+  min-width: 60px;
+  text-align: right;
+  font-size: 0.6rem;
+  color: #b8a454; /* softer gold */
+  font-weight: bold;
+  text-shadow: 1px 1px #3b2a15;
 }
 
-/* CONTENT HEADER TEXT ONLY */
-.content-head{
-  margin-bottom:14px;
-  text-align:center;
-}
-.content-head h1{
-  font-size:12px;
-  text-shadow:2px 2px #fff;
-}
-
-/* PANEL WRAP */
-.panel-wrap{
-  flex:1;
-  position:relative;
-}
-
-/* LESSON CONTAINER -> PANEL STYLE */
-.lesson-container{
-  position:absolute;
-  inset:0;
-  padding:16px;
-  overflow:auto;
+/* ===== BUTTONS ===== */
+button {
+  font-family: 'Press Start 2P', cursive;
+  background: #d9b16c; /* muted yellow/gold */
+  color: #3b2a15;
+  border: 3px solid #a97c4b;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
-/* LANGUAGE CARDS AREA */
-.language-strip{
-  margin-top:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-}
-.language-card{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  background:#c3d8b5;
-  border:2px solid #4a7d4a;
-  border-radius:12px;
-  padding:16px;
-  width:140px;
-  box-shadow:1px 1px 4px rgba(0,0,0,.2);
-  cursor:pointer;
-  opacity:0.7;
-  transform:translateX(0);
-  transition:all .3s ease;
-}
-.language-card img{
-  width:64px;
-  height:64px;
-  margin-bottom:8px;
-}
-.language-card p{
-  font-size:9px;
-}
-.language-card.active{
-  opacity:1;
-  transform:translateY(-4px) scale(1.03);
-  border-color:#3e763e;
-  box-shadow:2px 2px 6px rgba(0,0,0,.25);
+button:hover {
+  transform: translateY(-2px);
+  background: #e5c890; /* softer hover */
+  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
 }
 
-/* NAV ARROWS (same logic, pixel look) */
-.nav-arrow{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  background:#ffcc4d;
-  border:3px solid #e09c2b;
-  color:#3b2a15;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:10px;
-  cursor:pointer;
-  box-shadow:0 3px 0 #b5741b,0 4px 0 #3b2a15;
-  transition:transform .1s,box-shadow .1s,background .1s;
-}
-.nav-arrow:hover{
-  transform:translateY(-2px);
-  background:#ffe38a;
-  box-shadow:0 5px 0 #b5741b,0 6px 0 #3b2a15;
-}
-.nav-arrow:active{
-  transform:translateY(1px);
-  background:#f5b93a;
-  box-shadow:0 1px 0 #b5741b,0 2px 0 #3b2a15;
+button:active {
+  transform: translateY(1px);
+  background: #cfa356;
+  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
 }
 
-/* OPTIONS (reuse) */
-.option-buttons{
-  margin-top:20px;
-  display:flex;
-  justify-content:center;
-  gap:12px;
-}
-.quiz-dropdown{
-  position:relative;
-}
-.quiz-list{
-  background:#d4e0c7;
-  border-radius:8px;
-  border:2px solid #5c915c;
-  padding:6px;
+/* ===== RANK DISPLAY ===== */
+#rankDisplay {
+  background: #e3d5a2;
+  border: 2px solid #ddd3b2;
+  color: #3b2a15;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 8px;
+  text-align: center;
 }
 
-/* REUSE ORIGINAL BUTTON STYLE FOR THESE */
-button{
-  font-family:'Press Start 2P',cursive;
-  background:#d9b16c;
-  color:#3b2a15;
-  border:3px solid #a97c4b;
-  padding:6px 10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  box-shadow:0 3px 0 #a97c4b,0 4px 0 #3b2a15;
-  transition:transform .1s,box-shadow .1s,background .1s;
-}
-button:hover{
-  transform:translateY(-2px);
-  background:#e5c890;
-  box-shadow:0 5px 0 #a97c4b,0 6px 0 #3b2a15;
-}
-button:active{
-  transform:translateY(1px);
-  background:#cfa356;
-  box-shadow:0 1px 0 #a97c4b,0 2px 0 #3b2a15;
+/* ===== MAIN CONTENT ===== */
+main {
+  text-align: center;
+  padding: 30px 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .app{
-    grid-template-columns:1fr;
-    grid-template-rows:auto 1fr;
-  }
-  body{
-    overflow:auto;
-  }
+/* ===== LESSON CONTAINER ===== */
+.lesson-container {
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  background: #d4e0c7; /* muted grass block */
+  border: 3px solid #5c915c;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #5c915c;
+  transition: all 0.3s ease;
+}
+
+/* ===== LANGUAGE CARDS ===== */
+.language-card {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #c3d8b5;
+  border: 2px solid #4a7d4a;
+  border-radius: 12px;
+  padding: 20px;
+  width: 240px;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+
+.language-card.active {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0) scale(1.03);
+  border-color: #3e763e;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* ===== NAV ARROWS ===== */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #d9b16c;
+  border: 2px solid #a97c4b;
+  color: #3b2a15;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 8px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #a97c4b, 0 4px 0 #3b2a15;
+  transition: all 0.1s ease;
+  z-index: 50;
+}
+
+.nav-arrow.left { left: -45px; }
+.nav-arrow.right { right: -45px; }
+
+.nav-arrow:hover {
+  transform: translateY(-2px);
+  background: #e5c890;
+  box-shadow: 0 5px 0 #a97c4b, 0 6px 0 #3b2a15;
+}
+
+.nav-arrow:active {
+  transform: translateY(1px);
+  background: #cfa356;
+  box-shadow: 0 1px 0 #a97c4b, 0 2px 0 #3b2a15;
+}
+
+/* ===== LANGUAGE PANEL ===== */
+.language-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #d4e0c7;
+  border: 3px solid #5c915c;
+  border-radius: 12px;
+  padding: 25px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.language-panel .panel-title .titleText {
+  font-size: 8px;
+  color: #3e763e;
+  text-align: center;
+}
+
+/* ===== DROPDOWNS ===== */
+.quiz-list,
+.lesson-list {
+  background: #d4e0c7;
+  border-radius: 8px;
+  border: 2px solid #5c915c;
+  padding: 6px;
+}
+
+.quiz-list button:hover,
+.lesson-list button:hover {
+  background: #c3d8b5;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  margin-top: auto;
+  background: #7a4f2f;
+  border-top: 3px solid #5c3a1a;
+  color: #3b2a15;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), 0 2px 0 #3b2a15;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  .nav-arrow.left { left: -35px; }
+  .nav-arrow.right { right: -35px; }
+}
+
+@media (max-width: 400px) {
+  .nav-arrow { width: 28px; height: 28px; font-size: 7px; }
 }
 </style>
 </head>
 <body>
 
-<div class="app">
-  <!-- SIDEBAR: XP + NAV -->
-  <aside class="sidebar">
-    <div>
-      <div class="brand">
-        <h1>🧠 MindCraft</h1>
-        <p>Code Language Select</p>
-      </div>
-
-      <div class="xp-group">
-        <div>XP: <span id="xpValue">0</span></div>
-        <div>Level <span id="levelValue">1</span></div>
-      </div>
-
-      <div class="user-actions">
-        <button onclick="location.href='../Account/account.html'">👤 Account</button>
-        <button id="leaderboardBtn">🏆 Leaderboard</button>
-        <button id="rankDisplay">Rank: #--</button>
-        <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-      </div>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT: SAME FUNCTIONALITY -->
-  <main class="content">
-    <div class="content-head">
-      <h1>CHOOSE A CODE LANGUAGE</h1>
-    </div>
-
-    <div class="panel-wrap">
-      <div class="lesson-container">
-        <div class="language-strip">
-          <button class="nav-arrow left" id="prevLang">⬅</button>
-
-          <div id="languageView">
-            <div class="language-card active" data-lang="HTML">
-              <img src="../Assets/Icons/html.png" alt="HTML">
-              <p>HTML</p>
-            </div>
-
-            <div class="language-card" data-lang="CSS">
-              <img src="../Assets/Icons/css.png" alt="CSS">
-              <p>CSS</p>
-            </div>
-
-            <div class="language-card" data-lang="JS">
-              <img src="../Assets/Icons/js.png" alt="JavaScript">
-              <p>JavaScript</p>
-            </div>
-          </div>
-
-          <button class="nav-arrow right" id="nextLang">➡</button>
-        </div>
-
-        <div id="lessonQuizOptions" style="display:none;" class="option-buttons">
-          <button id="lessonBtn">📖 Lessons</button>
-          <div class="quiz-dropdown">
-            <button id="quizBtn">📝 Quiz ▾</button>
-            <div class="quiz-list" id="quizList"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+<!-- ✅ Welcome Popup -->
+<div id="welcomeOverlay" style="display:none;">
+  <p>🎉 Welcome, <span id="studentName">Student</span>!</p>
 </div>
 
-<!-- Hidden selects (unchanged) -->
-<select id="htmlLessons" style="display:none;"></select>
-<select id="htmlQuizzes" style="display:none;"></select>
-<select id="cssLessons" style="display:none;"></select>
-<select id="cssQuizzes" style="display:none;"></select>
-<select id="jsLessons" style="display:none;"></select>
-<select id="jsQuizzes" style="display:none;"></select>>
+<header>
+  <div class="xp-group">
+    <div class="xp-status">
+      <span>XP:</span>
+      <div class="xp-bar-container">
+        <progress id="xpBar" value="0" max="100"></progress>
+        <span id="xpValue">0</span>
+      </div>
+    </div>
+    <div class="level-display">
+      Level <span id="levelValue">1</span>
+    </div>
+  </div>
+
+  <div class="user-actions">
+    <button onclick="location.href='../Account/account.html'">👤 Account</button>
+    <button id="leaderboardBtn">🏆 Leaderboard</button>
+    <button id="rankDisplay">Rank: #--</button>
+    <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
+  </div>
+</header>
+
+<main>
+  <h1>CHOOSE A CODE LANGUAGE</h1>
+
+  <div class="lesson-container">
+    <button class="nav-arrow left" id="prevLang">⬅</button>
+    <button class="nav-arrow right" id="nextLang">➡</button>
+    <button id="backBtn" style="display:none;" class="back-btn">⬅ BACK</button>
+
+    <div id="languageView">
+      <div class="language-card active" data-lang="HTML">
+        <img src="../Assets/Icons/html.png" alt="HTML">
+        <p>HTML</p>
+      </div>
+
+      <div class="language-card" data-lang="CSS">
+        <img src="../Assets/Icons/css.png" alt="CSS">
+        <p>CSS</p>
+      </div>
+
+      <div class="language-card" data-lang="JS">
+        <img src="../Assets/Icons/js.png" alt="JavaScript">
+        <p>JavaScript</p>
+      </div>
+    </div>
+
+    <!-- ✅ Options panel -->
+    <div id="lessonQuizOptions" style="display:none;" class="option-buttons">
+      <button id="lessonBtn">📖 Lessons</button>
+
+      <div class="quiz-dropdown">
+        <button id="quizBtn">📝 Quiz ▾</button>
+        <div class="quiz-list" id="quizList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Hidden selects for internal data -->
+  <select id="htmlLessons" style="display:none;"></select>
+  <select id="htmlQuizzes" style="display:none;"></select>
+  <select id="cssLessons" style="display:none;"></select>
+  <select id="cssQuizzes" style="display:none;"></select>
+  <select id="jsLessons" style="display:none;"></select>
+  <select id="jsQuizzes" style="display:none;"></select>
+</main>
+
 <footer>
   <p>© 2025 MindCraft | Created by Group 3</p>
 </footer>
- 
 <script src="../Design/theme.js"></script>
 <script>window.useFirestoreXP = true;</script>
 <script src="../Exp/levels.js"></script>
