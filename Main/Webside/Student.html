@@ -11,24 +11,23 @@
 <link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
-* { box-sizing: border-box; }
-html, body {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; }
 
+/* ===== BODY / BACKGROUND ===== */
 body {
   font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  transition: background 1s, color 1s;
+  background: linear-gradient(#87e4ff, #c8f7b0); /* sky to grass */
+  color: #3b2a15;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  padding: 20px;
+  font-size: 10px;
 }
 
-/* ===== Header ===== */
+/* ===== HEADER ===== */
 header {
   width: 100vw;
   display: flex;
@@ -36,8 +35,9 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: 2px solid #1DB954;
+  background: #8b5a2b; /* earthy brown */
+  border-bottom: 3px solid #5c3a1a;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), 0 3px 0 #3b2a15;
 }
 
 .xp-group {
@@ -50,118 +50,56 @@ header {
   padding: 0 10px;
 }
 
-.xp-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.xp-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  min-width: 120px;
-}
-
 #xpValue {
   display: inline-block;
   min-width: 60px;
   text-align: right;
   font-size: 0.6rem;
-  line-height: 1;
-  color: #fff;
-  transition: font-size 0.25s ease, transform 0.25s ease;
-  word-break: keep-all;
-  max-width: 130px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
+  color: #ffd966;
+  font-weight: bold;
+  text-shadow: 1px 1px #3b2a15;
 }
 
-/* Shrinks when big numbers appear */
-@media (max-width: 480px) {
-  #xpValue {
-    font-size: 0.45rem;
-    max-width: 100px;
-  }
-}
-
-/* Tooltip styling for hover/long-press display */
-#xpTooltip {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.85);
-  color: #1DB954;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.45rem;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 9999;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  transform: scale(0.9);
-}
-
-#xpTooltip.show {
-  opacity: 1;
-  transform: scale(1);
-}
-
-#xpBar {
-  width: 80px;
-  height: 10px;
-}
-
-.level-display {
-  font-size: 0.6rem;
-  text-align: center;
-}
-
-.user-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 5px;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-}
-
+/* ===== BUTTONS ===== */
 button {
   font-family: 'Press Start 2P', cursive;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
+  background: #ffcc4d;
+  color: #3b2a15;
+  border: 3px solid #e09c2b;
   padding: 6px 10px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 0.5rem;
-  transition: all 0.3s ease;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 0 #b5741b, 0 4px 0 #3b2a15;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
-button:hover { background: #1ed760; transform: scale(1.05); }
 
-/* === Rank Display Button Glow === */
+button:hover {
+  transform: translateY(-2px);
+  background: #ffe38a;
+  box-shadow: 0 5px 0 #b5741b, 0 6px 0 #3b2a15;
+}
+
+button:active {
+  transform: translateY(1px);
+  background: #f5b93a;
+  box-shadow: 0 1px 0 #b5741b, 0 2px 0 #3b2a15;
+}
+
+/* ===== RANK DISPLAY ===== */
 #rankDisplay {
-  font-family: 'Press Start 2P', cursive;
-  background: none;
-  border: 2px solid #fff;
-  color: #fff;
+  background: #ffe89c;
+  border: 2px solid #fff7c9;
+  color: #3b2a15;
   padding: 6px 10px;
   border-radius: 6px;
-  cursor: default;
-  font-size: 0.5rem;
+  font-size: 8px;
   text-align: center;
-  min-width: 60px;
-}
-.rank-top {
-  animation: glowPulse 1.7s infinite alternate;
-}
-@keyframes glowPulse {
-  0% { box-shadow: 0 0 5px #fff; }
-  50% { box-shadow: 0 0 12px #fff; }
-  100% { box-shadow: 0 0 5px #fff; }
 }
 
-/* === Main Content === */
+/* ===== MAIN CONTENT ===== */
 main {
   text-align: center;
   padding: 30px 20px;
@@ -171,431 +109,146 @@ main {
   align-items: center;
 }
 
-/* === Lesson Container === */
+/* ===== LESSON CONTAINER ===== */
 .lesson-container {
   position: relative;
   text-align: center;
   padding: 20px;
-  background: rgba(0,0,0,0.45);
-  border: 1px solid rgba(29,185,84,0.4);
+  background: #d9ead3; /* light grass block */
+  border: 3px solid #6aa84f;
   border-radius: 12px;
   max-width: 600px;
   margin: 20px auto;
-  box-shadow: 0 0 15px rgba(29,185,84,0.25);
-  overflow: visible;
-  z-index: 10;
+  box-shadow: inset -3px -3px 0 rgba(0,0,0,0.15), 0 8px 0 #6aa84f;
   transition: all 0.3s ease;
 }
 
-/* === Language View (Card Selector) === */
-#languageView {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.4s ease, opacity 0.4s ease;
-  position: relative;
-  min-height: 200px;
-}
-
+/* ===== LANGUAGE CARDS ===== */
 .language-card {
   display: none;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: rgba(0,0,0,0.6);
-  border: 2px solid transparent;
+  background: #cce6cc;
+  border: 2px solid #5c915c;
   border-radius: 12px;
   padding: 20px;
   width: 240px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
   opacity: 0;
   transform: translateX(30px);
   transition: all 0.5s ease;
   cursor: pointer;
 }
+
 .language-card.active {
   display: flex;
   opacity: 1;
-  transform: translateX(0) scale(1.05);
-  border-color: #1DB954;
-  box-shadow: 0 0 20px #1DB954;
-  animation: fadeSlideIn 0.4s ease;
-}
-.language-card img {
-  width: 70px;
-  height: 70px;
-}
-.language-card p {
-  margin-top: 10px;
-  font-size: 0.6rem;
-}
-@keyframes fadeSlideIn {
-  0% { opacity: 0; transform: translateX(40px); }
-  100% { opacity: 1; transform: translateX(0); }
+  transform: translateX(0) scale(1.03);
+  border-color: #3e763e;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
-/* === Navigation Arrows (OUTSIDE language selector) === */
-/*.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(29,185,84,0.9);
-  border: none;
-  color: white;
-  font-family: 'Press Start 2P', cursive;
-  font-size: clamp(0.45rem, 2vw, 0.6rem);
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  z-index: 15;
-}*/
-
-/* === Center and position arrow buttons correctly === */
-/* === Adjust arrow position OUTSIDE the card === */
+/* ===== NAV ARROWS ===== */
 .nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  background: rgba(29,185,84,0.9);
-  border: 2px solid #1DB954;
-  box-shadow: 0 0 10px rgba(29,185,84,0.5);
-  color: white;
+  border-radius: 6px;
+  background: #ffcc4d;
+  border: 2px solid #e09c2b;
+  color: #3b2a15;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.5rem;
+  font-size: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 50; /* ensure it's above the card */
+  box-shadow: 0 3px 0 #b5741b, 0 4px 0 #3b2a15;
+  transition: all 0.1s ease;
+  z-index: 50;
 }
 
-/* push them slightly outside the container */
-.nav-arrow.left {
-  left: -45px;  /* move more left (was inside before) */
-}
+.nav-arrow.left { left: -45px; }
+.nav-arrow.right { right: -45px; }
 
-.nav-arrow.right {
-  right: -45px; /* move more right */
-}
-
-/* hover and active feedback */
 .nav-arrow:hover {
-  background: #1ed760;
-  transform: translateY(-50%) scale(1.1);
+  transform: translateY(-2px);
+  background: #ffe38a;
+  box-shadow: 0 5px 0 #b5741b, 0 6px 0 #3b2a15;
 }
+
 .nav-arrow:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(1px);
+  background: #f5b93a;
+  box-shadow: 0 1px 0 #b5741b, 0 2px 0 #3b2a15;
 }
 
-/* === BACKGROUND BLUR (outside container only) === */
-#panelBackdrop {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  background: rgba(0,0,0,0.3);
-  z-index: 998;
-  display: none;
-  pointer-events: auto;
-  animation: fadeBackdrop 0.3s ease;
-}
-
-@keyframes fadeBackdrop {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* disable clicks when blur-active */
-.blur-active header,
-.blur-active main,
-.blur-active footer {
-  pointer-events: none;
-  user-select: none;
-}
-
-/* === Language Panel (Inside Lesson Mode) === */
+/* ===== LANGUAGE PANEL ===== */
 .language-panel {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.95);
-  border: 3px solid #1DB954;
+  background: #d9ead3;
+  border: 3px solid #6aa84f;
   border-radius: 12px;
   padding: 25px;
   width: 90%;
   max-width: 520px;
-  box-shadow: 0 0 32px #1DB95466;
-  z-index: 999;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: fadeInPanel 0.3s ease;
-}
-@keyframes fadeInPanel {
-  from { opacity: 0; transform: translate(-50%, -55%) scale(0.9); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-
-/* === Centered Option Buttons === */
-.language-panel .option-buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin-top: 10px;
-}
-.language-panel .option-buttons button {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.55rem;
-  padding: 8px 12px;
-  background: #1DB954;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.language-panel .option-buttons button:hover {
-  background: #1ed760;
-  transform: scale(1.05);
-}
-
-/* === Back Button (center bottom) === */
-.language-panel .back-btn {
-  margin-top: 18px;
-  background: #1DB954;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.5rem;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.language-panel .back-btn:hover {
-  transform: scale(1.05);
-}
-
-/* === Panel Title Fix (icon on top, text below) === */
-.language-panel .panel-title {
-  display: flex;
-  flex-direction: column; /* stack vertically */
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.language-panel .panel-title img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
+  z-index: 999;
 }
 
 .language-panel .panel-title .titleText {
-  font-size: 0.7rem;
-  color: #1DB954;
+  font-size: 8px;
+  color: #3e763e;
   text-align: center;
 }
 
-/* === Quiz Dropdown (for Quiz only) === */
-.quiz-dropdown {
-  position: relative;
-  display: inline-block;
-}
-.quiz-list {
-  position: absolute;
-  top: 120%;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.95);
-  border: 2px solid #1DB954;
-  border-radius: 8px;
-  display: none;
-  flex-direction: column;
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 1000;
-  padding: 6px 4px;
-}
-.quiz-list button {
-  font-size: 0.45rem;
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  background: none;
-  border: none;
-  padding: 8px 10px;
-  text-align:center;
-}
-.quiz-list button:hover {
-  background: rgba(29,185,84,0.2);
-}
-
-.lesson-dropdown {
-  position: relative;
-  display: inline-block;
-  margin-bottom: 12px;
-}
+/* ===== DROPDOWNS ===== */
+.quiz-list,
 .lesson-list {
-  position: absolute;
-  top: 120%;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.95);
-  border: 2px solid #1DB954;
+  background: #d9ead3;
   border-radius: 8px;
-  display: none;
-  flex-direction: column;
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 1000;
-  padding: 6px 4px;
+  border: 2px solid #6aa84f;
+  padding: 6px;
 }
-.lesson-list button {
-  font-size: 0.45rem;
-  font-family: 'Press Start 2P', cursive;
-  color: #fff;
-  background: none;
-  border: none;
-  padding: 8px 10px;
-  text-align:center;
-}
+
+.quiz-list button:hover,
 .lesson-list button:hover {
-  background: rgba(29,185,84,0.2);
+  background: #cce6cc;
 }
 
-
-/* === Footer === */
+/* ===== FOOTER ===== */
 footer {
   margin-top: auto;
-  background: rgba(0, 0, 0, 0.4);
-  border-top: 1px solid rgba(29,185,84,0.4);
-  color: #fff;
+  background: #8b5a2b;
+  border-top: 3px solid #5c3a1a;
+  color: #3b2a15;
   text-align: center;
   padding: 6px 0;
-  width: 100%;
-  font-size: 0.6rem;
+  font-size: 8px;
+  box-shadow: inset -2px -2px 0 rgba(0,0,0,0.2), 0 2px 0 #3b2a15;
 }
 
-  /* === Welcome Overlay === */
-#welcomeOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.85);
-  color: #1DB954;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.7rem;
-  z-index: 2000;
-  text-align: center;
-  flex-direction: column;
-  animation: welcomeFadeIn 0.5s ease forwards;
-}
-
-/* Message box style */
-#welcomeOverlay p {
-  margin: 0;
-  padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.6);
-  border: 2px solid #1DB954;
-  border-radius: 10px;
-  box-shadow: 0 0 20px #1DB95455;
-  opacity: 0;
-  animation: textFadeIn 0.8s ease forwards 0.2s;
-}
-
-/* Fade-in and fade-out keyframes */
-@keyframes welcomeFadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes textFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes welcomeFadeOut {
-  from { opacity: 1; transform: scale(1); }
-  to { opacity: 0; transform: scale(0.95); }
-}
-
-/* Fade-out helper class triggered before hiding */
-#welcomeOverlay.fade-out {
-  animation: welcomeFadeOut 0.6s ease forwards;
-}
-
-/* === Mobile tweaks === */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
-  .language-card img { width: 55px; height: 55px; }
-  .nav-arrow { font-size: 0.5rem; padding: 5px 8px; }
-  .language-panel .option-buttons button { font-size: 0.45rem; padding: 6px 8px; }
-  #xpValue { font-size: 0.45rem; max-width: 100px; }
+  .nav-arrow.left { left: -35px; }
+  .nav-arrow.right { right: -35px; }
 }
 
-/* Slight shrink for small screens */
 @media (max-width: 400px) {
-  .nav-arrow {
-    width: 28px;
-    height: 28px;
-    font-size: 0.35rem;
-  }
-}
-  
-/* === Responsive Arrow Fix for Portrait & Landscape === */
-@media (max-width: 400px) {
-  /*.nav-arrow {
-    font-size: 0.35rem;
-    padding: 4px 5px;
-  }*/
-
-  .nav-arrow.left {
-    left: -40px;
-  }
-  .nav-arrow.right {
-    right: -40px;
-  }
+  .nav-arrow { width: 28px; height: 28px; font-size: 7px; }
 }
 
-@media (min-width: 401px) and (max-width: 600px) {
-  .nav-arrow {
-    font-size: 0.4rem;
-    padding: 5px 7px;
-  }
-
-  .nav-arrow.left {
-    left: -20px;
-  }
-  .nav-arrow.right {
-    right: -20px;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 900px) {
-  .nav-arrow {
-    font-size: 0.45rem;
-    padding: 6px 8px;
-  }
-
-  .nav-arrow.left {
-    left: -30px;
-  }
-  .nav-arrow.right {
-    right: -30px;
-  }
-}
 </style>
+
 </head>
 <body>
 
