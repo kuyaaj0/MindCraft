@@ -15,7 +15,12 @@
 
     if (theme === 'dark') {
       // Dark Mode Styles
-      body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
+      // 🌤️ Special background for Student page
+      if (window.location.pathname.toLowerCase().includes('student.html')) {
+  body.style.background = 'linear-gradient(#87e4ff, #c8f7b0)';
+} else {
+  body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
+}
       body.style.color = '#ffffff';
 
       containers.forEach(c => {
