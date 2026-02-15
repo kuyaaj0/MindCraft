@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CSS Selectors - Pixel Lesson 3</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MindCraft — Lessons Dashboard</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 
+/* ===== WORLD BACKGROUND ===== */
 body{
   font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
@@ -17,10 +20,11 @@ body{
   font-size:10px;
 }
 
+/* ===== EXIT BUTTON ===== */
 .exit-btn{
   position:fixed;
-  top:480px;
-  left:202px;
+  top:28px;
+  left:28px;
   background:#ff4d4d;
   color:#fff;
   text-decoration:none;
@@ -62,6 +66,7 @@ body{
   color:#fff;
   display:flex;
   flex-direction:column;
+  overflow-y: auto;
 }
 
 .brand h1{
@@ -76,7 +81,7 @@ body{
   margin-top:6px;
 }
 
-/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+/* ===== LESSON BUTTONS ===== */
 .lessons-list{
   margin-top:16px;
   display:flex;
@@ -85,52 +90,34 @@ body{
 }
 
 .lessons-list button{
-  background:#ffcc4d;
-  border:3px solid #e09c2b;
-  padding:10px 10px;
-  border-radius:10px;
+  background:#a56b34;
+  border:none;
+  padding:12px;
+  border-radius:12px;
   cursor:pointer;
-  color:#3b2a15;
-  font-size:8px;
+  color:#fff;
+  font-size:9px;
   display:flex;
   gap:8px;
   align-items:center;
   box-shadow:
-    0 3px 0 #b5741b,
-    0 4px 0 #3b2a15;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 5px 0 #5c3a1a;
 }
 
 .lessons-list button:hover{
   transform:translateY(-2px);
-  box-shadow:
-    0 5px 0 #b5741b,
-    0 6px 0 #3b2a15;
-  background:#ffe38a;
-}
-
-.lessons-list button:active{
-  transform:translateY(1px);
-  box-shadow:
-    0 1px 0 #b5741b,
-    0 2px 0 #3b2a15;
-  background:#f5b93a;
 }
 
 .lessons-list button.active{
-  background:#ffe89c;
-  border-color:#fff7c9;
+  background:#c98b4a;
 }
 
 .num{
-  background:#3b2a15;
-  color:#ffd966;
-  padding:4px 7px;
+  background:#ffd966;
+  color:#000;
+  padding:4px 6px;
   border-radius:6px;
-  box-shadow:0 2px 0 #1e1309;
-  font-size:8px;
 }
 
 /* ===== CONTENT ===== */
@@ -158,8 +145,14 @@ body{
   text-shadow:2px 2px #fff;
 }
 
-/* ===== NAV BUTTONS - PIXEL STYLE ===== */
-.content-head button{
+/* ===== NAV BUTTONS ===== */
+.content-head .nav-buttons {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.content-head button.arrow-btn{
   font-family:'Press Start 2P';
   background:#4e91ff;
   color:#fff;
@@ -174,7 +167,7 @@ body{
   transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
-.content-head button:hover{
+.content-head button.arrow-btn:hover{
   transform:translateY(-2px);
   background:#6aa7ff;
   box-shadow:
@@ -182,7 +175,7 @@ body{
     0 6px 0 #0c1b3a;
 }
 
-.content-head button:active{
+.content-head button.arrow-btn:active{
   transform:translateY(1px);
   background:#3f7aed;
   box-shadow:
@@ -243,32 +236,9 @@ body{
   position:relative;
 }
 
-/* ===== COPY BUTTON - PIXEL STYLE ===== */
-.code button.copy-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  background:#ffd966;
-  color:#000;
-  border:2px solid #b59b24;
-  padding:4px 6px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:7px;
-  box-shadow:0 2px 0 #7a6515;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-}
-
-.code button.copy-btn:hover{
-  transform:translateY(-1px);
-  background:#fff1a8;
-  box-shadow:0 3px 0 #7a6515;
-}
-
-.code button.copy-btn:active{
-  transform:translateY(1px);
-  box-shadow:0 1px 0 #7a6515;
-  background:#f2c93a;
+.code pre{
+  white-space:pre-wrap;
+  word-break:break-word;
 }
 
 .demo{
@@ -279,42 +249,6 @@ body{
   margin-bottom:14px;
 }
 
-/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
-.demo button{
-  font-family:'Press Start 2P';
-  background:#00c98b;
-  color:#003322;
-  border:3px solid #00805c;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:
-    0 3px 0 #00563f,
-    0 4px 0 #001f16;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-top:8px;
-  margin-right:8px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-}
-
-.demo button:hover{
-  transform:translateY(-2px);
-  background:#29e2aa;
-  box-shadow:
-    0 5px 0 #00563f,
-    0 6px 0 #001f16;
-}
-
-.demo button:active{
-  transform:translateY(1px);
-  background:#00b27a;
-  box-shadow:
-    0 1px 0 #00563f,
-    0 2px 0 #001f16;
-}
-
 .examples{
   margin-left:16px;
 }
@@ -323,204 +257,534 @@ body{
   margin:6px 0;
 }
 
+/* ===== EDIT BUTTON ===== */
+.code .edit-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#5c3a1a;
+  color:#fff;
+  border:none;
+  padding:6px 8px;
+  border-radius:8px;
+  font-size:9px;
+  cursor:pointer;
+  box-shadow:0 4px 0 #3e2814;
+}
+
+/* ===== EDITOR MODAL ===== */
+#editorModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.5);
+  z-index:1200;
+}
+#editorModal .modal{
+  width:min(950px,95%);
+  height:min(700px,95%);
+  background:#0b1020;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  color:#e6f7ff;
+  box-shadow:0 10px 40px rgba(0,0,0,.6);
+  font-family:monospace;
+}
+#editorModal header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+#editorModal .controls{display:flex;gap:8px;align-items:center;}
+#editorModal button{
+  font-family:inherit;
+}
+#editorModal textarea{
+  width:100%;
+  height:280px;
+  background:#071018;
+  color:#cfeefd;
+  border:1px solid #27455b;
+  padding:10px;
+  border-radius:8px;
+  resize:vertical;
+  font-family:monospace;
+  font-size:12px;
+  line-height:1.4;
+}
+#editorModal .bottom{
+  display:flex;
+  gap:12px;
+}
+#editorModal .preview{
+  flex:1;
+  border:1px solid #27455b;
+  border-radius:8px;
+  overflow:hidden;
+}
+#errorBox{
+  background:#3a1b1b;
+  color:#ffd6d6;
+  padding:8px;
+  border-radius:6px;
+  display:none;
+  font-size:12px;
+}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .app{
     grid-template-columns:1fr;
     grid-template-rows:auto 1fr;
   }
+  #editorModal .modal{height:86vh}
 }
 </style>
 </head>
+
 <body>
 <div class="app">
 
 <aside class="sidebar">
   <div class="brand">
-    <h1>🎨 CSS Matrix</h1>
-    <p>Lesson 3</p>
+    <h1>🧠 MindCraft</h1>
+    <p>CSS Lesson 03</p>
   </div>
 
   <div class="lessons-list">
-    <button data-lesson="css3-1" class="active"><span class="num">01</span> What Are Selectors?</button>
-    <button data-lesson="css3-2"><span class="num">02</span> Element Selector</button>
-    <button data-lesson="css3-3"><span class="num">03</span> Class Selector (.dot)</button>
-    <button data-lesson="css3-4"><span class="num">04</span> ID Selector (#hash)</button>
-    <button data-lesson="css3-5"><span class="num">05</span> Element vs Class vs ID</button>
-    <button data-lesson="css3-6"><span class="num">06</span> Your Challenge!</button>
+
+    <!-- ===== LESSON 3 ONLY (no arrow) ===== -->
+    <script>
+      const lessonsData=[
+        {num:'03',title:'Targeting Elements Efficiently',parts:['What Are CSS Selectors?','Element Selector','Class Selector (.)','ID Selector (#)','Element vs Class vs ID','YOUR CHALLENGE']}
+      ];
+
+      lessonsData.forEach((lesson,i)=>{
+        document.write(`<button data-lesson="lesson-${i+1}-1" style="display:flex; align-items:center; justify-content:space-between;">
+          <span><span class="num">${lesson.num}</span> ${lesson.title}</span>
+        </button>`);
+        
+        document.write(`<div id="partsDropdown${i+1}" style="display:flex; flex-direction:column; gap:8px; margin-left: 30px; margin-top: 6px;">`);
+        lesson.parts.forEach((part,j)=>{
+          document.write(`<button data-lesson="lesson-${i+1}-${j+1}" style="font-size:8px; padding:6px 12px;">${part}</button>`);
+        });
+        document.write(`</div>`);
+      });
+    </script>
+
   </div>
 </aside>
 
 <main class="content">
   <div class="content-head">
-    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
-    <div class="title" id="panel-title">01 • What Are Selectors?</div>
-    <div>
-      <button id="prevLesson">◀</button>
-      <button id="nextLesson">▶</button>
+    <a href="../../../Webside/Student.html" class="exit-btn" aria-label="Exit lessons">EXIT</a>
+    <div class="title" id="panel-title">03 • CSS Selectors</div>
+    <div class="nav-buttons">
+      <button id="prevLesson" class="arrow-btn" aria-label="Previous lesson">◀</button>
+      <button id="nextLesson" class="arrow-btn" aria-label="Next lesson">▶</button>
     </div>
   </div>
 
   <div class="panel-wrap">
 
-    <!-- TOPIC 1: WHAT ARE SELECTORS -->
-    <article id="css3-1" class="lesson-panel visible">
-      <h1>CSS Selectors</h1>
-      <div class="meta">Lesson 3 • Targeting Elements</div>
-      <div class="explain"><strong>CSS selectors</strong> tell browser WHICH HTML to style! Target paragraphs, buttons, titles with specific designs.</div>
-      <div class="demo">
-        <p>3 Selector Types:</p>
-        <button onclick="document.querySelectorAll('p')[0].style.color='cyan'">Element (p)</button>
-        <button onclick="document.querySelectorAll('.special')[0].style.color='hotpink'">Class (.special)</button>
-        <button onclick="document.querySelectorAll('#unique')[0].style.color='yellow'">ID (#unique)</button>
-      </div>
-    </article>
-
-    <!-- TOPIC 2: ELEMENT SELECTOR -->
-    <article id="css3-2" class="lesson-panel">
-      <h1>Element Selector</h1>
-      <div class="meta">Lesson 3 • Topic 2</div>
-      <div class="explain">Targets ALL elements by tag name. <strong>p</strong> = all paragraphs, <strong>h1</strong> = all H1s.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>p {
-  color: cyan;
-  font-size: 18px;
-}</pre>
-      </div>
-      <div class="demo-output">
-        <p style="color:cyan;">ALL &lt;p&gt; tags get cyan!</p>
-        <p style="color:cyan;">Every paragraph matches!</p>
-      </div>
-    </article>
-
-    <!-- TOPIC 3: CLASS SELECTOR -->
-    <article id="css3-3" class="lesson-panel">
-      <h1>Class Selector (.dot)</h1>
-      <div class="meta">Lesson 3 • Topic 3</div>
-      <div class="explain">Use <strong>.</strong> + class name. Multiple elements can share same class! Add <code>class="special"</code> in HTML.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>.special {
-  color: hotpink;
-  text-shadow: 0 0 10px #ff00ff;
-}
-
-/* HTML */
-&lt;p class="special"&gt;Hotpink text!&lt;/p&gt;</pre>
-      </div>
-      <div class="demo-output">
-        <p style="color:hotpink;font-weight:bold;">.special class demo!</p>
-      </div>
-    </article>
-
-    <!-- TOPIC 4: ID SELECTOR -->
-    <article id="css3-4" class="lesson-panel">
-      <h1>ID Selector (#hash)</h1>
-      <div class="meta">Lesson 3 • Topic 4</div>
-      <div class="explain"><strong>#</strong> + ID name. UNIQUE - only ONE element per page! Use <code>id="unique"</code> in HTML.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>#unique {
-  background: rgba(0,255,255,0.15);
-  border: 2px solid cyan;
-  padding: 15px;
-}
-
-/* HTML */
-&lt;div id="unique"&gt;Unique!&lt;/div&gt;</pre>
-      </div>
-      <div class="demo-output">
-        <div style="background:rgba(0,255,255,0.15);border:2px solid cyan;padding:10px;">#unique ID demo!</div>
-      </div>
-    </article>
-
-    <!-- TOPIC 5: COMPARISON -->
-    <article id="css3-5" class="lesson-panel">
-      <h1>Element vs Class vs ID</h1>
-      <div class="meta">Lesson 3 • Summary</div>
-      <div class="explain">
-        <strong>Element:</strong> ALL matching tags (p, h1, div)<br>
-        <strong>Class:</strong> GROUP of elements (.special)<br>
-        <strong>ID:</strong> ONE unique element (#unique)
-      </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>h2 { color: cyan; }
-.special { color: hotpink; }
-#unique { color: yellow; }</pre>
-      </div>
-      <div class="demo-output">
-        <h2 style="color:cyan;">h2 = Element</h2>
-        <p style="color:hotpink;">.special = Class</p>
-        <p style="color:yellow;">#unique = ID</p>
-      </div>
-    </article>
-
-    <!-- TOPIC 6: CHALLENGE -->
-    <article id="css3-6" class="lesson-panel">
-      <h1>Your Challenge!</h1>
-      <div class="meta">Lesson 3 • Practice Time</div>
-      <div class="explain">Create webpage with: 1 element selector + 2 classes + 1 ID. Use neon colors!</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;style&gt;
-  h1 { color: cyan; }
-  .highlight-me { 
-    color: magenta; 
-    font-weight: bold; 
-  }
-  #my-info { 
-    border: 2px solid cyan; 
-    padding: 10px; 
-  }
-&lt;/style&gt;
-
-&lt;h1&gt;My Neon Profile&lt;/h1&gt;
-&lt;p class="highlight-me"&gt;I love CSS!&lt;/p&gt;
-&lt;div id="my-info"&gt;Student&lt;/div&gt;</pre>
-      </div>
-      <div class="demo">
-        <button onclick="alert('Save as lesson3.html and add your selectors! 🚀')">START CHALLENGE</button>
-      </div>
-    </article>
+    <!-- ===== LESSON 3 PANELS ONLY ===== -->
+    <script>
+      lessonsData.forEach((lesson,i)=>{
+        lesson.parts.forEach((part,j)=>{
+          document.write(`<article id="lesson-${i+1}-${j+1}" class="lesson-panel">
+            <h1>${lesson.title}</h1>
+            <div class="meta">Lesson ${i+1} • Part ${j+1}</div>
+            <h2>${('0'+(j+1)).slice(-2)}. ${part}</h2>
+            <div class="explain"></div>
+          </article>`);
+        });
+      });
+    </script>
 
   </div>
 </main>
 </div>
+ 
+<!-- EDITOR MODAL -->
+<div id="editorModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Code editor">
+    <header>
+      <div>
+        <strong id="modalTitle">Edit Code</strong>
+        <div id="errorBox"></div>
+      </div>
+      <div class="controls">
+        <button id="applyBtn">Apply</button>
+        <button id="closeEditor">Close</button>
+      </div>
+    </header>
+    <textarea id="codeEditor" spellcheck="false"></textarea>
+    <div style="display:flex;gap:8px;flex:1;min-height:220px;">
+      <div style="flex:1;">
+        <strong style="font-size:12px">Live Preview (editor)</strong>
+        <div class="preview"><iframe id="previewFrame" style="width:100%;height:100%;border:0"></iframe></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-// Lesson navigation
-const buttons = document.querySelectorAll('.lessons-list button');
-const panels = document.querySelectorAll('.lesson-panel');
-const title = document.getElementById('panel-title');
+/* ===============================
+   LESSON CONTENT (Lesson 3 only)
+=============================== */
+const lessonContent = {
+  "lesson-1-1": `
+  <div class="explain">CSS selectors let you target elements on the page to style them. Here are examples for element, class and ID selectors.</div>
+  <div class="code">
+  <pre>/* Element selector */
+h2 { color:#00ccff; }
 
-function showLesson(id){
-  panels.forEach(p=>p.classList.remove('visible'));
-  buttons.forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('visible');
-  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
-  btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+/* Class selector */
+.note { background:#111;color:#0ff;padding:8px;border-radius:6px; }
+
+/* ID selector */
+#welcome { font-size:20px; color:#ff66aa; }</pre>
+  </div>
+  <div class="demo">
+    <h2>Element selector example</h2>
+    <div class="note">.note example box</div>
+    <p id="welcome" style="margin-top:10px;">#welcome example</p>
+  </div>
+  `,
+  "lesson-1-2": `
+  <div class="explain">Element selectors select HTML tags by name. Use them for broad changes like typography.</div>
+  <div class="code">
+  <pre>/* Select all paragraph tags */
+p { line-height:1.6; color:#004466; }</pre>
+  </div>
+  <div class="demo">
+    <p>This paragraph is styled by the element selector example above.</p>
+    <p>Another paragraph to show consistent styling.</p>
+  </div>
+  `,
+  "lesson-1-3": `
+  <div class="explain">Classes are reusable. Add the same class to many elements.</div>
+  <div class="code">
+  <pre>/* class used for highlight */
+.highlight { background:linear-gradient(90deg,#ffdd57,#ff9a57); color:#111; padding:6px; border-radius:6px; }</pre>
+  </div>
+  <div class="demo">
+    <p class="highlight">This text uses the .highlight class</p>
+    <button onclick="this.classList.toggle('highlight')">Toggle highlight on button</button>
+  </div>
+  `,
+  "lesson-1-4": `
+  <div class="explain">IDs identify a single element and are useful for unique items on the page.</div>
+  <div class="code">
+  <pre>#hero { background:#001122; color:#00ffcc; padding:12px; border-radius:8px; }</pre>
+  </div>
+  <div class="demo">
+    <div id="hero" style="background:#001122;color:#00ffcc;padding:12px;border-radius:8px;">Hero section — unique styling</div>
+    <p style="margin-top:8px">IDs should be used once per page.</p>
+  </div>
+  `,
+  "lesson-1-5": `
+  <div class="explain">Compare element, class and ID together.</div>
+  <div class="code">
+  <pre>/* element */
+li { margin-bottom:6px; }
+
+/* class */
+.menu-item { color:#ffcc00; }
+
+/* id */
+#main-item { font-weight:700; }</pre>
+  </div>
+  <div class="demo">
+    <ul>
+      <li class="menu-item">Menu A</li>
+      <li class="menu-item" id="main-item">Menu B (main)</li>
+      <li class="menu-item">Menu C</li>
+    </ul>
+  </div>
+  `,
+  "lesson-1-6": `
+  <div class="explain">Challenge: create a small profile using element, class and id selectors. Example provided.</div>
+  <div class="code">
+  <pre>&lt;div id="profile"&gt;
+  &lt;h3&gt;Student&lt;/h3&gt;
+  &lt;p class="bio"&gt;Loves neon CSS.&lt;/p&gt;
+&lt;/div&gt;
+
+#profile { border:2px solid #00ffff; padding:10px; border-radius:8px; }
+.bio { color:#ff77aa; }</pre>
+  </div>
+  <div class="demo">
+    <div id="profile" style="border:2px solid #00ffff;padding:10px;border-radius:8px;">
+      <h3>Student</h3>
+      <p class="bio" style="color:#ff77aa;margin:0">Loves neon CSS.</p>
+    </div>
+  </div>
+  `
+}; /* end lessonContent */
+
+/* ===============================
+   After DOM ready: inject content, add edit buttons, wire navigation
+=============================== */
+document.addEventListener('DOMContentLoaded', () => {
+  // inject lesson content
+  const panels = document.querySelectorAll('.lesson-panel');
+  panels.forEach(panel => {
+    if (lessonContent[panel.id]) {
+      panel.querySelector('.explain').innerHTML = lessonContent[panel.id];
+    }
+  });
+
+  // add Edit buttons to each .code block
+  document.querySelectorAll('.lesson-panel').forEach(panel=>{
+    panel.querySelectorAll('.code').forEach(codeBlock=>{
+      // avoid duplicating
+      if (codeBlock.querySelector('.edit-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'edit-btn';
+      btn.textContent = 'Edit';
+      codeBlock.appendChild(btn);
+
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openEditorForBlock(panel, codeBlock);
+      });
+    });
+  });
+
+  // wire up navigation (sidebar/arrow buttons)
+  wireUpNavigation();
+
+  // show first lesson
+  showLesson('lesson-1-1');
+});
+
+/* ===============================
+   Editor logic and helpers
+=============================== */
+const modal = document.getElementById('editorModal');
+const codeEditor = document.getElementById('codeEditor');
+const applyBtn = document.getElementById('applyBtn');
+const closeEditor = document.getElementById('closeEditor');
+const previewFrame = document.getElementById('previewFrame');
+const modalTitle = document.getElementById('modalTitle');
+const errorBox = document.getElementById('errorBox');
+
+function decodeHtmlEntities(str){
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = str;
+  return textarea.value;
 }
 
-buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+function showError(msg){
+  errorBox.style.display = 'block';
+  errorBox.textContent = msg;
+}
+function clearError(){
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+}
 
-const order=[...buttons].map(b=>b.dataset.lesson);
-const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
-document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
-document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
-
-// Copy buttons
-document.querySelectorAll('.copy-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        const code = btn.nextElementSibling.innerText;
-        navigator.clipboard.writeText(code).then(()=>{
-            btn.innerText='✔ Copied!';
-            setTimeout(()=>btn.innerText='Copy',1500);
+function buildSrcdocFromCode(code){
+  const reporter = `
+    <script>
+      (function(){
+        window.addEventListener('error', function(e){
+          parent.postMessage({type:'runtime-error', message: e.message, lineno: e.lineno, colno: e.colno}, '*');
         });
-    });
+        window.addEventListener('unhandledrejection', function(e){
+          parent.postMessage({type:'runtime-error', message: e.reason && e.reason.message ? e.reason.message : String(e.reason)}, '*');
+        });
+        const levels = ['log','warn','error','info'];
+        levels.forEach(l=>{
+          const orig = console[l];
+          console[l] = function(...args){
+            parent.postMessage({type:'console', level: l, args: args}, '*');
+            orig.apply(console, args);
+          }
+        });
+      })();
+    <\/script>
+  `;
+  const trimmed = (code || '').trim();
+
+  if (/<\/?html|<!doctype|<head|<body/i.test(trimmed)) {
+    if (/<\/body>/i.test(trimmed)) {
+      return trimmed.replace(/<\/body>/i, reporter + '</body>');
+    }
+    return trimmed + reporter;
+  }
+
+  const looksLikeCSS = /\{[^}]*:[^}]*\}/.test(trimmed) && !/<[a-z]/i.test(trimmed);
+  if (looksLikeCSS) {
+    return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>${trimmed}</style>
+      <style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style>
+      </head><body>
+      <h1>Preview Heading</h1>
+      <p>This is a sample paragraph to show your CSS styles.</p>
+      <div class="example-box" style="padding:12px;border:1px dashed #999;margin-top:12px;">Example box</div>
+      ${reporter}
+      </body></html>`;
+  }
+
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style></head><body>${trimmed}${reporter}</body></html>`;
+}
+
+function openEditorForBlock(panel, codeBlock){
+  modal.dataset.targetPanel = panel.id;
+  modalTitle.textContent = 'Edit code — ' + (panel.querySelector('h2') ? panel.querySelector('h2').textContent : panel.id);
+  clearError();
+
+  const pre = codeBlock.querySelector('pre');
+  const codeText = pre ? pre.innerText.trim() : '';
+  codeEditor.value = decodeHtmlEntities(codeText);
+
+  try {
+    previewFrame.srcdoc = buildSrcdocFromCode(codeEditor.value);
+  } catch (err) {
+    showError('Preview failed: ' + err.message);
+  }
+
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(()=>codeEditor.focus(),120);
+}
+
+applyBtn.addEventListener('click', ()=>{
+  const code = codeEditor.value;
+  const panelId = modal.dataset.targetPanel;
+  if (!panelId) return;
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const pre = panel.querySelector('.code pre');
+  if (pre) pre.innerText = code;
+
+  try {
+    const srcdoc = buildSrcdocFromCode(code);
+    previewFrame.srcdoc = srcdoc;
+    clearError();
+  } catch (err) {
+    showError('Apply preview failed: ' + err.message);
+  }
 });
+
+closeEditor.addEventListener('click', ()=>{
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  clearError();
+  previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+});
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal){
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    clearError();
+    previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+  }
+});
+
+window.addEventListener('message', (ev)=>{
+  if(!ev.data) return;
+  if(ev.data.type === 'runtime-error'){
+    showError('Runtime error: ' + ev.data.message + ' (line:'+ (ev.data.lineno||'n/a') +')');
+  }
+});
+
+/* ===============================
+   Navigation (sidebar + arrows)
+=============================== */
+function queryAll(selector){ return Array.from(document.querySelectorAll(selector)); }
+
+const sideButtons = () => queryAll('.lessons-list > button');
+const panelsAll  = () => queryAll('.lesson-panel');
+const titleEl   = document.getElementById('panel-title');
+const prevBtn = document.getElementById('prevLesson');
+const nextBtn = document.getElementById('nextLesson');
+
+function updateButtons() {
+  const current = document.querySelector('.lesson-panel.visible');
+  if(!current) return;
+  const ids = current.id.split('-').map(Number);
+  const lessonNum = ids[1];
+  const partNum = ids[2];
+  const parts = lessonsData[lessonNum - 1].parts.length;
+  prevBtn.style.display = partNum === 1 ? 'none' : 'inline-block';
+  nextBtn.style.display = partNum === parts ? 'none' : 'inline-block';
+}
+
+function showLesson(id) {
+  panelsAll().forEach(p => p.classList.remove('visible'));
+  sideButtons().forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(id);
+  if(!panel) return;
+  panel.classList.add('visible');
+  const mainId = id.split('-').slice(0, 2).join('-') + '-1';
+  const mainBtn = document.querySelector(`[data-lesson="${mainId}"]`);
+  if (mainBtn) mainBtn.classList.add('active');
+  const metaEl = panel.querySelector('.meta');
+  const partText = metaEl ? (metaEl.textContent.split('•')[1] || '').trim() : '';
+  titleEl.textContent = (panel.querySelector('h1') ? panel.querySelector('h1').textContent : '') + (partText ? ' • ' + partText : '');
+  updateButtons();
+}
+
+function wireUpNavigation(){
+  sideButtons().forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.lesson) {
+        showLesson(btn.dataset.lesson);
+      }
+    });
+  });
+
+  prevBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    if (partNum > 1) {
+      showLesson(`lesson-${lessonNum}-${partNum - 1}`);
+    }
+  };
+
+  nextBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    const totalParts = lessonsData[lessonNum - 1].parts.length;
+    if (partNum < totalParts) {
+      showLesson(`lesson-${lessonNum}-${partNum + 1}`);
+    }
+  };
+}
+
+if(document.readyState === 'complete' || document.readyState === 'interactive'){
+  wireUpNavigation();
+} else {
+  document.addEventListener('DOMContentLoaded', wireUpNavigation);
+}
+
+// dropdown always visible, no toggle
+lessonsData.forEach((lesson, i) => {
+    const dropdown = document.getElementById(`partsDropdown${i + 1}`);
+    if (!dropdown) return;
+
+    dropdown.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showLesson(btn.dataset.lesson);
+      });
+    });
+  });
+
+showLesson('lesson-1-1');
+
 </script>
+
 </body>
 </html>
