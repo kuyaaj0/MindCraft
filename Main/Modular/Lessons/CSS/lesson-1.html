@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CSS Basics & Syntax - Pixel Lesson 1</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MindCraft — Lessons Dashboard</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 
+/* ===== WORLD BACKGROUND ===== */
 body{
   font-family:'Press Start 2P', cursive;
   background:linear-gradient(#87e4ff,#c8f7b0);
@@ -17,10 +20,11 @@ body{
   font-size:10px;
 }
 
+/* ===== EXIT BUTTON ===== */
 .exit-btn{
   position:fixed;
-  top:480px;
-  left:202px;
+  top:28px;
+  left:28px;
   background:#ff4d4d;
   color:#fff;
   text-decoration:none;
@@ -62,6 +66,7 @@ body{
   color:#fff;
   display:flex;
   flex-direction:column;
+  overflow-y: auto;
 }
 
 .brand h1{
@@ -76,7 +81,7 @@ body{
   margin-top:6px;
 }
 
-/* ===== LESSON BUTTONS - PIXEL STYLE ===== */
+/* ===== LESSON BUTTONS ===== */
 .lessons-list{
   margin-top:16px;
   display:flex;
@@ -85,52 +90,54 @@ body{
 }
 
 .lessons-list button{
-  background:#ffcc4d;
-  border:3px solid #e09c2b;
-  padding:10px 10px;
-  border-radius:10px;
+  background:#a56b34;
+  border:none;
+  padding:12px;
+  border-radius:12px;
   cursor:pointer;
-  color:#3b2a15;
-  font-size:8px;
+  color:#fff;
+  font-size:9px;
   display:flex;
   gap:8px;
   align-items:center;
+  justify-content:center;
   box-shadow:
-    0 3px 0 #b5741b,
-    0 4px 0 #3b2a15;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
+    inset -4px -4px 0 rgba(0,0,0,.25),
+    0 5px 0 #5c3a1a;
 }
 
 .lessons-list button:hover{
   transform:translateY(-2px);
-  box-shadow:
-    0 5px 0 #b5741b,
-    0 6px 0 #3b2a15;
-  background:#ffe38a;
-}
-
-.lessons-list button:active{
-  transform:translateY(1px);
-  box-shadow:
-    0 1px 0 #b5741b,
-    0 2px 0 #3b2a15;
-  background:#f5b93a;
 }
 
 .lessons-list button.active{
-  background:#ffe89c;
-  border-color:#fff7c9;
+  background:#c98b4a;
 }
 
 .num{
-  background:#3b2a15;
-  color:#ffd966;
-  padding:4px 7px;
+  background:#ffd966;
+  color:#000;
+  padding:4px 6px;
   border-radius:6px;
-  box-shadow:0 2px 0 #1e1309;
+}
+
+.parts-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:8px;
+  margin-left:12px;
+}
+
+.parts-buttons button{
   font-size:8px;
+  padding:8px 12px;
+  justify-content:flex-start;
+  background:#8a5a2a;
+}
+
+.parts-buttons button:hover{
+  background:#9a6a3a;
 }
 
 /* ===== CONTENT ===== */
@@ -158,8 +165,14 @@ body{
   text-shadow:2px 2px #fff;
 }
 
-/* ===== NAV BUTTONS - PIXEL STYLE ===== */
-.content-head button{
+/* ===== NAV BUTTONS ===== */
+.content-head .nav-buttons {
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.content-head button.arrow-btn{
   font-family:'Press Start 2P';
   background:#4e91ff;
   color:#fff;
@@ -174,7 +187,7 @@ body{
   transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
 }
 
-.content-head button:hover{
+.content-head button.arrow-btn:hover{
   transform:translateY(-2px);
   background:#6aa7ff;
   box-shadow:
@@ -182,7 +195,7 @@ body{
     0 6px 0 #0c1b3a;
 }
 
-.content-head button:active{
+.content-head button.arrow-btn:active{
   transform:translateY(1px);
   background:#3f7aed;
   box-shadow:
@@ -231,6 +244,7 @@ body{
   border-radius:12px;
   margin-bottom:14px;
   line-height:1.6;
+  font-size:9px;
 }
 
 .code{
@@ -241,34 +255,13 @@ body{
   margin-bottom:14px;
   overflow:auto;
   position:relative;
+  font-size:8px;
 }
 
-/* ===== COPY BUTTON - PIXEL STYLE ===== */
-.code button.copy-btn{
-  position:absolute;
-  top:8px;
-  right:8px;
-  background:#ffd966;
-  color:#000;
-  border:2px solid #b59b24;
-  padding:4px 6px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:7px;
-  box-shadow:0 2px 0 #7a6515;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-}
-
-.code button.copy-btn:hover{
-  transform:translateY(-1px);
-  background:#fff1a8;
-  box-shadow:0 3px 0 #7a6515;
-}
-
-.code button.copy-btn:active{
-  transform:translateY(1px);
-  box-shadow:0 1px 0 #7a6515;
-  background:#f2c93a;
+.code pre{
+  white-space:pre-wrap;
+  word-break:break-word;
+  margin:0;
 }
 
 .demo{
@@ -277,41 +270,7 @@ body{
   padding:14px;
   border-radius:12px;
   margin-bottom:14px;
-}
-
-/* ===== DEMO BUTTONS - PIXEL STYLE ===== */
-.demo button{
-  font-family:'Press Start 2P';
-  background:#00c98b;
-  color:#003322;
-  border:3px solid #00805c;
-  padding:8px 12px;
-  border-radius:10px;
-  box-shadow:
-    0 3px 0 #00563f,
-    0 4px 0 #001f16;
-  cursor:pointer;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-top:8px;
-  transition:transform 0.1s, box-shadow 0.1s, background 0.1s;
-}
-
-.demo button:hover{
-  transform:translateY(-2px);
-  background:#29e2aa;
-  box-shadow:
-    0 5px 0 #00563f,
-    0 6px 0 #001f16;
-}
-
-.demo button:active{
-  transform:translateY(1px);
-  background:#00b27a;
-  box-shadow:
-    0 1px 0 #00563f,
-    0 2px 0 #001f16;
+  font-size:9px;
 }
 
 .examples{
@@ -322,237 +281,571 @@ body{
   margin:6px 0;
 }
 
+/* ===== EDIT BUTTON ===== */
+.code .edit-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#5c3a1a;
+  color:#fff;
+  border:none;
+  padding:6px 8px;
+  border-radius:8px;
+  font-size:8px;
+  cursor:pointer;
+  box-shadow:0 4px 0 #3e2814;
+  font-family:'Press Start 2P';
+}
+
+.code .edit-btn:hover{
+  transform:translateY(-2px);
+}
+
+/* ===== EDITOR MODAL ===== */
+#editorModal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,0.5);
+  z-index:1200;
+}
+#editorModal .modal{
+  width:min(950px,95%);
+  height:min(700px,95%);
+  background:#0b1020;
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  color:#e6f7ff;
+  box-shadow:0 10px 40px rgba(0,0,0,.6);
+  font-family:monospace;
+}
+#editorModal header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+#editorModal .controls{display:flex;gap:8px;align-items:center;}
+#editorModal button{
+  font-family:'Press Start 2P';
+}
+#editorModal textarea{
+  width:100%;
+  height:280px;
+  background:#071018;
+  color:#cfeefd;
+  border:1px solid #27455b;
+  padding:10px;
+  border-radius:8px;
+  resize:vertical;
+  font-family:monospace;
+  font-size:12px;
+  line-height:1.4;
+}
+#editorModal .bottom{
+  display:flex;
+  gap:12px;
+}
+#editorModal .preview{
+  flex:1;
+  border:1px solid #27455b;
+  border-radius:8px;
+  overflow:hidden;
+}
+#errorBox{
+  background:#3a1b1b;
+  color:#ffd6d6;
+  padding:8px;
+  border-radius:6px;
+  display:none;
+  font-size:12px;
+}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){
   .app{
     grid-template-columns:1fr;
     grid-template-rows:auto 1fr;
   }
+  #editorModal .modal{height:86vh}
 }
 </style>
 </head>
+
 <body>
 <div class="app">
 
 <aside class="sidebar">
   <div class="brand">
-    <h1>🎨 CSS Matrix</h1>
-    <p>Lesson 1</p>
+    <h1>🧠 MindCraft</h1>
+    <p>CSS Lesson 01</p>
   </div>
 
   <div class="lessons-list">
-    <button data-lesson="css-1" class="active"><span class="num">01</span> CSS Basics</button>
-    <button data-lesson="css-2"><span class="num">02</span> Selectors</button>
-    <button data-lesson="css-3"><span class="num">03</span> Properties</button>
-    <button data-lesson="css-4"><span class="num">04</span> Values</button>
-    <button data-lesson="css-5"><span class="num">05</span> Syntax Rules</button>
-    <button data-lesson="css-6"><span class="num">06</span> Code Examples</button>
-    <button data-lesson="css-7"><span class="num">07</span> Your Challenge</button>
+    <!-- ===== LESSON 1 WITH PARTS DISPLAYED ===== -->
+    <button data-lesson="lesson-1-1" style="display:flex; align-items:center; justify-content:center;">
+      <span><span class="num">01</span> Cyberpunk Style Matrix</span>
+    </button>
+
+    <div class="parts-buttons">
+      <button data-lesson="lesson-1-1">01. CSS Rule Anatomy</button>
+      <button data-lesson="lesson-1-2">02. Selector Types</button>
+      <button data-lesson="lesson-1-3">03. How CSS Works</button>
+      <button data-lesson="lesson-1-4">04. CSS Comments</button>
+      <button data-lesson="lesson-1-5">05. How CSS Finds HTML</button>
+      <button data-lesson="lesson-1-6">06. Your First CSS Challenge!</button>
+    </div>
   </div>
 </aside>
 
 <main class="content">
   <div class="content-head">
-    <a href="../../../Webside/Student.html" class="exit-btn">EXIT</a>
+    <a href="../../../Webside/Student.html" class="exit-btn" aria-label="Exit lessons">EXIT</a>
     <div class="title" id="panel-title">01 • CSS Basics</div>
-    <div>
-      <button id="prevLesson">◀</button>
-      <button id="nextLesson">▶</button>
+    <div class="nav-buttons">
+      <button id="prevLesson" class="arrow-btn" aria-label="Previous lesson">◀</button>
+      <button id="nextLesson" class="arrow-btn" aria-label="Next lesson">▶</button>
     </div>
   </div>
 
   <div class="panel-wrap">
-
-    <!-- CSS BASICS -->
-    <article id="css-1" class="lesson-panel visible">
-      <h1>CSS Basics & Syntax</h1>
-      <div class="meta">Lesson 1 • Topic 1</div>
-      <div class="explain">CSS = <strong>Cascading Style Sheets</strong>. Makes HTML pretty! Controls colors, fonts, spacing, layout. Lives in &lt;style&gt; tags or .css files.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>&lt;style&gt;
-body {
-  background: black;
-  color: cyan;
-  font-family: monospace;
-}
-&lt;/style&gt;</pre>
-      </div>
-      <div class="demo">
-        <p>Live CSS Demo:</p>
-        <button onclick="document.body.style.background='black';document.body.style.color='cyan';document.body.style.fontFamily='monospace'">Apply Dark Theme</button>
-        <button onclick="document.body.style.background='linear-gradient(#87e4ff,#c8f7b0)';document.body.style.color='black'">Reset</button>
-      </div>
+    <!-- ===== LESSON 1 PANELS ===== -->
+    <article id="lesson-1-1" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 1</div>
+      <h2>01. CSS Rule Anatomy</h2>
+      <div class="explain"></div>
     </article>
 
-    <!-- SELECTORS -->
-    <article id="css-2" class="lesson-panel">
-      <h1>CSS Selectors</h1>
-      <div class="explain">Selectors target HTML elements. Use <strong>class</strong> (.), <strong>ID</strong> (#), or <strong>element</strong> names.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>p { color: red; }           /* All paragraphs */
-.title { font-size: 24px; } /* Class selector */
-#main { background: blue; } /* ID selector */</pre>
-      </div>
-      <div class="demo">
-        <p>Test selectors:</p>
-        <button onclick="document.querySelectorAll('p')[0].style.color='red'">Color P Red</button>
-        <button onclick="document.body.innerHTML+='<p class=title style=color:purple;font-size:20px;>Class Demo</p>'">Add .title</button>
-      </div>
+    <article id="lesson-1-2" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 2</div>
+      <h2>02. Selector Types</h2>
+      <div class="explain"></div>
     </article>
 
-    <!-- PROPERTIES -->
-    <article id="css-3" class="lesson-panel">
-      <h1>CSS Properties</h1>
-      <div class="explain">Properties = what you style. Common ones: color, background, font-size, margin, padding, border.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>color: #ff0000;        /* Red text */
-margin: 10px;          /* All sides */
-padding: 20px 10px;    /* Top/bottom, left/right */
-border: 2px solid blue;</pre>
-      </div>
-      <div class="demo">
-        <button onclick="this.style.color='red';this.style.border='2px solid blue';this.style.padding='10px';this.innerText='Styled!'">Style Me</button>
-      </div>
+    <article id="lesson-1-3" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 3</div>
+      <h2>03. How CSS Works</h2>
+      <div class="explain"></div>
     </article>
 
-    <!-- VALUES -->
-    <article id="css-4" class="lesson-panel">
-      <h1>CSS Values</h1>
-      <div class="explain">Values = HOW to style. Use pixels (px), percentages (%), colors (hex/rgb/names), keywords (bold/italic).</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>font-size: 16px;
-width: 50%;
-color: #00ff00;
-background: rgb(0,0,255);
-font-weight: bold;</pre>
-      </div>
-      <div class="demo">
-        <button onclick="this.style.fontSize='20px';this.style.fontWeight='bold';this.style.color='#00ff00'">Big Green Bold</button>
-      </div>
+    <article id="lesson-1-4" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 4</div>
+      <h2>04. CSS Comments</h2>
+      <div class="explain"></div>
     </article>
 
-    <!-- SYNTAX RULES -->
-    <article id="css-5" class="lesson-panel">
-      <h1>CSS Syntax Rules</h1>
-      <div class="explain"><strong>Syntax:</strong> selector { property: value; }. Use semicolons between properties. Use curly braces.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>/* WRONG */
-body { color red font big }
+    <article id="lesson-1-5" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 5</div>
+      <h2>05. How CSS Finds HTML</h2>
+      <div class="explain"></div>
+    </article>
 
-/* CORRECT */
-body {
-  color: red;
-  font-size: 24px;
+    <article id="lesson-1-6" class="lesson-panel">
+      <h1>Cyberpunk Style Matrix</h1>
+      <div class="meta">Lesson 1 • Part 6</div>
+      <h2>06. Your First CSS Challenge!</h2>
+      <div class="explain"></div>
+    </article>
+  </div>
+</main>
+</div>
+ 
+<!-- EDITOR MODAL -->
+<div id="editorModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Code editor">
+    <header>
+      <div>
+        <strong id="modalTitle">Edit Code</strong>
+        <div id="errorBox"></div>
+      </div>
+      <div class="controls">
+        <button id="applyBtn">Apply</button>
+        <button id="closeEditor">Close</button>
+      </div>
+    </header>
+    <textarea id="codeEditor" spellcheck="false"></textarea>
+    <div style="display:flex;gap:8px;flex:1;min-height:220px;">
+      <div style="flex:1;">
+        <strong style="font-size:12px">Live Preview</strong>
+        <div class="preview"><iframe id="previewFrame" style="width:100%;height:100%;border:0"></iframe></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== LESSON 1 CONTENT ONLY ===== */
+const lessonContent = {
+  "lesson-1-1": `
+    <div class="explain">
+      CSS = <strong>SELECTOR { PROPERTY: VALUE; }</strong><br><br>
+      <strong>Selector</strong> = HTML target (h1, .class, #id)<br>
+      <strong>Property</strong> = what to change (color, font-size)<br>
+      <strong>Value</strong> = how to change it (red, 24px)
+    </div>
+    <div class="code">
+<pre>h1 {                    /* SELECTOR */
+    color: #ff00ff;      /* PROPERTY: VALUE */
+    font-size: 48px;     /* PROPERTY: VALUE */
 }</pre>
-      </div>
-      <div class="demo">
-        <p>Valid CSS syntax gets a ✔:</p>
-        <button onclick="alert('✅ VALID: body { color: red; }')">Test Valid</button>
-        <button onclick="alert('❌ INVALID: body { color red }')">Test Invalid</button>
-      </div>
-    </article>
+    </div>
+  `,
+  "lesson-1-2": `
+    <p>CSS selectors tell the browser <strong>which HTML elements</strong> to target.</p>
+    <div class="code">
+<pre>/* Element selector */
+p { color: #00aaff; }
 
-    <!-- CODE EXAMPLES -->
-    <article id="css-6" class="lesson-panel">
-      <h1>Complete Examples</h1>
-      <div class="explain">Real CSS that works! Copy these complete blocks.</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre>/* Pixel Button */
-button {
-  background: #ffcc4d;
-  border: 3px solid #e09c2b;
-  padding: 10px;
-  border-radius: 10px;
-  font-family: 'Press Start 2P';
+/* Class selector */
+.card { background:#111; color:#0ff; padding:12px; }
+
+/* ID selector */
+#hero { font-size:24px; color:#ff66cc; }</pre>
+    </div>
+    <div class="demo">
+      <p>Try the examples:</p>
+      <div class="card" style="margin-top:8px;padding:10px;border-radius:8px;background:#111;color:#0ff;">.card demo box</div>
+      <p id="hero" style="margin-top:8px;font-size:16px;color:#ff66cc;">#hero demo</p>
+    </div>
+  `,
+  "lesson-1-3": `
+    <p>Watch plain HTML transform with CSS! Same content, different styles.</p>
+    <div class="code">
+<pre>/* Add neon outline to headings */
+h3 { color:#ffcc00; text-shadow:0 0 8px rgba(255,204,0,0.6); }
+
+/* Style paragraph */
+p.notice { color:#00ffcc; font-weight:bold; }</pre>
+    </div>
+
+    <div class="demo">
+      <h3 style="color:#ffcc00;text-shadow:0 0 8px rgba(255,204,0,0.6);margin:0;">Example Heading</h3>
+      <p class="notice" style="color:#00ffcc;font-weight:bold;margin:8px 0 0 0;">This paragraph uses class "notice".</p>
+    </div>
+  `,
+  "lesson-1-4": `
+    <p>Use <strong>/* comments */</strong> to explain code. Browsers ignore everything between /* and */.</p>
+    <div class="code">
+<pre>/* This styles the main heading */
+h1 {
+    color: #ff00ff;     /* Magenta color */
+    font-size: 4em;     /* Extra large text */
 }
 
-/* Cyberpunk Body */
-body {
-  background: #000;
-  color: #00ffff;
-  font-family: monospace;
+/* Navigation menu styles */
+nav {
+    background: #000;   /* Pure black */
 }</pre>
-      </div>
-      <div class="demo">
-        <button onclick="this.style.cssText='background:#ffcc4d;border:3px solid #e09c2b;padding:10px;border-radius:10px;font-family:serif;font-size:12px;'">Pixel Button Effect</button>
-      </div>
-    </article>
+    </div>
 
-    <!-- CHALLENGE -->
-    <article id="css-7" class="lesson-panel">
-      <h1>Your Challenge</h1>
-      <div class="explain">Create a COMPLETE cyberpunk webpage! Use background gradients, neon text shadows, glowing buttons. Make it pixel-perfect!</div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
+    <div class="demo">
+      <strong style="display:block;margin-bottom:8px">Live Preview</strong>
+      <iframe class="inline-preview" style="width:100%;height:220px;border:1px solid #27455b;border-radius:8px"></iframe>
+    </div>
+  `,
+  "lesson-1-5": `
+    <p>CSS scans HTML → finds matching <strong>selectors</strong> → applies styles.<br>
+    Inline styles &gt; Internal &gt; External CSS (priority order).</p>
+    <div class="code">
+<pre>/* Inline example */
+/* (in HTML) &lt;p style='color:red'&gt;... &lt;/p&gt; */
+
+/* Internal CSS example (in &lt;style&gt;) */
+.box { padding:12px; background:#222; color:#0ff; }</pre>
+    </div>
+    <div class="demo">
+      <p style="color: red;margin:0;">RED = Inline style (highest priority)</p>
+      <div class="box" style="margin-top:8px;padding:8px;background:#222;color:#0ff;border-radius:8px;">Internal CSS demo</div>
+    </div>
+  `,
+  "lesson-1-6": `
+    <p>Style this CMU card! Change colors, add shadows, make it cyberpunk!</p>
+    <div class="code">
 <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
 &lt;style&gt;
-body {
-  background: #000;
-  color: #00ffff;
-  font-family: monospace;
-  text-shadow: 0 0 10px #00ffff;
-}
-.btn-glow {
-  background: #ff00ff;
-  border: 2px solid #00ffff;
-  color: white;
-  padding: 15px;
-  box-shadow: 0 0 20px #ff00ff;
+/* YOUR CSS HERE! */
+.cmu-card {
+    border-radius:10px;
+    padding:12px;
 }
 &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;h1&gt;CYBERPUNK ZONE&lt;/h1&gt;
-&lt;button class="btn-glow"&gt;ENTER MATRIX&lt;/button&gt;
+&lt;div class="cmu-card"&gt;
+    &lt;h2&gt;CMU IT Student&lt;/h2&gt;
+    &lt;p&gt;Learning cyberpunk CSS!&lt;/p&gt;
+&lt;/div&gt;
 &lt;/body&gt;
 &lt;/html&gt;</pre>
-      </div>
-    </article>
+    </div>
 
-  </div>
-</main>
-</div>
+    <div class="demo">
+      <strong style="display:block;margin-bottom:8px">Live Preview</strong>
+      <iframe class="inline-preview" style="width:100%;height:260px;border:1px solid #27455b;border-radius:8px"></iframe>
+    </div>
+  `
+};
 
-<script>
-// Lesson navigation
-const buttons = document.querySelectorAll('.lessons-list button');
-const panels = document.querySelectorAll('.lesson-panel');
-const title = document.getElementById('panel-title');
+const lessonsData = [
+  {num:'01',title:'Cyberpunk Style Matrix',parts:['CSS Rule Anatomy','Selector Types','How CSS Works','CSS Comments','How CSS Finds HTML','Your First CSS Challenge!']}
+];
 
-function showLesson(id){
-  panels.forEach(p=>p.classList.remove('visible'));
-  buttons.forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('visible');
-  const btn = document.querySelector(`.lessons-list button[data-lesson="${id}"]`);
-  btn.classList.add('active');
-  title.textContent = btn.querySelector('.num').textContent + ' • ' + btn.textContent.replace(/^\d+\s+/, '');
+/* ===== Initialize on DOM Ready ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  // Inject lesson content
+  const panels = document.querySelectorAll('.lesson-panel');
+  panels.forEach(panel => {
+    if (lessonContent[panel.id]) {
+      panel.querySelector('.explain').innerHTML = lessonContent[panel.id];
+    }
+  });
+
+  // Initialize inline previews
+  panels.forEach(panel => {
+    const pre = panel.querySelector('.code pre');
+    const inline = panel.querySelector('.inline-preview');
+    if (inline && pre) {
+      const codeText = pre.innerText || '';
+      inline.srcdoc = buildSrcdocFromCode(codeText);
+    }
+  });
+
+  // Add Edit buttons
+  document.querySelectorAll('.lesson-panel').forEach(panel=>{
+    panel.querySelectorAll('.code').forEach(codeBlock=>{
+      if (codeBlock.querySelector('.edit-btn')) return;
+      const btn = document.createElement('button');
+      btn.className = 'edit-btn';
+      btn.textContent = 'Edit';
+      codeBlock.appendChild(btn);
+
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openEditorForBlock(panel, codeBlock);
+      });
+    });
+  });
+
+  // Wire navigation
+  wireUpNavigation();
+  showLesson('lesson-1-1');
+});
+
+/* ===== Editor Functions ===== */
+const modal = document.getElementById('editorModal');
+const codeEditor = document.getElementById('codeEditor');
+const applyBtn = document.getElementById('applyBtn');
+const closeEditor = document.getElementById('closeEditor');
+const previewFrame = document.getElementById('previewFrame');
+const modalTitle = document.getElementById('modalTitle');
+const errorBox = document.getElementById('errorBox');
+
+function decodeHtmlEntities(str){
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = str;
+  return textarea.value;
 }
 
-buttons.forEach(b=>b.onclick=()=>showLesson(b.dataset.lesson));
+function showError(msg){
+  errorBox.style.display = 'block';
+  errorBox.textContent = msg;
+}
 
-const order=[...buttons].map(b=>b.dataset.lesson);
-const current=()=>order.indexOf(document.querySelector('.lesson-panel.visible').id);
-document.getElementById('prevLesson').onclick=()=>{let i=current(); if(i>0) showLesson(order[i-1]);};
-document.getElementById('nextLesson').onclick=()=>{let i=current(); if(i<order.length-1) showLesson(order[i+1]);};
+function clearError(){
+  errorBox.style.display = 'none';
+  errorBox.textContent = '';
+}
 
-// Copy buttons
-document.querySelectorAll('.copy-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-        const code = btn.nextElementSibling.innerText;
-        navigator.clipboard.writeText(code).then(()=>{
-            btn.innerText='✔ Copied!';
-            setTimeout(()=>btn.innerText='Copy',1500);
+function buildSrcdocFromCode(code){
+  const reporter = `
+    <script>
+      (function(){
+        window.addEventListener('error', function(e){
+          parent.postMessage({type:'runtime-error', message: e.message, lineno: e.lineno, colno: e.colno}, '*');
         });
-    });
+        window.addEventListener('unhandledrejection', function(e){
+          parent.postMessage({type:'runtime-error', message: e.reason && e.reason.message ? e.reason.message : String(e.reason)}, '*');
+        });
+      })();
+    <\/script>
+  `;
+  const trimmed = (code || '').trim();
+
+  if (/<\/?html|<!doctype|<head|<body/i.test(trimmed)) {
+    if (/<\/body>/i.test(trimmed)) {
+      return trimmed.replace(/<\/body>/i, reporter + '</body>');
+    }
+    return trimmed + reporter;
+  }
+
+  const looksLikeCSS = /\{[^}]*:[^}]*\}/.test(trimmed) && !/<[a-z]/i.test(trimmed);
+  if (looksLikeCSS) {
+    return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+      <style>${trimmed}</style>
+      <style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style>
+      </head><body>
+      <h1>Preview Heading</h1>
+      <p>This is a sample paragraph to show your CSS styles.</p>
+      <div class="example-box" style="padding:12px;border:1px dashed #999;margin-top:12px;">Example box</div>
+      ${reporter}
+      </body></html>`;
+  }
+
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{margin:0;padding:12px;font-family:system-ui,Segoe UI,Roboto,Arial}</style></head><body>${trimmed}${reporter}</body></html>`;
+}
+
+function openEditorForBlock(panel, codeBlock){
+  modal.dataset.targetPanel = panel.id;
+  modalTitle.textContent = 'Edit code — ' + (panel.querySelector('h2') ? panel.querySelector('h2').textContent : panel.id);
+  clearError();
+
+  const pre = codeBlock.querySelector('pre');
+  const codeText = pre ? pre.innerText.trim() : '';
+  codeEditor.value = decodeHtmlEntities(codeText);
+
+  try {
+    previewFrame.srcdoc = buildSrcdocFromCode(codeEditor.value);
+  } catch (err) {
+    showError('Preview failed: ' + err.message);
+  }
+
+  modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(()=>codeEditor.focus(),120);
+}
+
+applyBtn.addEventListener('click', ()=>{
+  const code = codeEditor.value;
+  const panelId = modal.dataset.targetPanel;
+  if (!panelId) return;
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const pre = panel.querySelector('.code pre');
+  if (pre) pre.innerText = code;
+
+  try {
+    const srcdoc = buildSrcdocFromCode(code);
+    previewFrame.srcdoc = srcdoc;
+    clearError();
+  } catch (err) {
+    showError('Apply preview failed: ' + err.message);
+  }
+
+  const inline = panel.querySelector('.inline-preview');
+  if (inline) {
+    try {
+      inline.srcdoc = buildSrcdocFromCode(code);
+    } catch (err) {
+      console.error('Inline preview update failed', err);
+    }
+  }
 });
+
+closeEditor.addEventListener('click', ()=>{
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  clearError();
+  previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+});
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal){
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    clearError();
+    previewFrame.srcdoc = '<!doctype html><html><body></body></html>';
+  }
+});
+
+window.addEventListener('message', (ev)=>{
+  if(!ev.data) return;
+  if(ev.data.type === 'runtime-error'){
+    showError('Runtime error: ' + ev.data.message);
+  }
+});
+
+/* ===== Navigation Functions ===== */
+function queryAll(selector){ return Array.from(document.querySelectorAll(selector)); }
+
+const partButtons = () => queryAll('.parts-buttons button');
+const panelsAll  = () => queryAll('.lesson-panel');
+const titleEl   = document.getElementById('panel-title');
+const prevBtn = document.getElementById('prevLesson');
+const nextBtn = document.getElementById('nextLesson');
+
+function updateButtons() {
+  const current = document.querySelector('.lesson-panel.visible');
+  if(!current) return;
+  const ids = current.id.split('-').map(Number);
+  const lessonNum = ids[1];
+  const partNum = ids[2];
+  const parts = lessonsData[lessonNum - 1].parts.length;
+  prevBtn.style.display = partNum === 1 ? 'none' : 'inline-block';
+  nextBtn.style.display = partNum === parts ? 'none' : 'inline-block';
+}
+
+function showLesson(id) {
+  panelsAll().forEach(p => p.classList.remove('visible'));
+  partButtons().forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(id);
+  if(!panel) return;
+  panel.classList.add('visible');
+  const btn = document.querySelector(`[data-lesson="${id}"]`);
+  if (btn) btn.classList.add('active');
+  const metaEl = panel.querySelector('.meta');
+  const partText = metaEl ? (metaEl.textContent.split('•')[1] || '').trim() : '';
+  titleEl.textContent = (panel.querySelector('h1') ? panel.querySelector('h1').textContent : '') + (partText ? ' • ' + partText : '');
+  updateButtons();
+}
+
+function wireUpNavigation(){
+  partButtons().forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.lesson) {
+        showLesson(btn.dataset.lesson);
+      }
+    });
+  });
+
+  prevBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    if (partNum > 1) {
+      showLesson(`lesson-${lessonNum}-${partNum - 1}`);
+    }
+  };
+
+  nextBtn.onclick = () => {
+    const current = document.querySelector('.lesson-panel.visible');
+    if(!current) return;
+    const [_, lessonNum, partNum] = current.id.split('-').map(Number);
+    const totalParts = lessonsData[lessonNum - 1].parts.length;
+    if (partNum < totalParts) {
+      showLesson(`lesson-${lessonNum}-${partNum + 1}`);
+    }
+  };
+}
+
+if(document.readyState === 'complete' || document.readyState === 'interactive'){
+  wireUpNavigation();
+} else {
+  document.addEventListener('DOMContentLoaded', wireUpNavigation);
+}
+
 </script>
+
 </body>
 </html>
