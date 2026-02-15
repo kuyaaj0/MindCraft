@@ -278,21 +278,30 @@ studentSignupForm.addEventListener("submit", async (e) => {
   try {
     const user = await createUserWithEmailAndPassword(auth, email, password);
 
-    await setDoc(doc(db, "users", user.user.uid), {
-      name,
-      email,
-      role: "student",
-      verified: false,
-      level: 1,
-      xp: 0,
-      xpMax: 100,
-      totalXP: 0,
-      completedLessons: [],
-      completedQuizzes: [],
-      createdAt: new Date()
-    });
+    // ✅ Create Firestore document and confirm write success
+const userRef = doc(db, "users", user.user.uid);
+await setDoc(userRef, {
+  name,
+  email,
+  role: "student",
+  verified: false,
+  level: 1,
+  xp: 0,
+  xpMax: 100,
+  totalXP: 0,
+  completedLessons: [],
+  completedQuizzes: [],
+  createdAt: new Date()
+});
 
-    await sendEmailVerification(user.user); // ✅ Gmail verification
+// ✅ Delay before sending verification (ensure Firestore sync)
+await new Promise(res => setTimeout(res, 1500));
+
+// ✅ Send email verification
+await sendEmailVerification(user.user);
+
+// ✅ Optional update for Firestore consistency (in case of race condition)
+await setDoc(userRef, { verified: false }, { merge: true });
 
     showToast("Verification email sent. Check Gmail inbox/spam.");
     studentMessage.style.color = "#1DB954";
