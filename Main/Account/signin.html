@@ -336,11 +336,26 @@ teacherSigninForm.addEventListener("submit", async e=>{
 
     const ref = doc(db,"users",user.uid);
     const snap = await getDoc(ref);
-    if(!snap.exists() || snap.data().role !== "teacher"){
-      teacherMessage.textContent = "This account is not a teacher.";
-      await signOut(auth);
-      return;
-    }
+    if (!snap.exists()) {
+  // 🔧 Auto-recover Firestore data if missing
+  await setDoc(ref, {
+    name: user.displayName || user.email.split("@")[0],
+    email: user.email,
+    role: "student",
+    verified: user.emailVerified,
+    level: 1,
+    xp: 0,
+    xpMax: 100,
+    totalXP: 0,
+    completedLessons: [],
+    completedQuizzes: [],
+    createdAt: new Date()
+  });
+} else if (snap.data().role !== "student") {
+  studentMessage.textContent = "This account is not a student.";
+  await signOut(auth);
+  return;
+}
 
     localStorage.setItem("currentUser",user.uid);
     localStorage.setItem("cachedName",snap.data().name||"Teacher");
