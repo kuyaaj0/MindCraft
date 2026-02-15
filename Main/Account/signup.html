@@ -249,7 +249,6 @@ function backToChoice() {
   teacherMessage.textContent = "";
 }
 
-/* ==== EVENT LISTENERS ==== */
 studentBtn.addEventListener("click", showStudentForm);
 teacherBtn.addEventListener("click", showTeacherForm);
 backBtn.addEventListener("click", backToChoice);
@@ -278,30 +277,30 @@ studentSignupForm.addEventListener("submit", async (e) => {
   try {
     const user = await createUserWithEmailAndPassword(auth, email, password);
 
-    // ✅ Create Firestore document and confirm write success
-const userRef = doc(db, "users", user.user.uid);
-await setDoc(userRef, {
-  name,
-  email,
-  role: "student",
-  verified: false,
-  level: 1,
-  xp: 0,
-  xpMax: 100,
-  totalXP: 0,
-  completedLessons: [],
-  completedQuizzes: [],
-  createdAt: new Date()
-});
+    // ✅ Create Firestore document immediately
+    const userRef = doc(db, "users", user.user.uid);
+    await setDoc(userRef, {
+      name,
+      email,
+      role: "student",
+      verified: false,
+      level: 1,
+      xp: 0,
+      xpMax: 100,
+      totalXP: 0,
+      completedLessons: [],
+      completedQuizzes: [],
+      createdAt: new Date()
+    });
 
-// ✅ Delay before sending verification (ensure Firestore sync)
-await new Promise(res => setTimeout(res, 1500));
+    // ✅ Short delay to ensure Firestore writes
+    await new Promise(res => setTimeout(res, 1000));
 
-// ✅ Send email verification
-await sendEmailVerification(user.user);
+    // ✅ Send Gmail verification
+    await sendEmailVerification(user.user);
 
-// ✅ Optional update for Firestore consistency (in case of race condition)
-await setDoc(userRef, { verified: false }, { merge: true });
+    // ✅ Merge verified field in case of sync delay
+    await setDoc(userRef, { verified: false }, { merge: true });
 
     showToast("Verification email sent. Check Gmail inbox/spam.");
     studentMessage.style.color = "#1DB954";
@@ -339,7 +338,8 @@ teacherSignupForm.addEventListener("submit", async (e) => {
   try {
     const user = await createUserWithEmailAndPassword(auth, email, password);
 
-    await setDoc(doc(db, "users", user.user.uid), {
+    const userRef = doc(db, "users", user.user.uid);
+    await setDoc(userRef, {
       name,
       email,
       role: "teacher",
@@ -347,9 +347,11 @@ teacherSignupForm.addEventListener("submit", async (e) => {
       createdAt: new Date()
     });
 
-    showToast("Teacher account created successfully!");
+    await sendEmailVerification(user.user);
+
+    showToast("Teacher account created! Check DepEd inbox.");
     teacherMessage.style.color = "#1DB954";
-    teacherMessage.textContent = "Teacher account created! You can now sign in.";
+    teacherMessage.textContent = "Teacher account created successfully!";
 
     setTimeout(() => location.href = "signin.html", 3000);
   } catch (err) {
