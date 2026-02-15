@@ -295,27 +295,38 @@ studentSigninForm.addEventListener("submit", async e=>{
 
     const ref = doc(db,"users",user.uid);
     const snap = await getDoc(ref);
-    if(!snap.exists() || snap.data().role !== "student"){
+
+    // 🧩 Auto-repair Firestore data if missing
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        name: user.displayName || user.email.split("@")[0],
+        email: user.email,
+        role: "student",
+        verified: user.emailVerified,
+        ...defaultStudentFields,
+        createdAt: new Date()
+      });
+      console.log("✅ Firestore record recreated for missing student.");
+    } else if (snap.data().role !== "student") {
       studentMessage.textContent = "This account is not a student.";
       await signOut(auth);
       return;
     }
 
-    let data = snap.data();
-    for(const key in defaultStudentFields){
-      if(!(key in data)) data[key] = defaultStudentFields[key];
-    }
-    await setDoc(ref,data,{merge:true});
-
-    localStorage.setItem("currentUser",user.uid);
-    localStorage.setItem("cachedName",data.name||"Student");
-    localStorage.setItem("currentRole","student");
+    const data = (await getDoc(ref)).data(); // refresh after repair
+    localStorage.setItem("currentUser", user.uid);
+    localStorage.setItem("cachedName", data.name || "Student");
+    localStorage.setItem("currentRole", "student");
 
     showToast("Login successful");
     setTimeout(()=>location.href="../Startup/StartupS.html",1200);
 
-  }catch(err){ showToast(err.message,true); }
+  }catch(err){ 
+    console.error(err);
+    showToast(err.message,true);
+  }
 });
+
 
 /* TEACHER SIGN IN */
 teacherSigninForm.addEventListener("submit", async e=>{
