@@ -54,11 +54,11 @@ body::before {
 .back-btn:hover { background: #888; transform: translateY(-1px); }
 .back-btn:active { transform: translateY(2px); }
 
-/* HOME BUTTON (LEFT) */
+/* HOME BUTTON */
 .home-wrap {
   position: absolute;
   top: 24px;
-  left: 24px; /* same left as back button */
+  left: 24px;
   display: block;
   z-index: 10;
 }
@@ -156,7 +156,7 @@ button:active { transform: translateY(3px); }
   <button class="back-btn" id="backBtn">← Back</button>
 </div>
 
-<!-- HOME BUTTON (VISIBLE ONLY ON ROLE CHOICE) -->
+<!-- HOME BUTTON -->
 <div class="home-wrap" id="homeWrap">
   <button class="home-btn" onclick="location.href='../../index.html'">Home</button>
 </div>
@@ -188,7 +188,7 @@ button:active { transform: translateY(3px); }
   <p class="message" id="studentMessage"></p>
 </div>
 
-<!-- TEACHER SIGN UP PANEL -->
+<!-- TEACHER SIGN UP PANEL (Temporarily Disabled) -->
 <div class="panel teacher-form" id="teacherForm">
   <div class="title">Teacher Sign Up</div>
   <div class="subtitle">DepEd email required</div>
@@ -216,10 +216,17 @@ const studentBtn = document.getElementById("studentBtn");
 const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
 const studentForm = document.getElementById("studentForm");
-const teacherForm = document.getElementById("teacherForm");
 const backWrap = document.getElementById("backWrap");
 const backBtn = document.getElementById("backBtn");
 const homeWrap = document.getElementById("homeWrap");
+
+/* ==== TOAST ==== */
+function showToast(msg, isError=false) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => toast.className = "toast", 3000);
+}
 
 /* ==== UI TOGGLE ==== */
 function showStudentForm() {
@@ -229,37 +236,30 @@ function showStudentForm() {
   homeWrap.style.display = "none";
 }
 
+/* ❌ Teacher Sign-up Temporarily Disabled ❌ */
 function showTeacherForm() {
-  choiceSection.style.display = "none";
-  teacherForm.style.display = "block";
-  backWrap.style.display = "block";
-  homeWrap.style.display = "none";
+  showToast("Teacher registration is not available yet.", true);
+  // Uncomment these lines later when the teacher feature is ready:
+  // choiceSection.style.display = "none";
+  // teacherForm.style.display = "block";
+  // backWrap.style.display = "block";
+  // homeWrap.style.display = "none";
 }
 
 function backToChoice() {
   studentForm.style.display = "none";
-  teacherForm.style.display = "none";
   choiceSection.style.display = "block";
   backWrap.style.display = "none";
   homeWrap.style.display = "block";
 
   studentSignupForm.reset();
-  teacherSignupForm.reset();
   studentMessage.textContent = "";
-  teacherMessage.textContent = "";
 }
 
+/* ==== EVENT LISTENERS ==== */
 studentBtn.addEventListener("click", showStudentForm);
 teacherBtn.addEventListener("click", showTeacherForm);
 backBtn.addEventListener("click", backToChoice);
-
-/* ==== TOAST ==== */
-function showToast(msg, isError=false) {
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.className = "toast show" + (isError ? " error" : "");
-  setTimeout(() => toast.className = "toast", 3000);
-}
 
 /* ==== STUDENT SIGN UP ==== */
 const studentSignupForm = document.getElementById("studentSignupForm");
@@ -276,8 +276,6 @@ studentSignupForm.addEventListener("submit", async (e) => {
 
   try {
     const user = await createUserWithEmailAndPassword(auth, email, password);
-
-    // ✅ Create Firestore document immediately
     const userRef = doc(db, "users", user.user.uid);
     await setDoc(userRef, {
       name,
@@ -293,13 +291,8 @@ studentSignupForm.addEventListener("submit", async (e) => {
       createdAt: new Date()
     });
 
-    // ✅ Short delay to ensure Firestore writes
     await new Promise(res => setTimeout(res, 1000));
-
-    // ✅ Send Gmail verification
     await sendEmailVerification(user.user);
-
-    // ✅ Merge verified field in case of sync delay
     await setDoc(userRef, { verified: false }, { merge: true });
 
     showToast("Verification email sent. Check Gmail inbox/spam.");
@@ -316,51 +309,49 @@ studentSignupForm.addEventListener("submit", async (e) => {
 });
 
 /* ==== TEACHER SIGN UP ==== */
-const teacherSignupForm = document.getElementById("teacherSignupForm");
-const teacherName = document.getElementById("teacherName");
-const teacherEmail = document.getElementById("teacherEmail");
-const teacherPassword = document.getElementById("teacherPassword");
-const teacherMessage = document.getElementById("teacherMessage");
-
-teacherSignupForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const name = teacherName.value.trim();
-  const email = teacherEmail.value.trim();
-  const password = teacherPassword.value;
-
-  if (!email.includes("@ed.gov") && !email.includes("@deped.gov.ph")) {
-    teacherMessage.style.color = "#c62828";
-    teacherMessage.textContent = "Invalid DepEd email address.";
-    showToast("Invalid DepEd email.", true);
-    return;
-  }
-
-  try {
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-
-    const userRef = doc(db, "users", user.user.uid);
-    await setDoc(userRef, {
-      name,
-      email,
-      role: "teacher",
-      verified: true,
-      createdAt: new Date()
-    });
-
-    await sendEmailVerification(user.user);
-
-    showToast("Teacher account created! Check DepEd inbox.");
-    teacherMessage.style.color = "#1DB954";
-    teacherMessage.textContent = "Teacher account created successfully!";
-
-    setTimeout(() => location.href = "signin.html", 3000);
-  } catch (err) {
-    console.error(err);
-    teacherMessage.style.color = "#c62828";
-    teacherMessage.textContent = err.message;
-    showToast(err.message, true);
-  }
-});
+// ⚠️ Temporarily Disabled – For future use only ⚠️
+//
+// const teacherSignupForm = document.getElementById("teacherSignupForm");
+// const teacherName = document.getElementById("teacherName");
+// const teacherEmail = document.getElementById("teacherEmail");
+// const teacherPassword = document.getElementById("teacherPassword");
+// const teacherMessage = document.getElementById("teacherMessage");
+//
+// teacherSignupForm.addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   const name = teacherName.value.trim();
+//   const email = teacherEmail.value.trim();
+//   const password = teacherPassword.value;
+//
+//   if (!email.includes("@ed.gov") && !email.includes("@deped.gov.ph")) {
+//     teacherMessage.style.color = "#c62828";
+//     teacherMessage.textContent = "Invalid DepEd email address.";
+//     showToast("Invalid DepEd email.", true);
+//     return;
+//   }
+//
+//   try {
+//     const user = await createUserWithEmailAndPassword(auth, email, password);
+//     const userRef = doc(db, "users", user.user.uid);
+//     await setDoc(userRef, {
+//       name,
+//       email,
+//       role: "teacher",
+//       verified: true,
+//       createdAt: new Date()
+//     });
+//     await sendEmailVerification(user.user);
+//     showToast("Teacher account created! Check DepEd inbox.");
+//     teacherMessage.style.color = "#1DB954";
+//     teacherMessage.textContent = "Teacher account created successfully!";
+//     setTimeout(() => location.href = "signin.html", 3000);
+//   } catch (err) {
+//     console.error(err);
+//     teacherMessage.style.color = "#c62828";
+//     teacherMessage.textContent = err.message;
+//     showToast(err.message, true);
+//   }
+// });
 </script>
 
 </body>
