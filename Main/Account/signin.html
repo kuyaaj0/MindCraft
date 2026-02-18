@@ -5,168 +5,238 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sign In | MindCraft</title>
 
+<!-- ==============================
+ 🎨 Fonts & Style
+============================== -->
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  font-family:'Baloo 2', cursive;
-  min-height:100vh;
-  background:linear-gradient(to bottom,#8fe9ff,#c8f7b0);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position:relative;
+/* ==============================
+ 🔧 Global Reset
+============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Background stars */
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
+/* ==============================
+ 🌈 Body Styling
+============================== */
+body {
+  font-family: 'Baloo 2', cursive;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #8fe9ff, #c8f7b0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* ✨ Background Glow Stars */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
     radial-gradient(circle at 20% 30%, #fff 2px, transparent 3px),
     radial-gradient(circle at 70% 20%, #fff 2px, transparent 3px),
     radial-gradient(circle at 40% 80%, #fff 2px, transparent 3px);
-  opacity:.25;
+  opacity: 0.25;
   pointer-events: none;
 }
 
-/* Home & Back buttons */
-.home-wrap, .back-wrap{
-  position:absolute;
-  top:24px;
-  left:24px;
-  z-index:10;
+/* ==============================
+ 🏠 Home & Back Buttons
+============================== */
+.home-wrap, 
+.back-wrap {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 10;
 }
-.home-btn, .back-btn{
-  background:#ffae42;
-  border:none;
-  padding:10px 18px;
-  border-radius:18px;
-  font-size:15px;
-  font-weight:700;
-  color:#5a3a1a;
-  cursor:pointer;
-  box-shadow:0 4px 0 #d8942f;
-}
-.home-btn:hover, .back-btn:hover{transform:translateY(-1px)}
-.home-btn:active, .back-btn:active{transform:translateY(2px)}
 
-/* Card */
-.panel{
-  background:white;
-  width:400px;
-  padding:36px;
-  border-radius:26px;
-  text-align:center;
-  box-shadow:0 14px 28px rgba(0,0,0,.2);
+.home-btn, 
+.back-btn {
+  background: #ffae42;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 18px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #5a3a1a;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #d8942f;
+  transition: transform 0.2s ease;
+}
+
+.home-btn:hover, 
+.back-btn:hover {
+  transform: translateY(-1px);
+}
+
+.home-btn:active, 
+.back-btn:active {
+  transform: translateY(2px);
+}
+
+/* ==============================
+ 📦 Main Panel Container
+============================== */
+.panel {
+  background: white;
+  width: 400px;
+  padding: 36px;
+  border-radius: 26px;
+  text-align: center;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
   position: relative;
-  z-index:1;
+  z-index: 1;
 }
 
-/* Text */
-.title{
-  font-size:38px;
-  font-weight:800;
-  color:#5a3a1a;
-  margin-bottom:6px;
-}
-.subtitle{
-  font-size:17px;
-  color:#6d4c41;
-  margin-bottom:24px;
+/* ==============================
+ 🧭 Typography
+============================== */
+.title {
+  font-size: 38px;
+  font-weight: 800;
+  color: #5a3a1a;
+  margin-bottom: 6px;
 }
 
-/* Inputs */
-input{
-  width:100%;
-  padding:13px;
-  border-radius:14px;
-  border:none;
-  background:#f3f3f3;
-  font-size:15px;
-  margin-bottom:12px;
+.subtitle {
+  font-size: 17px;
+  color: #6d4c41;
+  margin-bottom: 24px;
 }
 
-/* Buttons */
-button{
-  width:100%;
-  background:#b8783d;
-  color:white;
-  border:none;
-  border-radius:18px;
-  padding:14px;
-  font-size:17px;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 5px 0 #6b3e1a;
-  transition:.2s;
-}
-button:hover{transform:translateY(-1px)}
-button:active{transform:translateY(3px)}
-
-.role-btn{margin-bottom:12px}
-
-/* Links */
-.auth-link{
-  margin-top:14px;
-  font-size:14px;
-}
-.auth-link a{
-  color:#1db954;
-  font-weight:700;
-  text-decoration:none;
+/* ==============================
+ ✏️ Input Styling
+============================== */
+input {
+  width: 100%;
+  padding: 13px;
+  border-radius: 14px;
+  border: none;
+  background: #f3f3f3;
+  font-size: 15px;
+  margin-bottom: 12px;
 }
 
-/* Message */
-.message{
-  margin-top:10px;
-  font-weight:700;
-  color:#c62828;
-  font-size:14px;
+/* ==============================
+ 🔘 Button Styling
+============================== */
+button {
+  width: 100%;
+  background: #b8783d;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #6b3e1a;
+  transition: transform 0.15s ease;
 }
 
-/* Toast */
-.toast{
-  position:fixed;
-  bottom:24px;
-  right:24px;
-  background:#1db954;
-  color:white;
-  padding:14px 18px;
-  border-radius:14px;
-  font-weight:700;
-  opacity:0;
-  transform:translateY(20px);
-  transition:.4s;
-  z-index:9999;
+button:hover {
+  transform: translateY(-1px);
 }
-.toast.show{opacity:1;transform:translateY(0)}
-.toast.error{background:#c62828}
 
-/* Hide sections */
-.student-form,.teacher-form{display:none}
+button:active {
+  transform: translateY(3px);
+}
 
-/* Position resend/forgot buttons inside panel */
-.inner-btn{margin-bottom:12px}
+.role-btn {
+  margin-bottom: 12px;
+}
+
+/* ==============================
+ 🔗 Auth Links
+============================== */
+.auth-link {
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.auth-link a {
+  color: #1db954;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ==============================
+ ⚠️ Error & Message Text
+============================== */
+.message {
+  margin-top: 10px;
+  font-weight: 700;
+  color: #c62828;
+  font-size: 14px;
+}
+
+/* ==============================
+ 🍞 Toast Notification
+============================== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #1db954;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.4s;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.error {
+  background: #c62828;
+}
+
+/* ==============================
+ 📱 Responsive Adjustments
+============================== */
+.student-form, 
+.teacher-form {
+  display: none;
+}
+
+.inner-btn {
+  margin-bottom: 12px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- Home button (only on choice) -->
+<!-- ==============================
+ 🏠 Home Button
+============================== -->
 <div class="home-wrap">
   <button id="homeBtn" class="home-btn">Home</button>
 </div>
 
-<!-- Back button (outside panels, left top) -->
+<!-- ==============================
+ ⬅️ Back Button
+============================== -->
 <div class="back-wrap" style="display:none;">
   <button id="backBtn" class="back-btn">Back</button>
 </div>
 
-<!-- ROLE CHOICE -->
+<!-- ==============================
+ 🧩 Role Selection
+============================== -->
 <div class="panel" id="choiceSection">
   <div class="title">MindCraft</div>
   <div class="subtitle">Choose your role to sign in</div>
@@ -179,7 +249,9 @@ button:active{transform:translateY(3px)}
   </div>
 </div>
 
-<!-- STUDENT SIGN IN -->
+<!-- ==============================
+ 🎓 Student Login Section
+============================== -->
 <div class="panel student-form" id="studentForm">
   <div class="title">Student Login</div>
 
@@ -191,10 +263,11 @@ button:active{transform:translateY(3px)}
 
   <p class="message" id="studentMessage"></p>
   <button id="studentForgot" class="inner-btn">Forgot Password?</button>
-  <!--<button id="resendStudent" class="inner-btn" style="background:#ff69b4;">Resend Verification</button>-->
 </div>
 
-<!-- TEACHER SIGN IN -->
+<!-- ==============================
+ 🧑‍🏫 Teacher Login (Disabled)
+============================== -->
 <div class="panel teacher-form" id="teacherForm">
   <div class="title">Teacher Login</div>
   <div class="subtitle">DepEd email only</div>
@@ -210,15 +283,23 @@ button:active{transform:translateY(3px)}
   <button id="resendTeacher" class="inner-btn" style="background:#ff69b4;">Resend Verification</button>
 </div>
 
-<!-- Toast -->
+<!-- ==============================
+ 🍞 Toast Element
+============================== -->
 <div id="toast" class="toast"></div>
 
+<!-- ==============================
+ ⚙️ JavaScript Section
+============================== -->
 <script type="module">
+/* Firebase Imports */
 import { auth, db } from '../System/Database/firebase.js';
-import { signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* UI Elements */
+/* ==============================
+ 🔧 DOM Elements
+============================== */
 const studentBtn = document.getElementById("studentBtn");
 const teacherBtn = document.getElementById("teacherBtn");
 const choiceSection = document.getElementById("choiceSection");
@@ -230,7 +311,19 @@ const backBtn = document.getElementById("backBtn");
 const studentMessage = document.getElementById("studentMessage");
 const teacherMessage = document.getElementById("teacherMessage");
 
-/* Show role forms */
+/* ==============================
+ 🍞 Toast Message Function
+============================== */
+function showToast(msg, isError = false) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : "");
+  setTimeout(() => t.className = "toast", 3000);
+}
+
+/* ==============================
+ 🧑‍🎓 Show Student Login
+============================== */
 studentBtn.addEventListener("click", () => {
   choiceSection.style.display = "none";
   studentForm.style.display = "block";
@@ -238,14 +331,22 @@ studentBtn.addEventListener("click", () => {
   backWrap.style.display = "block";
 });
 
+/* ==============================
+ 🚫 Disable Teacher Login (Coming Soon)
+============================== */
 teacherBtn.addEventListener("click", () => {
-  choiceSection.style.display = "none";
-  teacherForm.style.display = "block";
-  homeBtn.style.display = "none";
-  backWrap.style.display = "block";
+  showToast("Teacher login is not available yet.", true);
+
+  // Uncomment below once Teacher feature is active:
+  // choiceSection.style.display = "none";
+  // teacherForm.style.display = "block";
+  // homeBtn.style.display = "none";
+  // backWrap.style.display = "block";
 });
 
-/* Back button outside panel */
+/* ==============================
+ ⬅️ Back Button Logic
+============================== */
 backBtn.addEventListener("click", () => {
   studentForm.style.display = "none";
   teacherForm.style.display = "none";
@@ -259,44 +360,48 @@ backBtn.addEventListener("click", () => {
   teacherMessage.textContent = "";
 });
 
-/* Home button */
+/* ==============================
+ 🏠 Home Button Logic
+============================== */
 homeBtn.addEventListener("click", () => location.href='../../index.html');
 
-/* Toast */
-function showToast(msg, isError=false){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show" + (isError ? " error" : "");
-  setTimeout(() => t.className = "toast", 3000);
-}
-
-/* Default Student Fields */
+/* ==============================
+ 🧮 Default Student Data Fields
+============================== */
 const defaultStudentFields = {
-  level:1, xp:0, xpMax:100, totalXP:0,
-  completedLessons:[], completedQuizzes:[]
+  level: 1,
+  xp: 0,
+  xpMax: 100,
+  totalXP: 0,
+  completedLessons: [],
+  completedQuizzes: []
 };
 
-/* STUDENT SIGN IN */
-studentSigninForm.addEventListener("submit", async e=>{
+/* ==============================
+ 🧠 Student Sign-In Logic
+============================== */
+studentSigninForm.addEventListener("submit", async e => {
   e.preventDefault();
   const email = studentEmail.value.trim();
   const password = studentPassword.value;
   studentMessage.textContent = "";
 
-  try{
-    const userCred = await signInWithEmailAndPassword(auth,email,password);
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
     const user = userCred.user;
 
-    if(!user.emailVerified){
+    // 🔍 Verify email before allowing login
+    if (!user.emailVerified) {
       studentMessage.textContent = "Please verify your email before signing in.";
       await signOut(auth);
       return;
     }
 
-    const ref = doc(db,"users",user.uid);
+    // 🔗 Reference user data in Firestore
+    const ref = doc(db, "users", user.uid);
     const snap = await getDoc(ref);
 
-    // 🧩 Auto-repair Firestore data if missing
+    // 🧩 Recreate data if missing
     if (!snap.exists()) {
       await setDoc(ref, {
         name: user.displayName || user.email.split("@")[0],
@@ -313,108 +418,76 @@ studentSigninForm.addEventListener("submit", async e=>{
       return;
     }
 
-    const data = (await getDoc(ref)).data(); // refresh after repair
+    const data = (await getDoc(ref)).data();
     localStorage.setItem("currentUser", user.uid);
     localStorage.setItem("cachedName", data.name || "Student");
     localStorage.setItem("currentRole", "student");
 
     showToast("Login successful");
-    setTimeout(()=>location.href="../Startup/StartupS.html",1200);
+    setTimeout(() => location.href = "../Startup/StartupS.html", 1200);
 
-  }catch(err){ 
+  } catch (err) {
     console.error(err);
-    showToast(err.message,true);
+    showToast(err.message, true);
   }
 });
 
-
-/* TEACHER SIGN IN */
-teacherSigninForm.addEventListener("submit", async e=>{
-  e.preventDefault();
-  const email = teacherEmail.value.trim();
-  const password = teacherPassword.value;
-  teacherMessage.textContent = "";
-
-  try{
-    const userCred = await signInWithEmailAndPassword(auth,email,password);
-    const user = userCred.user;
-
-    if(!user.emailVerified){
-      teacherMessage.textContent = "Please verify your email before signing in.";
-      await signOut(auth);
-      return;
-    }
-
-    const ref = doc(db,"users",user.uid);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-  // 🔧 Auto-recover Firestore data if missing
-  await setDoc(ref, {
-    name: user.displayName || user.email.split("@")[0],
-    email: user.email,
-    role: "student",
-    verified: user.emailVerified,
-    level: 1,
-    xp: 0,
-    xpMax: 100,
-    totalXP: 0,
-    completedLessons: [],
-    completedQuizzes: [],
-    createdAt: new Date()
-  });
-} else if (snap.data().role !== "student") {
-  studentMessage.textContent = "This account is not a student.";
-  await signOut(auth);
-  return;
-}
-
-    localStorage.setItem("currentUser",user.uid);
-    localStorage.setItem("cachedName",snap.data().name||"Teacher");
-    localStorage.setItem("currentRole","teacher");
-
-    showToast("Login successful");
-    setTimeout(()=>location.href="../Startup/StartupT.html",1200);
-
-  }catch(err){ showToast(err.message,true); }
-});
-
-/* STUDENT FORGOT PASSWORD */
-studentForgot.addEventListener("click", async ()=>{
+/* ==============================
+ 🔑 Forgot Password (Student)
+============================== */
+studentForgot.addEventListener("click", async () => {
   const email = studentEmail.value.trim();
-  if(!email){ showToast("Enter Gmail first.",true); return; }
-  try{ await sendPasswordResetEmail(auth,email); showToast("Password reset email sent."); }
-  catch(err){ showToast(err.message,true); }
+  if (!email) {
+    showToast("Enter Gmail first.", true);
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    showToast("Password reset email sent.");
+  } catch (err) {
+    showToast(err.message, true);
+  }
 });
 
-/* TEACHER FORGOT PASSWORD */
-teacherForgot.addEventListener("click", async ()=>{
-  const email = teacherEmail.value.trim();
-  if(!email){ showToast("Enter DepEd email first.",true); return; }
-  try{ await sendPasswordResetEmail(auth,email); showToast("Password reset email sent."); }
-  catch(err){ showToast(err.message,true); }
-});
+/* ==============================
+ 🧑‍🏫 Teacher Login (Commented for Future Use)
+============================== */
+// teacherSigninForm.addEventListener("submit", async e => {
+//   e.preventDefault();
+//   const email = teacherEmail.value.trim();
+//   const password = teacherPassword.value;
+//   teacherMessage.textContent = "";
 
-/* STUDENT RESEND VERIFICATION */
-resendStudent.addEventListener("click", async ()=>{
-  const email = studentEmail.value.trim();
-  try{
-    const userCred = await signInWithEmailAndPassword(auth,email,studentPassword.value);
-    await sendEmailVerification(userCred.user);
-    showToast("Verification email sent again.");
-    await signOut(auth);
-  }catch(err){ showToast(err.message,true); }
-});
+//   try {
+//     const userCred = await signInWithEmailAndPassword(auth, email, password);
+//     const user = userCred.user;
 
-/* TEACHER RESEND VERIFICATION */
-resendTeacher.addEventListener("click", async ()=>{
-  const email = teacherEmail.value.trim();
-  try{
-    const userCred = await signInWithEmailAndPassword(auth,email,teacherPassword.value);
-    await sendEmailVerification(userCred.user);
-    showToast("Verification email sent again.");
-    await signOut(auth);
-  }catch(err){ showToast(err.message,true); }
-});
+//     if (!user.emailVerified) {
+//       teacherMessage.textContent = "Please verify your email before signing in.";
+//       await signOut(auth);
+//       return;
+//     }
+
+//     const ref = doc(db, "users", user.uid);
+//     const snap = await getDoc(ref);
+
+//     if (!snap.exists() || snap.data().role !== "teacher") {
+//       teacherMessage.textContent = "This account is not a teacher.";
+//       await signOut(auth);
+//       return;
+//     }
+
+//     localStorage.setItem("currentUser", user.uid);
+//     localStorage.setItem("cachedName", snap.data().name || "Teacher");
+//     localStorage.setItem("currentRole", "teacher");
+
+//     showToast("Login successful");
+//     setTimeout(() => location.href = "../Startup/StartupT.html", 1200);
+
+//   } catch (err) {
+//     showToast(err.message, true);
+//   }
+// });
 </script>
 </body>
 </html>
