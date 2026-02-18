@@ -5,100 +5,206 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings - MindCraft</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../Design/Position.css">
-<link rel="stylesheet" href="../Design/global_size-FIX.css">
 
 <style>
+/* ===========================================
+ 🎨 MindCraft Settings Page (Account-Themed)
+=========================================== */
+
+/* ---------- Base ---------- */
 body {
-    font-family: 'Press Start 2P', cursive;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-    color: #fff;
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
+  font-family: 'Press Start 2P', cursive;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background: linear-gradient(to bottom right, #c8f7b0, #a0ecff, #e8fff8);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  min-height: 100vh;
+  color: #3b2e16;
+  transition: background 0.4s, color 0.4s;
+  overflow-x: hidden;
 }
 
+/* ---------- Navigation Bar ---------- */
+nav {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+}
+
+nav button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #b8783d;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  box-shadow: 0 4px 0 #6b3e1a;
+}
+nav button:hover { background: #c98b50; transform: translateY(-1px); }
+nav button:active { transform: translateY(2px); }
+
+/* ---------- Settings Container ---------- */
 .settings-container {
-    max-width: 600px;
-    margin: 60px auto;
-    padding: 25px;
-    border-radius: 12px;
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    box-shadow: 0 0 15px #1DB954;
+  margin-top: 60px;
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.05);
+  backdrop-filter: blur(8px);
+  animation: floatLight 5s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.settings-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.2);
+}
+
+/* ---------- Header ---------- */
 .settings-container h2 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  color: #5a3a1a;
+  font-size: 1rem;
+  letter-spacing: 1px;
 }
 
-button, select {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 0.8rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Press Start 2P', cursive;
+/* ---------- Labels & Selects ---------- */
+label {
+  display: block;
+  font-size: 0.65rem;
+  color: #3a2d1c;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
+select {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #b8783d;
+  background: #fff;
+  color: #3b2a15;
+  box-shadow: 0 3px 0 #d9b16c;
+  transition: all 0.3s ease;
+}
+select:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #b8783d;
+}
+
+/* ---------- Buttons ---------- */
 button {
-    background: #1DB954;
-    color: #fff;
-    border: none;
+  margin-top: 18px;
+  padding: 12px 20px;
+  font-size: 0.7rem;
+  border-radius: 12px;
+  font-family: 'Press Start 2P', cursive;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #fff;
+  background: #b8783d;
+  box-shadow: 0 4px 0 #6b3e1a;
 }
 button:hover {
-    background: #1ed760;
-    transform: scale(1.05);
+  background: #c98b50;
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(2px);
 }
 
-.back-btn {
-    background: #ff69b4;
-}
-.back-btn:hover {
-    background: #ff85c1;
-}
-
+/* ---------- Feedback ---------- */
 #settingsFeedback {
-    font-size: 0.6rem;
-    margin-top: 10px;
-    color: #1DB954;
-    min-height: 18px;
+  font-size: 0.55rem;
+  margin-top: 12px;
+  color: #1DB954;
+  min-height: 20px;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.55rem;
+  background: rgba(255,255,255,0.7);
+  padding: 6px 0;
+  color: #4b3b2b;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  backdrop-filter: blur(8px);
+}
+
+/* ---------- Animation ---------- */
+@keyframes floatLight {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  nav button { font-size: 0.6rem; padding: 6px 10px; }
+  .settings-container { width: 90%; padding: 20px; }
+  h2 { font-size: 0.85rem; }
+  footer { font-size: 0.45rem; }
 }
 </style>
 </head>
+
 <body>
 
+<!-- Navigation -->
+<nav>
+  <button id="homeBtn">🏠 Home</button>
+  <button id="backBtn">⬅️ Back</button>
+</nav>
+
+<!-- Settings Container -->
 <div class="settings-container">
-    <h2>⚙️ Settings</h2>
+  <h2>⚙️ Settings</h2>
 
-    <label>Theme:</label>
-    <select id="themeSelect">
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-    </select>
-    <br>
+  <label>Theme:</label>
+  <select id="themeSelect">
+    <option value="dark">Dark</option>
+    <option value="light">Light</option>
+  </select>
 
-    <label>Sound:</label>
-    <select id="soundSelect">
-        <option value="on">On</option>
-        <option value="off">Off</option>
-    </select>
-    <br>
+  <label>Sound:</label>
+  <select id="soundSelect">
+    <option value="on">On</option>
+    <option value="off">Off</option>
+  </select>
 
-    <label>Vibration:</label>
-    <select id="vibrationSelect">
-        <option value="on">On</option>
-        <option value="off">Off</option>
-    </select>
-    <br>
+  <label>Vibration:</label>
+  <select id="vibrationSelect">
+    <option value="on">On</option>
+    <option value="off">Off</option>
+  </select>
 
-    <button class="back-btn" id="backBtn">⬅️ Back</button>
-
-    <div id="settingsFeedback"></div>
+  <div id="settingsFeedback"></div>
 </div>
+
+<footer>© 2025 MindCraft | Created by Kuya AJ & Team</footer>
 
 <script src="../Design/theme.js"></script>
 
@@ -120,42 +226,41 @@ const feedback = document.getElementById('settingsFeedback');
 // Save new settings
 // =============================
 document.getElementById('themeSelect').addEventListener('change', e => {
-    const newTheme = e.target.value;
-    localStorage.setItem('theme', newTheme);
-    if (typeof window.setTheme === 'function') {
-        window.setTheme(newTheme);
-    }
-    feedback.textContent = `Theme set to ${newTheme}!`;
-    setTimeout(() => feedback.textContent = '', 2000);
+  const newTheme = e.target.value;
+  localStorage.setItem('theme', newTheme);
+  if (typeof window.setTheme === 'function') window.setTheme(newTheme);
+  feedback.textContent = `Theme set to ${newTheme}!`;
+  setTimeout(() => feedback.textContent = '', 2000);
 });
 
 document.getElementById('soundSelect').addEventListener('change', e => {
-    localStorage.setItem('sound', e.target.value);
-    feedback.textContent = `Sound turned ${e.target.value}!`;
-    setTimeout(() => feedback.textContent = '', 2000);
+  localStorage.setItem('sound', e.target.value);
+  feedback.textContent = `Sound turned ${e.target.value}!`;
+  setTimeout(() => feedback.textContent = '', 2000);
 });
 
 document.getElementById('vibrationSelect').addEventListener('change', e => {
-    localStorage.setItem('vibration', e.target.value);
-    feedback.textContent = `Vibration turned ${e.target.value}!`;
-    setTimeout(() => feedback.textContent = '', 2000);
+  localStorage.setItem('vibration', e.target.value);
+  feedback.textContent = `Vibration turned ${e.target.value}!`;
+  setTimeout(() => feedback.textContent = '', 2000);
 });
 
 // =============================
-// Back button (dynamic based on role)
+// Navigation
 // =============================
-document.getElementById('backBtn').addEventListener('click', () => {
-    const currentRole = localStorage.getItem('currentRole') || 'student';
+document.getElementById('homeBtn').addEventListener('click', () => {
+  const role = localStorage.getItem('currentRole') || 'student';
+  window.location.href = role === 'teacher'
+    ? '../Webside/Teacher.html'
+    : '../Webside/Student.html';
+});
 
-    if(currentRole === 'student') {
-        window.location.href = '../Webside/Student.html';
-    } else if(currentRole === 'teacher') {
-        window.location.href = '../Webside/Teacher.html';
-    } else {
-        window.location.href = 'signin.html';
-    }
+document.getElementById('backBtn').addEventListener('click', () => {
+  const role = localStorage.getItem('currentRole') || 'student';
+  window.location.href = role === 'teacher'
+    ? '../Webside/Teacher.html'
+    : '../Webside/Student.html';
 });
 </script>
-
 </body>
 </html>
