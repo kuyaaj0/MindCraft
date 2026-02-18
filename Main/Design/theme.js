@@ -12,6 +12,7 @@
     const buttons = document.querySelectorAll('button, select, a');
     const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option');
 
+    // Detect specific pages
     const isStudentPage = window.location.pathname.toLowerCase().includes('student.html');
     const isAccountPage = window.location.pathname.toLowerCase().includes('account.html');
     const isSettingsPage = window.location.pathname.toLowerCase().includes('setting.html');
@@ -27,11 +28,11 @@
         body.style.background = 'linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)';
         body.style.color = '#f0e6c8';
       } else if (isSettingsPage) {
-        // 🌌 NEW Midnight Aurora Theme
+        // 🌌 Midnight Aurora Theme (new)
         body.style.background = 'radial-gradient(circle at top right, #2c1e4a 0%, #0b132b 60%, #03091e 100%)';
         body.style.color = '#e3e9ff';
       } else {
-        // Default dark
+        // Default dark fallback
         body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
         body.style.color = '#ffffff';
       }
@@ -85,12 +86,13 @@
       });
 
     } else {
-      // ☀️ LIGHT MODE (unchanged)
+      // ☀️ LIGHT MODE
       if (isStudentPage) {
         body.style.background = 'linear-gradient(180deg, #a0c4ff 0%, #d4edc4 100%)';
         body.style.color = '#3b2a15';
-      } else if (isAccountPage) {
-        body.style.background = 'linear-gradient(180deg, #c8f7b0 0%, #a0ecff 100%)';
+      } else if (isAccountPage || isSettingsPage) {
+        // 🌤️ Same as account.html – sky-mint gradient style
+        body.style.background = 'linear-gradient(to bottom right, #c8f7b0, #a0ecff, #e8fff8)';
         body.style.color = '#3b2a15';
       } else {
         body.style.background = '#f5f5f5';
@@ -98,7 +100,7 @@
       }
 
       containers.forEach(c => {
-        if (isAccountPage) {
+        if (isAccountPage || isSettingsPage) {
           c.style.background = 'rgba(255,255,255,0.9)';
           c.style.color = '#3b2a15';
           c.style.boxShadow = '0 12px 25px rgba(0,0,0,0.15)';
@@ -112,7 +114,7 @@
       });
 
       buttons.forEach(btn => {
-        if (isAccountPage) {
+        if (isAccountPage || isSettingsPage) {
           btn.style.background = '#b8783d';
           btn.style.color = '#fff';
           btn.style.border = 'none';
@@ -125,7 +127,7 @@
       });
 
       texts.forEach(t => {
-        t.style.color = isAccountPage ? '#3b2a15' : '#000000';
+        t.style.color = (isAccountPage || isSettingsPage) ? '#3b2a15' : '#000000';
       });
     }
 
@@ -136,9 +138,14 @@
     }
   }
 
+  // Apply immediately
   applyTheme(savedTheme);
+
+  // React to theme change
   window.addEventListener('storage', e => {
     if (e.key === 'theme') applyTheme(e.newValue);
   });
+
+  // Global access
   window.setTheme = applyTheme;
 })();
