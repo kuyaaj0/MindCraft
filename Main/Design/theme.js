@@ -1,6 +1,9 @@
-// =============================
-// 🌗 Global Theme Loader (Dark/Light) + Environment Sync
-// =============================
+// ===========================================================
+// 🌗 MindCraft Global Theme Loader (Dark/Light)
+// File: Design/theme.js
+// Unified for all pages (Landing, Settings, Account, etc.)
+// ===========================================================
+
 (function() {
   const savedTheme = localStorage.getItem('theme') || 'dark';
   const body = document.body;
@@ -12,126 +15,72 @@
     const buttons = document.querySelectorAll('button, select, a');
     const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option');
 
-    // Detect specific pages
-    const isStudentPage = window.location.pathname.toLowerCase().includes('student.html');
-    const isAccountPage = window.location.pathname.toLowerCase().includes('account.html');
-    const isSettingsPage = window.location.pathname.toLowerCase().includes('setting.html');
-
+    // ======================================================
+    // 🌑 DARK MODE (Aurora Night with Transparent Glow)
+    // ======================================================
     if (theme === 'dark') {
-      // 🌑 DARK MODE
-      if (isStudentPage) {
-        // Forest Night
-        body.style.background = 'linear-gradient(180deg, #0b1a0b 0%, #1f3d1f 100%)';
-        body.style.color = '#e0d6b4';
-      } else if (isAccountPage) {
-        // Deep Bronze + Teal Glow
-        body.style.background = 'linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)';
-        body.style.color = '#f0e6c8';
-      } else if (isSettingsPage) {
-        // 🌌 Midnight Aurora Theme (new)
-        body.style.background = 'radial-gradient(circle at top right, #2c1e4a 0%, #0b132b 60%, #03091e 100%)';
-        body.style.color = '#e3e9ff';
-      } else {
-        // Default dark fallback
-        body.style.background = 'linear-gradient(180deg, #0f2027, #203a43, #2c5364)';
-        body.style.color = '#ffffff';
-      }
+      body.style.transition = 'background 0.5s ease, color 0.5s ease';
+      body.style.background = 'radial-gradient(circle at top right, #1a1a2e 0%, #0f2027 60%, #0b132b 100%)';
+      body.style.color = '#e3e9ff';
 
+      // Containers – keep transparency for visible sky/cloud background
       containers.forEach(c => {
-        if (isAccountPage) {
-          c.style.background = 'rgba(0,0,0,0.6)';
-          c.style.color = '#f4e3b2';
-          c.style.boxShadow = '0 0 15px rgba(29,185,84,0.5)';
-          c.style.border = '1px solid rgba(255,255,255,0.1)';
-        } else if (isSettingsPage) {
-          c.style.background = 'rgba(20, 20, 35, 0.7)';
-          c.style.color = '#d6daff';
-          c.style.boxShadow = '0 0 20px rgba(80,150,255,0.4)';
-          c.style.border = '1px solid rgba(100,150,255,0.2)';
-          c.style.backdropFilter = 'blur(8px)';
-        } else {
-          c.style.background = 'rgba(0,0,0,0.5)';
-          c.style.color = '#ffffff';
-          c.style.boxShadow = '0 0 15px #1DB954';
-          c.style.border = 'none';
-        }
+        c.style.transition = 'all 0.4s ease';
+        c.style.background = 'rgba(10, 15, 25, 0.65)'; // transparent dark bluish
+        c.style.color = '#e3e9ff';
+        c.style.boxShadow = '0 0 20px rgba(80,150,255,0.35)';
+        c.style.border = '1px solid rgba(100,150,255,0.2)';
+        c.style.backdropFilter = 'blur(8px)';
       });
 
+      // Buttons – keep golden brown design
       buttons.forEach(btn => {
-        if (isSettingsPage) {
-          btn.style.background = 'linear-gradient(90deg, #5b68e3, #6ef2ff)';
-          btn.style.color = '#fff';
-          btn.style.border = 'none';
-          btn.style.boxShadow = '0 4px 10px rgba(80,150,255,0.4)';
-        } else if (isAccountPage) {
-          btn.style.background = '#1DB954';
-          btn.style.color = '#fff';
-          btn.style.border = 'none';
-          btn.style.boxShadow = '0 4px 0 #10783a';
-        } else {
-          btn.style.background = '#1DB954';
-          btn.style.color = '#ffffff';
-          btn.style.border = 'none';
-        }
+        btn.style.transition = 'all 0.3s ease';
+        btn.style.background = 'linear-gradient(to bottom, #c9945a, #a67d4a)';
+        btn.style.color = '#fff';
+        btn.style.border = '3px solid #8a6a3a';
+        btn.style.boxShadow = '0 4px 0 #6b3e1a';
       });
 
+      // Texts
       texts.forEach(t => {
-        if (isSettingsPage) {
-          t.style.color = '#e3e9ff';
-        } else if (isAccountPage) {
-          t.style.color = '#f5eecf';
-        } else {
-          t.style.color = '#ffffff';
-        }
-      });
-
-    } else {
-      // ☀️ LIGHT MODE
-      if (isStudentPage) {
-        body.style.background = 'linear-gradient(180deg, #a0c4ff 0%, #d4edc4 100%)';
-        body.style.color = '#3b2a15';
-      } else if (isAccountPage || isSettingsPage) {
-        // 🌤️ Same as account.html – sky-mint gradient style
-        body.style.background = 'linear-gradient(to bottom right, #c8f7b0, #a0ecff, #e8fff8)';
-        body.style.color = '#3b2a15';
-      } else {
-        body.style.background = '#f5f5f5';
-        body.style.color = '#000000';
-      }
-
-      containers.forEach(c => {
-        if (isAccountPage || isSettingsPage) {
-          c.style.background = 'rgba(255,255,255,0.9)';
-          c.style.color = '#3b2a15';
-          c.style.boxShadow = '0 12px 25px rgba(0,0,0,0.15)';
-          c.style.border = '1px solid rgba(0,0,0,0.05)';
-        } else {
-          c.style.background = '#ffffff';
-          c.style.color = '#000000';
-          c.style.boxShadow = '0 0 10px #aaa';
-          c.style.border = '1px solid #ddd';
-        }
-      });
-
-      buttons.forEach(btn => {
-        if (isAccountPage || isSettingsPage) {
-          btn.style.background = '#b8783d';
-          btn.style.color = '#fff';
-          btn.style.border = 'none';
-          btn.style.boxShadow = '0 4px 0 #6b3e1a';
-        } else {
-          btn.style.background = '#1DB954';
-          btn.style.color = '#ffffff';
-          btn.style.border = 'none';
-        }
-      });
-
-      texts.forEach(t => {
-        t.style.color = (isAccountPage || isSettingsPage) ? '#3b2a15' : '#000000';
+        t.style.color = '#e3e9ff';
       });
     }
 
-    // ✅ Save + Sync
+    // ======================================================
+    // ☀️ LIGHT MODE (Sky-Mint Cloud Style)
+    // ======================================================
+    else {
+      body.style.transition = 'background 0.5s ease, color 0.5s ease';
+      body.style.background = 'linear-gradient(to bottom right, #c8f7b0, #a0ecff, #e8fff8)';
+      body.style.color = '#3b2a15';
+
+      containers.forEach(c => {
+        c.style.transition = 'all 0.4s ease';
+        c.style.background = 'rgba(255, 255, 255, 0.9)';
+        c.style.color = '#3b2a15';
+        c.style.boxShadow = '0 12px 25px rgba(0,0,0,0.15)';
+        c.style.border = '1px solid rgba(0,0,0,0.05)';
+        c.style.backdropFilter = 'blur(6px)';
+      });
+
+      buttons.forEach(btn => {
+        btn.style.transition = 'all 0.3s ease';
+        btn.style.background = 'linear-gradient(to bottom, #c9945a, #a67d4a)';
+        btn.style.color = '#fff';
+        btn.style.border = '3px solid #8a6a3a';
+        btn.style.boxShadow = '0 4px 0 #6b3e1a';
+      });
+
+      texts.forEach(t => {
+        t.style.color = '#3b2a15';
+      });
+    }
+
+    // ======================================================
+    // 💾 Save preference + Environment Sync
+    // ======================================================
     localStorage.setItem('theme', theme);
     if (typeof window.applyEnvironment === 'function') {
       window.applyEnvironment(theme, true);
@@ -141,11 +90,19 @@
   // Apply immediately
   applyTheme(savedTheme);
 
-  // React to theme change
+  // React to theme changes
   window.addEventListener('storage', e => {
     if (e.key === 'theme') applyTheme(e.newValue);
   });
 
-  // Global access
+  // Global access for theme switch
   window.setTheme = applyTheme;
+
+  // Fade-in for smooth page load
+  document.addEventListener('DOMContentLoaded', () => {
+    body.style.opacity = '0';
+    body.style.transition = 'opacity 0.6s ease';
+    requestAnimationFrame(() => { body.style.opacity = '1'; });
+  });
+
 })();
