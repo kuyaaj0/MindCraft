@@ -493,12 +493,12 @@ navHome.addEventListener("click", async () => {
 navLeaderboard.addEventListener("click", async () => {
   try {
     // Remove any existing leaderboard container if open
-    const old = document.getElementById("leaderboardContainer");
+    const old = document.getElementById("leaderboardOverlay");
     if (old) old.remove();
 
     // Create a container where the leaderboard.js can inject its UI
     const container = document.createElement("div");
-    container.id = "leaderboardContainer";
+    container.id = "leaderboardOverlay";
     document.body.appendChild(container);
 
     // Dynamically load leaderboard module
