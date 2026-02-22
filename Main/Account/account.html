@@ -265,7 +265,7 @@ body {
 
   <div class="nav-buttons" role="navigation" aria-label="page navigation">
     <button class="nav-btn" id="navHome">🏠 Home</button>
-    <button class="nav-btn" id="navLeaderboard">📊 Leaderboard</button>
+    <button class="nav-btn" id="LeaderboardBtn">📊 Leaderboard</button>
     <button class="nav-btn" id="navSettings">⚙️ Settings</button>
     <button class="nav-btn" id="navLogout" style="background:#ff6b6b;border-color:#ffb3b3;">🚪 Logout</button>
   </div>
@@ -490,7 +490,7 @@ navHome.addEventListener("click", async () => {
   }
 });
 
-navLeaderboard.addEventListener("click", async () => {
+/*navLeaderboard.addEventListener("click", async () => {
   try {
     // Remove any existing leaderboard container if open
     const old = document.getElementById("leaderboardOverlay");
@@ -508,7 +508,7 @@ navLeaderboard.addEventListener("click", async () => {
     console.error("⚠️ Failed to load leaderboard module:", err);
     alert("Leaderboard failed to load. Please try again.");
   }
-});
+});*/
 
 navSettings.addEventListener("click", () => {
   window.location.href = "../Settings/setting.html";
