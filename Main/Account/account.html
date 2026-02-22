@@ -490,8 +490,24 @@ navHome.addEventListener("click", async () => {
   }
 });
 
-navLeaderboard.addEventListener("click", () => {
-  window.location.href = "../Feature/SLeaderboard/Leaderboard.js";
+navLeaderboard.addEventListener("click", async () => {
+  try {
+    // Remove any existing leaderboard container if open
+    const old = document.getElementById("leaderboardContainer");
+    if (old) old.remove();
+
+    // Create a container where the leaderboard.js can inject its UI
+    const container = document.createElement("div");
+    container.id = "leaderboardContainer";
+    document.body.appendChild(container);
+
+    // Dynamically load leaderboard module
+    await import("../Feature/SLeaderboard/leaderboard.js");
+    console.log("✅ Leaderboard module loaded successfully");
+  } catch (err) {
+    console.error("⚠️ Failed to load leaderboard module:", err);
+    alert("Leaderboard failed to load. Please try again.");
+  }
 });
 
 navSettings.addEventListener("click", () => {
