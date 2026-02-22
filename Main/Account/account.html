@@ -1,356 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Account - MindCraft</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MindCount</title>
+
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
- 
-<!--<link rel="stylesheet" href="../Design/Position.css">
-<link rel="stylesheet" href="../Design/global_size-FIX.css">-->
 
+<!-- NOTE: keep your theme.js loaded at end so pages sync with theme -->
 <style>
-/* ===========================================
- 🌤️ MindCraft Account Page (Light Theme Version)
-=========================================== */
+/* =====================================================================
+   MindCraft — Account Page (Upgraded hybrid: retro visual + robust JS)
+   ===================================================================== */
 
-/* ---------- Global ---------- */
+/* ---------- Reset & Globals ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html,body { height: 100%; width: 100%; font-family: 'Press Start 2P', cursive; }
+
+/* ---------- Page background (non-repeating) ---------- */
 body {
-  font-family: 'Press Start 2P', cursive;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-
-  /* Put gradient FIRST */
-  background: linear-gradient(to bottom right, #c8f7b0, #a0ecff, #e8fff8);
-
-  /* Then the controlling properties */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg,#8b6f47 0%, #a0ecff 45%, #c8f7b0 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-
   color: #3b2e16;
-  transition: background 0.4s, color 0.4s;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- Navigation Bar ---------- */
-nav {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px 0;
+/* ---------- Top bar (XP + level + nav) ---------- */
+.top-bar {
+  width: 100%;
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  width: 100%;
-  box-sizing: border-box;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  backdrop-filter: blur(10px);
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(to bottom, #8b6f47 0%, #6b5636 100%);
+  border-bottom: 3px solid #5a4a30;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  z-index: 30;
 }
 
-/* ---------- Nav Buttons ---------- */
-nav button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 10px;
-  background: #b8783d;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.7rem;
-  box-shadow: 0 4px 0 #6b3e1a;
-}
-
-nav button:hover {
-  background: #c98b50;
-  transform: translateY(-1px);
-}
-
-nav button:active {
-  transform: translateY(2px);
-}
-
-/* ---------- Main Container ---------- */
-.container {
-  margin-top: 60px;
-  background: rgba(255,255,255,0.9);
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,0,0,0.05);
-  backdrop-filter: blur(8px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.container:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 30px rgba(0,0,0,0.2);
-}
-
-/* ---------- Text Styling ---------- */
-h2 {
-  margin-bottom: 18px;
-  color: #5a3a1a;
-  font-size: 1rem;
-  letter-spacing: 1px;
-}
-
-.container p {
-  font-size: 0.7rem;
-  color: #3a2d1c;
-  margin: 10px 0;
-}
-
-/* ---------- XP Bar ---------- */
-#xpBar {
-  width: 80%;
-  height: 20px;
-  margin: 15px auto;
-  border-radius: 12px;
-  background: #f3f3f3;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-}
-
-#xpBar > div {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(to right, #1db954, #4ae88f);
-  border-radius: 12px;
-  transition: width 0.4s ease;
-}
-
-/* ---------- Rank ---------- */
-.rank {
-  margin-top: 10px;
+/* XP display left */
+.xp-display {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex: 0 0 auto;
+  color: #f4e4c1;
   font-size: 0.65rem;
-  color: #c18f00;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  text-shadow: 0 0 3px rgba(255,215,0,0.4);
+}
+.xp-label { font-weight:700; letter-spacing:1px; }
+
+/* XP bar */
+.xp-bar-outer {
+  width: 150px;
+  height: 18px;
+  border-radius: 6px;
+  background: #3d2f1f;
+  border: 2px solid #f4e4c1;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.45);
+}
+.xp-bar-inner {
+  height:100%;
+  width:0%;
+  background: linear-gradient(90deg,#1db954 0%, #ffd700 100%);
+  transition: width 600ms cubic-bezier(.2,.9,.2,1), background 400ms ease;
 }
 
-/* ---------- Footer ---------- */
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
+/* XP numbers */
+.xp-numbers { font-weight:700; color:#f4e4c1; font-size:0.65rem; min-width:90px; text-align:right; }
+
+/* middle area: level info */
+.level-holder { flex: 1 1 auto; display:flex; justify-content:center; align-items:center; gap:10px; }
+.level-pill {
+  background: linear-gradient(0deg,#2b2017,#5d4a37);
+  color: #f4e4c1;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+  font-size: 0.65rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+/* nav buttons right */
+.nav-buttons { display:flex; gap:10px; align-items:center; justify-content:flex-end; }
+.nav-btn {
+  padding: 9px 14px;
+  border-radius: 8px;
+  background: linear-gradient(to bottom,#d4a574,#b8945a);
+  border: 2px solid #f4e4c1;
+  color: #2b2017;
+  cursor:pointer;
+  font-family: 'Press Start 2P', cursive;
   font-size: 0.55rem;
+  box-shadow: 0 6px 0 #6b5636, inset 0 1px 0 rgba(255,255,255,0.25);
+  transition: transform .12s ease, box-shadow .12s ease;
+  white-space:nowrap;
+}
+.nav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #6b5636; }
+.nav-btn:hover { transform: translateY(-2px); }
+
+/* ---------- Content region ---------- */
+.content {
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 36px 16px 100px;
+}
+
+/* ---------- Account card ---------- */
+.account-card {
+  width:100%;
+  max-width:720px;
+  border-radius:14px;
+  padding:28px;
+  background: linear-gradient(135deg,#e8f4ff 0%, #e8fff8 100%);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.28);
+  border: 3px solid #8b9dc3;
+  text-align:center;
+  position:relative;
+  overflow:visible;
+}
+
+/* animated subtle badge */
+.role-badge {
+  position:absolute;
+  top:-18px;
+  left:18px;
+  background:#1DB954;
+  color:#fff;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  border:2px solid rgba(255,255,255,0.15);
+  box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+  font-size:0.55rem;
+}
+
+/* heading */
+.account-card h1 {
+  margin-bottom:16px;
+  color:#5a3a1a;
+  font-size:0.95rem;
+  letter-spacing:2px;
+  text-shadow: 0 2px 4px rgba(255,255,255,0.5);
+}
+
+/* info rows */
+.info-row {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:space-between;
+  margin:10px 0;
+  padding:12px;
   background: rgba(255,255,255,0.7);
-  padding: 6px 0;
-  color: #4b3b2b;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  backdrop-filter: blur(8px);
+  border-radius:8px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.info-label { color:#5a3a1a; font-size:0.65rem; font-weight:700; letter-spacing:1px; }
+.info-value { color:#3b2e16; font-weight:800; font-size:0.85rem; }
+
+/* rank panel */
+.rank-panel {
+  margin-top:14px;
+  background: linear-gradient(90deg,#ffeaa7,#fff9e6);
+  padding:14px;
+  border-radius:8px;
+  border:2px solid #c18f00;
+  color:#5a3a1a;
+  font-weight:700;
+  letter-spacing:1px;
 }
 
-/* ---------- Light Floating Animation ---------- */
-@keyframes floatLight {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-  100% { transform: translateY(0); }
+/* footer fixed */
+.page-footer {
+  width:100%;
+  text-align:center;
+  padding:12px 8px;
+  background: linear-gradient(to top,#6b5636,#8b6f47);
+  color:#f4e4c1;
+  box-shadow: 0 -6px 14px rgba(0,0,0,0.25);
+  font-size:0.55rem;
+  position:fixed;
+  bottom:0;
+  left:0;
+  z-index:25;
+  border-top:2px solid #5a4a30;
 }
 
-.container {
-  animation: floatLight 5s ease-in-out infinite;
+/* small screen tweaks */
+@media (max-width:860px) {
+  .xp-bar-outer { width: 120px; }
+  .xp-numbers { min-width:70px; font-size:0.58rem; }
+  .nav-btn { font-size:0.5rem; padding:8px 12px; }
+  .account-card { padding:18px; }
+}
+@media (max-width:520px) {
+  .top-bar { flex-direction:column; gap:10px; align-items:stretch; padding:12px; }
+  .level-holder { justify-content:center; }
+  .xp-display { justify-content:center; }
+  .nav-buttons { justify-content:center; }
+  .xp-bar-outer { width: 100px; }
+  .account-card { max-width: 92%; padding:16px; }
 }
 
-/* ---------- Responsive Design ---------- */
-@media (max-width: 600px) {
-  nav button {
-    font-size: 0.6rem;
-    padding: 6px 10px;
-  }
-
-  .container {
-    width: 90%;
-    padding: 20px;
-  }
-
-  h2 {
-    font-size: 0.85rem;
-  }
-
-  footer {
-    font-size: 0.45rem;
-  }
+/* decorative floating particles (subtle) */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index:0;
+  overflow: hidden;
 }
+.particle {
+  position: absolute;
+  width: 6px; height:6px;
+  background: rgba(255,255,255,0.12);
+  border-radius:50%;
+  filter: blur(.2px);
+  animation: floatUp linear infinite;
+  opacity: 0.6;
+}
+@keyframes floatUp {
+  from { transform: translateY(30vh) scale(.8); opacity:0; }
+  10% { opacity:0.35; }
+  50% { opacity:0.9; }
+  to { transform: translateY(-20vh) scale(1.1); opacity:0; }
+}
+
+/* small helper classes */
+.hidden { display:none !important; }
+.center { display:flex; align-items:center; justify-content:center; gap:10px; }
 </style>
 </head>
-
 <body>
-<nav>
-  <button id="homeBtn">🏠 Home</button>
-  <button onclick="location.href='../Settings/setting.html'">⚙️ Settings</button>
-  <button id="logoutBtn">🚪 Logout</button>
-</nav>
 
-<div class="container">
-  <h2>👤 Account Information</h2>
-  <p><b>Username:</b> <span id="username">Loading...</span></p>
-  <p><b>Level:</b> <span id="level">1</span></p>
-  <div id="xpBar"><div></div></div>
-  <p><b>XP:</b> <span id="xp">0/100</span></p>
-  <p class="rank" id="rank">Rank: Beginner</p>
+<!-- Floating particle layer -->
+<div id="particleLayer" class="particles" aria-hidden="true"></div>
+
+<!-- Top bar -->
+<div class="top-bar" role="banner" aria-label="top navigation and status">
+  <div class="xp-display" aria-hidden="false">
+    <div class="xp-label">XP</div>
+    <div class="xp-bar-outer" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div id="xpBarInner" class="xp-bar-inner"></div>
+    </div>
+    <div id="xpNumbers" class="xp-numbers">0 / 100</div>
+  </div>
+
+  <div class="level-holder" aria-live="polite">
+    <div class="level-pill" id="levelPill">LEVEL 1</div>
+  </div>
+
+  <div class="nav-buttons" role="navigation" aria-label="page navigation">
+    <button class="nav-btn" id="navHome">🏠 Home</button>
+    <button class="nav-btn" id="navLeaderboard">📊 Leaderboard</button>
+    <button class="nav-btn" id="navSettings">⚙️ Settings</button>
+    <button class="nav-btn" id="navLogout" style="background:#ff6b6b;border-color:#ffb3b3;">🚪 Logout</button>
+  </div>
 </div>
 
-<footer>© 2025 MindCraft | Created by Kuya AJ & Team</footer>
+<!-- Main content -->
+<div class="content">
+  <div class="account-card" role="main" aria-labelledby="accountHeading">
+    <div class="role-badge" id="roleBadge">STUDENT</div>
+    <h1 id="accountHeading">👤 ACCOUNT INFORMATION</h1>
 
+    <div class="info-row">
+      <div class="info-label">USERNAME</div>
+      <div class="info-value" id="username">Loading...</div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-label">LEVEL</div>
+      <div class="info-value" id="level">1</div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-label">TOTAL XP</div>
+      <div class="info-value" id="totalXP">0</div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-label">LAST LOGIN</div>
+      <div class="info-value" id="lastLogin">—</div>
+    </div>
+
+    <div class="rank-panel" id="rankPanel">🏅 Rank: <span id="rankTitle">Beginner</span></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="page-footer">© 2025 MindCraft | Created by Kuya AJ & Team</div>
+
+<!-- ===========================
+     JavaScript: Firebase + UI
+     =========================== -->
 <script type="module">
+/* eslint-disable no-console */
+/*
+  Upgraded Account page JS
+  - Integrates with Firebase (auth + firestore)
+  - Smooth XP animation using requestAnimationFrame
+  - Auto-repair missing Firestore fields
+  - Theme compatibility via window.setTheme (if provided)
+  - Particle decoration generator (small, perf-friendly)
+*/
+
+/* ---------- Imports (keep same relative path) ---------- */
 import { auth, db } from "../System/Database/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ---------- Optional level data helpers (your existing modules) ---------- */
 import { getStudentLevelData } from "../Exp/student-LV.js";
 import { getTeacherLevelData } from "../Exp/teacher-LV.js";
 
-// === UI Elements ===
+/* ---------- UI refs ---------- */
+const xpBarInner = document.getElementById("xpBarInner");
+const xpNumbers = document.getElementById("xpNumbers");
+const levelPill = document.getElementById("levelPill");
 const usernameEl = document.getElementById("username");
 const levelEl = document.getElementById("level");
-const xpEl = document.getElementById("xp");
-const xpBarFill = document.querySelector("#xpBar > div");
-const rankEl = document.getElementById("rank");
-const homeBtn = document.getElementById("homeBtn");
-const logoutBtn = document.getElementById("logoutBtn");
+const totalXPEl = document.getElementById("totalXP");
+const lastLoginEl = document.getElementById("lastLogin");
+const rankTitleEl = document.getElementById("rankTitle");
+const roleBadge = document.getElementById("roleBadge");
 
-// === Ultra-extended number formatter (up to 1e99) ===
-function formatNumberSmart(value) {
-  const abs = Math.abs(value);
-  const units = [
-    { v: 1e99, s: "Ce" },   // Centillion
-    { v: 1e96, s: "NoCe" }, // Nonillion-Centillion
-    { v: 1e93, s: "OcCe" }, // Octo-Centillion
-    { v: 1e90, s: "SeCe" }, // Septen-Centillion
-    { v: 1e87, s: "SxCe" }, // Sexten-Centillion
-    { v: 1e84, s: "QiCe" }, // Quinten-Centillion
-    { v: 1e81, s: "QdCe" }, // Quadro-Centillion
-    { v: 1e78, s: "TrCe" }, // Tre-Centillion
-    { v: 1e75, s: "DuCe" }, // Duo-Centillion
-    { v: 1e72, s: "UnCe" }, // Un-Centillion
-    { v: 1e69, s: "Vi" },   // Vigintillion
-    { v: 1e66, s: "Nv" },   // Novemdecillion
-    { v: 1e63, s: "Oc" },   // Octodecillion
-    { v: 1e60, s: "Spt" },  // Septendecillion
-    { v: 1e57, s: "Sxd" },  // Sexdecillion
-    { v: 1e54, s: "Qid" },  // Quindecillion
-    { v: 1e51, s: "Qad" },  // Quattuordecillion
-    { v: 1e48, s: "Td" },   // Tredecillion
-    { v: 1e45, s: "Dd" },   // Duodecillion
-    { v: 1e42, s: "Und" },  // Undecillion
-    { v: 1e39, s: "Dc" },   // Decillion
-    { v: 1e36, s: "Nn" },   // Nonillion
-    { v: 1e33, s: "Oc" },   // Octillion
-    { v: 1e30, s: "Sp" },   // Septillion
-    { v: 1e27, s: "Sx" },   // Sextillion
-    { v: 1e24, s: "Qi" },   // Quintillion
-    { v: 1e21, s: "Qd" },   // Quadrillion
-    { v: 1e18, s: "T" },    // Trillion
-    { v: 1e15, s: "B" },    // Billion
-    { v: 1e12, s: "M" },    // Million
-    { v: 1e9,  s: "K" },    // Thousand (legacy compact)
-  ];
-  for (const u of units) {
-    if (abs >= u.v) {
-      const shortened = (value / u.v).toFixed(value >= 1e6 ? 2 : 3);
-      return shortened.replace(/\.00$|\.0$/, "") + u.s;
+const navHome = document.getElementById("navHome");
+const navLeaderboard = document.getElementById("navLeaderboard");
+const navSettings = document.getElementById("navSettings");
+const navLogout = document.getElementById("navLogout");
+
+const particleLayer = document.getElementById("particleLayer");
+
+/* ---------- Local helpers ---------- */
+function formatShort(n) {
+  // small compact formatter for UI (similar to other helpers)
+  if (typeof n !== "number") n = Number(n) || 0;
+  if (n >= 1e12) return (n/1e12).toFixed(2)+"T";
+  if (n >= 1e9) return (n/1e9).toFixed(2)+"B";
+  if (n >= 1e6) return (n/1e6).toFixed(2)+"M";
+  if (n >= 1e3) return (n/1e3).toFixed(2)+"K";
+  return String(n);
+}
+function formatFullDate(d) {
+  if (!d) return "—";
+  try {
+    const dt = new Date(d);
+    return dt.toLocaleString();
+  } catch(e) { return String(d); }
+}
+
+/* ---------- Smooth animate XP bar ----------
+   We animate from previous value to new value with requestAnimationFrame.
+*/
+let xpAnimation = null;
+let xpAnimationState = { from:0, to:0, start:0, duration:600 };
+
+function animateXP(fromVal, toVal, maxVal=100) {
+  cancelAnimationFrame(xpAnimation);
+  xpAnimationState = { from: fromVal, to: toVal, start: performance.now(), duration: 600, maxVal };
+  function tick(now) {
+    const t = Math.min((now - xpAnimationState.start) / xpAnimationState.duration, 1);
+    // easeOutCubic
+    const ease = 1 - Math.pow(1 - t, 3);
+    const cur = xpAnimationState.from + (xpAnimationState.to - xpAnimationState.from) * ease;
+    const percent = Math.max(0, Math.min(100, (cur / xpAnimationState.maxVal) * 100));
+    xpBarInner.style.width = percent + "%";
+    // change gradient based on percent
+    if (percent >= 95) {
+      xpBarInner.style.background = "linear-gradient(90deg,#ffd700,#ffb84d)";
+    } else if (percent >= 50) {
+      xpBarInner.style.background = "linear-gradient(90deg,#1db954,#ffd700)";
+    } else {
+      xpBarInner.style.background = "linear-gradient(90deg,#1db954,#4ae88f)";
     }
+    xpNumbers.textContent = `${formatShort(Math.round(cur))} / ${formatShort(xpAnimationState.maxVal)}`;
+    if (t < 1) xpAnimation = requestAnimationFrame(tick);
   }
-  return value.toString();
+  xpAnimation = requestAnimationFrame(tick);
 }
 
-// === Auto font scaling for XP ===
-function adjustXPFontSize(xpEl, xpMax) {
-  const len = xpMax.toString().length;
-  let newSize = 0.7; // default for small numbers
-  if (len > 6 && len <= 9) newSize = 0.65;
-  else if (len > 9 && len <= 12) newSize = 0.6;
-  else if (len > 12 && len <= 18) newSize = 0.55;
-  else if (len > 18 && len <= 25) newSize = 0.5;
-  else if (len > 25 && len <= 35) newSize = 0.45;
-  else if (len > 35 && len <= 50) newSize = 0.4;
-  else if (len > 50 && len <= 65) newSize = 0.38;
-  else if (len > 65 && len <= 80) newSize = 0.36;
-  else if (len > 80) newSize = 0.34; // ultra-tiny for extreme XP
-  xpEl.style.fontSize = `${newSize}rem`;
-  xpEl.style.transition = "font-size 0.3s ease";
+/* ---------- Firestore repair: ensure user doc has necessary fields ---------- */
+async function ensureUserDoc(user) {
+  const ref = doc(db,"users",user.uid);
+  const snap = await getDoc(ref);
+  const defaults = {
+    name: user.displayName || (user.email ? user.email.split("@")[0] : "Unknown"),
+    email: user.email || "",
+    role: "student",
+    verified: user.emailVerified || false,
+    level: 1,
+    xp: 0,
+    xpMax: 100,
+    totalXP: 0,
+    completedLessons: [],
+    completedQuizzes: [],
+    createdAt: new Date()
+  };
+  if (!snap.exists()) {
+    await setDoc(ref, defaults);
+    return { ...defaults, id: user.uid };
+  }
+  const data = snap.data();
+  const merged = { ...defaults, ...data };
+  // If any keys missing, merge back
+  let needsMerge = false;
+  for (const k in defaults) if (!(k in data)) needsMerge = true;
+  if (needsMerge) await setDoc(ref, merged, { merge: true });
+  return merged;
 }
 
-// === Navigation Buttons ===
-homeBtn.addEventListener("click", () => {
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      window.location.href = "signin.html";
-      return;
-    }
+/* ---------- Auth state listener ---------- */
+let lastKnownXP = 0, lastKnownLevel = 1;
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    // not signed in, redirect to signin
+    window.location.href = "../Account/signin.html";
+    return;
+  }
+
+  try {
+    // ensure doc exists and has expected fields
+    const data = await ensureUserDoc(user);
+
+    // update UI
+    usernameEl.textContent = data.name || (user.email ? user.email.split("@")[0] : "Guest");
+    levelEl.textContent = (data.level || 1);
+    levelPill.textContent = `LEVEL ${data.level || 1}`;
+    totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
+    lastLoginEl.textContent = formatFullDate(data.lastLogin || user.metadata?.lastSignInTime || new Date());
+    roleBadge.textContent = ((data.role || "student").toUpperCase());
+
+    // rank title using your helper modules
     try {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) {
-        const role = snap.data().role || "student";
-        const redirect = role === "teacher"
-          ? "../Webside/Teacher.html"
-          : "../Webside/Student.html";
-        setTimeout(() => { window.location.href = redirect; }, 150);
-      } else {
-        alert("⚠️ User data not found in Firestore");
-      }
-    } catch (err) {
-      console.error("Home redirect error:", err);
+      const rankInfo = data.role === "teacher" ? getTeacherLevelData(data.xp || 0) : getStudentLevelData(data.xp || 0);
+      rankTitleEl.textContent = rankInfo && rankInfo.title ? rankInfo.title : "Beginner";
+    } catch(e) {
+      rankTitleEl.textContent = "Beginner";
+      console.warn("rank helper error", e);
     }
-  });
+
+    // animate xp from lastKnownXP -> new xp
+    const xpNow = Number(data.xp || 0);
+    const xpMax = Number(data.xpMax || 100);
+    animateXP(lastKnownXP, xpNow, xpMax);
+    lastKnownXP = xpNow;
+    lastKnownLevel = data.level || 1;
+
+    // Write a lastSeen/lastLogin stamp (non-critical)
+    try {
+      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), lastLogin: new Date() });
+    } catch(e) { /* ignore non-critical */ }
+
+  } catch (err) {
+    console.error("Account load error:", err);
+  }
 });
 
-logoutBtn.addEventListener("click", async () => {
+/* ---------- Navigation event wiring ---------- */
+navHome.addEventListener("click", async () => {
+  // decide target based on role saved in Firestore or localStorage
+  const uid = (auth.currentUser && auth.currentUser.uid) || localStorage.getItem("currentUser");
+  if (!uid) { window.location.href = "../Account/signin.html"; return; }
+  try {
+    const snap = await getDoc(doc(db,"users",uid));
+    const role = snap.exists() ? (snap.data().role || "student") : (localStorage.getItem("currentRole") || "student");
+    const redirect = role === "teacher" ? "../Webside/Teacher.html" : "../Webside/Student.html";
+    window.location.href = redirect;
+  } catch(e) {
+    console.error(e);
+    window.location.href = "../Webside/Student.html";
+  }
+});
+
+navLeaderboard.addEventListener("click", () => {
+  window.location.href = "../Webside/Leaderboard.html";
+});
+
+navSettings.addEventListener("click", () => {
+  window.location.href = "../Settings/setting.html";
+});
+
+navLogout.addEventListener("click", async () => {
   try {
     await signOut(auth);
     localStorage.removeItem("cachedName");
     localStorage.removeItem("currentRole");
-    window.location.href = "signin.html";
-  } catch (err) {
-    console.error("Logout error:", err);
+    window.location.href = "../Account/signin.html";
+  } catch(e) {
+    console.error("Logout failed:", e);
   }
 });
 
-// === Firebase: Load User Data ===
-onAuthStateChanged(auth, async (user) => {
-  if (!user) {
-    window.location.href = "signin.html";
-    return;
+/* ---------- Particle generator (lightweight) ---------- */
+function spawnParticles(count = 18) {
+  particleLayer.innerHTML = "";
+  const h = window.innerHeight, w = window.innerWidth;
+  for (let i=0;i<count;i++){
+    const el = document.createElement("div");
+    el.className = "particle";
+    const left = Math.random()*w;
+    const top = h * (0.55 + Math.random()*0.4); // start lower to float up
+    el.style.left = left + "px";
+    el.style.top = top + "px";
+    // duration vary
+    const dur = 8000 + Math.random()*8000;
+    el.style.animationDuration = dur + "ms";
+    el.style.opacity = (0.15 + Math.random()*0.6).toFixed(2);
+    el.style.transform = `scale(${0.6 + Math.random()*0.9})`;
+    particleLayer.appendChild(el);
   }
+}
+spawnParticles();
 
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
-  const data = snap.exists() ? snap.data() : {};
-
-  const displayName = data.name || user.displayName || (user.email ? user.email.split("@")[0] : "Guest");
-  const role = data.role || "student";
-  const xp = data.xp || 0;
-  const level = data.level || 1;
-  const xpMax = data.xpMax || 100;
-
-  const rankTitle =
-    role === "teacher"
-      ? getTeacherLevelData(xp).title
-      : getStudentLevelData(xp).title;
-
-  usernameEl.textContent = displayName;
-  levelEl.textContent = level;
-  rankEl.textContent = `🏅 Rank: ${rankTitle}`;
-
-  // === Animate XP Bar ===
-  const percent = (xp / xpMax) * 100;
-  xpBarFill.style.width = `${percent}%`;
-
-  // === Display formatted XP ===
-  xpEl.textContent = `${formatNumberSmart(xp)} / ${formatNumberSmart(xpMax)}`;
-  adjustXPFontSize(xpEl, xpMax);
+/* regenerate on resize but throttled */
+let resizeTimeout = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => spawnParticles(18),200);
 });
+
+/* ---------- Theme integration (if theme.js present) ---------- */
+if (typeof window.setTheme === "function") {
+  // Ensure the page respects saved theme on load
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+    // theme.js will style containers/buttons automatically,
+    // but we also might adjust XP-bar colors slightly:
+    if (saved === "dark") {
+      // darker XP track
+      document.querySelectorAll(".xp-bar-outer").forEach(n=>n.style.background="#202520");
+    }
+  }
+}
+
+/* ---------- End of module ---------- */
 </script>
 
-<!--<script src="../Design/theme.js"></script>-->
+<!-- keep your theme script for sync (only if project uses it) -->
+<script src="../Design/theme.js"></script>
 </body>
 </html>
