@@ -12,12 +12,17 @@
     body.classList.toggle('theme-dark', theme === 'dark');
     body.classList.toggle('theme-light', theme !== 'dark');
     const containers = document.querySelectorAll(
-      '.container, .settings-container, .quiz-container, .lesson-content, .language-card, header, footer, nav'
+      '.container, .settings-container, .quiz-container, .lesson-content, .language-card, .account-card, header, footer, nav'
     );
     const buttons = document.querySelectorAll('button, select, a');
-    const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option, .title, .subtitle, .setting-label, .small-note');
+    const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option, .title, .subtitle, .setting-label, .small-note, .info-label, .info-value, .xp-label, .xp-numbers');
     const clouds = document.querySelectorAll('.cloud');
     const suns = document.querySelectorAll('.sun');
+
+    const accountRows = document.querySelectorAll('.info-row');
+    const accountTopBars = document.querySelectorAll('.top-bar');
+    const accountFooters = document.querySelectorAll('.page-footer');
+    const accountRanks = document.querySelectorAll('.rank-panel');
 
     // ======================================================
     // 🌑 DARK MODE (Aurora Night with Transparent Glow)
@@ -61,6 +66,25 @@
         sun.style.background = 'radial-gradient(circle at 35% 35%, #c5d8ff 0%, #8fb2ff 35%, #5c84db 70%, #3a5fb3 100%)';
         sun.style.boxShadow = '0 0 35px rgba(95, 140, 230, 0.35)';
       });
+
+      accountRows.forEach(row => {
+        row.style.background = 'rgba(18, 24, 36, 0.78)';
+        row.style.border = '1px solid rgba(151, 180, 230, 0.25)';
+      });
+      accountTopBars.forEach(bar => {
+        bar.style.background = 'linear-gradient(to bottom, #1d2a44 0%, #151f33 100%)';
+        bar.style.borderBottom = '3px solid #2c3f66';
+      });
+      accountFooters.forEach(footer => {
+        footer.style.background = 'linear-gradient(to top, #151f33, #1d2a44)';
+        footer.style.color = '#f7ead7';
+        footer.style.borderTop = '2px solid #2c3f66';
+      });
+      accountRanks.forEach(rank => {
+        rank.style.background = 'linear-gradient(90deg,#24334f,#1a2740)';
+        rank.style.border = '2px solid #5a79b8';
+        rank.style.color = '#f7ead7';
+      });
     }
 
     // ======================================================
@@ -100,6 +124,25 @@
       suns.forEach(sun => {
         sun.style.background = 'radial-gradient(circle at 30% 30%, #fff9a8 0%, #fff07a 18%, #fff200 45%, #ffd800 100%)';
         sun.style.boxShadow = '0 0 40px rgba(255,204,0,0.25)';
+      });
+
+      accountRows.forEach(row => {
+        row.style.background = 'rgba(255,255,255,0.7)';
+        row.style.border = '1px solid rgba(0,0,0,0.06)';
+      });
+      accountTopBars.forEach(bar => {
+        bar.style.background = 'linear-gradient(to bottom, #8b6f47 0%, #6b5636 100%)';
+        bar.style.borderBottom = '3px solid #5a4a30';
+      });
+      accountFooters.forEach(footer => {
+        footer.style.background = 'linear-gradient(to top,#6b5636,#8b6f47)';
+        footer.style.color = '#f4e4c1';
+        footer.style.borderTop = '2px solid #5a4a30';
+      });
+      accountRanks.forEach(rank => {
+        rank.style.background = 'linear-gradient(90deg,#ffeaa7,#fff9e6)';
+        rank.style.border = '2px solid #c18f00';
+        rank.style.color = '#5a3a1a';
       });
     }
 
