@@ -403,6 +403,18 @@ homeBtn.addEventListener("click", () => location.href='../../index.html');
 /* ==============================
  🧮 Default Student Data Fields
 ============================== */
+
+async function removeDuplicateDocsByEmail(email, keepUid) {
+  if (!email) return;
+  const q = query(collection(db, "users"), where("email", "==", email));
+  const snap = await getDocs(q);
+  const deletions = [];
+  snap.forEach((d) => {
+    if (d.id !== keepUid) deletions.push(deleteDoc(doc(db, "users", d.id)));
+  });
+  if (deletions.length) await Promise.all(deletions);
+}
+ 
 const defaultStudentFields = {
   level: 1,
   xp: 0,
