@@ -1,9 +1,5 @@
-diff --git a/Main/Design/theme.js b/Main/Design/theme.js
-index 91338b47934fae8665236c642d504c9b22a749f3..85062dd23c38272b8d7d66337b5a2bd2db42316b 100644
---- a/Main/Design/theme.js
-+++ b/Main/Design/theme.js
-@@ -1,103 +1,126 @@
- // ===========================================================
+
+// ===========================================================
  // 🌗 MindCraft Global Theme Loader (Dark/Light)
  // File: Design/theme.js
  // Unified for all pages (Landing, Settings, Account, etc.)
