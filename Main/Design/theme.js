@@ -14,7 +14,7 @@
     const containers = document.querySelectorAll(
       '.container, .settings-container, .quiz-container, .lesson-content, .language-card, header, footer, nav'
     );
-    const buttons = document.querySelectorAll('button, select, a');
+    const buttons = document.querySelectorAll('button, select');
     const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option, .title, .subtitle, .setting-label, .small-note');
     const clouds = document.querySelectorAll('.cloud');
     const suns = document.querySelectorAll('.sun');
