@@ -1034,16 +1034,24 @@ document.getElementById("closeSettings").onclick = () =>
 const themeSwitch = document.getElementById("themeSwitch");
 const themeLabel = document.getElementById("themeLabel");
 
+function applyThemeState(theme) {
+  const isDark = theme === "dark";
+  document.body.classList.toggle("dark", isDark);
+  themeSwitch.checked = isDark;
+  updateLabel(isDark);
+  if (typeof window.setTheme === "function") window.setTheme(theme);
+  else localStorage.setItem("theme", theme);
+}
+
 // Initialize after DOM ready: make BB8 reflect current theme
 document.addEventListener('DOMContentLoaded', () => {
-  themeSwitch.checked = document.body.classList.contains("dark");
-  updateLabel(themeSwitch.checked);
+  const savedTheme = localStorage.getItem("theme") || "light";
+  applyThemeState(savedTheme);
 });
 
-// When the BB8 checkbox changes, toggle dark class and update label
+// When the BB8 checkbox changes, persist and sync theme across pages
 themeSwitch.addEventListener("change", () => {
-  document.body.classList.toggle("dark", themeSwitch.checked);
-  updateLabel(themeSwitch.checked);
+  applyThemeState(themeSwitch.checked ? "dark" : "light");
 });
 
 // Keep the label intuitive: when dark is active, show "Light Mode" (meaning clicking will switch to light).
@@ -1058,5 +1066,6 @@ document.getElementById("settingsPopup").addEventListener("click", (e) => {
   }
 });
 </script>
+<script src="Main/Design/theme.js"></script>
 </body>
 </html>

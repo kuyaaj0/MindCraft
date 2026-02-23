@@ -146,6 +146,29 @@ button:active { transform: translateY(3px); }
 /* Hide forms by default */
 .student-form, .teacher-form { display: none; }
 
+
+body.theme-dark {
+  background: radial-gradient(circle at top right, #1a1a2e 0%, #0f2027 60%, #0b132b 100%);
+}
+body.theme-dark .panel {
+  background: rgba(10, 15, 25, 0.72);
+  border: 1px solid rgba(100,150,255,0.2);
+  box-shadow: 0 0 20px rgba(80,150,255,0.35);
+}
+body.theme-dark .title,
+body.theme-dark .subtitle,
+body.theme-dark .auth-link,
+body.theme-dark .auth-link a,
+body.theme-dark .message {
+  color: #f7ead7;
+}
+body.theme-dark input {
+  background: rgba(255,255,255,0.12);
+  color: #f7ead7;
+}
+body.theme-dark input::placeholder {
+  color: rgba(247,234,215,0.7);
+}
 </style>
 </head>
 
@@ -352,6 +375,19 @@ studentSignupForm.addEventListener("submit", async (e) => {
 //     showToast(err.message, true);
 //   }
 // });
+</script>
+<script src="../Design/theme.js"></script>
+<script>
+(function(){
+  function syncThemeClass(theme){
+    document.body.classList.toggle("theme-dark", theme === "dark");
+    document.body.classList.toggle("theme-light", theme !== "dark");
+  }
+  const saved = localStorage.getItem("theme") || "light";
+  syncThemeClass(saved);
+  if (typeof window.setTheme === "function") window.setTheme(saved);
+  window.addEventListener("storage", (e)=>{ if (e.key === "theme") syncThemeClass(e.newValue || "light"); });
+})();
 </script>
 
 </body>
