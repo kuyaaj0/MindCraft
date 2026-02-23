@@ -541,6 +541,57 @@ footer { margin-left: -15px; margin-right: -15px; margin-bottom: -15px; }
 main h1 { font-size: 0.65rem; }
 button { padding: 6px 10px; font-size: 0.4rem; }
 }
+
+/* ===== DARK THEME OVERRIDES ===== */
+body.theme-dark {
+background: radial-gradient(circle at top right, #1a1a2e 0%, #0f2027 60%, #0b132b 100%);
+color: #f7ead7;
+}
+body.theme-dark header,
+body.theme-dark footer {
+background: linear-gradient(to bottom, #1d2a44 0%, #151f33 100%);
+border-color: #2c3f66;
+}
+body.theme-dark main h1,
+body.theme-dark .level-display,
+body.theme-dark #xpValue,
+body.theme-dark .xp-status,
+body.theme-dark header h1 {
+color: #f7ead7;
+text-shadow: 1px 1px #0b132b;
+}
+body.theme-dark .lesson-container,
+body.theme-dark .language-card,
+body.theme-dark .language-panel,
+body.theme-dark .lesson-list,
+body.theme-dark .quiz-list,
+body.theme-dark #rankDisplay {
+background: rgba(18, 24, 36, 0.82);
+border-color: #5a79b8;
+box-shadow: 0 6px 0 #2c3f66, 0 10px 20px rgba(0,0,0,0.35);
+}
+body.theme-dark .language-card p,
+body.theme-dark .language-panel .panel-title .titleText,
+body.theme-dark .lesson-list button,
+body.theme-dark .quiz-list button {
+color: #f7ead7;
+text-shadow: none;
+}
+body.theme-dark .lesson-list button,
+body.theme-dark .quiz-list button {
+background: rgba(30, 42, 66, 0.95);
+border-color: #5a79b8;
+}
+body.theme-dark #welcomeOverlay {
+background: rgba(6, 10, 20, 0.9);
+}
+body.theme-dark #welcomeOverlay p {
+background: linear-gradient(180deg, #1b2a44 0%, #152036 100%);
+border: 4px solid #5a79b8;
+box-shadow: 0 8px 0 #2c3f66;
+color: #f7ead7;
+text-shadow: none;
+}
 </style>
 </head>
 <body>
