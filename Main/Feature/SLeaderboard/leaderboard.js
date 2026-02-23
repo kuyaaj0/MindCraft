@@ -10,7 +10,8 @@ import {
   onSnapshot,
   getDocs,
   deleteDoc,
-  doc
+  doc,
+  where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -34,20 +35,73 @@ const auth = getAuth(app);
 async function cleanupGhostUsers() {
   const snap = await getDocs(collection(db, "users"));
   const deletions = [];
+  const byEmail = new Map();
 
   for (const userDoc of snap.docs) {
     const data = userDoc.data();
-    const email = data.email || "";
-    const name = data.name || "";
+    const email = (data.email || "").trim().toLowerCase();
+    const name = (data.name || "").trim();
     const isValid = email.includes("@") && name;
 
-    // ❌ Only delete if name or email invalid — skip valid duplicates
     if (!isValid) {
       deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
+      continue;
     }
+
+    const candidate = {
+      uid: userDoc.id,
+      email,
+      level: Number(data.level || 0),
+      xp: Number(data.xp || 0),
+      createdAtMs: getTimeValue(data.createdAt)
+    };
+
+    const existing = byEmail.get(email);
+    if (!existing) {
+      byEmail.set(email, candidate);
+      continue;
+    }
+
+    const keep = pickPreferredUser(existing, candidate);
+    const remove = keep.uid === existing.uid ? candidate : existing;
+    byEmail.set(email, keep);
+    deletions.push(deleteDoc(doc(db, "users", remove.uid)));
   }
 
   if (deletions.length > 0) await Promise.all(deletions);
+}
+
+
+function getTimeValue(v) {
+  if (!v) return 0;
+  if (typeof v.toMillis === "function") return v.toMillis();
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+}
+
+function pickPreferredUser(a, b, currentUID = null) {
+  if (currentUID && a.uid === currentUID) return a;
+  if (currentUID && b.uid === currentUID) return b;
+
+  const scoreA = (Number(a.level || 0) * 1_000_000) + Number(a.xp || 0);
+  const scoreB = (Number(b.level || 0) * 1_000_000) + Number(b.xp || 0);
+  if (scoreA !== scoreB) return scoreA > scoreB ? a : b;
+
+  return (a.createdAtMs || 0) >= (b.createdAtMs || 0) ? a : b;
+}
+
+function dedupeUsersByEmail(users, currentUID = null) {
+  const byEmail = new Map();
+  for (const u of users) {
+    const key = (u.email || "").trim().toLowerCase();
+    if (!key) continue;
+    if (!byEmail.has(key)) {
+      byEmail.set(key, u);
+      continue;
+    }
+    byEmail.set(key, pickPreferredUser(byEmail.get(key), u, currentUID));
+  }
+  return Array.from(byEmail.values());
 }
 
 // ===============================================
@@ -196,18 +250,22 @@ function liveLeaderboard(currentUID) {
         // ✅ Default missing fields
         users.push({
           uid: doc.id,
+          email: (data.email || "").trim().toLowerCase(),
           name: data.name || "Unknown",
           level: data.level ?? 1,
-          xp: data.xp ?? 0
+          xp: data.xp ?? 0,
+          createdAtMs: getTimeValue(data.createdAt)
         });
       });
 
-      if (users.length === 0) {
+      const cleanedUsers = dedupeUsersByEmail(users, currentUID);
+
+      if (cleanedUsers.length === 0) {
         body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
         return;
       }
 
-      const rows = users
+      const rows = cleanedUsers
         .slice(0, 100)
         .map((u, i) => {
           const rank = i + 1;

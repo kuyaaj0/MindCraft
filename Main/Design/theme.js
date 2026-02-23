@@ -12,7 +12,7 @@
     body.classList.toggle('theme-dark', theme === 'dark');
     body.classList.toggle('theme-light', theme !== 'dark');
     const containers = document.querySelectorAll(
-      '.container, .settings-container, .quiz-container, .lesson-content, .language-card, .account-card, header, footer, nav'
+      '.container, .settings-container, .quiz-container, .lesson-content, .account-card, header, footer, nav'
     );
     const buttons = document.querySelectorAll('button, select, a');
     const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option, .title, .subtitle, .setting-label, .small-note, .info-label, .info-value, .xp-label, .xp-numbers');
