@@ -465,6 +465,8 @@ studentSigninForm.addEventListener("submit", async e => {
       return;
     }
 
+    await removeDuplicateDocsByEmail(user.email, user.uid);
+
     const data = (await getDoc(ref)).data();
     localStorage.setItem("currentUser", user.uid);
     localStorage.setItem("cachedName", data.name || "Student");
