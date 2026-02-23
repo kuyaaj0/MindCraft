@@ -216,6 +216,34 @@ button:active {
   margin-bottom: 12px;
 }
 
+/* --- Fix for Sign Up link looking like a button --- */
+.auth-link a {
+  all: unset; /* remove inherited button styles */
+  color: #1db9ff; /* sky-blue text */
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 4px;
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.auth-link a:hover {
+  color: #0096ff;
+  text-shadow: 0 0 6px rgba(29,185,255,0.6);
+}
+
+/* Dark mode style */
+body.theme-dark .auth-link a {
+  color: #9bd6ff;
+}
+
+body.theme-dark .auth-link a:hover {
+  color: #b8e8ff;
+  text-shadow: 0 0 8px rgba(155,214,255,0.7);
+}
+ 
 body.theme-dark {
   background: radial-gradient(circle at top right, #1a1a2e 0%, #0f2027 60%, #0b132b 100%);
 }
