@@ -4,33 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>MindCraft Settings</title>
-
-<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
-
 <style>
-/* ===========================================
- 🌈 MindCraft — Settings (Light theme visuals preserved)
-=========================================== */
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-/* ---------- Page layout ---------- */
-html,body { height:100%; }
-body{
+html, body { height: 100%; }
+body {
   font-family: 'Baloo 2', sans-serif;
   background: linear-gradient(135deg, #a0ecff 0%, #c8f7b0 100%);
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  overflow-x:hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow-x: hidden;
   padding: 18px 12px 40px;
 }
-
-/* ---------- Decorative elements (kept) ---------- */
 .cloud {
   position: absolute;
   background: rgba(255,255,255,0.92);
@@ -39,24 +28,21 @@ body{
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   z-index: 1;
 }
-
 .cloud-1 { width: 220px; height: 80px; top: 6%; left: 4%; animation: float 6s ease-in-out infinite; }
 .cloud-2 { width: 180px; height: 70px; top: 34%; right: 8%; animation: float 7s ease-in-out infinite 1s; }
 .cloud-3 { width: 140px; height: 60px; top: 14%; right: 22%; animation: float 8s ease-in-out infinite 2s; }
-
 .sun {
   position: absolute;
-  width: 110px; height:110px;
+  width: 110px;
+  height: 110px;
   background: radial-gradient(circle at 30% 30%, #fff9a8 0%, #fff07a 18%, #fff200 45%, #ffd800 100%);
-  border-radius:50%;
+  border-radius: 50%;
   top: 8%;
   right: 10%;
   box-shadow: 0 0 40px rgba(255,204,0,0.25);
   z-index: 1;
   animation: pulse 4s ease-in-out infinite;
 }
-
-/* ---------- Container ---------- */
 .container {
   z-index: 10;
   width: 100%;
@@ -69,25 +55,8 @@ body{
   border: 2px solid rgba(138,152,170,0.12);
   font-family: 'Press Start 2P', cursive;
 }
-
-/* ---------- Title ---------- */
-.title {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 1.15rem;
-  color: #5a3a1a;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-}
-
-/* ---------- Subtitle ---------- */
-.subtitle {
-  font-size: 0.78rem;
-  color: #2b2017;
-  margin-bottom: 22px;
-  font-weight: 700;
-}
-
-/* ---------- Settings form ---------- */
+.title { font-size: 1.15rem; color: #5a3a1a; margin-bottom: 10px; letter-spacing: 1px; }
+.subtitle { font-size: 0.78rem; color: #2b2017; margin-bottom: 22px; font-weight: 700; }
 .settings-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -95,21 +64,9 @@ body{
   align-items: center;
   margin-bottom: 14px;
 }
-
-.setting-label {
-  text-align: left;
-  padding-left: 8px;
-  font-size: 0.62rem;
-  color: #3b2e16;
-  font-weight: 700;
-}
-
-.setting-control {
-  text-align: right;
-  padding-right: 8px;
-}
-
-select, button[type="button"]{
+.setting-label { text-align: left; padding-left: 8px; font-size: 0.62rem; color: #3b2e16; font-weight: 700; }
+.setting-control { text-align: right; padding-right: 8px; }
+select {
   min-width: 160px;
   padding: 10px 12px;
   border-radius: 10px;
@@ -120,13 +77,10 @@ select, button[type="button"]{
   cursor: pointer;
   font-family: 'Baloo 2', sans-serif;
   box-shadow: 0 6px 0 #7a5a3a;
-  transition: transform .12s ease;
+  appearance: none;
 }
-select { appearance:none; -webkit-appearance:none; -moz-appearance:none; padding-right: 18px; }
-
-select:focus, button[type="button"]:focus { outline: none; transform: translateY(-1px); }
-
-button[type="submit"]{
+select:focus { outline: none; transform: translateY(-1px); }
+button[type="submit"] {
   margin-top: 12px;
   padding: 14px 22px;
   width: 100%;
@@ -138,52 +92,43 @@ button[type="submit"]{
   font-size: 0.95rem;
   box-shadow: 0 8px 0 #3b6f36, 0 0 18px rgba(0,0,0,0.08);
   cursor: pointer;
-  transition: transform .12s ease;
 }
-
-/* ---------- Feedback / helper ---------- */
-#settingsFeedback {
-  margin-top: 12px;
-  min-height: 20px;
-  font-size: 0.68rem;
-  color: #10783a;
-  font-weight: 700;
-}
-
-/* ---------- Back / navigation ---------- */
-.controls {
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  margin-top:18px;
-}
+#settingsFeedback { margin-top: 12px; min-height: 20px; font-size: 0.68rem; color: #10783a; font-weight: 700; }
+.controls { display: flex; justify-content: center; margin-top: 18px; }
 .btn-ghost {
   padding: 10px 16px;
   border-radius: 12px;
   border: 2px solid rgba(43,32,23,0.18);
   background: rgba(255,255,255,0.9);
   color: #5a3a1a;
-  cursor:pointer;
-  font-weight:700;
+  cursor: pointer;
+  font-weight: 700;
   box-shadow: 0 6px 0 rgba(107,62,26,0.15);
 }
-
-/* ---------- Footer small ---------- */
-.small-note {
-  margin-top:10px;
-  font-size: 0.62rem;
-  color: #3b2e16;
-  opacity: 0.9;
-}
-
-/* ---------- Animations ---------- */
+.small-note { margin-top: 10px; font-size: 0.62rem; color: #3b2e16; opacity: 0.9; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
 
-/* ---------- Responsive ---------- */
-@media (max-width:720px){
+body.theme-dark .cloud {
+  background: rgba(170, 190, 220, 0.35);
+  box-shadow: 0 6px 20px rgba(30, 45, 70, 0.45);
+  opacity: 0.8;
+}
+body.theme-dark .sun {
+  background: radial-gradient(circle at 35% 35%, #c5d8ff 0%, #8fb2ff 35%, #5c84db 70%, #3a5fb3 100%);
+  box-shadow: 0 0 35px rgba(95, 140, 230, 0.35);
+}
+body.theme-dark .title,
+body.theme-dark .subtitle,
+body.theme-dark .setting-label,
+body.theme-dark .small-note,
+body.theme-dark footer,
+body.theme-dark #settingsFeedback {
+  color: #9be7b3;
+}
+@media (max-width: 720px) {
   .settings-grid { grid-template-columns: 1fr; gap: 10px; }
-  .container { padding:20px; }
+  .container { padding: 20px; }
   .cloud-1 { left: 2%; width: 160px; height: 60px; top: 4%; }
   .cloud-2 { right: 6%; width: 130px; height: 54px; top: 34%; }
   .sun { right: 6%; top: 6%; width: 90px; height: 90px; }
@@ -191,14 +136,11 @@ button[type="submit"]{
 </style>
 </head>
 <body>
-
-<!-- Decorative Elements (kept) -->
 <div class="cloud cloud-1" aria-hidden="true"></div>
 <div class="cloud cloud-2" aria-hidden="true"></div>
 <div class="cloud cloud-3" aria-hidden="true"></div>
 <div class="sun" aria-hidden="true"></div>
 
-<!-- Main container (Settings) -->
 <div class="container" role="region" aria-label="MindCraft Settings">
   <div class="title">MindCraft Settings</div>
   <div class="subtitle">Customize your experience — Theme, Sound, and Vibration</div>
@@ -228,53 +170,35 @@ button[type="submit"]{
           <option value="off">Off</option>
         </select>
       </div>
-
-      <!--<div class="setting-label">Reset progress</div>
-      <div class="setting-control">
-        <button type="button" id="resetProgressBtn" title="Reset your local progress">Reset</button>
-      </div>
-    </div>-->
+    </div>
 
     <button type="submit" id="saveBtn">Save Settings</button>
-
-    <!--<div id="settingsFeedback" role="status" aria-live="polite"></div>
-    <div class="small-note">Your choices are saved locally in your browser. Theme will apply immediately if available.</div>-->
+    <div id="settingsFeedback" role="status" aria-live="polite"></div>
+    <div class="small-note">Your choices are saved locally in your browser. Theme will apply immediately if available.</div>
 
     <div class="controls">
       <button type="button" class="btn-ghost" id="backBtn">⬅ Back</button>
-      <button type="button" class="btn-ghost" id="homeBtn">🏠 Home</button>
     </div>
   </form>
 </div>
 
-<footer style="margin-top:18px; font-size:0.7rem; color:#3b2e16; opacity:0.85;">
-  © 2025 MindCraft | Made by the team
-</footer>
+<footer style="margin-top:18px; font-size:0.7rem; color:#3b2e16; opacity:0.85;">© 2025 MindCraft | Made by the team</footer>
 
-<!-- Optional theme system (the page will call window.setTheme if your theme.js exists) -->
 <script>
-/* ==============================
-   Settings logic (keeps teammate design)
-   - LocalStorage persistence
-   - Theme integration (calls window.setTheme if available)
-   - Role-aware back navigation
-   - Reset progress (local-only)
-   ============================== */
-
-(function(){
-  // Elements
+(() => {
   const form = document.getElementById('settingsForm');
   const themeSelect = document.getElementById('themeSelect');
   const soundSelect = document.getElementById('soundSelect');
   const vibrationSelect = document.getElementById('vibrationSelect');
-  const saveBtn = document.getElementById('saveBtn');
   const feedback = document.getElementById('settingsFeedback');
   const backBtn = document.getElementById('backBtn');
-  const homeBtn = document.getElementById('homeBtn');
-  const resetBtn = document.getElementById('resetProgressBtn');
 
-  // Load saved preferences (fall back to light mode by requirement)
   const savedTheme = localStorage.getItem('theme') || 'light';
+
+  const applyLocalThemeFallback = (theme) => {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    document.body.classList.toggle('theme-light', theme !== 'dark');
+  };
   const savedSound = localStorage.getItem('sound') || 'on';
   const savedVibration = localStorage.getItem('vibration') || 'on';
 
@@ -282,82 +206,44 @@ button[type="submit"]{
   soundSelect.value = savedSound;
   vibrationSelect.value = savedVibration;
 
-  // Apply theme immediately if theme system exists
+  applyLocalThemeFallback(savedTheme);
   if (typeof window.setTheme === 'function') {
-    try { window.setTheme(savedTheme); } catch(e){ console.warn(e); }
+    try { window.setTheme(savedTheme); } catch (e) { console.warn(e); }
   }
 
-  // Helper: show feedback
-  function showFeedback(msg, isError=false){
+  const showFeedback = (msg, isError = false) => {
     feedback.textContent = msg;
     feedback.style.color = isError ? '#c62828' : '#10783a';
-    // clear after 2.5s
-    clearTimeout(showFeedback._t);
-    showFeedback._t = setTimeout(()=> feedback.textContent = '', 2500);
-  }
+    clearTimeout(showFeedback.t);
+    showFeedback.t = setTimeout(() => { feedback.textContent = ''; }, 2500);
+  };
 
-  // Save handler
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
-    const theme = themeSelect.value;
-    const sound = soundSelect.value;
-    const vibration = vibrationSelect.value;
+    localStorage.setItem('theme', themeSelect.value);
+    localStorage.setItem('sound', soundSelect.value);
+    localStorage.setItem('vibration', vibrationSelect.value);
 
-    localStorage.setItem('theme', theme);
-    localStorage.setItem('sound', sound);
-    localStorage.setItem('vibration', vibration);
-
-    // Apply theme if theme engine available
+    applyLocalThemeFallback(themeSelect.value);
     if (typeof window.setTheme === 'function') {
-      try { window.setTheme(theme); }
-      catch(e){ console.warn('setTheme failed', e); }
+      try { window.setTheme(themeSelect.value); } catch (e) { console.warn('setTheme failed', e); }
     }
 
     showFeedback('Settings saved!');
   });
 
-  // Reset progress (local-only) — safe operation
-  resetBtn.addEventListener('click', () => {
-    if (!confirm('Reset local progress (this will remove cached progress and localStorage keys like currentLevel/currentXP). Proceed?')) return;
-    // remove common keys (you can expand keys as needed)
-    const keysToRemove = ['currentLevel','currentXP','totalXP','currentUser','cachedName','currentRole'];
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-    showFeedback('Local progress reset.');
-  });
-
-  // Back button: role-aware
   backBtn.addEventListener('click', () => {
     const role = localStorage.getItem('currentRole') || 'student';
-    if (role === 'teacher') {
-      window.location.href = '../Webside/Teacher.html';
-    } else {
-      window.location.href = '../Webside/Student.html';
-    }
+    window.location.href = role === 'teacher' ? '../Webside/Teacher.html' : '../Webside/Student.html';
   });
 
-  // Home button: same behaviour as back
-  homeBtn.addEventListener('click', () => {
-    const role = localStorage.getItem('currentRole') || 'student';
-    if (role === 'teacher') {
-      window.location.href = '../Webside/Teacher.html';
-    } else {
-      window.location.href = '../Webside/Student.html';
-    }
-  });
-
-  // keyboard accessibility: Enter on selects will submit
-  [themeSelect, soundSelect, vibrationSelect].forEach(el=>{
-    el.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter') { form.requestSubmit(); }
+  [themeSelect, soundSelect, vibrationSelect].forEach((el) => {
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') form.requestSubmit();
     });
   });
-
 })();
 </script>
-
-<!-- Link your theme.js if you want the global theme system to work -->
 <script src="../Design/theme.js"></script>
-
 </body>
 </html>
-  <!--backup is important before changing to new one-->

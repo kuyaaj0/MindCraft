@@ -9,11 +9,15 @@
   const body = document.body;
 
   function applyTheme(theme) {
+    body.classList.toggle('theme-dark', theme === 'dark');
+    body.classList.toggle('theme-light', theme !== 'dark');
     const containers = document.querySelectorAll(
       '.container, .settings-container, .quiz-container, .lesson-content, .language-card, header, footer, nav'
     );
     const buttons = document.querySelectorAll('button, select, a');
-    const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option');
+    const texts = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, option, .title, .subtitle, .setting-label, .small-note');
+    const clouds = document.querySelectorAll('.cloud');
+    const suns = document.querySelectorAll('.sun');
 
     // ======================================================
     // 🌑 DARK MODE (Aurora Night with Transparent Glow)
@@ -42,9 +46,20 @@
         btn.style.boxShadow = '0 4px 0 #6b3e1a';
       });
 
-      // Texts
+      // Texts (warmer + brighter for readability against dark cards)
       texts.forEach(t => {
-        t.style.color = '#e3e9ff';
+        t.style.color = '#f7ead7';
+      });
+
+      // Sky decor in dark mode
+      clouds.forEach(cloud => {
+        cloud.style.background = 'rgba(170, 190, 220, 0.35)';
+        cloud.style.boxShadow = '0 6px 20px rgba(30, 45, 70, 0.45)';
+        cloud.style.opacity = '0.8';
+      });
+      suns.forEach(sun => {
+        sun.style.background = 'radial-gradient(circle at 35% 35%, #c5d8ff 0%, #8fb2ff 35%, #5c84db 70%, #3a5fb3 100%)';
+        sun.style.boxShadow = '0 0 35px rgba(95, 140, 230, 0.35)';
       });
     }
 
@@ -75,6 +90,16 @@
 
       texts.forEach(t => {
         t.style.color = '#3b2a15';
+      });
+
+      clouds.forEach(cloud => {
+        cloud.style.background = 'rgba(255,255,255,0.92)';
+        cloud.style.boxShadow = '0 6px 18px rgba(0,0,0,0.08)';
+        cloud.style.opacity = '0.95';
+      });
+      suns.forEach(sun => {
+        sun.style.background = 'radial-gradient(circle at 30% 30%, #fff9a8 0%, #fff07a 18%, #fff200 45%, #ffd800 100%)';
+        sun.style.boxShadow = '0 0 40px rgba(255,204,0,0.25)';
       });
     }
 
