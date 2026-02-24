@@ -252,15 +252,22 @@ function liveLeaderboard(currentUID) {
           name: data.name || "Unknown",
           level: data.level ?? 1,
           xp: data.xp ?? 0
+          email: (data.email || "").trim().toLowerCase(),
+          name: data.name || "Unknown",
+          level: data.level ?? 1,
+          xp: data.xp ?? 0,
+          createdAtMs: getTimeValue(data.createdAt)
         });
       });
 
-      if (users.length === 0) {
+      const cleanedUsers = dedupeUsersByEmail(users, currentUID);
+
+      if (cleanedUsers.length === 0) {
         body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
         return;
       }
 
-      const rows = users
+      const rows = cleanedUsers
         .slice(0, 100)
         .map((u, i) => {
           const rank = i + 1;
