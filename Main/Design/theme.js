@@ -23,6 +23,7 @@
     const accountTopBars = document.querySelectorAll('.top-bar');
     const accountFooters = document.querySelectorAll('.page-footer');
     const accountRanks = document.querySelectorAll('.rank-panel');
+    const accountRankTitles = document.querySelectorAll('#rankTitle');
 
     // ======================================================
     // 🌑 DARK MODE (Aurora Night with Transparent Glow)
@@ -85,6 +86,11 @@
         rank.style.border = '2px solid #5a79b8';
         rank.style.color = '#f7ead7';
       });
+      accountRankTitles.forEach(title => {
+        title.style.color = '#ffd36b';
+        title.style.fontWeight = '800';
+        title.style.textShadow = '0 0 8px rgba(255,211,107,0.25)';
+      });
     }
 
     // ======================================================
@@ -143,6 +149,11 @@
         rank.style.background = 'linear-gradient(90deg,#ffeaa7,#fff9e6)';
         rank.style.border = '2px solid #c18f00';
         rank.style.color = '#5a3a1a';
+      });
+      accountRankTitles.forEach(title => {
+        title.style.color = '#5a3a1a';
+        title.style.fontWeight = '700';
+        title.style.textShadow = 'none';
       });
     }
 
