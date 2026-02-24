@@ -1107,6 +1107,21 @@ else rankDisplay.classList.remove("rank-top");
 });
 });
 </script>
-
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const overlay = document.getElementById("welcomeOverlay");
+  if (overlay) {
+    // Wait a short moment to ensure theme + user data are loaded
+    setTimeout(() => {
+      overlay.style.display = "flex";
+      overlay.style.opacity = "0";
+      overlay.style.transition = "opacity 0.5s ease";
+      requestAnimationFrame(() => {
+        overlay.style.opacity = "1";
+      });
+    }, 500);
+  }
+});
+</script>
 </body>
 </html>
