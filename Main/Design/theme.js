@@ -63,6 +63,13 @@
       });
     }
 
+    accountRankTitles.forEach(title => {
+        title.style.color = '#ffd36b';
+        title.style.fontWeight = '800';
+        title.style.textShadow = '0 0 8px rgba(255,211,107,0.25)';
+      });
+    }
+
     // ======================================================
     // ☀️ LIGHT MODE (Sky-Mint Cloud Style)
     // ======================================================
@@ -100,13 +107,6 @@
       suns.forEach(sun => {
         sun.style.background = 'radial-gradient(circle at 30% 30%, #fff9a8 0%, #fff07a 18%, #fff200 45%, #ffd800 100%)';
         sun.style.boxShadow = '0 0 40px rgba(255,204,0,0.25)';
-      });
-    }
-
-      accountRankTitles.forEach(title => {
-        title.style.color = '#ffd36b';
-        title.style.fontWeight = '800';
-        title.style.textShadow = '0 0 8px rgba(255,211,107,0.25)';
       });
     }
 
