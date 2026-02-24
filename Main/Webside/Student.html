@@ -519,7 +519,7 @@ font-size: 0.5rem;
 }
 .nav-arrow.left { left: -57px; }
 .nav-arrow.right { right: -57px; }
-5
+}
 
 @media (max-width: 500px) {
 body { padding: 15px; }
@@ -542,6 +542,38 @@ main h1 { font-size: 0.65rem; }
 button { padding: 6px 10px; font-size: 0.4rem; }
 }
 
+
+
+
+/* ===== LIGHT THEME OVERRIDES (keep teammate style) ===== */
+body.theme-light header {
+background: #7a4f2f;
+border-bottom: 4px solid #5c3a1a;
+}
+body.theme-light footer {
+background: #7a4f2f;
+border-top: 4px solid #5c3a1a;
+color: #d9b16c;
+}
+body.theme-light .user-actions button,
+body.theme-light .nav-arrow,
+body.theme-light .language-panel .panel-back,
+body.theme-light .back-btn {
+background: #d9b16c;
+color: #3b2a15;
+border: 3px solid #a97c4b;
+box-shadow: 0 4px 0 #a97c4b, 0 5px 0 #3b2a15;
+}
+body.theme-light #welcomeOverlay {
+background: rgba(0, 0, 0, 0.8);
+}
+body.theme-light #welcomeOverlay p {
+background: #d4e0c7;
+border: 4px solid #5c915c;
+box-shadow: 0 8px 0 #5c915c;
+color: #3e763e;
+text-shadow: 1px 1px rgba(255,255,255,0.5);
+}
 
 /* ===== DARK THEME OVERRIDES ===== */
 body.theme-dark {
@@ -1083,12 +1115,17 @@ lastLevel = level;
 const name = user.displayName || data.name || user.email.split("@")[0];
 document.getElementById("studentName").textContent = name;
 const welcomeOverlay = document.getElementById("welcomeOverlay");
-if (!sessionStorage.getItem("welcomeShown")) {
-sessionStorage.setItem("welcomeShown", "true");
+const welcomeKey = `welcomeShown_${user.uid}`;
+if (!sessionStorage.getItem(welcomeKey)) {
+sessionStorage.setItem(welcomeKey, "true");
+welcomeOverlay.classList.remove("fade-out");
 welcomeOverlay.style.display = "flex";
 setTimeout(() => {
 welcomeOverlay.classList.add("fade-out");
-setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
+setTimeout(() => {
+welcomeOverlay.style.display = "none";
+welcomeOverlay.classList.remove("fade-out");
+}, 600);
 }, 3000);
 }
 
