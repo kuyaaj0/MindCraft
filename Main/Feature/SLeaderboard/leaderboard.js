@@ -1,33 +1,17 @@
 // ===============================================
 // 🏆 MindCraft Live Leaderboard System (Fixed & Optimized)
 // ===============================================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore,
   collection,
   query,
   orderBy,
   onSnapshot,
   getDocs,
   deleteDoc,
-  doc,
-  where
+  doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-// ✅ Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
-  authDomain: "mindcraft-83f81.firebaseapp.com",
-  projectId: "mindcraft-83f81",
-  storageBucket: "mindcraft-83f81.firebasestorage.app",
-  messagingSenderId: "483019456762",
-  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { db, auth } from "../../System/Database/firebase.js";
 
 // ===============================================
 // 🧹 Smart Cleanup — delete only broken/invalid accounts
@@ -104,34 +88,62 @@ function dedupeUsersByEmail(users, currentUID = null) {
   return Array.from(byEmail.values());
 }
 
+
+function getThemePalette() {
+  const isDark = document.body.classList.contains("theme-dark") || localStorage.getItem("theme") === "dark";
+  if (isDark) {
+    return {
+      overlay: "rgba(10,14,24,0.82)",
+      containerBg: "rgba(20, 28, 45, 0.95)",
+      border: "#5a79b8",
+      text: "#f7ead7",
+      row: "rgba(255,255,255,0.03)",
+      headerBorder: "rgba(151,180,230,0.45)",
+      closeBg: "#c04a4a",
+      closeText: "#fff"
+    };
+  }
+  return {
+    overlay: "rgba(35,24,14,0.58)",
+    containerBg: "linear-gradient(135deg,#f6e7d3,#eed4b5)",
+    border: "#a97c4b",
+    text: "#5a3a1a",
+    row: "rgba(255,255,255,0.45)",
+    headerBorder: "rgba(169,124,75,0.55)",
+    closeBg: "#b8783d",
+    closeText: "#fff"
+  };
+}
+
 // ===============================================
 // 🧩 Create Leaderboard Popup
 // ===============================================
 function createLeaderboardPopup(currentUID) {
   if (document.getElementById("leaderboardOverlay")) return;
+  const palette = getThemePalette();
 
   const overlay = document.createElement("div");
   overlay.id = "leaderboardOverlay";
   overlay.style.cssText = `
     position: fixed; top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.85);
+    background: ${palette.overlay};
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
-    color: #fff; font-family: 'Press Start 2P', cursive;
+    color: ${palette.text}; font-family: 'Press Start 2P', cursive;
     z-index: 1000; padding: 10px;
     opacity: 0; transition: opacity 0.4s ease;
   `;
 
   const container = document.createElement("div");
   container.style.cssText = `
-    background: rgba(25,25,25,0.9);
-    border: 2px solid #1DB954;
+    background: ${palette.containerBg};
+    border: 2px solid ${palette.border};
     border-radius: 12px;
     padding: 18px;
     width: 95%;
     max-width: 650px;
-    box-shadow: 0 0 12px #1DB95433;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
     text-align: center;
     max-height: 85vh;
     display: flex;
@@ -141,10 +153,10 @@ function createLeaderboardPopup(currentUID) {
   const title = document.createElement("h2");
   title.textContent = "MindCraft Leaderboard";
   title.style.cssText = `
-    color: #1DB954;
+    color: ${palette.text};
     margin-bottom: 15px;
     font-size: clamp(0.9rem, 3vw, 1.1rem);
-    text-shadow: 0 0 6px #1DB95455;
+    text-shadow: none;
   `;
 
   const scrollArea = document.createElement("div");
@@ -152,22 +164,22 @@ function createLeaderboardPopup(currentUID) {
     overflow-y: auto;
     max-height: 60vh;
     width: 100%;
-    border-top: 1px solid #1DB95455;
-    border-bottom: 1px solid #1DB95455;
+    border-top: 1px solid ${palette.headerBorder};
+    border-bottom: 1px solid ${palette.headerBorder};
     scrollbar-width: thin;
-    scrollbar-color: #1DB954 #111;
+    scrollbar-color: ${palette.border} rgba(0,0,0,0.2);
   `;
 
   const table = document.createElement("table");
   table.style.cssText = `
     width: 100%;
     border-collapse: collapse;
-    color: #1DB954;
+    color: ${palette.text};
     font-size: clamp(0.45rem, 1.8vw, 0.7rem);
   `;
   table.innerHTML = `
     <thead>
-      <tr style="color:#1DB954; border-bottom:1px solid #1DB954">
+      <tr style="color:${palette.text}; border-bottom:1px solid ${palette.headerBorder}">
         <th style="padding:6px;">Rank</th>
         <th style="padding:6px;">Username</th>
         <th style="padding:6px;">Level</th>
@@ -185,10 +197,10 @@ function createLeaderboardPopup(currentUID) {
   closeBtn.textContent = "Close";
   closeBtn.style.cssText = `
     margin-top: 14px;
-    background: #ff4d4d;
+    background: ${palette.closeBg};
     border: none;
     border-radius: 10px;
-    color: white;
+    color: ${palette.closeText};
     padding: 10px 20px;
     font-family: 'Press Start 2P', cursive;
     cursor: pointer;
@@ -235,6 +247,7 @@ function createLeaderboardPopup(currentUID) {
 // 📊 Live Leaderboard (Fixed)
 // ===============================================
 function liveLeaderboard(currentUID) {
+  const palette = getThemePalette();
   const leaderboardRef = collection(db, "users");
   const q = query(leaderboardRef, orderBy("level", "desc"), orderBy("xp", "desc"));
   const body = document.getElementById("leaderboardBody");
@@ -276,7 +289,7 @@ function liveLeaderboard(currentUID) {
           else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
 
           return `
-            <tr style="background:rgba(255,255,255,0.02); box-shadow:${glow}; ${
+            <tr style="background:${palette.row}; box-shadow:${glow}; ${
               isCurrentUser ? "animation: glowPulse 1.7s infinite alternate;" : ""
             }">
               <td style="padding:6px;">#${rank}</td>
@@ -295,9 +308,9 @@ function liveLeaderboard(currentUID) {
         style.id = "glowAnimation";
         style.textContent = `
           @keyframes glowPulse {
-            0% { box-shadow: 0 0 5px #fff; }
-            50% { box-shadow: 0 0 12px #fff; }
-            100% { box-shadow: 0 0 5px #fff; }
+            0% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
+            50% { box-shadow: 0 0 9px rgba(247,234,215,0.65); }
+            100% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
           }
         `;
         document.head.appendChild(style);
