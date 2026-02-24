@@ -70,6 +70,39 @@ async function cleanupGhostUsers() {
   if (deletions.length > 0) await Promise.all(deletions);
 }
 
+function getTimeValue(v) {
+  if (!v) return 0;
+  if (typeof v.toMillis === "function") return v.toMillis();
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+}
+
+function pickPreferredUser(a, b, currentUID = null) {
+  if (currentUID && a.uid === currentUID) return a;
+  if (currentUID && b.uid === currentUID) return b;
+
+  const scoreA = (Number(a.level || 0) * 1_000_000) + Number(a.xp || 0);
+  const scoreB = (Number(b.level || 0) * 1_000_000) + Number(b.xp || 0);
+  if (scoreA !== scoreB) return scoreA > scoreB ? a : b;
+
+  return (a.createdAtMs || 0) >= (b.createdAtMs || 0) ? a : b;
+}
+
+function dedupeUsersByEmail(users, currentUID = null) {
+  const byEmail = new Map();
+  for (const u of users) {
+    const key = (u.email || "").trim().toLowerCase();
+    if (!key) continue;
+    if (!byEmail.has(key)) {
+      byEmail.set(key, u);
+      continue;
+    }
+    byEmail.set(key, pickPreferredUser(byEmail.get(key), u, currentUID));
+  }
+  return Array.from(byEmail.values());
+}
+
+
 // ===============================================
 // 🧩 Create Leaderboard Popup
 // ===============================================
