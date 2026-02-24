@@ -190,7 +190,7 @@ if (welcomeOverlay) {
     }
   } else {
   // 🌤️ Light Theme — same gradient design as teammate's layout
-  welcomeOverlay.style.background = 'linear-gradient(135deg, #a0ecff 0%, #c8f7b0 100%)';
+/*  welcomeOverlay.style.background = 'linear-gradient(135deg, #a0ecff 0%, #c8f7b0 100%)';
   welcomeOverlay.style.backdropFilter = 'blur(8px)';
   welcomeOverlay.style.border = '2px solid rgba(255, 255, 255, 0.3)';
   welcomeOverlay.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
@@ -209,7 +209,7 @@ if (welcomeOverlay) {
     p.style.textShadow = '0 1px 2px rgba(255,255,255,0.8)';
     p.style.transition = 'all 0.4s ease';
   }
-}
+}*/
 }
 
     localStorage.setItem('theme', currentTheme);
