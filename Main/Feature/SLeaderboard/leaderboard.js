@@ -37,14 +37,34 @@ async function cleanupGhostUsers() {
 
   for (const userDoc of snap.docs) {
     const data = userDoc.data();
-    const email = data.email || "";
-    const name = data.name || "";
+    const email = (data.email || "").trim().toLowerCase();
+    const name = (data.name || "").trim();
     const isValid = email.includes("@") && name;
 
     // ❌ Only delete if name or email invalid — skip valid duplicates
     if (!isValid) {
       deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
+     continue;
     }
+
+    const candidate = {
+      uid: userDoc.id,
+      email,
+      level: Number(data.level || 0),
+      xp: Number(data.xp || 0),
+      createdAtMs: getTimeValue(data.createdAt)
+    };
+
+    const existing = byEmail.get(email);
+    if (!existing) {
+      byEmail.set(email, candidate);
+      continue;
+    }
+
+    const keep = pickPreferredUser(existing, candidate);
+    const remove = keep.uid === existing.uid ? candidate : existing;
+    byEmail.set(email, keep);
+    deletions.push(deleteDoc(doc(db, "users", remove.uid)));
   }
 
   if (deletions.length > 0) await Promise.all(deletions);
