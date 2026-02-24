@@ -173,6 +173,34 @@
       el.style.textShadow = t.rankTitleShadow;
     });
 
+    // ============================
+// 🎉 Welcome Overlay Styling
+// ============================
+const welcomeOverlay = document.getElementById('welcomeOverlay');
+if (welcomeOverlay) {
+  if (theme === 'dark') {
+    welcomeOverlay.style.background = 'rgba(6, 10, 20, 0.9)';
+    const p = welcomeOverlay.querySelector('p');
+    if (p) {
+      p.style.background = 'linear-gradient(180deg, #1b2a44 0%, #152036 100%)';
+      p.style.border = '4px solid #5a79b8';
+      p.style.boxShadow = '0 8px 0 #2c3f66';
+      p.style.color = '#f7ead7';
+      p.style.textShadow = 'none';
+    }
+  } else {
+    welcomeOverlay.style.background = 'rgba(255, 255, 255, 0.9)';
+    const p = welcomeOverlay.querySelector('p');
+    if (p) {
+      p.style.background = 'linear-gradient(180deg, #fffefb 0%, #f0f8ff 100%)';
+      p.style.border = '3px solid rgba(0, 0, 0, 0.05)';
+      p.style.boxShadow = '0 8px 0 rgba(0,0,0,0.1)';
+      p.style.color = '#3b2a15';
+      p.style.textShadow = '0 1px 2px rgba(255,255,255,0.5)';
+    }
+  }
+}
+
     localStorage.setItem('theme', currentTheme);
     if (typeof window.applyEnvironment === 'function') {
       window.applyEnvironment(currentTheme, true);
