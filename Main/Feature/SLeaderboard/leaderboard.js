@@ -249,9 +249,6 @@ function liveLeaderboard(currentUID) {
         // ✅ Default missing fields
         users.push({
           uid: doc.id,
-          name: data.name || "Unknown",
-          level: data.level ?? 1,
-          xp: data.xp ?? 0
           email: (data.email || "").trim().toLowerCase(),
           name: data.name || "Unknown",
           level: data.level ?? 1,
