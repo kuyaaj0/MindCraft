@@ -110,6 +110,13 @@
       });
     }
 
+      accountRankTitles.forEach(title => {
+        title.style.color = '#5a3a1a';
+        title.style.fontWeight = '700';
+        title.style.textShadow = 'none';
+      });
+    }
+  
     // ======================================================
     // 💾 Save preference + Environment Sync
     // ======================================================
