@@ -316,7 +316,11 @@ onAuthStateChanged(auth, (user) => {
   const btn = document.getElementById("leaderboardBtn");
   if (btn) {
     btn.addEventListener("click", async () => {
-      await cleanupGhostUsers(); // Safe cleanup only removes broken docs
+      try {
+        await cleanupGhostUsers(); // Safe cleanup only removes broken/duplicate docs
+      } catch (err) {
+        console.warn("Cleanup skipped (permission/rules issue):", err);
+      } // Safe cleanup only removes broken docs
       createLeaderboardPopup(user ? user.uid : null);
     });
   }
