@@ -249,8 +249,7 @@ body.theme-dark input::placeholder {
 <script type="module">
 import { auth, db } from '../System/Database/firebase.js';
 import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { setDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+import { setDoc, doc, getDocs, query, where, deleteDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 /* ==== UI ELEMENTS ==== */
 const studentBtn = document.getElementById("studentBtn");
 const teacherBtn = document.getElementById("teacherBtn");
