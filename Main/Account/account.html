@@ -215,6 +215,14 @@ body {
   .account-card { max-width: 92%; padding:16px; }
 }
 
+
+body.theme-dark .account-card h1,
+body.theme-dark #rankTitle,
+body.theme-dark .rank-panel {
+  color: #f7ead7 !important;
+  text-shadow: none;
+}
+
 /* decorative floating particles (subtle) */
 .particles {
   position: fixed;
@@ -343,7 +351,7 @@ const rankTitleEl = document.getElementById("rankTitle");
 const roleBadge = document.getElementById("roleBadge");
 
 const navHome = document.getElementById("navHome");
-const navLeaderboard = document.getElementById("navLeaderboard");
+const navLeaderboard = document.getElementById("leaderboardBtn");
 const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
 
