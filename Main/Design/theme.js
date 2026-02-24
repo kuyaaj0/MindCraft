@@ -189,16 +189,27 @@ if (welcomeOverlay) {
       p.style.textShadow = 'none';
     }
   } else {
-    welcomeOverlay.style.background = 'rgba(255, 255, 255, 0.9)';
-    const p = welcomeOverlay.querySelector('p');
-    if (p) {
-      p.style.background = 'linear-gradient(180deg, #fffefb 0%, #f0f8ff 100%)';
-      p.style.border = '3px solid rgba(0, 0, 0, 0.05)';
-      p.style.boxShadow = '0 8px 0 rgba(0,0,0,0.1)';
-      p.style.color = '#3b2a15';
-      p.style.textShadow = '0 1px 2px rgba(255,255,255,0.5)';
-    }
+  // 🌤️ Light Theme — same gradient design as teammate's layout
+  welcomeOverlay.style.background = 'linear-gradient(135deg, #a0ecff 0%, #c8f7b0 100%)';
+  welcomeOverlay.style.backdropFilter = 'blur(8px)';
+  welcomeOverlay.style.border = '2px solid rgba(255, 255, 255, 0.3)';
+  welcomeOverlay.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+  welcomeOverlay.style.transition = 'all 0.5s ease';
+  welcomeOverlay.style.borderRadius = '20px';
+
+  const p = welcomeOverlay.querySelector('p');
+  if (p) {
+    p.style.background = 'rgba(255, 255, 255, 0.85)';
+    p.style.border = '3px solid rgba(0, 0, 0, 0.05)';
+    p.style.boxShadow = '0 6px 0 rgba(0, 0, 0, 0.1)';
+    p.style.color = '#3b2a15';
+    p.style.fontWeight = '700';
+    p.style.borderRadius = '16px';
+    p.style.padding = '20px 40px';
+    p.style.textShadow = '0 1px 2px rgba(255,255,255,0.8)';
+    p.style.transition = 'all 0.4s ease';
   }
+}
 }
 
     localStorage.setItem('theme', currentTheme);
