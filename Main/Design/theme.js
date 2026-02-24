@@ -14,7 +14,7 @@
   // Selectors: grouped so the theme logic is easy to maintain
   // ---------------------------------------------------------
   const SELECTORS = {
-    containers: '.container, .settings-container, .quiz-container, .lesson-container, .account-card',
+    containers: '.container, .settings-container, .quiz-container, .lesson-container, .languageView, .account-card',
     buttons: 'button, select, a.nav-btn, a.btn',
     texts:
       'h1, h2, h3, h4, h5, h6, p, span, label, option, ' +
