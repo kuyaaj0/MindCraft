@@ -188,7 +188,7 @@ if (welcomeOverlay) {
       p.style.color = '#f7ead7';
       p.style.textShadow = 'none';
     }
-  } else {
+  } /*else {*/
   // 🌤️ Light Theme — same gradient design as teammate's layout
 /*  welcomeOverlay.style.background = 'linear-gradient(135deg, #a0ecff 0%, #c8f7b0 100%)';
   welcomeOverlay.style.backdropFilter = 'blur(8px)';
