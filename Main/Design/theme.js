@@ -15,7 +15,7 @@
   // ---------------------------------------------------------
   const SELECTORS = {
     containers: '.container, .settings-container, .quiz-container, .lesson-content, .account-card',
-    buttons: 'button, select, a',
+    buttons: 'button, select, a.nav-btn, a.btn',
     texts:
       'h1, h2, h3, h4, h5, h6, p, span, label, option, ' +
       '.title, .subtitle, .setting-label, .small-note, ' +
