@@ -34,6 +34,7 @@ const auth = getAuth(app);
 async function cleanupGhostUsers() {
   const snap = await getDocs(collection(db, "users"));
   const deletions = [];
+  const byEmail = new Map();
 
   for (const userDoc of snap.docs) {
     const data = userDoc.data();
@@ -100,6 +101,25 @@ function dedupeUsersByEmail(users, currentUID = null) {
     byEmail.set(key, pickPreferredUser(byEmail.get(key), u, currentUID));
   }
   return Array.from(byEmail.values());
+}
+
+function isUserActive(user, now = Date.now()) {
+  const lastSeen = Number(user.lastSeenMs || 0);
+  const activeWindowMs = 5 * 60 * 1000; // 5 minutes
+  if (lastSeen > 0 && now - lastSeen <= activeWindowMs) return true;
+  return Boolean(user.isActive);
+}
+
+function formatInactiveDuration(lastSeenMs, now = Date.now()) {
+  const ms = Math.max(0, now - Number(lastSeenMs || 0));
+  const totalHours = Math.floor(ms / (1000 * 60 * 60));
+  const totalDays = Math.floor(totalHours / 24);
+  const totalMonths = Math.floor(totalDays / 30);
+
+  if (!lastSeenMs) return "No activity data";
+  if (totalMonths >= 1) return `${totalMonths} month${totalMonths > 1 ? "s" : ""}`;
+  if (totalDays >= 1) return `${totalDays} day${totalDays > 1 ? "s" : ""}`;
+  return `${Math.max(totalHours, 0)} hr${totalHours === 1 ? "" : "s"}`;
 }
 
 function getThemePalette() {
@@ -198,10 +218,12 @@ function createLeaderboardPopup(currentUID) {
         <th style="padding:6px;">Username</th>
         <th style="padding:6px;">Level</th>
         <th style="padding:6px;">XP</th>
+        <th style="padding:6px;">Status</th>
+        <th style="padding:6px;">Inactive</th>
       </tr>
     </thead>
     <tbody id="leaderboardBody">
-      <tr><td colspan="4" style="padding:10px;">⏳ Loading leaderboard...</td></tr>
+      <tr><td colspan="6" style="padding:10px;">⏳ Loading leaderboard...</td></tr>
     </tbody>
   `;
 
@@ -281,6 +303,9 @@ function liveLeaderboard(currentUID) {
           name: data.name || "Unknown",
           level: data.level ?? 1,
           xp: data.xp ?? 0,
+          isActive: Boolean(data.isActive),
+          lastSeenMs: getTimeValue(data.lastSeen),
+          lastLoginMs: getTimeValue(data.lastLogin),
           createdAtMs: getTimeValue(data.createdAt)
         });
       });
@@ -288,7 +313,7 @@ function liveLeaderboard(currentUID) {
       const cleanedUsers = dedupeUsersByEmail(users, currentUID);
 
       if (cleanedUsers.length === 0) {
-        body.innerHTML = `<tr><td colspan="4" style="padding:10px;">No users found yet.</td></tr>`;
+        body.innerHTML = `<tr><td colspan="6" style="padding:10px;">No users found yet.</td></tr>`;
         return;
       }
 
@@ -297,6 +322,9 @@ function liveLeaderboard(currentUID) {
         .map((u, i) => {
           const rank = i + 1;
           const isCurrentUser = u.uid === currentUID;
+          const active = isUserActive(u, now);
+          const statusText = active ? "🟢 Active" : "⚪ Inactive";
+          const inactiveText = active ? "0 hrs" : formatInactiveDuration(u.lastSeenMs || u.lastLoginMs, now);
           let glow = "";
           if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
           else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
@@ -310,6 +338,8 @@ function liveLeaderboard(currentUID) {
               <td style="padding:6px;">${u.name}</td>
               <td style="padding:6px;">${u.level}</td>
               <td style="padding:6px;">${u.xp}</td>
+              <td style="padding:6px;">${statusText}</td>
+              <td style="padding:6px;">${inactiveText}</td>
             </tr>
           `;
         })
@@ -325,13 +355,14 @@ function liveLeaderboard(currentUID) {
             0% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
             50% { box-shadow: 0 0 9px rgba(247,234,215,0.65); }
             100% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
+            }
         `;
         document.head.appendChild(style);
       }
     },
     (err) => {
       console.error("⚠️ Live leaderboard error:", err);
-      body.innerHTML = `<tr><td colspan="4" style="padding:10px;">Error loading leaderboard.</td></tr>`;
+      body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
     }
   );
 }
