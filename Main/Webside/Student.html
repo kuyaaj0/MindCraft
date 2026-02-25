@@ -1050,6 +1050,10 @@ xpValue.addEventListener("click", toggleXPFormat);
 
 onAuthStateChanged(auth, (user) => {
 if (!user) {
+Object.keys(sessionStorage)
+.filter((key) => key.startsWith("welcomeShown_"))
+.forEach((key) => sessionStorage.removeItem(key));
+sessionStorage.removeItem("activeStudentUid");
 alert("⚠️ Please sign in first!");
 window.location.href = "../Account/signin.html";
 return;
@@ -1095,6 +1099,13 @@ const name = user.displayName || data.name || user.email.split("@")[0];
 document.getElementById("studentName").textContent = name;
 const welcomeOverlay = document.getElementById("welcomeOverlay");
 const welcomeKey = `welcomeShown_${user.uid}`;
+const previousUid = sessionStorage.getItem("activeStudentUid");
+if (previousUid !== user.uid) {
+Object.keys(sessionStorage)
+.filter((key) => key.startsWith("welcomeShown_"))
+.forEach((key) => sessionStorage.removeItem(key));
+}
+sessionStorage.setItem("activeStudentUid", user.uid);
 if (welcomeOverlay && !sessionStorage.getItem(welcomeKey)) {
 sessionStorage.setItem(welcomeKey, "true");
 welcomeOverlay.classList.remove("fade-out");
