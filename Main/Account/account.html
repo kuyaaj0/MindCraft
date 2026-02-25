@@ -478,8 +478,33 @@ onAuthStateChanged(auth, async (user) => {
 
     // Write a lastSeen/lastLogin stamp (non-critical)
     try {
-      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), lastLogin: new Date() });
+      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), lastLogin: new Date() isActive: true });
     } catch(e) { /* ignore non-critical */ }
+
+   const markActive = async () => {
+      try {
+        const current = auth.currentUser;
+        if (!current) return;
+        await updateDoc(doc(db, "users", current.uid), { lastSeen: new Date(), isActive: true });
+      } catch (_) { }
+    };
+
+   const markInactive = async () => {
+      try {
+        const current = auth.currentUser;
+        if (!current) return;
+        await updateDoc(doc(db, "users", current.uid), { lastSeen: new Date(), isActive: false });
+      } catch (_) { }
+    };
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") markActive();
+      else markInactive();
+    });
+
+    window.addEventListener("beforeunload", () => { markInactive(); });
+    const activityInterval = setInterval(markActive, 60000);
+    window.addEventListener("beforeunload", () => clearInterval(activityInterval));
 
   } catch (err) {
     console.error("Account load error:", err);
