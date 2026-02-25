@@ -592,6 +592,18 @@ box-shadow: 0 8px 0 #2c3f66;
 color: #f7ead7;
 text-shadow: none;
 }
+
+ /* Keep student header/footer text readable in both themes.
+   theme.js applies text color inline, so we enforce white here. */
+body header h1,
+body header .xp-status,
+body header .xp-status span,
+body header .level-display,
+body header #xpValue,
+body footer,
+body footer p {
+color: #ffffff !important;
+} 
 </style>
 </head>
 <body>
@@ -1082,12 +1094,17 @@ lastLevel = level;
 const name = user.displayName || data.name || user.email.split("@")[0];
 document.getElementById("studentName").textContent = name;
 const welcomeOverlay = document.getElementById("welcomeOverlay");
-if (!sessionStorage.getItem("welcomeShown")) {
-sessionStorage.setItem("welcomeShown", "true");
+const welcomeKey = `welcomeShown_${user.uid}`;
+if (welcomeOverlay && !sessionStorage.getItem(welcomeKey)) {
+sessionStorage.setItem(welcomeKey, "true");
+welcomeOverlay.classList.remove("fade-out");
 welcomeOverlay.style.display = "flex";
 setTimeout(() => {
 welcomeOverlay.classList.add("fade-out");
-setTimeout(() => (welcomeOverlay.style.display = "none"), 600);
+setTimeout(() => {
+welcomeOverlay.style.display = "none";
+welcomeOverlay.classList.remove("fade-out");
+}, 600);
 }, 3000);
 }
 
