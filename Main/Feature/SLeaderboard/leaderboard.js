@@ -354,7 +354,7 @@ function liveLeaderboard(currentUID) {
             const rank = i + 1;
             const isCurrentUser = u.uid === currentUID;
             const active = isUserActive(u, now);
-            const statusText = active ? "🟢 Active" : "⚪ Inactive";
+            const statusText = active ? "Active" : "Inactive";
             const inactiveText = active
               ? "0 hrs"
               : formatInactiveDuration(u.lastSeenMs || u.timestampMs || u.lastLoginMs, now);
