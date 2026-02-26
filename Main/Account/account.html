@@ -478,7 +478,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Write a lastSeen/lastLogin stamp (non-critical)
     try {
-      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), lastLogin: new Date() isActive: true });
+      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), isActive: true });
     } catch(e) { /* ignore non-critical */ }
 
    const markActive = async () => {
