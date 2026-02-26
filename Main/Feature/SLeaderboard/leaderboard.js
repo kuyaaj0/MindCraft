@@ -370,16 +370,28 @@ function liveLeaderboard(currentUID) {
 // ===============================================
 // 🚀 Button Trigger
 // ===============================================
-onAuthStateChanged(auth, (user) => {
+function wireLeaderboardButton() {
   const btn = document.getElementById("leaderboardBtn");
-  if (btn) {
-    btn.addEventListener("click", async () => {
-      try {
-        await cleanupGhostUsers(); // Safe cleanup only removes broken/duplicate docs
-      } catch (err) {
-        console.warn("Cleanup skipped (permission/rules issue):", err);
-      } // Safe cleanup only removes broken docs
-      createLeaderboardPopup(user ? user.uid : null);
-    });
-  }
-});
+  if (!btn || btn.dataset.lbBound === "true") return;
+
+  btn.dataset.lbBound = "true";
+  btn.addEventListener("click", async () => {
+    try {
+      await cleanupGhostUsers(); // Safe cleanup only removes broken/duplicate docs
+    } catch (err) {
+      console.warn("Cleanup skipped (permission/rules issue):", err);
+    }
+
+    const currentUID = auth.currentUser ? auth.currentUser.uid : null;
+    createLeaderboardPopup(currentUID);
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", wireLeaderboardButton, { once: true });
+} else {
+  wireLeaderboardButton();
+}
+
+// Keep auth observer only to ensure auth initializes quietly in the module lifecycle.
+onAuthStateChanged(auth, () => {});
