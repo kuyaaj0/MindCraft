@@ -74,6 +74,18 @@ async function cleanupGhostUsers() {
 function getTimeValue(v) {
   if (!v) return 0;
   if (typeof v.toMillis === "function") return v.toMillis();
+
+// Firestore Timestamp-like plain object
+  if (typeof v === "object" && Number.isFinite(v.seconds)) {
+    const nanos = Number.isFinite(v.nanoseconds) ? v.nanoseconds : 0;
+    return (v.seconds * 1000) + Math.floor(nanos / 1_000_000);
+  }
+
+  // Numeric timestamps (seconds or milliseconds)
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return v < 1e12 ? v * 1000 : v;
+  }
+  
   const d = new Date(v);
   return Number.isNaN(d.getTime()) ? 0 : d.getTime();
 }
@@ -104,10 +116,19 @@ function dedupeUsersByEmail(users, currentUID = null) {
 }
 
 function isUserActive(user, now = Date.now()) {
-  const lastSeen = Number(user.lastSeenMs || 0);
+  //const lastSeen = Number(user.lastSeenMs || 0);
   const activeWindowMs = 5 * 60 * 1000; // 5 minutes
-  if (lastSeen > 0) return now - lastSeen <= activeWindowMs;
-  return Boolean(user.isActive);
+  const lastPresenceMs = Math.max(
+    Number(user.lastSeenMs || 0),
+    Number(user.lastLoginMs || 0),
+    Number(user.timestampMs || 0)
+  );
+
+  // Primary rule: recent heartbeat/login means active.
+  if (lastPresenceMs > 0 && now - lastPresenceMs <= activeWindowMs) return true;
+
+  // Prevent stale `isActive: true` flags from showing users as active forever.
+  return false;
 }
 
 function formatInactiveDuration(lastSeenMs, now = Date.now()) {
@@ -306,6 +327,7 @@ function liveLeaderboard(currentUID) {
             isActive: Boolean(data.isActive),
             lastSeenMs: getTimeValue(data.lastSeen),
             lastLoginMs: getTimeValue(data.lastLogin),
+            timestampMs: getTimeValue(data.timestamp),
             createdAtMs: getTimeValue(data.createdAt)
           });
         });
@@ -317,7 +339,7 @@ function liveLeaderboard(currentUID) {
         if (!body) return;
 
         if (cleanedUsers.length === 0) {
-          body.innerHTML = `<tr><td colspan="6" style="padding:10px;">No users found yet.</td></tr>`;
+          body.innerHTML = `<tr><td colspan="7" style="padding:10px;">No users found yet.</td></tr>`;
           return;
         }
 
@@ -328,7 +350,9 @@ function liveLeaderboard(currentUID) {
             const isCurrentUser = u.uid === currentUID;
             const active = isUserActive(u, now);
             const statusText = active ? "🟢 Active" : "⚪ Inactive";
-            const inactiveText = active ? "0 hrs" : formatInactiveDuration(u.lastSeenMs || u.lastLoginMs, now);
+            const inactiveText = active
+              ? "0 hrs"
+              : formatInactiveDuration(u.lastSeenMs || u.timestampMs || u.lastLoginMs, now);
             let glow = "";
             if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
             else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
@@ -366,13 +390,13 @@ function liveLeaderboard(currentUID) {
       } catch (err) {
         console.error("⚠️ Live leaderboard error (render):", err);
         const body = document.getElementById("leaderboardBody");
-        if (body) body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
+        if (body) body.innerHTML = `<tr><td colspan="7" style="padding:10px;">Error loading leaderboard.</td></tr>`;
       }
     },
     (err) => {
       console.error("⚠️ Live leaderboard error (snapshot):", err);
       const body = document.getElementById("leaderboardBody");
-      if (body) body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
+      if (body) body.innerHTML = `<tr><td colspan="7" style="padding:10px;">Error loading leaderboard.</td></tr>`;
     }
   );
 }
