@@ -931,7 +931,7 @@ openLanguagePanel(card);
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, onSnapshot, collection, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, collection, query, orderBy, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
@@ -1060,6 +1060,34 @@ return;
 }
 
 const userRef = doc(db, "users", user.uid);
+
+updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
+
+  // update every 30s to keep presence fresh
+  setInterval(() => {
+    updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
+  }, 30000);
+
+  // when tab closed or refreshed
+  window.addEventListener("beforeunload", () => {
+    updateDoc(userRef, { isActive: false, lastSeen: serverTimestamp() });
+  });
+
+  // when signed out manually
+  auth.onAuthStateChanged((usr) => {
+    if (!usr) {
+      updateDoc(userRef, { isActive: false, lastSeen: serverTimestamp() });
+    }
+  });
+
+  // 📡 Realtime student data
+  onSnapshot(userRef, async (snap) => {
+    if (!snap.exists()) {
+      alert("⚠️ No user data found.");
+      window.location.href = "../Account/signin.html";
+      return;
+    }
+ 
 onSnapshot(userRef, async (snap) => {
 if (!snap.exists()) {
 alert("⚠️ No user data found.");
