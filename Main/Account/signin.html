@@ -358,7 +358,7 @@ body.theme-dark .auth-link a {
 /* Firebase Imports */
 import { auth, db } from '../System/Database/firebase.js';
 import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getDoc, setDoc, updateDoc, doc, getDocs, query, where, deleteDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getDoc, setDoc, updateDoc, doc, getDocs, query, where, deleteDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ==============================
  🔧 DOM Elements
@@ -484,7 +484,7 @@ studentSigninForm.addEventListener("submit", async e => {
         role: "student",
         verified: user.emailVerified,
         ...defaultStudentFields,
-        createdAt: new Date()
+        createdAt: serverTimestamp()
       });
       console.log("✅ Firestore record recreated for missing student.");
     } else if (snap.data().role !== "student") {
@@ -496,8 +496,9 @@ studentSigninForm.addEventListener("submit", async e => {
     await removeDuplicateDocsByEmail(user.email, user.uid);
 
     await updateDoc(ref, {
-      lastLogin: new Date(),
-      lastSeen: new Date(),
+      lastLogin: serverTimestamp(),
+      lastSeen: serverTimestamp(),
+      timestamp: serverTimestamp(),
       isActive: true
     });
    
