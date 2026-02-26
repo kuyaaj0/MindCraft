@@ -1066,7 +1066,7 @@ updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
   // update every 30s to keep presence fresh
   setInterval(() => {
     updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
-  }, 30000);
+  }, 5000);
 
   // when tab closed or refreshed
   window.addEventListener("beforeunload", () => {
