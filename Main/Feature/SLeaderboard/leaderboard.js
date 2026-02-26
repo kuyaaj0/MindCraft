@@ -106,7 +106,7 @@ function dedupeUsersByEmail(users, currentUID = null) {
 function isUserActive(user, now = Date.now()) {
   const lastSeen = Number(user.lastSeenMs || 0);
   const activeWindowMs = 5 * 60 * 1000; // 5 minutes
-  if (lastSeen > 0 && now - lastSeen <= activeWindowMs) return true;
+  if (lastSeen > 0) return now - lastSeen <= activeWindowMs;
   return Boolean(user.isActive);
 }
 
