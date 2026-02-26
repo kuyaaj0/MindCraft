@@ -1060,33 +1060,30 @@ return;
 }
 
 const userRef = doc(db, "users", user.uid);
+ const presencePayload = { isActive: true, lastSeen: serverTimestamp(), timestamp: serverTimestamp() };
+const inactivePayload = { isActive: false, lastSeen: serverTimestamp(), timestamp: serverTimestamp() };
 
-updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
+updateDoc(userRef, presencePayload);
 
-  // update every 30s to keep presence fresh
-  setInterval(() => {
-    updateDoc(userRef, { isActive: true, lastSeen: serverTimestamp() });
-  }, 5000);
+// update every 5s to keep presence fresh
+const heartbeatId = setInterval(() => {
+updateDoc(userRef, presencePayload);
+}, 5000);
 
-  // when tab closed or refreshed
-  window.addEventListener("beforeunload", () => {
-    updateDoc(userRef, { isActive: false, lastSeen: serverTimestamp() });
-  });
+// when tab closed or refreshed
+window.addEventListener("beforeunload", () => {
+clearInterval(heartbeatId);
+updateDoc(userRef, inactivePayload);
+});
 
-  // when signed out manually
-  auth.onAuthStateChanged((usr) => {
-    if (!usr) {
-      updateDoc(userRef, { isActive: false, lastSeen: serverTimestamp() });
-    }
-  });
-
-  // 📡 Realtime student data
-  onSnapshot(userRef, async (snap) => {
-    if (!snap.exists()) {
-      alert("⚠️ No user data found.");
-      window.location.href = "../Account/signin.html";
-      return;
-    }
+// when tab visibility changes
+window.addEventListener("visibilitychange", () => {
+if (document.visibilityState === "hidden") {
+updateDoc(userRef, inactivePayload);
+return;
+}
+updateDoc(userRef, presencePayload);
+});
  
 onSnapshot(userRef, async (snap) => {
 if (!snap.exists()) {
