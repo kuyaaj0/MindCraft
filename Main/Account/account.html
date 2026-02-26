@@ -337,7 +337,7 @@ body.theme-dark #rankTitle {
 /* ---------- Imports (keep same relative path) ---------- */
 import { auth, db } from "../System/Database/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ---------- Optional level data helpers (your existing modules) ---------- */
 import { getStudentLevelData } from "../Exp/student-LV.js";
@@ -371,13 +371,24 @@ function formatShort(n) {
   if (n >= 1e3) return (n/1e3).toFixed(2)+"K";
   return String(n);
 }
-function formatFullDate(d) {
-  if (!d) return "—";
-  try {
-    const dt = new Date(d);
-    return dt.toLocaleString();
-  } catch(e) { return String(d); }
+function normalizeDateValue(v) {
+  if (!v) return null;
+  if (typeof v.toDate === "function") return v.toDate();
+  if (typeof v.toMillis === "function") return new Date(v.toMillis());
+  if (typeof v === "object" && Number.isFinite(v.seconds)) {
+    const nanos = Number.isFinite(v.nanoseconds) ? v.nanoseconds : 0;
+    return new Date((v.seconds * 1000) + Math.floor(nanos / 1_000_000));
+  }
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return new Date(v < 1e12 ? v * 1000 : v);
+  }
+  const dt = new Date(v);
+  return Number.isNaN(dt.getTime()) ? null : dt;
 }
+
+function formatFullDate(d) {
+  const dt = normalizeDateValue(d);
+  return dt ? dt.toLocaleString() : "—";
 
 /* ---------- Smooth animate XP bar ----------
    We animate from previous value to new value with requestAnimationFrame.
@@ -457,7 +468,7 @@ onAuthStateChanged(auth, async (user) => {
     levelEl.textContent = (data.level || 1);
     levelPill.textContent = `LEVEL ${data.level || 1}`;
     totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
-    lastLoginEl.textContent = formatFullDate(data.lastLogin || user.metadata?.lastSignInTime || new Date());
+    lastLoginEl.textContent = formatFullDate(data.lastLogin || data.timestamp || data.lastSeen || user.metadata?.lastSignInTime || new Date());
     roleBadge.textContent = ((data.role || "student").toUpperCase());
 
     // rank title using your helper modules
@@ -478,7 +489,7 @@ onAuthStateChanged(auth, async (user) => {
 
     // Write a lastSeen/lastLogin stamp (non-critical)
     try {
-      await updateDoc(doc(db,"users",user.uid), { lastSeen: new Date(), isActive: true });
+      await updateDoc(doc(db,"users",user.uid), { lastSeen: serverTimestamp(), timestamp: serverTimestamp(), isActive: true });
     } catch(e) { /* ignore non-critical */ }
 
    const markActive = async () => {
