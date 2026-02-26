@@ -291,24 +291,24 @@ function liveLeaderboard(currentUID) {
   onSnapshot(
     q,
     (snapshot) => {
-      const users = [];
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        if (!data.name || !data.email) return;
+      try {
+        const users = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
 
-        // ✅ Default missing fields
-        users.push({
-          uid: doc.id,
-          email: (data.email || "").trim().toLowerCase(),
-          name: data.name || "Unknown",
-          level: data.level ?? 1,
-          xp: data.xp ?? 0,
-          isActive: Boolean(data.isActive),
-          lastSeenMs: getTimeValue(data.lastSeen),
-          lastLoginMs: getTimeValue(data.lastLogin),
-          createdAtMs: getTimeValue(data.createdAt)
+          // ✅ Keep older records visible too (fallbacks instead of dropping rows)
+          users.push({
+            uid: doc.id,
+            email: (data.email || `uid:${doc.id}`).trim().toLowerCase(),
+            name: data.name || data.username || data.displayName || "Unknown",
+            level: Number(data.level ?? 1),
+            xp: Number(data.xp ?? 0),
+            isActive: Boolean(data.isActive),
+            lastSeenMs: getTimeValue(data.lastSeen),
+            lastLoginMs: getTimeValue(data.lastLogin),
+            createdAtMs: getTimeValue(data.createdAt)
+          });
         });
-      });
 
       const cleanedUsers = dedupeUsersByEmail(users, currentUID);
 
