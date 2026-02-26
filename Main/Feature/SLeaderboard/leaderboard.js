@@ -132,15 +132,20 @@ function isUserActive(user, now = Date.now()) {
 }
 
 function formatInactiveDuration(lastSeenMs, now = Date.now()) {
+  if (!lastSeenMs) return "No activity data";
+
   const ms = Math.max(0, now - Number(lastSeenMs || 0));
-  const totalHours = Math.floor(ms / (1000 * 60 * 60));
+  const totalSeconds = Math.floor(ms / 1000);
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const totalHours = Math.floor(totalMinutes / 60);
   const totalDays = Math.floor(totalHours / 24);
   const totalMonths = Math.floor(totalDays / 30);
 
-  if (!lastSeenMs) return "No activity data";
-  if (totalMonths >= 1) return `${totalMonths} month${totalMonths > 1 ? "s" : ""}`;
-  if (totalDays >= 1) return `${totalDays} day${totalDays > 1 ? "s" : ""}`;
-  return `${Math.max(totalHours, 0)} hr${totalHours === 1 ? "" : "s"}`;
+  if (totalSeconds < 60) return `${Math.max(totalSeconds, 0)} sec${totalSeconds === 1 ? "" : "s"}`;
+  if (totalMinutes < 60) return `${totalMinutes} min${totalMinutes === 1 ? "" : "s"}`;
+  if (totalHours < 24) return `${totalHours} hr${totalHours === 1 ? "" : "s"}`;
+  if (totalDays < 30) return `${totalDays} day${totalDays === 1 ? "" : "s"}`;
+  return `${totalMonths} month${totalMonths === 1 ? "" : "s"}`;
 }
 
 function getThemePalette() {
