@@ -1,7 +1,7 @@
 // ===============================================
 // 🏆 MindCraft Live Leaderboard System (Fixed & Optimized)
 // ===============================================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
   collection,
@@ -45,7 +45,7 @@ async function cleanupGhostUsers() {
     // ❌ Only delete if name or email invalid — skip valid duplicates
     if (!isValid) {
       deletions.push(deleteDoc(doc(db, "users", userDoc.id)));
-     continue;
+      continue;
     }
 
     const candidate = {
@@ -276,6 +276,7 @@ function createLeaderboardPopup(currentUID) {
     document.head.appendChild(style);
   }
 
+  // Start live updates
   liveLeaderboard(currentUID);
 }
 
@@ -286,20 +287,19 @@ function liveLeaderboard(currentUID) {
   const palette = getThemePalette();
   const leaderboardRef = collection(db, "users");
   const q = query(leaderboardRef, orderBy("level", "desc"), orderBy("xp", "desc"));
-  const body = document.getElementById("leaderboardBody");
 
+  // Use onSnapshot to keep live updates:
   onSnapshot(
     q,
     (snapshot) => {
       try {
+        const now = Date.now(); // <- FIX: define now
         const users = [];
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-
-          // ✅ Keep older records visible too (fallbacks instead of dropping rows)
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
           users.push({
-            uid: doc.id,
-            email: (data.email || `uid:${doc.id}`).trim().toLowerCase(),
+            uid: docSnap.id,
+            email: (data.email || `uid:${docSnap.id}`).trim().toLowerCase(),
             name: data.name || data.username || data.displayName || "Unknown",
             level: Number(data.level ?? 1),
             xp: Number(data.xp ?? 0),
@@ -310,61 +310,81 @@ function liveLeaderboard(currentUID) {
           });
         });
 
-      const cleanedUsers = dedupeUsersByEmail(users, currentUID);
+        const cleanedUsers = dedupeUsersByEmail(users, currentUID);
 
-      if (cleanedUsers.length === 0) {
-        body.innerHTML = `<tr><td colspan="6" style="padding:10px;">No users found yet.</td></tr>`;
-        return;
-      }
+        // Ensure the DOM element exists (popup may be closed/recreated)
+        const body = document.getElementById("leaderboardBody");
+        if (!body) return;
 
-      const rows = cleanedUsers
-        .slice(0, 100)
-        .map((u, i) => {
-          const rank = i + 1;
-          const isCurrentUser = u.uid === currentUID;
-          const active = isUserActive(u, now);
-          const statusText = active ? "🟢 Active" : "⚪ Inactive";
-          const inactiveText = active ? "0 hrs" : formatInactiveDuration(u.lastSeenMs || u.lastLoginMs, now);
-          let glow = "";
-          if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
-          else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
-          else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
+        if (cleanedUsers.length === 0) {
+          body.innerHTML = `<tr><td colspan="6" style="padding:10px;">No users found yet.</td></tr>`;
+          return;
+        }
 
-          return `
-            <tr style="background:${palette.row}; box-shadow:${glow}; ${
-              isCurrentUser ? "animation: glowPulse 1.7s infinite alternate;" : ""
-            }">
-              <td style="padding:6px;">#${rank}</td>
-              <td style="padding:6px;">${u.name}</td>
-              <td style="padding:6px;">${u.level}</td>
-              <td style="padding:6px;">${u.xp}</td>
-              <td style="padding:6px;">${statusText}</td>
-              <td style="padding:6px;">${inactiveText}</td>
-            </tr>
-          `;
-        })
-        .join("");
+        const rows = cleanedUsers
+          .slice(0, 100)
+          .map((u, i) => {
+            const rank = i + 1;
+            const isCurrentUser = u.uid === currentUID;
+            const active = isUserActive(u, now);
+            const statusText = active ? "🟢 Active" : "⚪ Inactive";
+            const inactiveText = active ? "0 hrs" : formatInactiveDuration(u.lastSeenMs || u.lastLoginMs, now);
+            let glow = "";
+            if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
+            else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
+            else if (rank === 3) glow = "0 0 10px rgba(205,127,50,0.25)";
 
-      body.innerHTML = rows;
+            return `
+              <tr style="background:${palette.row}; box-shadow:${glow}; ${
+                isCurrentUser ? "animation: glowPulse 1.7s infinite alternate;" : ""
+              }">
+                <td style="padding:6px;">#${rank}</td>
+                <td style="padding:6px;">${escapeHtml(u.name)}</td>
+                <td style="padding:6px;">${u.level}</td>
+                <td style="padding:6px;">${u.xp}</td>
+                <td style="padding:6px;">${statusText}</td>
+                <td style="padding:6px;">${inactiveText}</td>
+              </tr>
+            `;
+          })
+          .join("");
 
-      if (!document.getElementById("glowAnimation")) {
-        const style = document.createElement("style");
-        style.id = "glowAnimation";
-        style.textContent = `
-          @keyframes glowPulse {
-            0% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
-            50% { box-shadow: 0 0 9px rgba(247,234,215,0.65); }
-            100% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
+        body.innerHTML = rows;
+
+        if (!document.getElementById("glowAnimation")) {
+          const style = document.createElement("style");
+          style.id = "glowAnimation";
+          style.textContent = `
+            @keyframes glowPulse {
+              0% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
+              50% { box-shadow: 0 0 9px rgba(247,234,215,0.65); }
+              100% { box-shadow: 0 0 4px rgba(247,234,215,0.4); }
             }
-        `;
-        document.head.appendChild(style);
+          `;
+          document.head.appendChild(style);
+        }
+      } catch (err) {
+        console.error("⚠️ Live leaderboard error (render):", err);
+        const body = document.getElementById("leaderboardBody");
+        if (body) body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
       }
     },
     (err) => {
-      console.error("⚠️ Live leaderboard error:", err);
-      body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
+      console.error("⚠️ Live leaderboard error (snapshot):", err);
+      const body = document.getElementById("leaderboardBody");
+      if (body) body.innerHTML = `<tr><td colspan="6" style="padding:10px;">Error loading leaderboard.</td></tr>`;
     }
   );
+}
+
+// small utility to escape HTML in usernames
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // ===============================================
