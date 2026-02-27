@@ -355,7 +355,7 @@ const rankTitleEl = document.getElementById("rankTitle");
 const roleBadge = document.getElementById("roleBadge");
 
 const navHome = document.getElementById("navHome");
-const navLeaderboard = document.getElementById("navLeaderboard");
+const navLeaderboard = document.getElementById("leaderboardBtn");
 const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
 
@@ -537,6 +537,29 @@ onAuthStateChanged(auth, async (user) => {
 });
 
 /* ---------- Navigation event wiring ---------- */
+   let leaderboardForwarding = false;
+navLeaderboard?.addEventListener("click", async () => {
+  if (leaderboardForwarding) {
+    leaderboardForwarding = false;
+    return;
+  }
+
+  if (navLeaderboard.dataset.lbBound !== "true") {
+    try {
+      await import("../Feature/SLeaderboard/leaderboard.js");
+    } catch (err) {
+      console.error("⚠️ Failed to load leaderboard module:", err);
+      alert("Leaderboard failed to load. Please try again.");
+      return;
+    }
+  }
+
+  if (navLeaderboard.dataset.lbBound === "true") {
+    leaderboardForwarding = true;
+    setTimeout(() => navLeaderboard.click(), 0);
+  }
+});
+
 navHome.addEventListener("click", async () => {
   // decide target based on role saved in Firestore or localStorage
   const uid = (auth.currentUser && auth.currentUser.uid) || localStorage.getItem("currentUser");
