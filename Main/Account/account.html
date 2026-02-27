@@ -469,7 +469,8 @@ onAuthStateChanged(auth, async (user) => {
     levelEl.textContent = (data.level || 1);
     levelPill.textContent = `LEVEL ${data.level || 1}`;
     totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
-    lastLoginEl.textContent = formatFullDate(data.lastLogin || data.timestamp || data.lastSeen || user.metadata?.lastSignInTime || new Date());
+    const lastLoginValue = data.lastLogin || user.metadata?.lastSignInTime || null;
+    lastLoginEl.textContent = formatFullDate(lastLoginValue);
     roleBadge.textContent = ((data.role || "student").toUpperCase());
 
     // rank title using your helper modules
@@ -492,6 +493,13 @@ onAuthStateChanged(auth, async (user) => {
     try {
       await updateDoc(doc(db,"users",user.uid), { lastSeen: serverTimestamp(), timestamp: serverTimestamp(), isActive: true });
     } catch(e) { /* ignore non-critical */ }
+
+     // Backfill lastLogin once if older records don't have it
+    if (!data.lastLogin && user.metadata?.lastSignInTime) {
+      try {
+        await updateDoc(doc(db, "users", user.uid), { lastLogin: new Date(user.metadata.lastSignInTime) });
+      } catch (_) { }
+    }
 
    const markActive = async () => {
       try {
