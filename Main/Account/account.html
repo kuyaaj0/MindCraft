@@ -455,6 +455,7 @@ let lastKnownXP = 0, lastKnownLevel = 1;
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     // not signed in, redirect to signin
+    cleanupPresenceTracking();
     window.location.href = "../Account/signin.html";
     return;
   }
@@ -508,14 +509,19 @@ onAuthStateChanged(auth, async (user) => {
       } catch (_) { }
     };
 
-    document.addEventListener("visibilitychange", () => {
+    cleanupPresenceTracking();
+    visibilityHandler = () => {
       if (document.visibilityState === "visible") markActive();
       else markInactive();
-    });
+     };
+    unloadHandler = () => { markInactive(); };
 
-    window.addEventListener("beforeunload", () => { markInactive(); });
-    const activityInterval = setInterval(markActive, 60000);
-    window.addEventListener("beforeunload", () => clearInterval(activityInterval));
+    document.addEventListener("visibilitychange", visibilityHandler);
+    window.addEventListener("beforeunload", unloadHandler);
+
+    activityInterval = setInterval(() => {
+      if (document.visibilityState === "visible") markActive();
+    }, 60000);
 
   } catch (err) {
     console.error("Account load error:", err);
@@ -564,6 +570,7 @@ navSettings.addEventListener("click", () => {
 
 navLogout.addEventListener("click", async () => {
   try {
+    cleanupPresenceTracking();
     await signOut(auth);
     localStorage.removeItem("cachedName");
     localStorage.removeItem("currentRole");
