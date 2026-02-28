@@ -134,18 +134,24 @@ function isUserActive(user, now = Date.now()) {
 function formatInactiveDuration(lastSeenMs, now = Date.now()) {
   if (!lastSeenMs) return "No activity data";
 
-  const ms = Math.max(0, now - Number(lastSeenMs || 0));
-  const totalSeconds = Math.floor(ms / 1000);
-  const totalMinutes = Math.floor(totalSeconds / 60);
-  const totalHours = Math.floor(totalMinutes / 60);
-  const totalDays = Math.floor(totalHours / 24);
-  const totalMonths = Math.floor(totalDays / 30);
+  const diff = now - Number(lastSeenMs);
+  if (diff < 0) return "Just now";
 
-  if (totalSeconds < 60) return `${Math.max(totalSeconds, 0)} sec${totalSeconds === 1 ? "" : "s"}`;
-  if (totalMinutes < 60) return `${totalMinutes} min${totalMinutes === 1 ? "" : "s"}`;
-  if (totalHours < 24) return `${totalHours} hr${totalHours === 1 ? "" : "s"}`;
-  if (totalDays < 30) return `${totalDays} day${totalDays === 1 ? "" : "s"}`;
-  return `${totalMonths} month${totalMonths === 1 ? "" : "s"}`;
+  const sec = Math.floor(diff / 1000);
+  const min = Math.floor(sec / 60);
+  const hr = Math.floor(min / 60);
+  const day = Math.floor(hr / 24);
+  const week = Math.floor(day / 7);
+  const month = Math.floor(day / 30);
+  const year = Math.floor(day / 365);
+
+  if (sec < 60) return `${sec} second${sec !== 1 ? "s" : ""} ago`;
+  if (min < 60) return `${min} minute${min !== 1 ? "s" : ""} ago`;
+  if (hr < 24) return `${hr} hour${hr !== 1 ? "s" : ""} ago`;
+  if (day < 7) return `${day} day${day !== 1 ? "s" : ""} ago`;
+  if (week < 5) return `${week} week${week !== 1 ? "s" : ""} ago`;
+  if (month < 12) return `${month} month${month !== 1 ? "s" : ""} ago`;
+  return `${year} year${year !== 1 ? "s" : ""} ago`;
 }
 
 function getThemePalette() {
