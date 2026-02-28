@@ -317,7 +317,7 @@ body.theme-dark #rankTitle {
 <div class="page-footer">© 2025 MindCraft | Created by Kuya AJ & Team</div>
 
 
-<script>window.useFirestoreXP = true;</script>
+<!--<script>window.useFirestoreXP = true;</script>-->
 <!--<script src="../Exp/levels.js"></script>-->
 <script type="module" src="../Feature/SLeaderboard/leaderboard.js"></script>
 <!-- ===========================
@@ -337,7 +337,7 @@ body.theme-dark #rankTitle {
 /* ---------- Imports (keep same relative path) ---------- */
 import { auth, db } from "../System/Database/firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc, updateDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ---------- Optional level data helpers (your existing modules) ---------- */
 import { getStudentLevelData } from "../Exp/student-LV.js";
@@ -360,6 +360,25 @@ const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
 
 const particleLayer = document.getElementById("particleLayer");
+
+let activityInterval = null;
+let visibilityHandler = null;
+let unloadHandler = null;
+
+function cleanupPresenceTracking() {
+  if (activityInterval) {
+    clearInterval(activityInterval);
+    activityInterval = null;
+  }
+  if (visibilityHandler) {
+    document.removeEventListener("visibilitychange", visibilityHandler);
+    visibilityHandler = null;
+  }
+  if (unloadHandler) {
+    window.removeEventListener("beforeunload", unloadHandler);
+    unloadHandler = null;
+  }
+}
 
 /* ---------- Local helpers ---------- */
 function formatShort(n) {
@@ -385,10 +404,12 @@ function normalizeDateValue(v) {
   const dt = new Date(v);
   return Number.isNaN(dt.getTime()) ? null : dt;
 }
-
+	
 function formatFullDate(d) {
   const dt = normalizeDateValue(d);
   return dt ? dt.toLocaleString() : "—";
+}
+
 
 /* ---------- Smooth animate XP bar ----------
    We animate from previous value to new value with requestAnimationFrame.
@@ -435,7 +456,7 @@ async function ensureUserDoc(user) {
     totalXP: 0,
     completedLessons: [],
     completedQuizzes: [],
-    createdAt: new Date()
+    createdAt: serverTimestamp()
   };
   if (!snap.exists()) {
     await setDoc(ref, defaults);
