@@ -254,6 +254,95 @@ body.theme-dark #rankTitle {
 /* small helper classes */
 .hidden { display:none !important; }
 .center { display:flex; align-items:center; justify-content:center; gap:10px; }
+
+/* 🔧 Mobile Portrait Optimization (≤400px) */
+@media (max-width: 400px) and (orientation: portrait) {
+  html, body {
+    font-size: 13px;
+    overflow-x: hidden;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .xp-display {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .xp-bar-outer {
+    width: 120px;
+    height: 16px;
+  }
+
+  .xp-numbers {
+    font-size: 0.6rem;
+    min-width: auto;
+  }
+
+  .level-holder {
+    justify-content: center;
+  }
+
+  .level-pill {
+    padding: 6px 10px;
+    font-size: 0.6rem;
+  }
+
+  .nav-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .nav-btn {
+    width: 45%;
+    padding: 8px 6px;
+    font-size: 0.55rem;
+  }
+
+  .content {
+    padding: 20px 10px 80px;
+  }
+
+  .account-card {
+    max-width: 95%;
+    padding: 16px;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .info-label {
+    font-size: 0.6rem;
+  }
+
+  .info-value {
+    font-size: 0.75rem;
+  }
+
+  .rank-panel {
+    font-size: 0.65rem;
+    padding: 10px;
+  }
+
+  .page-footer {
+    font-size: 0.5rem;
+    padding: 8px;
+  }
+	}
+	
 </style>
 </head>
 <body>
