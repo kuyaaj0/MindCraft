@@ -604,6 +604,56 @@ body footer,
 body footer p {
 color: #ffffff !important;
 } 
+
+/* ================================
+   🔧 Fix Dark Theme on Desktop
+   ================================ */
+@media (min-width: 600px) {
+  body.theme-dark {
+    background: radial-gradient(circle at top right, #0b132b 0%, #1a1a2e 60%, #0f2027 100%) !important;
+    color: #f7ead7 !important;
+  }
+
+  body.theme-dark header,
+  body.theme-dark footer {
+    background: linear-gradient(to bottom, #1a253d 0%, #0e1524 100%) !important;
+    border-color: #2c3f66 !important;
+    color: #f7ead7 !important;
+    box-shadow: inset -3px -3px 0 rgba(0,0,0,0.5), 0 4px 0 #0b132b !important;
+  }
+
+  body.theme-dark .lesson-container,
+  body.theme-dark .language-panel,
+  body.theme-dark .language-card {
+    background: rgba(15, 22, 33, 0.95) !important;
+    border-color: #5a79b8 !important;
+    box-shadow: 0 6px 0 #2c3f66, 0 10px 20px rgba(0,0,0,0.4) !important;
+  }
+
+  body.theme-dark button {
+    background: linear-gradient(180deg, #2a3c5a 0%, #1b2843 100%) !important;
+    color: #f7ead7 !important;
+    border-color: #5a79b8 !important;
+    box-shadow: 0 4px 0 #2c3f66 !important;
+  }
+
+  body.theme-dark button:hover {
+    background: linear-gradient(180deg, #31476a 0%, #22355b 100%) !important;
+  }
+
+  body.theme-dark #rankDisplay {
+    background: rgba(20, 28, 45, 0.95) !important;
+    border-color: #5a79b8 !important;
+    color: #f7ead7 !important;
+  }
+
+  body.theme-dark main h1,
+  body.theme-dark header h1 {
+    color: #f7ead7 !important;
+    text-shadow: 0 0 4px rgba(90,121,184,0.4);
+  }
+                                }
+ 
 </style>
 </head>
 <body>
