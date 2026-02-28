@@ -324,26 +324,41 @@ body.theme-dark #rankTitle {
      JavaScript: Firebase + UI
      =========================== -->
 <script type="module">
-/* eslint-disable no-console */
-/*
-  Upgraded Account page JS
-  - Integrates with Firebase (auth + firestore)
-  - Smooth XP animation using requestAnimationFrame
-  - Auto-repair missing Firestore fields
-  - Theme compatibility via window.setTheme (if provided)
-  - Particle decoration generator (small, perf-friendly)
-*/
+/* =============================================================
+   MindCraft — Fixed Account Page Script (2026 update)
+   ============================================================= */
 
-/* ---------- Imports (keep same relative path) ---------- */
-import { auth, db } from "../System/Database/firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, getDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* ---------- Optional level data helpers (your existing modules) ---------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStudentLevelData } from "../Exp/student-LV.js";
 import { getTeacherLevelData } from "../Exp/teacher-LV.js";
 
-/* ---------- UI refs ---------- */
+// ------------------------- 🔥 Firebase Init -------------------------
+const firebaseConfig = {
+  apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
+  authDomain: "mindcraft-83f81.firebaseapp.com",
+  projectId: "mindcraft-83f81",
+  storageBucket: "mindcraft-83f81.firebasestorage.app",
+  messagingSenderId: "483019456762",
+  appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ------------------------- 🌟 Element Refs -------------------------
 const xpBarInner = document.getElementById("xpBarInner");
 const xpNumbers = document.getElementById("xpNumbers");
 const levelPill = document.getElementById("levelPill");
@@ -358,323 +373,214 @@ const navHome = document.getElementById("navHome");
 const navLeaderboard = document.getElementById("leaderboardBtn");
 const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
-
 const particleLayer = document.getElementById("particleLayer");
 
-let activityInterval = null;
-let visibilityHandler = null;
-let unloadHandler = null;
-
-function cleanupPresenceTracking() {
-  if (activityInterval) {
-    clearInterval(activityInterval);
-    activityInterval = null;
-  }
-  if (visibilityHandler) {
-    document.removeEventListener("visibilitychange", visibilityHandler);
-    visibilityHandler = null;
-  }
-  if (unloadHandler) {
-    window.removeEventListener("beforeunload", unloadHandler);
-    unloadHandler = null;
-  }
-}
-
-/* ---------- Local helpers ---------- */
+// ------------------------- ⚙️ Helper Functions -------------------------
 function formatShort(n) {
-  // small compact formatter for UI (similar to other helpers)
   if (typeof n !== "number") n = Number(n) || 0;
-  if (n >= 1e12) return (n/1e12).toFixed(2)+"T";
-  if (n >= 1e9) return (n/1e9).toFixed(2)+"B";
-  if (n >= 1e6) return (n/1e6).toFixed(2)+"M";
-  if (n >= 1e3) return (n/1e3).toFixed(2)+"K";
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(2) + "K";
   return String(n);
 }
+
 function normalizeDateValue(v) {
   if (!v) return null;
   if (typeof v.toDate === "function") return v.toDate();
   if (typeof v.toMillis === "function") return new Date(v.toMillis());
-  if (typeof v === "object" && Number.isFinite(v.seconds)) {
-    const nanos = Number.isFinite(v.nanoseconds) ? v.nanoseconds : 0;
-    return new Date((v.seconds * 1000) + Math.floor(nanos / 1_000_000));
-  }
-  if (typeof v === "number" && Number.isFinite(v)) {
-    return new Date(v < 1e12 ? v * 1000 : v);
-  }
-  const dt = new Date(v);
-  return Number.isNaN(dt.getTime()) ? null : dt;
+  if (typeof v === "number" && Number.isFinite(v)) return new Date(v);
+  if (typeof v === "string") return new Date(v);
+  return null;
 }
 	
-function formatFullDate(d) {
-  const dt = normalizeDateValue(d);
-  return dt ? dt.toLocaleString() : "—";
-}
+function formatTimeAgo(date) {
+  const d = normalizeDateValue(date);
+  if (!d) return "—";
+  const now = Date.now();
+  const diffMs = now - d.getTime();
+  if (diffMs < 0) return "just now";
 
+  const sec = Math.floor(diffMs / 1000);
+  const min = Math.floor(sec / 60);
+  const hr = Math.floor(min / 60);
+  const day = Math.floor(hr / 24);
 
-/* ---------- Smooth animate XP bar ----------
-   We animate from previous value to new value with requestAnimationFrame.
-*/
-let xpAnimation = null;
-let xpAnimationState = { from:0, to:0, start:0, duration:600 };
+  if (sec < 60) return `${sec} second${sec !== 1 ? "s" : ""} ago`;
+  if (min < 60) return `${min} minute${min !== 1 ? "s" : ""} ago`;
+  if (hr < 24) return `${hr} hour${hr !== 1 ? "s" : ""} ago`;
+  if (day < 30) return `${day} day${day !== 1 ? "s" : ""} ago`;
 
-function animateXP(fromVal, toVal, maxVal=100) {
-  cancelAnimationFrame(xpAnimation);
-  xpAnimationState = { from: fromVal, to: toVal, start: performance.now(), duration: 600, maxVal };
+  const month = Math.floor(day / 30);
+  if (month < 12) return `${month} month${month !== 1 ? "s" : ""} ago`;
+
+  const year = Math.floor(month / 12);
+  return `${year} year${year !== 1 ? "s" : ""} ago`;
+	}
+
+// ------------------------- 🎚️ XP Bar Animation -------------------------
+let xpAnim = null;
+function animateXP(fromVal, toVal, maxVal = 100) {
+  cancelAnimationFrame(xpAnim);
+  const start = performance.now();
+  const duration = 600;
+
   function tick(now) {
-    const t = Math.min((now - xpAnimationState.start) / xpAnimationState.duration, 1);
-    // easeOutCubic
+    const t = Math.min((now - start) / duration, 1);
     const ease = 1 - Math.pow(1 - t, 3);
-    const cur = xpAnimationState.from + (xpAnimationState.to - xpAnimationState.from) * ease;
-    const percent = Math.max(0, Math.min(100, (cur / xpAnimationState.maxVal) * 100));
-    xpBarInner.style.width = percent + "%";
-    // change gradient based on percent
-    if (percent >= 95) {
-      xpBarInner.style.background = "linear-gradient(90deg,#ffd700,#ffb84d)";
-    } else if (percent >= 50) {
-      xpBarInner.style.background = "linear-gradient(90deg,#1db954,#ffd700)";
-    } else {
-      xpBarInner.style.background = "linear-gradient(90deg,#1db954,#4ae88f)";
-    }
-    xpNumbers.textContent = `${formatShort(Math.round(cur))} / ${formatShort(xpAnimationState.maxVal)}`;
-    if (t < 1) xpAnimation = requestAnimationFrame(tick);
+    const cur = fromVal + (toVal - fromVal) * ease;
+    const pct = (cur / maxVal) * 100;
+    xpBarInner.style.width = pct + "%";
+
+    if (pct >= 95) xpBarInner.style.background = "linear-gradient(90deg,#ffd700,#ffb84d)";
+    else if (pct >= 50) xpBarInner.style.background = "linear-gradient(90deg,#1db954,#ffd700)";
+    else xpBarInner.style.background = "linear-gradient(90deg,#1db954,#4ae88f)";
+
+    xpNumbers.textContent = `${formatShort(Math.round(cur))} / ${formatShort(maxVal)}`;
+    if (t < 1) xpAnim = requestAnimationFrame(tick);
   }
-  xpAnimation = requestAnimationFrame(tick);
+  xpAnim = requestAnimationFrame(tick);
 }
 
-/* ---------- Firestore repair: ensure user doc has necessary fields ---------- */
-async function ensureUserDoc(user) {
-  const ref = doc(db,"users",user.uid);
-  const snap = await getDoc(ref);
-  const defaults = {
-    name: user.displayName || (user.email ? user.email.split("@")[0] : "Unknown"),
-    email: user.email || "",
-    role: "student",
-    verified: user.emailVerified || false,
-    level: 1,
-    xp: 0,
-    xpMax: 100,
-    totalXP: 0,
-    completedLessons: [],
-    completedQuizzes: [],
-    createdAt: serverTimestamp()
-  };
-  if (!snap.exists()) {
-    await setDoc(ref, defaults);
-    return { ...defaults, id: user.uid };
-  }
-  const data = snap.data();
-  const merged = { ...defaults, ...data };
-  // If any keys missing, merge back
-  let needsMerge = false;
-  for (const k in defaults) if (!(k in data)) needsMerge = true;
-  if (needsMerge) await setDoc(ref, merged, { merge: true });
-  return merged;
+// ------------------------- 🕒 Presence Tracking -------------------------
+let activityInterval = null;
+function cleanupPresenceTracking() {
+  if (activityInterval) clearInterval(activityInterval);
+  window.removeEventListener("beforeunload", handleUnload);
+  document.removeEventListener("visibilitychange", handleVisibility);
 }
 
-/* ---------- Auth state listener ---------- */
-let lastKnownXP = 0, lastKnownLevel = 1;
+async function markActive(uid) {
+  try {
+    await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: true });
+  } catch {}
+}
+
+async function markInactive(uid) {
+  try {
+    await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: false });
+  } catch {}
+}
+
+function handleVisibility() {
+  const uid = auth.currentUser?.uid;
+  if (!uid) return;
+  if (document.visibilityState === "visible") markActive(uid);
+  else markInactive(uid);
+}
+
+function handleUnload() {
+  const uid = auth.currentUser?.uid;
+  if (uid) markInactive(uid);
+}
+
+// ------------------------- 🔑 Auth & Firestore -------------------------
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    // not signed in, redirect to signin
     cleanupPresenceTracking();
     window.location.href = "../Account/signin.html";
     return;
   }
 
+  const uid = user.uid;
+  const ref = doc(db, "users", uid);
+  let data;
+
   try {
-    // ensure doc exists and has expected fields
-    const data = await ensureUserDoc(user);
-
-    // update UI
-    usernameEl.textContent = data.name || (user.email ? user.email.split("@")[0] : "Guest");
-    levelEl.textContent = (data.level || 1);
-    levelPill.textContent = `LEVEL ${data.level || 1}`;
-    totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
-    const lastLoginValue = data.lastLogin || user.metadata?.lastSignInTime || null;
-    lastLoginEl.textContent = formatFullDate(lastLoginValue);
-    roleBadge.textContent = ((data.role || "student").toUpperCase());
-
-    // rank title using your helper modules
-    try {
-      const rankInfo = data.role === "teacher" ? getTeacherLevelData(data.xp || 0) : getStudentLevelData(data.xp || 0);
-      rankTitleEl.textContent = rankInfo && rankInfo.title ? rankInfo.title : "Beginner";
-    } catch(e) {
-      rankTitleEl.textContent = "Beginner";
-      console.warn("rank helper error", e);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      const defaults = {
+        name: user.displayName || (user.email?.split("@")[0] || "Unknown"),
+        email: user.email || "",
+        role: "student",
+        level: 1,
+        xp: 0,
+        xpMax: 100,
+        totalXP: 0,
+        lastLogin: serverTimestamp(),
+        lastSeen: serverTimestamp(),
+        isActive: true,
+        createdAt: serverTimestamp()
+      };
+      await setDoc(ref, defaults);
+      data = defaults;
+    } else {
+      data = snap.data();
+      await updateDoc(ref, {
+        isActive: true,
+        lastSeen: serverTimestamp(),
+        lastLogin: serverTimestamp()
+      });
     }
-
-    // animate xp from lastKnownXP -> new xp
-    const xpNow = Number(data.xp || 0);
-    const xpMax = Number(data.xpMax || 100);
-    animateXP(lastKnownXP, xpNow, xpMax);
-    lastKnownXP = xpNow;
-    lastKnownLevel = data.level || 1;
-
-    // Write a lastSeen/lastLogin stamp (non-critical)
-    try {
-      await updateDoc(doc(db,"users",user.uid), { lastSeen: serverTimestamp(), timestamp: serverTimestamp(), isActive: true });
-    } catch(e) { /* ignore non-critical */ }
-
-     // Backfill lastLogin once if older records don't have it
-    if (!data.lastLogin && user.metadata?.lastSignInTime) {
-      try {
-        await updateDoc(doc(db, "users", user.uid), { lastLogin: new Date(user.metadata.lastSignInTime) });
-      } catch (_) { }
-    }
-
-   const markActive = async () => {
-      try {
-        const current = auth.currentUser;
-        if (!current) return;
-        await updateDoc(doc(db, "users", current.uid), { lastSeen: new Date(), isActive: true });
-      } catch (_) { }
-    };
-
-   const markInactive = async () => {
-      try {
-        const current = auth.currentUser;
-        if (!current) return;
-        await updateDoc(doc(db, "users", current.uid), { lastSeen: new Date(), isActive: false });
-      } catch (_) { }
-    };
-
-    cleanupPresenceTracking();
-    visibilityHandler = () => {
-      if (document.visibilityState === "visible") markActive();
-      else markInactive();
-     };
-    unloadHandler = () => { markInactive(); };
-
-    document.addEventListener("visibilitychange", visibilityHandler);
-    window.addEventListener("beforeunload", unloadHandler);
-
-    activityInterval = setInterval(() => {
-      if (document.visibilityState === "visible") markActive();
-    }, 60000);
-
   } catch (err) {
-    console.error("Account load error:", err);
-  }
-});
-
-/* ---------- Navigation event wiring ---------- */
-   let leaderboardForwarding = false;
-navLeaderboard?.addEventListener("click", async () => {
-  if (leaderboardForwarding) {
-    leaderboardForwarding = false;
+    console.error("⚠️ Firestore load error:", err);
+    usernameEl.textContent = "⚠️ Failed to load account";
     return;
   }
 
-  if (navLeaderboard.dataset.lbBound !== "true") {
-    try {
-      await import("../Feature/SLeaderboard/leaderboard.js");
-    } catch (err) {
-      console.error("⚠️ Failed to load leaderboard module:", err);
-      alert("Leaderboard failed to load. Please try again.");
-      return;
-    }
+  // ------------------------- 🎨 Update UI -------------------------
+  usernameEl.textContent = data.name || "Unknown";
+  levelEl.textContent = data.level || 1;
+  levelPill.textContent = `LEVEL ${data.level || 1}`;
+  totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
+  lastLoginEl.textContent = formatTimeAgo(data.lastLogin || user.metadata?.lastSignInTime);
+  roleBadge.textContent = (data.role || "student").toUpperCase();
+
+  try {
+    const rankInfo =
+      data.role === "teacher"
+        ? getTeacherLevelData(data.xp || 0)
+        : getStudentLevelData(data.xp || 0);
+    rankTitleEl.textContent = rankInfo?.title || "Beginner";
+  } catch {
+    rankTitleEl.textContent = "Beginner";
   }
 
-  if (navLeaderboard.dataset.lbBound === "true") {
-    leaderboardForwarding = true;
-    setTimeout(() => navLeaderboard.click(), 0);
-  }
+  animateXP(0, data.xp || 0, data.xpMax || 100);
+
+  // ------------------------- 👀 Presence Loop -------------------------
+  cleanupPresenceTracking();
+  document.addEventListener("visibilitychange", handleVisibility);
+  window.addEventListener("beforeunload", handleUnload);
+  activityInterval = setInterval(() => markActive(uid), 60000);
 });
 
-navHome.addEventListener("click", async () => {
-  // decide target based on role saved in Firestore or localStorage
-  const uid = (auth.currentUser && auth.currentUser.uid) || localStorage.getItem("currentUser");
-  if (!uid) { window.location.href = "../Account/signin.html"; return; }
+// ------------------------- 🧭 Navigation -------------------------
+navHome.onclick = () => (window.location.href = "../Webside/Student.html");
+navSettings.onclick = () => (window.location.href = "../Settings/setting.html");
+navLogout.onclick = async () => {
   try {
-    const snap = await getDoc(doc(db,"users",uid));
-    const role = snap.exists() ? (snap.data().role || "student") : (localStorage.getItem("currentRole") || "student");
-    const redirect = role === "teacher" ? "../Webside/Teacher.html" : "../Webside/Student.html";
-    window.location.href = redirect;
-  } catch(e) {
-    console.error(e);
-    window.location.href = "../Webside/Student.html";
-  }
-});
-
-/*navLeaderboard.addEventListener("click", async () => {
-  try {
-    // Remove any existing leaderboard container if open
-    const old = document.getElementById("leaderboardOverlay");
-    if (old) old.remove();
-
-    // Create a container where the leaderboard.js can inject its UI
-    const container = document.createElement("div");
-    container.id = "leaderboardOverlay";
-    document.body.appendChild(container);
-
-    // Dynamically load leaderboard module
-    await import("../Feature/SLeaderboard/leaderboard.js");
-    console.log("✅ Leaderboard module loaded successfully");
-  } catch (err) {
-    console.error("⚠️ Failed to load leaderboard module:", err);
-    alert("Leaderboard failed to load. Please try again.");
-  }
-});*/
-
-navSettings.addEventListener("click", () => {
-  window.location.href = "../Settings/setting.html";
-});
-
-navLogout.addEventListener("click", async () => {
-  try {
+    const uid = auth.currentUser?.uid;
+    if (uid) await markInactive(uid);
     cleanupPresenceTracking();
     await signOut(auth);
-    localStorage.removeItem("cachedName");
-    localStorage.removeItem("currentRole");
     window.location.href = "../Account/signin.html";
-  } catch(e) {
+  } catch (e) {
     console.error("Logout failed:", e);
   }
-});
+};
 
-/* ---------- Particle generator (lightweight) ---------- */
+// ------------------------- 💫 Particles -------------------------
 function spawnParticles(count = 18) {
   particleLayer.innerHTML = "";
   const h = window.innerHeight, w = window.innerWidth;
-  for (let i=0;i<count;i++){
+  for (let i = 0; i < count; i++) {
     const el = document.createElement("div");
     el.className = "particle";
-    const left = Math.random()*w;
-    const top = h * (0.55 + Math.random()*0.4); // start lower to float up
-    el.style.left = left + "px";
-    el.style.top = top + "px";
-    // duration vary
-    const dur = 8000 + Math.random()*8000;
-    el.style.animationDuration = dur + "ms";
-    el.style.opacity = (0.15 + Math.random()*0.6).toFixed(2);
-    el.style.transform = `scale(${0.6 + Math.random()*0.9})`;
+    el.style.left = Math.random() * w + "px";
+    el.style.top = h * (0.55 + Math.random() * 0.4) + "px";
+    el.style.animationDuration = 8000 + Math.random() * 8000 + "ms";
+    el.style.opacity = (0.2 + Math.random() * 0.6).toFixed(2);
+    el.style.transform = `scale(${0.6 + Math.random() * 0.9})`;
     particleLayer.appendChild(el);
   }
 }
 spawnParticles();
 
-/* regenerate on resize but throttled */
 let resizeTimeout = null;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => spawnParticles(18),200);
+  resizeTimeout = setTimeout(() => spawnParticles(18), 200);
 });
-
-/* ---------- Theme integration (if theme.js present) ---------- */
-if (typeof window.setTheme === "function") {
-  // Ensure the page respects saved theme on load
-  const saved = localStorage.getItem("theme");
-  if (saved) {
-    // theme.js will style containers/buttons automatically,
-    // but we also might adjust XP-bar colors slightly:
-    if (saved === "dark") {
-      // darker XP track
-      document.querySelectorAll(".xp-bar-outer").forEach(n=>n.style.background="#202520");
-    }
-  }
-}
-
-/* ---------- End of module ---------- */
 </script>
 
 <!-- keep your theme script for sync (only if project uses it) -->
