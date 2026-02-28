@@ -360,10 +360,10 @@ function liveLeaderboard(currentUID) {
             const rank = i + 1;
             const isCurrentUser = u.uid === currentUID;
             const active = isUserActive(u, now);
+            const lastSeenTime = u.lastSeenMs || u.timestampMs || u.lastLoginMs;
+            const ago = formatInactiveDuration(lastSeenTime, now);
             const statusText = active ? "Active" : "Inactive";
-            const inactiveText = active
-              ? "0 hrs"
-              : formatInactiveDuration(u.lastSeenMs || u.timestampMs || u.lastLoginMs, now);
+            const inactiveText = ago;
             let glow = "";
             if (rank === 1) glow = "0 0 12px rgba(255,215,0,0.5)";
             else if (rank === 2) glow = "0 0 10px rgba(192,192,192,0.35)";
