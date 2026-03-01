@@ -13,11 +13,11 @@
   // Assets/Music/Soundtrack/track1.mp3 ... track5.mp3
   // Assets/Image/Soundtrack/cover1.png ... cover5.png
   const tracks = [
-    { src: "../Assets/Music/Soundtrack/track1.mp3", title: "Soundtrack 1", cover: "../Assets/Image/Soundtrack/cover1.png" },
-    { src: "../Assets/Music/Soundtrack/track2.mp3", title: "Soundtrack 2", cover: "../Assets/Image/Soundtrack/cover2.png" },
-    { src: "../Assets/Music/Soundtrack/track3.mp3", title: "Soundtrack 3", cover: "../Assets/Image/Soundtrack/cover3.png" },
-    { src: "../Assets/Music/Soundtrack/track4.mp3", title: "Soundtrack 4", cover: "../Assets/Image/Soundtrack/cover4.png" },
-    { src: "../Assets/Music/Soundtrack/track5.mp3", title: "Soundtrack 5", cover: "../Assets/Image/Soundtrack/cover5.png" }
+    { src: "../Assets/Music/Soundtrack/track1.mp3", title: "Soundtrack 1", cover: "../Assets/Image/Soundtrack/MVA.png" },
+    { src: "../Assets/Music/Soundtrack/track2.mp3", title: "Soundtrack 2", cover: "../Assets/Image/Soundtrack/MVA.png" },
+    { src: "../Assets/Music/Soundtrack/track3.mp3", title: "Soundtrack 3", cover: "../Assets/Image/Soundtrack/MVA.png" },
+    { src: "../Assets/Music/Soundtrack/track4.mp3", title: "Soundtrack 4", cover: "../Assets/Image/Soundtrack/MVA.png" },
+    { src: "../Assets/Music/Soundtrack/track5.mp3", title: "Soundtrack 5", cover: "../Assets/Image/Soundtrack/MVA.png" }
   ];
   // --------------------------------
 
