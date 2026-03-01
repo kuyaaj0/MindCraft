@@ -533,7 +533,7 @@ footer { margin-left: -15px; margin-right: -15px; margin-bottom: -15px; }
 .language-panel { padding: 20px; max-width: 90vw; }
 }
 
-@media (max-width: 600px) {
+/*@media (max-width: 600px) {
 .nav-arrow { width: 32px; height: 32px; font-size: 0.35rem; }
 .nav-arrow.left { left: -48px; }
 .nav-arrow.right { right: -48px; }
@@ -561,7 +561,7 @@ body.theme-dark .top-bar .user-actions button:hover,
 body.theme-dark .top-bar #rankDisplay:hover {
   background: linear-gradient(180deg, #31476a 0%, #22355b 100%) !important;
  
-}
+}*/
  
 /* ===== DARK THEME OVERRIDES TO COONNECTIVITY ON THE THEME JS PART ===== */
 /*body.theme-dark {
@@ -730,6 +730,22 @@ body.theme-dark #rankDisplay {
     text-shadow: 0 0 4px rgba(90,121,184,0.4);
   }
                                 }
+  /* =======================================
+   🎨 Fix Light Mode Background to Match Account.html
+   ======================================= */
+body.theme-light {
+  background: linear-gradient(180deg, #8b6f47 0%, #a0ecff 45%, #c8f7b0 100%) !important;
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
+  background-size: cover !important;
+  color: #3b2a15 !important;
+}
+
+/* Keep dark mode consistent */
+body.theme-dark {
+  background: radial-gradient(circle at top right, #0b132b 0%, #1a1a2e 60%, #0f2027 100%) !important;
+  color: #f7ead7 !important;
+}
  
 </style>
 </head>
