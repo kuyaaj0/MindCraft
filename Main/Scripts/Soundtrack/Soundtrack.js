@@ -59,20 +59,21 @@
     --accent-2: #5a79b8;
   }
   #mc-soundtrack-root .mc-panel {
-    display:flex;
-    gap:10px;
-    align-items:center;
-    padding:8px;
-    background: var(--bg);
-    border: 1px solid var(--panel-border);
-    color: var(--text);
-    min-width: 260px;
-    max-width: 320px;
-    height: 72px;
-    border-radius: 10px;
-    box-sizing: border-box;
-    flex-direction: column;
-  }
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: var(--bg);
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  min-width: 260px;
+  max-width: 320px;
+  height: 72px; /* keeps everything inside */
+  border-radius: 10px;
+  box-sizing: border-box;
+  user-select: none;
+  position: relative;
+}
   #mc-soundtrack-root .mc-row {
     display:flex;
     width:100%;
@@ -80,13 +81,14 @@
     justify-content: space-between;
   }
   #mc-soundtrack-root .mc-cover {
-    width: 56px;
-    height: 48px;
-    border-radius:6px;
-    object-fit: cover;
-    border:1px solid var(--panel-border);
-    flex-shrink:0;
-  }
+  width: 56px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--panel-border);
+  flex-shrink: 0;
+  margin-top:2px; /* small gap from top */
+}
   #mc-soundtrack-root .mc-meta {
     flex:1 1 auto;
     display:flex;
@@ -96,12 +98,14 @@
     min-width:0;
   }
   #mc-soundtrack-root .mc-title {
-    font-size:0.65rem;
-    font-weight:bold;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
+  font-size: 0.65rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 4px; /* distance to progress bar/buttons */
+  margin-top: 2px; /* slightly above edge */
+}
   #mc-soundtrack-root .mc-progress {
     height:4px;
     width:100%;
@@ -118,12 +122,12 @@
     transition: width 200ms linear;
   }
   #mc-soundtrack-root .mc-controls {
-    display:flex;
-    gap:6px;
-    justify-content:center;
-    align-items:center;
-    margin-top:4px;
-  }
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px; /* keep buttons inside rectangle */
+}
   #mc-soundtrack-root button.mc-btn {
     background:transparent;
     border:none;
