@@ -87,7 +87,7 @@
   object-fit: cover;
   border: 1px solid var(--panel-border);
   flex-shrink: 0;
-  margin-top:2px; /* small gap from top */
+  margin-top: 1px; /* small gap from top */
 }
   #mc-soundtrack-root .mc-meta {
     flex:1 1 auto;
@@ -103,7 +103,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 12.7px; /* distance to progress bar/buttons */
+  margin-bottom: 1.7px; /* distance to progress bar/buttons */
   /*margin-top: 0.9px;*/ /* slightly above edge */
 }
   #mc-soundtrack-root .mc-progress {
@@ -112,7 +112,7 @@
     background: rgba(0,0,0,0.06);
     border-radius:4px;
     overflow:hidden;
-    margin-bottom: 10.5px;
+    margin-bottom: 25.5px;
   }
   #mc-soundtrack-root .mc-progress>i {
     display:block;
