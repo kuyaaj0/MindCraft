@@ -108,6 +108,56 @@ body {
 }
 .nav-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #6b5636; }
 .nav-btn:hover { transform: translateY(-2px); }
+/* -------------------------
+   Profile avatar (top-bar)
+   ------------------------- */
+.profile-wrapper {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-right:6px;
+  cursor:pointer;
+  position:relative;
+  flex:0 0 auto;
+}
+.profile-image {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,0.12);
+  box-shadow:0 4px 0 rgba(0,0,0,0.25);
+  background:linear-gradient(180deg,#f4e4c1,#d9b16c);
+}
+.profile-progress {
+  position:absolute;
+  right:-6px;
+  bottom:-6px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(0,0,0,0.18);
+  border:2px solid rgba(255,255,255,0.12);
+}
+.profile-progress.uploading {
+  animation:spin 1.2s linear infinite;
+  background:linear-gradient(90deg,#ffd700,#1db954);
+}
+@keyframes spin {
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
+.profile-wrapper:hover .profile-image { transform:translateY(-2px); }
+
+@media (max-width:520px){
+  .profile-image{width:34px;height:34px;border:2px solid rgba(255,255,255,0.08);}
+  .profile-wrapper{margin-right:8px;margin-left:6px;}
+}
+
+body.theme-dark .profile-image {
+  border-color:rgba(255,255,255,0.06);
+  background:linear-gradient(180deg,#263758,#1a2742);
+}
 
 /* ---------- Content region ---------- */
 .content {
