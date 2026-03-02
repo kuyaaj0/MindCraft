@@ -365,11 +365,20 @@ body.theme-dark #rankTitle {
   </div>
 
   <div class="nav-buttons" role="navigation" aria-label="page navigation">
-    <button class="nav-btn" id="navHome">🏠 Home</button>
-    <button class="nav-btn" id="leaderboardBtn">📊 Leaderboard</button>
-    <button class="nav-btn" id="navSettings">⚙️ Settings</button>
-    <button class="nav-btn" id="navLogout" style="background:#ff6b6b;border-color:#ffb3b3;">🚪 Logout</button>
+
+  <!-- Profile avatar (uploadable) -->
+  <div class="profile-wrapper" id="profileWrapper" title="Click to change profile picture">
+    <img id="profileImage" class="profile-image" alt="profile" src="../Assets/Images/Profile/default-avatar.png" />
+    <input id="profileFile" type="file" accept="image/*" style="display:none" />
+    <div id="profileUploadProgress" class="profile-progress hidden" aria-hidden="true"></div>
   </div>
+
+  <!-- Nav Buttons -->
+  <button class="nav-btn" id="navHome">🏠 Home</button>
+  <button class="nav-btn" id="leaderboardBtn">📊 Leaderboard</button>
+  <button class="nav-btn" id="navSettings">⚙️ Settings</button>
+  <button class="nav-btn" id="navLogout" style="background:#ff6b6b;border-color:#ffb3b3;">🚪 Logout</button>
+</div>
 </div>
 
 <!-- Main content -->
