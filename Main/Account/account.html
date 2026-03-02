@@ -500,7 +500,7 @@ const firebaseConfig = {
   authDomain: "mindcraft-83f81.firebaseapp.com",
   projectId: "mindcraft-83f81",
   storageBucket: "mindcraft-83f81.firebasestorage.app",
-  storageBucket: "mindcraft-83f81.appspot.com",
+  //storageBucket: "mindcraft-83f81.appspot.com",
   messagingSenderId: "483019456762",
   appId: "1:483019456762:web:fdc05a2dda51c0f39a8943"
 };
@@ -706,7 +706,8 @@ onAuthStateChanged(auth, async (user) => {
 
   const uid = user.uid;
   const ref = doc(db, "users", uid);
-  let data;
+  let data = {};
+  
   try {
     const snap = await getDoc(ref);
     if (!snap.exists()) {
@@ -723,23 +724,31 @@ onAuthStateChanged(auth, async (user) => {
         isActive: true,
         createdAt: serverTimestamp()
       };
-      await setDoc(ref, defaults);
+      await setDoc(ref, defaults, { merge: true });
       data = defaults;
     } else {
       data = snap.data();
-      await updateDoc(ref, { isActive: true, lastSeen: serverTimestamp(), lastLogin: serverTimestamp() });
+      try {
+        await updateDoc(ref, { isActive: true, lastSeen: serverTimestamp() });
+      } catch(e) {
+        console.warn("Failed to update active state:", e);
+      }
     }
   } catch (err) {
-    console.error("⚠️ Firestore load error:", err);
+    console.error("Firestore error:", err);
     usernameEl.textContent = "⚠️ Failed to load account";
     return;
   }
 
+  // Fill UI
   usernameEl.textContent = data.name || "Unknown";
   levelEl.textContent = data.level || 1;
   levelPill.textContent = `LEVEL ${data.level || 1}`;
   totalXPEl.textContent = formatShort(data.totalXP || data.xp || 0);
-  lastLoginEl.textContent = formatTimeAgo(data.lastLogin || user.metadata?.lastSignInTime);
+
+  const lastLoginTime = normalizeDateValue(data.lastLogin) || new Date(user.metadata?.lastSignInTime);
+  lastLoginEl.textContent = formatTimeAgo(lastLoginTime);
+
   roleBadge.textContent = (data.role || "student").toUpperCase();
 
   try {
@@ -753,6 +762,8 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   animateXP(0, data.xp || 0, data.xpMax || 100);
+
+  // Presence tracking
   cleanupPresenceTracking();
   document.addEventListener("visibilitychange", handleVisibility);
   window.addEventListener("beforeunload", handleUnload);
