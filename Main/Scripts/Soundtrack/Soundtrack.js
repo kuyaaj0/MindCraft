@@ -11,11 +11,11 @@
 
   // ----- TRACK LIST -----
   const tracks = [
-    { src: "../Assets/Soundtrack/Music/C418 - Minecraft - MVA.mp3", title: "MindCraft", cover: "../Assets/Image/Soundtrack/MVA.png" },
-    { src: "../Assets/Soundtrack/Music/C418 - Danny - MVA.mp3", title: "Danny", cover: "../Assets/Image/Soundtrack/MVA.png" },
-    { src: "../Assets/Soundtrack/Music/C418 - Living Mice - MVA.mp3", title: "Living Mice", cover: "../Assets/Image/Soundtrack/MVA.png" },
-    { src: "../Assets/Soundtrack/Music/C418 - Haggstrom - MVA.mp3", title: "Haggstrom", cover: "../Assets/Image/Soundtrack/MVA.png" },
-    { src: "../Assets/Soundtrack/Music/C418 - Subwoofer Lullaby - MVA.mp3", title: "Subwoofer Lullaby", cover: "../Assets/Image/Soundtrack/MVA.png" }
+    { src: "../Assets/Soundtrack/Music/C418 - Minecraft - MVA.mp3", title: "MindCraft", cover: "../Assets/Images/Soundtrack/MVA.png" },
+    { src: "../Assets/Soundtrack/Music/C418 - Danny - MVA.mp3", title: "Danny", cover: "../Assets/Images/Soundtrack/MVA.png" },
+    { src: "../Assets/Soundtrack/Music/C418 - Living Mice - MVA.mp3", title: "Living Mice", cover: "../Assets/Images/Soundtrack/MVA.png" },
+    { src: "../Assets/Soundtrack/Music/C418 - Haggstrom - MVA.mp3", title: "Haggstrom", cover: "../Assets/Images/Soundtrack/MVA.png" },
+    { src: "../Assets/Soundtrack/Music/C418 - Subwoofer Lullaby - MVA.mp3", title: "Subwoofer Lullaby", cover: "../Assets/Images/Soundtrack/MVA.png" }
   ];
 
   // STORAGE KEYS
