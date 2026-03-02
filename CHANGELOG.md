@@ -1,18 +1,18 @@
 # March 3 Final Update For Students Webpage Only and this is for due final defense today
--- added the timestamp on leaderboard
--- added active and inactive on leaderboard
--- fixed major bugs on the platform
--- major changes from the design
--- fixed the light and dark theme design
--- added the theme connection to signin to every page that connects 
--- added anti xp farm implemented
--- All lessons and quizzes fixed 
--- added profile on account.html only for info
--- more changes on the leaderboard and settings
--- android or mobile website platform support tested by me
--- fixed the number level to reach their limits to 999
--- added the signin and signup with the coming soon or under progress
--- and a bit lots more changes 
+-- added the timestamp on leaderboard <br>
+-- added active and inactive on leaderboard <br>
+-- fixed major bugs on the platform <br>
+-- major changes from the design <br>
+-- fixed the light and dark theme design <br>
+-- added the theme connection to signin to every page that connects <br>
+-- added anti xp farm implemented <br>
+-- All lessons and quizzes fixed <br>
+-- added profile on account.html only for info <br>
+-- more changes on the leaderboard and settings <br>
+-- android or mobile website platform support tested by me <br>
+-- fixed the number level to reach their limits to 999 <br>
+-- added the signin and signup with the coming soon or under progress <br>
+-- and a bit lots more changes <br>
 -- 1.2-Latest Version which is final update
 --
 
