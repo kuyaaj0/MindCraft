@@ -526,6 +526,80 @@ const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
 const particleLayer = document.getElementById("particleLayer");
 
+// ------------------------- 👤 Profile Upload -------------------------
+const storage = getStorage(app);
+const profileWrapper = document.getElementById("profileWrapper");
+const profileImage = document.getElementById("profileImage");
+const profileFile = document.getElementById("profileFile");
+const profileProgress = document.getElementById("profileUploadProgress");
+
+function setAvatarUrl(url) {
+  if (!url) {
+    profileImage.src = "../Assets/Images/Profile/default-avatar.png";
+  } else {
+    profileImage.src = url + (url.includes("?") ? "&v=" + Date.now() : "?v=" + Date.now());
+  }
+}
+
+// Load user photo after login
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return setAvatarUrl(null);
+  try {
+    const snap = await getDoc(doc(db, "users", user.uid));
+    const data = snap.exists() ? snap.data() : {};
+    const photo = data.photoURL || user.photoURL;
+    setAvatarUrl(photo);
+  } catch (e) {
+    console.warn("Photo load error:", e);
+    setAvatarUrl(null);
+  }
+});
+
+// When clicked -> choose file
+profileWrapper.addEventListener("click", () => {
+  if (!auth.currentUser) return alert("Sign in required.");
+  profileFile.click();
+});
+
+profileFile.addEventListener("change", async (ev) => {
+  const file = ev.target.files?.[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) return alert("Please select an image file.");
+  if (file.size > 5 * 1024 * 1024) return alert("Max size 5MB.");
+
+  const user = auth.currentUser;
+  if (!user) return alert("Sign in required.");
+  profileProgress.classList.remove("hidden");
+  profileProgress.classList.add("uploading");
+
+  try {
+    const path = `profile_pics/${user.uid}_${Date.now()}.jpg`;
+    const sRef = storageRef(storage, path);
+    const uploadTask = uploadBytesResumable(sRef, file);
+
+    uploadTask.on("state_changed", null,
+      (err) => {
+        console.error("Upload failed", err);
+        alert("Upload failed");
+        profileProgress.classList.add("hidden");
+        profileProgress.classList.remove("uploading");
+      },
+      async () => {
+        const url = await getDownloadURL(uploadTask.snapshot.ref);
+        await updateDoc(doc(db, "users", user.uid), { photoURL: url });
+        setAvatarUrl(url);
+        profileProgress.classList.add("hidden");
+        profileProgress.classList.remove("uploading");
+        profileFile.value = "";
+      }
+    );
+  } catch (err) {
+    console.error("Upload error", err);
+    profileProgress.classList.add("hidden");
+    profileProgress.classList.remove("uploading");
+  }
+});
+
 // ------------------------- ⚙️ Helper Functions -------------------------
 function formatShort(n) {
   if (typeof n !== "number") n = Number(n) || 0;
