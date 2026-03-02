@@ -1,168 +1,164 @@
 /* Scripts/Soundtrack/soundtrack.js
-   MindCraft — Full-featured soundtrack mini-player (draggable, theme-aware)
-   - Place in Scripts/Soundtrack/soundtrack.js
-   - Tracks from: Assets/Music/Soundtrack/track1.mp3 ... track5.mp3
-   - Covers from:  Assets/Image/Soundtrack/cover1.png ... cover5.png
-   - Uses localStorage to remember index/position/volume/shuffle/repeat/position on-screen
-   - Burger (SVG) opens menu below the player; menu auto-closes after timeout but also remains until user closes
-   - Responsive and theme-aware (body.theme-dark or localStorage.theme === 'dark')
-   - Drag handles included (drag anywhere on panel except interactive controls)
-   - Exposes window.MindCraftSoundtrack API for debug/control
+   MindCraft — compact rectangle soundtrack player with dropdown menu
+   - Theme-aware (body.class 'theme-dark' or localStorage.theme)
+   - Draggable, saves placement
+   - Remembers last track index, per-track position, volume, shuffle, repeat
+   - Burger menu holds extra controls (shuffle/repeat/volume/mute/open persistent player)
+   - Responsive for <=401px and <=600px
+   - Uses SVG icons only
 */
 
 (function () {
   if (document.getElementById("mc-soundtrack-root")) return;
 
-  // ---------- CONFIG ----------
-  const TRACKS = [
-    { src: "Assets/Music/Soundtrack/track1.mp3", title: "Track 1", cover: "Assets/Image/Soundtrack/cover1.png" },
-    { src: "Assets/Music/Soundtrack/track2.mp3", title: "Track 2", cover: "Assets/Image/Soundtrack/cover2.png" },
-    { src: "Assets/Music/Soundtrack/track3.mp3", title: "Track 3", cover: "Assets/Image/Soundtrack/cover3.png" },
-    { src: "Assets/Music/Soundtrack/track4.mp3", title: "Track 4", cover: "Assets/Image/Soundtrack/cover4.png" },
-    { src: "Assets/Music/Soundtrack/track5.mp3", title: "Track 5", cover: "Assets/Image/Soundtrack/cover5.png" }
+  /* -------------------------
+     Configure your tracks here
+     Use relative paths from pages that will include this script.
+     ------------------------- */
+  const tracks = [
+    { src: "../Assets/Music/Soundtrack/track1.mp3", title: "Track 1", cover: "../Assets/Image/Soundtrack/cover1.png" },
+    { src: "../Assets/Music/Soundtrack/track2.mp3", title: "Track 2", cover: "../Assets/Image/Soundtrack/cover2.png" },
+    { src: "../Assets/Music/Soundtrack/track3.mp3", title: "Track 3", cover: "../Assets/Image/Soundtrack/cover3.png" },
+    { src: "../Assets/Music/Soundtrack/track4.mp3", title: "Track 4", cover: "../Assets/Image/Soundtrack/cover4.png" },
+    { src: "../Assets/Music/Soundtrack/track5.mp3", title: "Track 5", cover: "../Assets/Image/Soundtrack/cover5.png" }
   ];
-  // localStorage keys
-  const LS = {
-    INDEX: "mc_sound_idx_v2",
-    POS: "mc_sound_pos_v2",
-    VOL: "mc_sound_vol_v2",
-    SHUFFLE: "mc_sound_shuffle_v2",
-    REPEAT: "mc_sound_repeat_v2",
-    LEFT: "mc_sound_left_v2",
-    TOP: "mc_sound_top_v2",
-    MENU_OPEN: "mc_sound_menu_open_v2"
-  };
+  /* ------------------------- */
 
-  // ---------- DOM BUILD ----------
+  // storage keys
+  const K_INDEX = "mc_soundtrack_index_v2";
+  const K_POS_PREFIX = "mc_soundtrack_pos_v2_idx_"; // per-track
+  const K_VOL = "mc_soundtrack_vol_v2";
+  const K_SHUFFLE = "mc_soundtrack_shuffle_v2";
+  const K_REPEAT = "mc_soundtrack_repeat_v2";
+  const K_PLACEMENT = "mc_soundtrack_placement_v2";
+  const K_POPUP = "mc_soundtrack_persistent_popup_v2";
+
+  // create root
   const root = document.createElement("div");
   root.id = "mc-soundtrack-root";
-  // Accessibility
   root.setAttribute("role", "region");
-  root.setAttribute("aria-label", "MindCraft soundtrack player");
+  root.setAttribute("aria-label", "Soundtrack player");
   document.body.appendChild(root);
 
-  // inject styles (theme aware variables)
-  const style = document.createElement("style");
-  style.id = "mc-soundtrack-style";
-  style.textContent = `
-  /* ===== MindCraft Soundtrack Player (injected CSS) ===== */
+  // injected CSS
+  const css = `
+  /* --- Player container --- */
   #mc-soundtrack-root {
     position: fixed;
     right: 18px;
     bottom: 18px;
-    z-index: 4000;
+    z-index: 3000;
     font-family: 'Press Start 2P', cursive;
-    --bg-light: rgba(236, 246, 235, 0.95); /* not plain white - soft cream */
-    --panel-border-light: rgba(20, 30, 20, 0.06);
-    --text-light: #3b2a15;
-    --muted-light: rgba(0,0,0,0.25);
-    --accent-light: linear-gradient(180deg,#d9b16c,#a97c4b);
-    --accent-2-light: #a97c4b;
-
-    --bg-dark: rgba(8,12,20,0.86);
-    --panel-border-dark: rgba(90,121,184,0.08);
-    --text-dark: #f7ead7;
-    --muted-dark: rgba(255,255,255,0.14);
-    --accent-dark: linear-gradient(180deg,#263758,#1a2742);
-    --accent-2-dark: #5a79b8;
-
-    transition: transform 160ms ease, opacity 200ms ease;
-    cursor: default;
-    user-select: none;
-  }
-
-  /* Light (default) */
-  #mc-soundtrack-root[data-theme="light"] .mc-panel {
-    background: var(--bg-light);
-    border: 1px solid var(--panel-border-light);
-    color: var(--text-light);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-  }
-  #mc-soundtrack-root[data-theme="light"] .mc-cover {
-    background: linear-gradient(90deg,#f0f6ee,#e6efe0);
-    border: 1px solid rgba(0,0,0,0.06);
-  }
-
-  /* Dark override */
-  #mc-soundtrack-root[data-theme="dark"] .mc-panel {
-    background: var(--bg-dark);
-    border: 1px solid var(--panel-border-dark);
-    color: var(--text-dark);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  }
-  #mc-soundtrack-root[data-theme="dark"] .mc-cover {
-    background: linear-gradient(180deg, rgba(20,28,40,0.7), rgba(10,14,24,0.6));
-    border: 1px solid rgba(255,255,255,0.03);
-  }
-
-  .mc-panel {
-    display:flex;
-    gap:12px;
-    align-items:center;
-    padding:10px;
-    min-width: 260px;
-    max-width: 360px;
-    height: 64px;
+    --bg: rgba(255,255,255,0.95);
+    --border: rgba(0,0,0,0.06);
+    --text: #3b2a15;
+    --muted: rgba(0,0,0,0.28);
+    --accent: #d9b16c;
+    --accent2: #a97c4b;
+    backdrop-filter: blur(6px);
     border-radius: 12px;
-    box-sizing: border-box;
-    overflow: visible;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+    transition: transform 160ms ease, opacity 200ms ease;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
-  .mc-cover {
+  body.theme-dark #mc-soundtrack-root {
+    --bg: rgba(8,12,20,0.88);
+    --border: rgba(90,121,184,0.12);
+    --text: #f7ead7;
+    --muted: rgba(255,255,255,0.14);
+    --accent: #263758;
+    --accent2: #5a79b8;
+    box-shadow: 0 8px 36px rgba(0,0,0,0.6);
+  }
+
+  /* panel */
+  #mc-soundtrack-root .mc-panel {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    min-width: 280px;
+    max-width: 360px;
+    height: 72px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  /* cover (tiny rectangle) */
+  #mc-soundtrack-root .mc-cover {
     width:56px;
     height:48px;
-    border-radius:8px;
+    border-radius:6px;
     object-fit:cover;
-    flex:0 0 auto;
-    display:block;
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    background: linear-gradient(90deg,#eee,#ddd);
+    cursor: pointer;
   }
 
-  .mc-meta {
+  /* meta */
+  #mc-soundtrack-root .mc-meta {
     display:flex;
     flex-direction:column;
     gap:6px;
-    flex: 1 1 auto;
+    flex:1 1 auto;
     min-width:0;
   }
-  .mc-title {
-    font-size: 0.62rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1;
+  #mc-soundtrack-root .mc-title {
+    font-size:0.62rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:block;
+    text-align:center;
+    color:var(--text);
   }
-  .mc-progress {
-    height: 6px;
-    width: 100%;
+  #mc-soundtrack-root .mc-progress-wrap {
+    display:block;
+    width:100%;
+    padding:0 6px;
+  }
+  #mc-soundtrack-root .mc-progress {
+    height:6px;
+    width:100%;
     background: rgba(0,0,0,0.06);
-    border-radius: 6px;
-    overflow: hidden;
+    border-radius:6px;
+    overflow:hidden;
   }
-  #mc-soundtrack-root[data-theme="dark"] .mc-progress { background: rgba(255,255,255,0.04); }
-
-  .mc-progress > i {
+  #mc-soundtrack-root .mc-progress > i {
     display:block;
     height:100%;
     width:0%;
-    background: linear-gradient(90deg, #d9b16c, #a97c4b);
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
     transition: width 160ms linear;
   }
-  #mc-soundtrack-root[data-theme="dark"] .mc-progress > i {
-    background: linear-gradient(90deg, #5a79b8, #263758);
-  }
 
-  .mc-controls {
+  /* controls column */
+  #mc-soundtrack-root .mc-controls {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    flex: 0 0 auto;
+  }
+  #mc-soundtrack-root .mc-btn-row {
     display:flex;
     gap:8px;
     align-items:center;
-    flex: 0 0 auto;
+    justify-content:center;
   }
 
-  button.mc-btn {
+  /* buttons */
+  #mc-soundtrack-root button.mc-btn {
     background: transparent;
     border: none;
-    width:36px;
-    height:36px;
+    width:36px; height:36px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
@@ -170,303 +166,308 @@
     border-radius:8px;
     cursor:pointer;
     transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
-    color: inherit;
+    color: var(--text);
   }
-  button.mc-btn:hover {
+
+  #mc-soundtrack-root button.mc-btn:hover {
     transform: translateY(-3px);
     background: rgba(0,0,0,0.06);
   }
-  #mc-soundtrack-root[data-theme="dark"] button.mc-btn:hover {
-    background: rgba(255,255,255,0.03);
-  }
+  body.theme-dark #mc-soundtrack-root button.mc-btn:hover { background: rgba(255,255,255,0.04); }
 
-  button.mc-btn.play {
-    width:44px; height:44px;
-    background: linear-gradient(180deg,#d9b16c,#a97c4b);
-    color:#fff;
+  /* play button slightly larger but still compact */
+  #mc-soundtrack-root button.mc-btn.play {
+    width:42px; height:42px;
+    background: linear-gradient(180deg,var(--accent), var(--accent2));
+    color: #fff;
     box-shadow: 0 4px 0 rgba(0,0,0,0.18);
   }
-  #mc-soundtrack-root[data-theme="dark"] button.mc-btn.play {
-    background: linear-gradient(180deg,#263758,#1a2742);
-    box-shadow: 0 4px 0 rgba(0,0,0,0.35);
-  }
+  #mc-soundtrack-root button.mc-btn svg { width:16px;height:16px; fill: currentColor; }
 
-  button.mc-btn svg { width:18px; height:18px; fill: currentColor; }
-
-  /* small controls row for shuffle/repeat icons below */
-  .mc-small-row { display:flex; gap:8px; justify-content:center; align-items:center; }
-
-  /* Menu (slides down beneath player) */
-  .mc-menu {
+  /* burger menu */
+  #mc-soundtrack-root .mc-burger {
     position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(100% + 8px);
-    margin-left: 6px;
-    margin-right: 6px;
-    background: rgba(255,255,255,0.96);
+    right:8px;
+    bottom:6px;
+    width:34px;
+    height:34px;
+    border-radius:6px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    background: transparent;
+    border: none;
+    color: var(--text);
+  }
+  #mc-soundtrack-root .mc-burger:hover { background: rgba(0,0,0,0.05); }
+
+  /* dropdown (inside the rectangle) */
+  #mc-soundtrack-root .mc-dropdown {
+    position: absolute;
+    right: 8px;
+    bottom: 46px;
+    width: 220px;
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 10px;
-    border: 1px solid rgba(0,0,0,0.06);
+    padding:8px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.18);
     display: none;
-    transform-origin: top center;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
-    z-index: 4010;
-    gap:10px;
+    flex-direction: column;
+    gap:8px;
+    z-index: 3010;
+    animation: dropdownIn 180ms ease;
   }
-  #mc-soundtrack-root[data-theme="dark"] .mc-menu {
-    background: rgba(6,10,20,0.95);
-    border: 1px solid rgba(90,121,184,0.06);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  @keyframes dropdownIn { from { transform: translateY(6px) scale(.98); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 } }
+
+  #mc-soundtrack-root .mc-dropdown.show { display:flex; }
+
+  .mc-dropdown .row {
+    display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px; border-radius:6px;
+  }
+  .mc-dropdown .row .label { font-size:0.62rem; color:var(--text); }
+  .mc-dropdown .row .small { font-size:0.55rem; color:var(--muted); }
+
+  /* volume slider inside dropdown */
+  .mc-dropdown input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    background: transparent;
+    margin-left:6px;
+  }
+  .mc-dropdown input[type="range"]::-webkit-slider-runnable-track { height:6px; background: rgba(0,0,0,0.08); border-radius:6px; }
+  .mc-dropdown input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; width:12px;height:12px;border-radius:50%; background:var(--accent); box-shadow:0 2px 0 rgba(0,0,0,0.15); margin-top:-3px; }
+
+  /* mobile adapt */
+  @media (max-width: 600px) {
+    #mc-soundtrack-root { right: 12px; bottom: 12px; }
+    #mc-soundtrack-root .mc-panel { min-width: 240px; max-width: 300px; height:66px; padding:8px; }
+    #mc-soundtrack-root .mc-cover { width:50px; height:40px; }
+  }
+  @media (max-width: 401px) {
+    #mc-soundtrack-root { right: 8px; bottom: 8px; }
+    #mc-soundtrack-root .mc-panel { min-width: 200px; max-width: 240px; height:60px; padding:6px; }
+    #mc-soundtrack-root .mc-cover { width:44px; height:36px; }
+    #mc-soundtrack-root button.mc-btn { width:32px; height:32px; }
+    #mc-soundtrack-root button.mc-btn.play { width:38px; height:38px; }
   }
 
-  .mc-menu.show { display:flex; animation: mcMenuSlide 240ms ease both; }
-  @keyframes mcMenuSlide {
-    from { opacity: 0; transform: translateY(-6px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .mc-menu .row { display:flex; gap:8px; align-items:center; justify-content:space-between; width:100%; }
-  .mc-menu .label { font-size:0.55rem; opacity:0.9; }
-  .mc-menu .control { display:flex; gap:8px; align-items:center; }
-
-  .mc-vol { width:120px; display:flex; gap:8px; align-items:center; }
-  input.mc-range { width:100%; -webkit-appearance:none; background:transparent; }
-  input.mc-range::-webkit-slider-runnable-track { height:6px; background: rgba(0,0,0,0.06); border-radius:6px; }
-  #mc-soundtrack-root[data-theme="dark"] input.mc-range::-webkit-slider-runnable-track { background: rgba(255,255,255,0.04); }
-  input.mc-range::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:#d9b16c; box-shadow: 0 2px 0 rgba(0,0,0,0.12); margin-top:-3px; }
-  #mc-soundtrack-root[data-theme="dark"] input.mc-range::-webkit-slider-thumb { background:#5a79b8; }
-
-  /* burger */
-  .mc-burger {
-    width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; cursor:pointer;
-  }
-
-  /* draggable handle hint (small dot) */
-  .mc-handle { position:absolute; right:8px; top:6px; width:8px; height:8px; border-radius:50%; opacity:0.9; background: rgba(0,0,0,0.12); }
-  #mc-soundtrack-root[data-theme="dark"] .mc-handle { background: rgba(255,255,255,0.06); }
-
-  /* Responsive tweaks */
-  @media (max-width:600px) {
-    #mc-soundtrack-root { right:12px; bottom:12px; }
-    .mc-panel { min-width:220px; max-width:300px; height:60px; padding:8px; }
-    .mc-cover { width:50px; height:42px; }
-    .mc-vol { width:100px; }
-  }
-  @media (max-width:401px) {
-    #mc-soundtrack-root { right:8px; bottom:8px; }
-    .mc-panel { min-width:200px; max-width:240px; height:56px; padding:6px; }
-    .mc-cover { width:44px; height:40px; }
-    button.mc-btn { width:34px; height:34px; }
-    button.mc-btn.play { width:40px; height:40px; }
-    .mc-vol { display:none; }
+  /* small tooltip-like label when hovering icons (on larger screens only) */
+  #mc-soundtrack-root .mc-tooltip {
+    position: absolute;
+    pointer-events:none;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    padding:6px 8px;
+    font-size:0.6rem;
+    border-radius:6px;
+    transform: translateY(-100%);
+    white-space:nowrap;
+    display:none;
+    z-index: 3050;
   }
   `;
+
+  const style = document.createElement("style");
+  style.id = "mc-soundtrack-style";
+  style.appendChild(document.createTextNode(css));
   document.head.appendChild(style);
 
-  // SVG icons (no emojis)
+  // svg icons
   const SVG = {
-    prev: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12l8.5-6L6 6zm10 0v12h2V6h-2z"/></svg>`,
-    next: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6v12l-8.5-6L16 6zm4 0v12h2V6h-2z"/></svg>`,
-    play: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`,
-    pause: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`,
-    shuffle: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.59 6.59L8.17 9H11c1.1 0 2 .9 2 2v1h2V11c0-1.1-.9-2-2-2H8.17l2.42-2.41L10 6 6 10l4 4 1.41-1.41L8.83 12H13c1.1 0 2-.9 2-2V9h2v1c0 1.1-.9 2-2 2h-4.17l2.42 2.41L14 18l4-4-4-4-1.41 1.41z"/></svg>`,
-    repeat: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v5z"/></svg>`,
-    volume: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9v6h4l5 5V4l-5 5H7z"/></svg>`,
-    burger: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>`,
-    disc: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 5.5A4.5 4.5 0 1112 16a4.5 4.5 0 010-9z"/></svg>`,
-    close: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71L12 12l6.3 6.29-1.42 1.42L10.59 13.41 4.29 19.71 2.87 18.29 9.17 12 2.87 5.71 4.29 4.29 10.59 10.59 16.88 4.29z"/></svg>`
+    play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',
+    prev: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6v12l8.5-6L6 6zM18 6v12h2V6h-2z"/></svg>',
+    next: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6v12l-8.5-6L16 6zM6 6v12h2V6H6z"/></svg>',
+    burger: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z"/></svg>',
+    shuffle: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.59 6.59L8.17 9H11c1.1 0 2 .9 2 2v1h2V11c0-1.1-.9-2-2-2H8.17l2.42-2.41z"/></svg>',
+    repeat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7z"/></svg>',
+    volume: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9v6h4l5 5V4l-5 5H7z"/></svg>',
+    mute: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 10.5 18 9 16.5 13.5 12 9 7.5 10.5 6 15 10.5l4.5-4.5L21 7.5 16.5 12z"/></svg>',
+    popup: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v2H7v10h12v2H5z"/></svg>'
   };
 
-  // render HTML
+  // build DOM structure
   root.innerHTML = `
     <div class="mc-panel" tabindex="0">
-      <img class="mc-cover" src="${TRACKS[0].cover}" alt="cover" />
-      <div class="mc-meta">
-        <div class="mc-title" id="mc-title">${TRACKS[0].title}</div>
-        <div class="mc-progress" title="progress"><i id="mc-progress-bar"></i></div>
+      <img class="mc-cover" src="${tracks[0].cover}" alt="cover" />
+      <div class="mc-meta" aria-hidden="false">
+        <div class="mc-title" id="mc-title">${tracks[0].title}</div>
+        <div class="mc-progress-wrap">
+          <div class="mc-progress" aria-hidden="true"><i id="mc-progress-bar"></i></div>
+        </div>
       </div>
 
       <div class="mc-controls" aria-hidden="false">
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-          <div style="display:flex;gap:6px;align-items:center;">
-            <button class="mc-btn" id="mc-prev" title="Previous">${SVG.prev}</button>
-            <button class="mc-btn play" id="mc-play" title="Play">${SVG.play}</button>
-            <button class="mc-btn" id="mc-next" title="Next">${SVG.next}</button>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center;margin-top:2px;">
-            <button class="mc-btn" id="mc-shuffle" title="Shuffle">${SVG.shuffle}</button>
-            <button class="mc-btn" id="mc-repeat" title="Repeat">${SVG.repeat}</button>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-          <div style="display:flex;align-items:center;gap:6px;">
-            <button class="mc-btn" id="mc-volbtn" title="Mute/Unmute">${SVG.volume}</button>
-            <input aria-label="volume" class="mc-range" id="mc-vol" type="range" min="0" max="1" step="0.01" value="0.8" />
-          </div>
-          <div style="display:flex;align-items:center;">
-            <div class="mc-burger" id="mc-burger" title="More">${SVG.burger}</div>
-          </div>
+        <div class="mc-btn-row" role="group" aria-label="Playback controls">
+          <button class="mc-btn" id="mc-prev" title="Previous">${SVG.prev}</button>
+          <button class="mc-btn play" id="mc-play" title="Play">${SVG.play}</button>
+          <button class="mc-btn" id="mc-next" title="Next">${SVG.next}</button>
         </div>
       </div>
 
-      <div class="mc-handle" aria-hidden="true"></div>
-    </div>
+      <button class="mc-burger" id="mc-burger" aria-haspopup="true" aria-expanded="false" title="Menu">${SVG.burger}</button>
 
-    <div class="mc-menu" id="mc-menu" role="menu" aria-hidden="true">
-      <div class="row">
-        <div class="label">Playback</div>
-        <div class="control">
-          <button class="mc-btn" id="mc-menu-prev" title="Previous">${SVG.prev}</button>
-          <button class="mc-btn play" id="mc-menu-play" title="Play small">${SVG.play}</button>
-          <button class="mc-btn" id="mc-menu-next" title="Next">${SVG.next}</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="label">Options</div>
-        <div class="control">
-          <button class="mc-btn" id="mc-menu-shuffle" title="Shuffle">${SVG.shuffle}</button>
-          <button class="mc-btn" id="mc-menu-repeat" title="Repeat">${SVG.repeat}</button>
-          <button class="mc-btn" id="mc-menu-disc" title="Open persistent player">${SVG.disc}</button>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="label">Volume</div>
-        <div class="control">
-          <div class="mc-vol">
-            <button class="mc-btn" id="mc-menu-mute" title="Mute">${SVG.volume}</button>
-            <input aria-label="menu-volume" class="mc-range" id="mc-menu-vol" type="range" min="0" max="1" step="0.01" value="0.8" />
+      <div class="mc-dropdown" id="mc-dropdown" role="menu" aria-hidden="true">
+        <div class="row" id="mc-row-shuffle">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;">${SVG.shuffle}</div>
+            <div class="label">Shuffle</div>
           </div>
+          <div class="small"><button id="mc-toggle-shuffle" class="mc-btn" title="Toggle Shuffle" aria-pressed="false">${SVG.shuffle}</button></div>
+        </div>
+
+        <div class="row" id="mc-row-repeat">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;">${SVG.repeat}</div>
+            <div class="label">Repeat</div>
+          </div>
+          <div class="small"><button id="mc-toggle-repeat" class="mc-btn" title="Toggle Repeat" aria-pressed="false">${SVG.repeat}</button></div>
+        </div>
+
+        <div class="row" id="mc-row-volume" style="flex-direction:column;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:8px;width:100%;">
+            <div style="width:22px;height:22px;">${SVG.volume}</div>
+            <div class="label">Volume</div>
+            <div style="margin-left:auto;" class="small" id="mc-vol-label">80%</div>
+          </div>
+          <input id="mc-vol-range" type="range" min="0" max="1" step="0.01" value="0.8" />
+        </div>
+
+        <div class="row" id="mc-row-mute">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;">${SVG.mute}</div>
+            <div class="label">Mute</div>
+          </div>
+          <div class="small"><button id="mc-toggle-mute" class="mc-btn" title="Mute/Unmute">${SVG.mute}</button></div>
+        </div>
+
+        <div class="row" id="mc-row-popup">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:22px;height:22px;">${SVG.popup}</div>
+            <div class="label">Open Persistent Player</div>
+          </div>
+          <div class="small"><button id="mc-open-popup" class="mc-btn" title="Open persistent player">${SVG.popup}</button></div>
         </div>
       </div>
+
+      <div class="mc-tooltip" id="mc-tooltip" aria-hidden="true"></div>
     </div>
   `;
 
-  // ---------- refs ----------
-  const panel = root.querySelector(".mc-panel");
+  // references
   const coverEl = root.querySelector(".mc-cover");
   const titleEl = root.querySelector("#mc-title");
   const progressBar = root.querySelector("#mc-progress-bar");
-
   const btnPrev = root.querySelector("#mc-prev");
   const btnPlay = root.querySelector("#mc-play");
   const btnNext = root.querySelector("#mc-next");
-  const btnShuffle = root.querySelector("#mc-shuffle");
-  const btnRepeat = root.querySelector("#mc-repeat");
-  const volBtn = root.querySelector("#mc-volbtn");
-  const volInput = root.querySelector("#mc-vol");
   const burgerBtn = root.querySelector("#mc-burger");
-  const handleEl = root.querySelector(".mc-handle");
+  const dropdown = root.querySelector("#mc-dropdown");
+  const toggleShuffleBtn = root.querySelector("#mc-toggle-shuffle");
+  const toggleRepeatBtn = root.querySelector("#mc-toggle-repeat");
+  const volRange = root.querySelector("#mc-vol-range");
+  const volLabel = root.querySelector("#mc-vol-label");
+  const toggleMuteBtn = root.querySelector("#mc-toggle-mute");
+  const openPopupBtn = root.querySelector("#mc-open-popup");
+  const tooltip = root.querySelector("#mc-tooltip");
 
-  const menu = root.querySelector("#mc-menu");
-  const menuPlay = root.querySelector("#mc-menu-play");
-  const menuPrev = root.querySelector("#mc-menu-prev");
-  const menuNext = root.querySelector("#mc-menu-next");
-  const menuShuffle = root.querySelector("#mc-menu-shuffle");
-  const menuRepeat = root.querySelector("#mc-menu-repeat");
-  const menuDisc = root.querySelector("#mc-menu-disc");
-  const menuMute = root.querySelector("#mc-menu-mute");
-  const menuVol = root.querySelector("#mc-menu-vol");
-
-  // ---------- audio & state ----------
+  // audio setup
   const audio = new Audio();
-  audio.preload = "auto";
+  audio.preload = "metadata";
   audio.crossOrigin = "anonymous";
 
-  let idx = Number(localStorage.getItem(LS.INDEX) || 0);
-  if (isNaN(idx) || idx < 0 || idx >= TRACKS.length) idx = 0;
+  // state
+  let idx = Number(localStorage.getItem(K_INDEX) || 0);
+  if (isNaN(idx) || idx < 0 || idx >= tracks.length) idx = 0;
+
+  let shuffle = localStorage.getItem(K_SHUFFLE) === "1";
+  let repeat = localStorage.getItem(K_REPEAT) === "1";
   let playing = false;
-  let shuffle = localStorage.getItem(LS.SHUFFLE) === "1";
-  let repeat = localStorage.getItem(LS.REPEAT) === "1";
-  let menuOpen = localStorage.getItem(LS.MENU_OPEN) === "1";
-  let autoCloseTimer = null;
-  let menuInteraction = false;
-  let positionSaveTimer = null;
-  let drag = { active: false, offsetX: 0, offsetY: 0 };
+  let lastUpdate = 0;
+  let autoCloseTimeout = null;
+  let dragState = null;
+  let popupWindow = null;
 
-  // load saved position & apply theme
-  function applyTheme() {
-    const dark = document.body.classList.contains("theme-dark") || localStorage.getItem("theme") === "dark";
-    root.setAttribute("data-theme", dark ? "dark" : "light");
+  // per-track saved positions
+  function saveTrackPos(i, seconds) {
+    try { localStorage.setItem(K_POS_PREFIX + String(i), String(Math.floor(seconds || 0))); } catch(e) {}
   }
-  applyTheme();
-  // observe storage/theme changes
-  window.addEventListener("storage", (e) => { if (e.key === "theme") applyTheme(); });
-
-  // apply initial position saved in localStorage
-  function applySavedPosition() {
-    const left = localStorage.getItem(LS.LEFT);
-    const top = localStorage.getItem(LS.TOP);
-    if (left != null && top != null) {
-      // ensure within viewport
-      let l = parseInt(left, 10), t = parseInt(top, 10);
-      if (Number.isFinite(l) && Number.isFinite(t)) {
-        // clamp
-        const padding = 8;
-        const maxLeft = Math.max(8, window.innerWidth - root.offsetWidth - padding);
-        const maxTop = Math.max(8, window.innerHeight - root.offsetHeight - padding);
-        l = Math.min(Math.max(padding, l), maxLeft);
-        t = Math.min(Math.max(padding, t), maxTop);
-        root.style.left = l + "px";
-        root.style.top = t + "px";
-        root.style.right = "auto";
-        root.style.bottom = "auto";
-        root.style.position = "fixed";
-      }
-    }
+  function loadTrackPos(i) {
+    return Number(localStorage.getItem(K_POS_PREFIX + String(i)) || 0);
   }
-  applySavedPosition();
 
-  // ---------- helper functions ----------
-  function setTrack(i, seek = 0, autoplay = false) {
-    idx = ((i % TRACKS.length) + TRACKS.length) % TRACKS.length;
-    const t = TRACKS[idx];
-    audio.src = t.src;
+  // volume init
+  let initVol = Number(localStorage.getItem(K_VOL) || 0.8);
+  if (isNaN(initVol) || initVol < 0 || initVol > 1) initVol = 0.8;
+  audio.volume = initVol;
+  volRange.value = initVol;
+  volLabel.textContent = Math.round(initVol * 100) + "%";
+
+  // Render state UI
+  function renderState() {
+    // title/cover
+    const t = tracks[idx];
     titleEl.textContent = t.title;
     coverEl.src = t.cover;
-    localStorage.setItem(LS.INDEX, String(idx));
-    if (seek > 0) {
-      audio.currentTime = Math.min(seek, audio.duration || seek);
-    } else {
-      // try to resume from saved pos (global)
-      const saved = Number(localStorage.getItem(LS.POS) || 0);
-      if (saved && saved > 0 && saved < 60 * 60 * 10) {
-        try { audio.currentTime = Math.min(saved, audio.duration || saved); } catch (e) { /* ignore */ }
-      } else {
-        audio.currentTime = 0;
-      }
+    root.querySelector(".mc-panel").setAttribute("data-track-idx", idx);
+
+    // progress bar width will be updated on timeupdate
+    // play/pause icon
+    btnPlay.innerHTML = playing ? SVG.pause : SVG.play;
+
+    // shuffle/repeat button states (buttons inside dropdown)
+    toggleShuffleBtn.style.opacity = shuffle ? "1" : "0.55";
+    toggleShuffleBtn.setAttribute("aria-pressed", shuffle ? "true" : "false");
+    toggleRepeatBtn.style.opacity = repeat ? "1" : "0.55";
+    toggleRepeatBtn.setAttribute("aria-pressed", repeat ? "true" : "false");
+  }
+
+  function setTrack(i, seekSec, autoplay) {
+    i = ((i % tracks.length) + tracks.length) % tracks.length;
+    idx = i;
+    const t = tracks[idx];
+    audio.src = t.src;
+    // attempt to set currentTime after metadata loaded
+    audio.currentTime = 0;
+    titleEl.textContent = t.title;
+    coverEl.src = t.cover;
+    localStorage.setItem(K_INDEX, String(idx));
+
+    // try to set seek time if provided or load saved
+    const saved = (typeof seekSec === "number" && seekSec > 0) ? seekSec : loadTrackPos(idx);
+    if (saved && saved > 0) {
+      // When metadata loads, attempt to set time
+      audio.addEventListener("loadedmetadata", function _set() {
+        try {
+          if (audio.duration && saved < audio.duration) audio.currentTime = saved;
+        } catch (e) {}
+        audio.removeEventListener("loadedmetadata", _set);
+      });
     }
-    renderControls();
+
+    renderState();
     if (autoplay) tryPlay();
   }
 
-  function renderControls() {
-    btnPlay.innerHTML = playing ? SVG.pause : SVG.play;
-    menuPlay.innerHTML = playing ? SVG.pause : SVG.play;
-
-    btnShuffle.style.opacity = shuffle ? "1" : "0.6";
-    menuShuffle.style.opacity = shuffle ? "1" : "0.6";
-    btnRepeat.style.opacity = repeat ? "1" : "0.6";
-    menuRepeat.style.opacity = repeat ? "1" : "0.6";
-
-    // title ellipsis handled by CSS
-  }
-
   function tryPlay() {
+    // return a promise when available
     const p = audio.play();
     if (p && typeof p.then === "function") {
-      p.then(() => { playing = true; renderControls(); })
-        .catch(() => { playing = false; renderControls(); });
+      p.then(() => {
+        playing = true;
+        renderState();
+      }).catch((err) => {
+        // autoplay blocked, wait for user gesture
+        playing = false;
+        renderState();
+      });
     } else {
-      // older browsers
       playing = true;
-      renderControls();
+      renderState();
     }
   }
-
   function togglePlay() {
     if (playing) {
       audio.pause();
@@ -474,107 +475,71 @@
     } else {
       tryPlay();
     }
-    renderControls();
+    renderState();
   }
 
   function prevTrack() {
-    if (audio.currentTime > 2) {
+    if (audio.currentTime > 2 && audio.duration && audio.currentTime > 0) {
       audio.currentTime = 0;
       return;
     }
     if (shuffle) {
-      setTrack(Math.floor(Math.random() * TRACKS.length), 0, true);
+      const next = Math.floor(Math.random() * tracks.length);
+      setTrack(next, 0, true);
     } else {
       setTrack(idx - 1, 0, true);
     }
   }
-
   function nextTrack() {
     if (shuffle) {
-      setTrack(Math.floor(Math.random() * TRACKS.length), 0, true);
-      return;
-    }
-    const next = idx + 1;
-    if (next >= TRACKS.length) {
-      if (repeat) setTrack(0, 0, true); else { audio.pause(); playing = false; renderControls(); }
-    } else {
+      const next = Math.floor(Math.random() * tracks.length);
       setTrack(next, 0, true);
+    } else {
+      const next = idx + 1;
+      if (next >= tracks.length) {
+        if (repeat) setTrack(0, 0, true);
+        else {
+          audio.pause();
+          playing = false;
+          renderState();
+          return;
+        }
+      } else {
+        setTrack(next, 0, true);
+      }
     }
   }
 
-  // progress handler
   audio.addEventListener("timeupdate", () => {
     if (!audio.duration || isNaN(audio.duration)) return;
     const pct = (audio.currentTime / audio.duration) * 100;
     progressBar.style.width = pct + "%";
 
-    // throttle position saves
-    if (positionSaveTimer) clearTimeout(positionSaveTimer);
-    // Save every 1.5s and also when stops
-    positionSaveTimer = setTimeout(() => {
-      localStorage.setItem(LS.POS, String(Math.floor(audio.currentTime)));
-    }, 1500);
+    // save pos occasionally (throttle)
+    const now = Date.now();
+    if (now - lastUpdate > 2000) {
+      lastUpdate = now;
+      saveTrackPos(idx, audio.currentTime);
+    }
   });
+
+  audio.addEventListener("pause", () => { playing = false; renderState(); });
+  audio.addEventListener("play", () => { playing = true; renderState(); });
 
   audio.addEventListener("ended", () => {
     if (repeat) setTrack(idx, 0, true);
     else nextTrack();
   });
 
-  audio.addEventListener("play", () => { playing = true; renderControls(); });
-  audio.addEventListener("pause", () => { playing = false; renderControls(); });
-
-  // ---------- wire UI ----------
+  // controls events
   btnPlay.addEventListener("click", (e) => { e.preventDefault(); togglePlay(); });
-  menuPlay.addEventListener("click", (e) => { e.preventDefault(); togglePlay(); });
-
   btnPrev.addEventListener("click", (e) => { e.preventDefault(); prevTrack(); });
-  menuPrev.addEventListener("click", (e) => { e.preventDefault(); prevTrack(); });
-
   btnNext.addEventListener("click", (e) => { e.preventDefault(); nextTrack(); });
-  menuNext.addEventListener("click", (e) => { e.preventDefault(); nextTrack(); });
 
-  btnShuffle.addEventListener("click", (e) => { e.preventDefault(); shuffle = !shuffle; localStorage.setItem(LS.SHUFFLE, shuffle ? "1" : "0"); renderControls(); });
-  menuShuffle.addEventListener("click", (e) => { e.preventDefault(); shuffle = !shuffle; localStorage.setItem(LS.SHUFFLE, shuffle ? "1" : "0"); renderControls(); });
-
-  btnRepeat.addEventListener("click", (e) => { e.preventDefault(); repeat = !repeat; localStorage.setItem(LS.REPEAT, repeat ? "1" : "0"); renderControls(); });
-  menuRepeat.addEventListener("click", (e) => { e.preventDefault(); repeat = !repeat; localStorage.setItem(LS.REPEAT, repeat ? "1" : "0"); renderControls(); });
-
-  // volume controls
-  const initialVol = Number(localStorage.getItem(LS.VOL) || 0.8);
-  audio.volume = initialVol;
-  volInput.value = String(initialVol);
-  menuVol.value = String(initialVol);
-
-  volInput.addEventListener("input", (ev) => {
-    const v = Number(ev.target.value);
-    audio.volume = v;
-    localStorage.setItem(LS.VOL, String(v));
-  });
-  menuVol.addEventListener("input", (ev) => {
-    const v = Number(ev.target.value);
-    audio.volume = v;
-    volInput.value = String(v);
-    localStorage.setItem(LS.VOL, String(v));
-  });
-
-  volBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    audio.muted = !audio.muted;
-    volBtn.style.opacity = audio.muted ? "0.5" : "1";
-    menuMute.style.opacity = audio.muted ? "0.5" : "1";
-  });
-  menuMute.addEventListener("click", (e) => {
-    e.preventDefault();
-    audio.muted = !audio.muted;
-    volBtn.style.opacity = audio.muted ? "0.5" : "1";
-    menuMute.style.opacity = audio.muted ? "0.5" : "1";
-  });
-
-  // cover click toggles
+  // clicking cover toggles play/pause
   coverEl.addEventListener("click", () => togglePlay());
 
-  // progress seek
+  // progress seek click (on progress wrapper element)
   const progressWrap = root.querySelector(".mc-progress");
   progressWrap.addEventListener("click", (ev) => {
     const rect = progressWrap.getBoundingClientRect();
@@ -582,214 +547,293 @@
     const pct = Math.min(1, Math.max(0, x / rect.width));
     if (audio.duration && !isNaN(audio.duration)) {
       audio.currentTime = pct * audio.duration;
+      saveTrackPos(idx, audio.currentTime);
     }
   });
 
-  // ---------- menu (burger) behaviour ----------
-  function openMenu() {
-    menu.classList.add("show");
-    menu.setAttribute("aria-hidden", "false");
-    menuOpen = true;
-    localStorage.setItem(LS.MENU_OPEN, "1");
-    scheduleAutoClose();
+  // burger menu toggling
+  function closeDropdown() {
+    dropdown.classList.remove("show");
+    dropdown.setAttribute("aria-hidden", "true");
+    burgerBtn.setAttribute("aria-expanded", "false");
+    if (autoCloseTimeout) { clearTimeout(autoCloseTimeout); autoCloseTimeout = null; }
   }
-  function closeMenu() {
-    menu.classList.remove("show");
-    menu.setAttribute("aria-hidden", "true");
-    menuOpen = false;
-    localStorage.setItem(LS.MENU_OPEN, "0");
-    clearAutoClose();
+  function openDropdown() {
+    dropdown.classList.add("show");
+    dropdown.setAttribute("aria-hidden", "false");
+    burgerBtn.setAttribute("aria-expanded", "true");
+    if (autoCloseTimeout) clearTimeout(autoCloseTimeout);
+    autoCloseTimeout = setTimeout(() => closeDropdown(), 5000);
   }
-  function toggleMenu() {
-    if (menuOpen) closeMenu(); else openMenu();
-  }
-  burgerBtn.addEventListener("click", (e) => { e.preventDefault(); toggleMenu(); });
-
-  // auto-close after 5s of no interaction; but if user toggles explicitly, still allow auto-close
-  function clearAutoClose() {
-    if (autoCloseTimer) { clearTimeout(autoCloseTimer); autoCloseTimer = null; }
-  }
-  function scheduleAutoClose() {
-    clearAutoClose();
-    autoCloseTimer = setTimeout(() => {
-      // only auto-close if not currently interacting
-      if (!menuInteraction) closeMenu();
-    }, 5000);
-  }
-  // keep menu open while mouse inside
-  menu.addEventListener("mouseenter", () => { menuInteraction = true; clearAutoClose(); });
-  menu.addEventListener("mouseleave", () => { menuInteraction = false; scheduleAutoClose(); });
-
-  // menuDisc -> optional "open persistent player" (opens small popup)
-  menuDisc.addEventListener("click", (e) => {
+  burgerBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    try {
-      // open small window - same origin required for audio control to work smoothly
-      const w = window.open(window.location.origin + window.location.pathname + "?mc_persistent_player=1", "mc_persistent_player", "width=420,height=140,menubar=no,toolbar=no");
-      w && w.focus();
-    } catch (err) { console.warn("popup blocked or same-origin issue:", err); }
+    if (dropdown.classList.contains("show")) closeDropdown(); else openDropdown();
   });
 
-  // ---------- drag behavior ----------
-  function onStartDrag(e) {
-    const evt = e.touches ? e.touches[0] : e;
-    drag.active = true;
-    const rect = root.getBoundingClientRect();
-    drag.offsetX = evt.clientX - rect.left;
-    drag.offsetY = evt.clientY - rect.top;
-    root.style.transition = "none";
-    document.addEventListener("mousemove", onDrag);
-    document.addEventListener("touchmove", onDrag, { passive: false });
-    document.addEventListener("mouseup", onEndDrag);
-    document.addEventListener("touchend", onEndDrag);
-  }
-  function onDrag(e) {
-    if (!drag.active) return;
-    const evt = e.touches ? e.touches[0] : e;
-    e.preventDefault && e.preventDefault();
-    let left = Math.round(evt.clientX - drag.offsetX);
-    let top = Math.round(evt.clientY - drag.offsetY);
-
-    // clamp inside viewport
-    const padding = 8;
-    const maxLeft = window.innerWidth - root.offsetWidth - padding;
-    const maxTop = window.innerHeight - root.offsetHeight - padding;
-    left = Math.min(Math.max(padding, left), Math.max(padding, maxLeft));
-    top = Math.min(Math.max(padding, top), Math.max(padding, maxTop));
-
-    root.style.left = left + "px";
-    root.style.top = top + "px";
-    root.style.right = "auto";
-    root.style.bottom = "auto";
-    root.style.position = "fixed";
-  }
-  function onEndDrag() {
-    drag.active = false;
-    root.style.transition = "";
-    // store
-    try {
-      const rect = root.getBoundingClientRect();
-      localStorage.setItem(LS.LEFT, String(Math.round(rect.left)));
-      localStorage.setItem(LS.TOP, String(Math.round(rect.top)));
-    } catch (_) {}
-    document.removeEventListener("mousemove", onDrag);
-    document.removeEventListener("touchmove", onDrag);
-    document.removeEventListener("mouseup", onEndDrag);
-    document.removeEventListener("touchend", onEndDrag);
-  }
-
-  // make panel draggable by holding panel (but not when clicking controls)
-  // We ignore drag start if target is interactive control
-  function isInteractive(target) {
-    if (!target) return false;
-    const t = target.closest && target.closest("button, input, .mc-progress, .mc-burger, .mc-cover");
-    return Boolean(t);
-  }
-  panel.addEventListener("mousedown", (e) => { if (!isInteractive(e.target)) onStartDrag(e); });
-  panel.addEventListener("touchstart", (e) => { if (!isInteractive(e.target)) onStartDrag(e); }, { passive: true });
-
-  // also allow handle dot as drag start
-  handleEl.addEventListener("mousedown", onStartDrag);
-  handleEl.addEventListener("touchstart", onStartDrag, { passive: true });
-
-  // ---------- keyboard accessibility ----------
-  root.addEventListener("keydown", (ev) => {
-    if (ev.key === " " || ev.key === "Spacebar") { ev.preventDefault(); togglePlay(); }
-    if (ev.key === "ArrowRight") { ev.preventDefault(); nextTrack(); }
-    if (ev.key === "ArrowLeft") { ev.preventDefault(); prevTrack(); }
-    if (ev.key === "Escape") { if (menuOpen) closeMenu(); }
+  // outside click closes dropdown
+  document.addEventListener("pointerdown", (ev) => {
+    if (!dropdown.classList.contains("show")) return;
+    const within = root.contains(ev.target);
+    if (!within) closeDropdown();
   });
 
-  // ---------- visibility & unload ----------
-  window.addEventListener("beforeunload", () => {
-    // save pos
-    try {
-      const rect = root.getBoundingClientRect();
-      localStorage.setItem(LS.LEFT, String(Math.round(rect.left)));
-      localStorage.setItem(LS.TOP, String(Math.round(rect.top)));
-    } catch (_) {}
-    localStorage.setItem(LS.POS, String(Math.floor(audio.currentTime || 0)));
-    localStorage.setItem(LS.INDEX, String(idx));
-    localStorage.setItem(LS.VOL, String(audio.volume));
-    localStorage.setItem(LS.SHUFFLE, shuffle ? "1" : "0");
-    localStorage.setItem(LS.REPEAT, repeat ? "1" : "0");
-    localStorage.setItem(LS.MENU_OPEN, menuOpen ? "1" : "0");
+  // toggle shuffle/repeat
+  toggleShuffleBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    shuffle = !shuffle;
+    localStorage.setItem(K_SHUFFLE, shuffle ? "1" : "0");
+    renderState();
+  });
+  toggleRepeatBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    repeat = !repeat;
+    localStorage.setItem(K_REPEAT, repeat ? "1" : "0");
+    renderState();
   });
 
-  // ---------- init ----------
-  function init() {
-    applyTheme();
-    // load saved settings
-    const savedVol = Number(localStorage.getItem(LS.VOL));
-    if (Number.isFinite(savedVol)) { audio.volume = savedVol; volInput.value = String(savedVol); menuVol.value = String(savedVol); }
-    shuffle = localStorage.getItem(LS.SHUFFLE) === "1";
-    repeat = localStorage.getItem(LS.REPEAT) === "1";
-    menuOpen = localStorage.getItem(LS.MENU_OPEN) === "1";
-    const savedPos = Number(localStorage.getItem(LS.POS) || 0);
+  // volume controls
+  volRange.addEventListener("input", (ev) => {
+    const v = Number(ev.target.value);
+    audio.volume = v;
+    localStorage.setItem(K_VOL, String(v));
+    volLabel.textContent = Math.round(v * 100) + "%";
+  });
+  toggleMuteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    audio.muted = !audio.muted;
+    toggleMuteBtn.style.opacity = audio.muted ? "0.55" : "1";
+  });
 
-    setTrack(idx, savedPos || 0, false);
-    renderControls();
-    applySavedPosition();
+  // open popup persistent player (if user allows)
+  openPopupBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    // open a small (persistent) window that hosts the player (same origin). This helps keep audio across navigation.
+    // the popup will load the same page 'popup-player.html' if available or we open a minimal url (same origin) that also includes player.
+    // We'll open about:blank and then write minimal content transferring state via localStorage.
+    try {
+      const w = window.open("", "mindcraft-player", "width=420,height=120");
+      if (!w) {
+        alert("Popup blocked. Allow popups for this site to enable persistent playback.");
+        return;
+      }
+      // store current state in storage for popup to pick up
+      const state = {
+        idx, pos: Math.floor(audio.currentTime || 0), vol: audio.volume || 0.8, playing
+      };
+      localStorage.setItem(K_POPUP, JSON.stringify(state));
 
-    if (menuOpen) openMenu(); else closeMenu();
-
-    // try autoplay after user interaction (browsers block autoplay without interaction)
-    function tryAuto() {
-      tryPlay();
-      window.removeEventListener("pointerdown", tryAuto);
-      window.removeEventListener("keydown", tryAuto);
+      // build a minimal HTML for the popup that reuses this same script (if accessible)
+      // We'll write a minimal page that loads the same soundtrack.js from relative path (best-effort)
+      const docHtml = `
+        <!doctype html><html><head><meta charset="utf-8"><title>MindCraft Player</title>
+        <style>html,body{margin:0;height:100%;background:#0b1220;color:#fff;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif}</style>
+        </head><body>
+        <div id="mc-popup-root">Persistent player starting...</div>
+        <script>
+          // simple bootstrap: read state and create audio element inside popup
+          (function(){
+            try {
+              const state = JSON.parse(localStorage.getItem("${K_POPUP}") || "{}");
+              const tracks = ${JSON.stringify(tracks)};
+              const idx = state.idx || 0;
+              const a = new Audio(tracks[idx].src);
+              a.volume = state.vol || 0.8;
+              a.currentTime = state.pos || 0;
+              a.loop = false;
+              a.play().catch(()=>{});
+              // show simple UI
+              document.getElementById("mc-popup-root").innerHTML =
+                '<div style="padding:10px;border-radius:8px;background:rgba(255,255,255,0.06)">'+
+                '<img src="'+tracks[idx].cover+'" style="width:60px;height:40px;vertical-align:middle;margin-right:8px"/>' +
+                '<span style="font-family: \\'Press Start 2P\\', monospace">'+tracks[idx].title+'</span>'+
+                '<div style="margin-top:8px;font-size:12px;color:#ccc">Close this window to stop persistent playback.</div>'+
+                '</div>';
+              // sync updates back to localStorage periodically
+              setInterval(()=>{ localStorage.setItem("${K_POS_PREFIX}"+idx, Math.floor(a.currentTime)); }, 1500);
+              window.addEventListener('beforeunload', ()=>{ try{ localStorage.removeItem("${K_POPUP}"); }catch(e){} });
+            } catch(e) { console.error(e); }
+          })();
+        </script>
+        </body></html>
+      `;
+      w.document.open();
+      w.document.write(docHtml);
+      w.document.close();
+    } catch (e) {
+      console.warn("popup failed", e);
+    } finally {
+      closeDropdown();
     }
-    window.addEventListener("pointerdown", tryAuto, { once: true });
-    window.addEventListener("keydown", tryAuto, { once: true });
+  });
 
-    // show/hide based on theme changes live
-    const mo = new MutationObserver(() => applyTheme());
-    mo.observe(document.documentElement || document.body, { attributes: true, subtree: false });
+  // tooltip helpers for desktop hover
+  const buttonsWithTitle = root.querySelectorAll("button[title]");
+  buttonsWithTitle.forEach((b) => {
+    b.addEventListener("mouseenter", (ev) => {
+      const t = b.getAttribute("title");
+      tooltip.textContent = t || "";
+      tooltip.style.display = "block";
+      const rect = b.getBoundingClientRect();
+      tooltip.style.left = (rect.left + rect.width/2 - tooltip.offsetWidth/2) + "px";
+      tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + "px";
+    });
+    b.addEventListener("mousemove", (ev) => {
+      const rect = b.getBoundingClientRect();
+      tooltip.style.left = (rect.left + rect.width/2 - tooltip.offsetWidth/2) + "px";
+      tooltip.style.top = (rect.top - tooltip.offsetHeight - 8) + "px";
+    });
+    b.addEventListener("mouseleave", () => { tooltip.style.display = "none"; });
+  });
+
+  // drag logic
+  function loadPlacement() {
+    try {
+      const raw = localStorage.getItem(K_PLACEMENT);
+      if (!raw) return null;
+      const o = JSON.parse(raw);
+      return o;
+    } catch(e) { return null; }
   }
-  init();
+  function savePlacement(x, y) {
+    try { localStorage.setItem(K_PLACEMENT, JSON.stringify({x,y})); } catch(e) {}
+  }
 
-  // ---------- public API ----------
+  function applyPlacement(v) {
+    if (!v) return;
+    try {
+      root.style.right = "auto";
+      root.style.left = v.x + "px";
+      root.style.bottom = v.y + "px";
+    } catch(e) {}
+  }
+
+  // pointer-based dragging
+  root.addEventListener("pointerdown", (ev) => {
+    // only start drag when clicking the panel area not interactive buttons
+    const panel = root.querySelector(".mc-panel");
+    if (!panel.contains(ev.target)) return;
+    const isBtn = ev.target.closest("button, input, a");
+    if (isBtn) return; // don't start drag when interacting with a control
+    ev.preventDefault();
+    dragState = {
+      startX: ev.clientX,
+      startY: ev.clientY,
+      origLeft: root.getBoundingClientRect().left,
+      origBottom: (window.innerHeight - root.getBoundingClientRect().bottom),
+      width: root.getBoundingClientRect().width,
+      height: root.getBoundingClientRect().height
+    };
+    root.setPointerCapture(ev.pointerId);
+  });
+
+  root.addEventListener("pointermove", (ev) => {
+    if (!dragState) return;
+    ev.preventDefault();
+    const dx = ev.clientX - dragState.startX;
+    const dy = ev.clientY - dragState.startY;
+    let newLeft = dragState.origLeft + dx;
+    let newBottom = dragState.origBottom - dy;
+    // clamp within viewport
+    newLeft = Math.max(8, Math.min(window.innerWidth - (dragState.width + 8), newLeft));
+    newBottom = Math.max(8, Math.min(window.innerHeight - (dragState.height + 8), newBottom));
+    root.style.left = newLeft + "px";
+    root.style.bottom = newBottom + "px";
+  });
+
+  root.addEventListener("pointerup", (ev) => {
+    if (!dragState) return;
+    try { root.releasePointerCapture(ev.pointerId); } catch(e){}
+    // save placement
+    const left = root.getBoundingClientRect().left;
+    const bottom = window.innerHeight - root.getBoundingClientRect().bottom;
+    savePlacement(left, bottom);
+    dragState = null;
+  });
+
+  // keyboard support: space toggles play when focused
+  root.addEventListener("keydown", (ev) => {
+    if (ev.key === " " || ev.key === "Spacebar") {
+      ev.preventDefault(); togglePlay();
+    } else if (ev.key === "ArrowRight") {
+      nextTrack();
+    } else if (ev.key === "ArrowLeft") {
+      prevTrack();
+    }
+  });
+
+  // restore placement
+  const savedPlace = loadPlacement();
+  if (savedPlace) applyPlacement(savedPlace);
+
+  // load index and track
+  const savedIndex = Number(localStorage.getItem(K_INDEX) || 0);
+  if (!isNaN(savedIndex) && savedIndex >= 0 && savedIndex < tracks.length) idx = savedIndex;
+
+  const savedPos = loadTrackPos(idx);
+  setTrack(idx, savedPos || 0, false);
+
+  // try autoplay on first interaction (browsers require gesture)
+  function onFirstInteraction() {
+    tryPlay();
+    window.removeEventListener("pointerdown", onFirstInteraction);
+    window.removeEventListener("keydown", onFirstInteraction);
+  }
+  window.addEventListener("pointerdown", onFirstInteraction, { once: true });
+  window.addEventListener("keydown", onFirstInteraction, { once: true });
+
+  // listen for theme changes (body class toggle or storage)
+  function applyThemeClass() {
+    const dark = document.body.classList.contains("theme-dark") || localStorage.getItem("theme") === "dark";
+    if (dark) root.classList.add("theme-dark"); else root.classList.remove("theme-dark");
+  }
+  applyThemeClass();
+  const mo = new MutationObserver(applyThemeClass);
+  mo.observe(document.documentElement || document.body, { attributes: true, subtree: false, attributeFilter: ["class"] });
+  window.addEventListener("storage", (ev) => {
+    if (ev.key === "theme") applyThemeClass();
+  });
+
+  // expose API
   window.MindCraftSoundtrack = {
     play: () => tryPlay(),
-    pause: () => audio.pause(),
+    pause: () => { audio.pause(); },
     next: () => nextTrack(),
     prev: () => prevTrack(),
-    setIndex: (i) => setTrack(i, 0, false),
-    getState: () => ({ idx, playing, shuffle, repeat, volume: audio.volume, pos: audio.currentTime }),
-    openMenu: () => openMenu(),
-    closeMenu: () => closeMenu(),
-    toggleMenu: () => toggleMenu()
+    setIndex: (i, seek = 0, autoplay = false) => setTrack(i, seek, autoplay),
+    getState: () => ({ idx, playing, shuffle, repeat, vol: audio.volume }),
+    openPersistentPopup: () => openPopupBtn.click()
   };
 
-  // ---------- small polish: reposition on resize (keep within viewport) ----------
-  window.addEventListener("resize", () => {
-    try {
-      const rect = root.getBoundingClientRect();
-      const padding = 8;
-      let left = rect.left, top = rect.top;
-      const maxLeft = Math.max(padding, window.innerWidth - root.offsetWidth - padding);
-      const maxTop = Math.max(padding, window.innerHeight - root.offsetHeight - padding);
-      if (left > maxLeft) left = maxLeft;
-      if (top > maxTop) top = maxTop;
-      root.style.left = left + "px";
-      root.style.top = top + "px";
-      localStorage.setItem(LS.LEFT, String(Math.round(left)));
-      localStorage.setItem(LS.TOP, String(Math.round(top)));
-    } catch (_) {}
-  });
-
-  // ---------- small accessibility: announce title changes for screen readers ----------
+  // small accessibility: announce current track changes using live region
   const live = document.createElement("div");
   live.setAttribute("aria-live", "polite");
   live.style.position = "absolute";
   live.style.width = "1px";
   live.style.height = "1px";
   live.style.overflow = "hidden";
-  live.style.clip = "rect(1px, 1px, 1px, 1px)";
+  live.style.clip = "rect(0 0 0 0)";
+  live.style.clipPath = "inset(50%)";
   root.appendChild(live);
-  const observer = new MutationObserver(() => {
-    live.textContent = `Now playing ${titleEl.textContent}`;
+
+  audio.addEventListener("playing", () => {
+    live.textContent = `Playing ${tracks[idx].title}`;
   });
-  observer.observe(titleEl, { childList: true, subtree: true });
+
+  // keep UI updated
+  renderState();
+
+  // ensure we save position when page unloads
+  window.addEventListener("beforeunload", () => {
+    try {
+      saveTrackPos(idx, audio.currentTime || 0);
+      // save placement again
+      const left = root.getBoundingClientRect().left;
+      const bottom = window.innerHeight - root.getBoundingClientRect().bottom;
+      savePlacement(left, bottom);
+    } catch (e) {}
+  });
+
+  // tidy: ensure dropdown closes when resizing or orientation change
+  window.addEventListener("resize", () => closeDropdown());
 
 })();
