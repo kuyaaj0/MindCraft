@@ -103,7 +103,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 6.6px; /* distance to progress bar/buttons */
+  margin-bottom: 9.7px; /* distance to progress bar/buttons */
   /*margin-top: 0.9px;*/ /* slightly above edge */
 }
   #mc-soundtrack-root .mc-progress {
@@ -112,7 +112,7 @@
     background: rgba(0,0,0,0.06);
     border-radius:4px;
     overflow:hidden;
-    margin-top:4.5px;
+    margin-bottom: 7.5px;
   }
   #mc-soundtrack-root .mc-progress>i {
     display:block;
@@ -126,7 +126,7 @@
   gap: 6px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 3.8px; /* keep buttons inside rectangle */
+  margin-bottom: 6.4px; /* keep buttons inside rectangle */
 }
   #mc-soundtrack-root button.mc-btn {
     background:transparent;
