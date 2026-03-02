@@ -474,7 +474,7 @@ body.theme-dark #rankTitle {
      =========================== -->
 <script type="module">
 /* =============================================================
-   MindCraft — Fixed Account Page Script (2026 update)
+   MindCraft — Account Page (Synced Local Avatar Version 2026)
    ============================================================= */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -491,12 +491,10 @@ import {
   updateDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 import { getStudentLevelData } from "../Exp/student-LV.js";
 import { getTeacherLevelData } from "../Exp/teacher-LV.js";
 
-// ------------------------- 🔥 Firebase Init -------------------------
+/* ------------------------- 🔥 Firebase Init ------------------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyAQBwwuXwh82MCRyJ_7CBk2aWUp-n6p4DQ",
   authDomain: "mindcraft-83f81.firebaseapp.com",
@@ -509,7 +507,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ------------------------- 🌟 Element Refs -------------------------
+/* ------------------------- 🌟 Element Refs ------------------------- */
 const xpBarInner = document.getElementById("xpBarInner");
 const xpNumbers = document.getElementById("xpNumbers");
 const levelPill = document.getElementById("levelPill");
@@ -519,88 +517,104 @@ const totalXPEl = document.getElementById("totalXP");
 const lastLoginEl = document.getElementById("lastLogin");
 const rankTitleEl = document.getElementById("rankTitle");
 const roleBadge = document.getElementById("roleBadge");
-
 const navHome = document.getElementById("navHome");
 const navLeaderboard = document.getElementById("leaderboardBtn");
 const navSettings = document.getElementById("navSettings");
 const navLogout = document.getElementById("navLogout");
 const particleLayer = document.getElementById("particleLayer");
 
-// ------------------------- 👤 Profile Upload -------------------------
-const storage = getStorage(app);
+/* ------------------------- 👤 Avatar System (Local + Firestore) ------------------------- */
 const profileWrapper = document.getElementById("profileWrapper");
 const profileImage = document.getElementById("profileImage");
 const profileFile = document.getElementById("profileFile");
-const profileProgress = document.getElementById("profileUploadProgress");
+const DEFAULT_AVATAR = "../Assets/Images/Profile/default-avatar.png";
+const STORAGE_KEY = "MindCraft_Profile_Avatar";
 
-function setAvatarUrl(url) {
-  if (!url) {
-    profileImage.src = "../Assets/Images/Profile/default-avatar.png";
-  } else {
-    profileImage.src = url + (url.includes("?") ? "&v=" + Date.now() : "?v=" + Date.now());
+/* Compress Base64 for Firestore (reduce size) */
+function compressBase64(base64, maxW = 256, maxH = 256, quality = 0.7) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      let [w, h] = [img.width, img.height];
+      const ratio = Math.min(maxW / w, maxH / h, 1);
+      w *= ratio; h *= ratio;
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.src = base64;
+  });
+}
+
+/* Load avatar from local or Firestore */
+async function loadAvatar(user) {
+  const local = localStorage.getItem(STORAGE_KEY);
+  if (local) profileImage.src = local;
+  else profileImage.src = DEFAULT_AVATAR;
+
+  if (user) {
+    try {
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.photoBase64) {
+          profileImage.src = data.photoBase64;
+          localStorage.setItem(STORAGE_KEY, data.photoBase64);
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load Firestore avatar:", e);
+    }
   }
 }
 
-// Load user photo after login
-onAuthStateChanged(auth, async (user) => {
-  if (!user) return setAvatarUrl(null);
-  try {
-    const snap = await getDoc(doc(db, "users", user.uid));
-    const data = snap.exists() ? snap.data() : {};
-    const photo = data.photoURL || user.photoURL;
-    setAvatarUrl(photo);
-  } catch (e) {
-    console.warn("Photo load error:", e);
-    setAvatarUrl(null);
-  }
-});
-
-// When clicked -> choose file
-profileWrapper.addEventListener("click", () => {
-  if (!auth.currentUser) return alert("Sign in required.");
-  profileFile.click();
-});
+/* Choose image and sync */
+profileWrapper.addEventListener("click", () => profileFile.click());
 
 profileFile.addEventListener("change", async (ev) => {
   const file = ev.target.files?.[0];
   if (!file) return;
-  if (!file.type.startsWith("image/")) return alert("Please select an image file.");
-  if (file.size > 5 * 1024 * 1024) return alert("Max size 5MB.");
+  if (!file.type.startsWith("image/")) return alert("Please upload an image file.");
+  if (file.size > 5 * 1024 * 1024) return alert("Maximum file size: 5MB.");
 
-  const user = auth.currentUser;
-  if (!user) return alert("Sign in required.");
-  profileProgress.classList.remove("hidden");
-  profileProgress.classList.add("uploading");
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    let base64 = e.target.result;
+    base64 = await compressBase64(base64);
 
-  try {
-    const path = `profile_pics/${user.uid}_${Date.now()}.jpg`;
-    const sRef = storageRef(storage, path);
-    const uploadTask = uploadBytesResumable(sRef, file);
+    profileImage.src = base64;
+    localStorage.setItem(STORAGE_KEY, base64);
 
-    uploadTask.on("state_changed", null,
-      (err) => {
-        console.error("Upload failed", err);
-        alert("Upload failed");
-        profileProgress.classList.add("hidden");
-        profileProgress.classList.remove("uploading");
-      },
-      async () => {
-        const url = await getDownloadURL(uploadTask.snapshot.ref);
-        await updateDoc(doc(db, "users", user.uid), { photoURL: url });
-        setAvatarUrl(url);
-        profileProgress.classList.add("hidden");
-        profileProgress.classList.remove("uploading");
-        profileFile.value = "";
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await updateDoc(doc(db, "users", user.uid), { photoBase64: base64 });
+      } catch (err) {
+        console.error("Failed to sync avatar:", err);
       }
-    );
-  } catch (err) {
-    console.error("Upload error", err);
-    profileProgress.classList.add("hidden");
-    profileProgress.classList.remove("uploading");
+    }
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Double-click reset */
+profileWrapper.addEventListener("dblclick", async () => {
+  if (confirm("Reset profile picture to default?")) {
+    localStorage.removeItem(STORAGE_KEY);
+    profileImage.src = DEFAULT_AVATAR;
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await updateDoc(doc(db, "users", user.uid), { photoBase64: null });
+      } catch {}
+    }
   }
 });
 
-// ------------------------- ⚙️ Helper Functions -------------------------
+/* ------------------------- ⚙️ Helper Functions ------------------------- */
 function formatShort(n) {
   if (typeof n !== "number") n = Number(n) || 0;
   if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
@@ -608,7 +622,6 @@ function formatShort(n) {
   if (n >= 1e3) return (n / 1e3).toFixed(2) + "K";
   return String(n);
 }
-
 function normalizeDateValue(v) {
   if (!v) return null;
   if (typeof v.toDate === "function") return v.toDate();
@@ -617,88 +630,70 @@ function normalizeDateValue(v) {
   if (typeof v === "string") return new Date(v);
   return null;
 }
-	
 function formatTimeAgo(date) {
   const d = normalizeDateValue(date);
   if (!d) return "—";
   const now = Date.now();
   const diffMs = now - d.getTime();
-  if (diffMs < 0) return "just now";
-
   const sec = Math.floor(diffMs / 1000);
   const min = Math.floor(sec / 60);
   const hr = Math.floor(min / 60);
   const day = Math.floor(hr / 24);
-
-  if (sec < 60) return `${sec} second${sec !== 1 ? "s" : ""} ago`;
-  if (min < 60) return `${min} minute${min !== 1 ? "s" : ""} ago`;
-  if (hr < 24) return `${hr} hour${hr !== 1 ? "s" : ""} ago`;
-  if (day < 30) return `${day} day${day !== 1 ? "s" : ""} ago`;
-
+  if (sec < 60) return `${sec}s ago`;
+  if (min < 60) return `${min}m ago`;
+  if (hr < 24) return `${hr}h ago`;
+  if (day < 30) return `${day}d ago`;
   const month = Math.floor(day / 30);
-  if (month < 12) return `${month} month${month !== 1 ? "s" : ""} ago`;
+  if (month < 12) return `${month}mo ago`;
+  return `${Math.floor(month / 12)}y ago`;
+}
 
-  const year = Math.floor(month / 12);
-  return `${year} year${year !== 1 ? "s" : ""} ago`;
-	}
-
-// ------------------------- 🎚️ XP Bar Animation -------------------------
+/* ------------------------- 🎚️ XP Bar Animation ------------------------- */
 let xpAnim = null;
 function animateXP(fromVal, toVal, maxVal = 100) {
   cancelAnimationFrame(xpAnim);
   const start = performance.now();
   const duration = 600;
-
   function tick(now) {
     const t = Math.min((now - start) / duration, 1);
     const ease = 1 - Math.pow(1 - t, 3);
     const cur = fromVal + (toVal - fromVal) * ease;
     const pct = (cur / maxVal) * 100;
     xpBarInner.style.width = pct + "%";
-
     if (pct >= 95) xpBarInner.style.background = "linear-gradient(90deg,#ffd700,#ffb84d)";
     else if (pct >= 50) xpBarInner.style.background = "linear-gradient(90deg,#1db954,#ffd700)";
     else xpBarInner.style.background = "linear-gradient(90deg,#1db954,#4ae88f)";
-
     xpNumbers.textContent = `${formatShort(Math.round(cur))} / ${formatShort(maxVal)}`;
     if (t < 1) xpAnim = requestAnimationFrame(tick);
   }
   xpAnim = requestAnimationFrame(tick);
 }
 
-// ------------------------- 🕒 Presence Tracking -------------------------
+/* ------------------------- 🕒 Presence Tracking ------------------------- */
 let activityInterval = null;
 function cleanupPresenceTracking() {
   if (activityInterval) clearInterval(activityInterval);
   window.removeEventListener("beforeunload", handleUnload);
   document.removeEventListener("visibilitychange", handleVisibility);
 }
-
 async function markActive(uid) {
-  try {
-    await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: true });
-  } catch {}
+  try { await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: true }); } catch {}
 }
-
 async function markInactive(uid) {
-  try {
-    await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: false });
-  } catch {}
+  try { await updateDoc(doc(db, "users", uid), { lastSeen: serverTimestamp(), isActive: false }); } catch {}
 }
-
 function handleVisibility() {
   const uid = auth.currentUser?.uid;
   if (!uid) return;
   if (document.visibilityState === "visible") markActive(uid);
   else markInactive(uid);
 }
-
 function handleUnload() {
   const uid = auth.currentUser?.uid;
   if (uid) markInactive(uid);
 }
 
-// ------------------------- 🔑 Auth & Firestore -------------------------
+/* ------------------------- 🔑 Auth & Firestore ------------------------- */
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     cleanupPresenceTracking();
@@ -706,10 +701,11 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  await loadAvatar(user);
+
   const uid = user.uid;
   const ref = doc(db, "users", uid);
   let data;
-
   try {
     const snap = await getDoc(ref);
     if (!snap.exists()) {
@@ -730,11 +726,7 @@ onAuthStateChanged(auth, async (user) => {
       data = defaults;
     } else {
       data = snap.data();
-      await updateDoc(ref, {
-        isActive: true,
-        lastSeen: serverTimestamp(),
-        lastLogin: serverTimestamp()
-      });
+      await updateDoc(ref, { isActive: true, lastSeen: serverTimestamp(), lastLogin: serverTimestamp() });
     }
   } catch (err) {
     console.error("⚠️ Firestore load error:", err);
@@ -742,7 +734,6 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // ------------------------- 🎨 Update UI -------------------------
   usernameEl.textContent = data.name || "Unknown";
   levelEl.textContent = data.level || 1;
   levelPill.textContent = `LEVEL ${data.level || 1}`;
@@ -761,15 +752,13 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   animateXP(0, data.xp || 0, data.xpMax || 100);
-
-  // ------------------------- 👀 Presence Loop -------------------------
   cleanupPresenceTracking();
   document.addEventListener("visibilitychange", handleVisibility);
   window.addEventListener("beforeunload", handleUnload);
   activityInterval = setInterval(() => markActive(uid), 60000);
 });
 
-// ------------------------- 🧭 Navigation -------------------------
+/* ------------------------- 🧭 Navigation ------------------------- */
 navHome.onclick = () => (window.location.href = "../Webside/Student.html");
 navSettings.onclick = () => (window.location.href = "../Settings/setting.html");
 navLogout.onclick = async () => {
@@ -784,7 +773,7 @@ navLogout.onclick = async () => {
   }
 };
 
-// ------------------------- 💫 Particles -------------------------
+/* ------------------------- 💫 Particles ------------------------- */
 function spawnParticles(count = 18) {
   particleLayer.innerHTML = "";
   const h = window.innerHeight, w = window.innerWidth;
